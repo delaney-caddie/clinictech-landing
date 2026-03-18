@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 44" fill="none">
+  <!-- ClinicTech text - white italic -->
+  <text x="0" y="34" font-family="Nunito, sans-serif" font-weight="800" font-style="italic" font-size="32" fill="white" letter-spacing="0.5">ClinicTech</text>
+  <!-- Connected nodes icon -->
+  <g transform="translate(178, 0)">
+    <rect x="8" y="1" width="9" height="9" rx="1.5" fill="#5EC4E3"/>
+    <rect x="22" y="1" width="12" height="12" rx="1.5" fill="#7DD4ED"/>
+    <rect x="1" y="12" width="7" height="7" rx="1.5" fill="#5EC4E3"/>
+    <rect x="14" y="16" width="9" height="9" rx="1.5" fill="#5EC4E3"/>
+    <rect x="28" y="22" width="10" height="10" rx="1.5" fill="#7DD4ED"/>
+    <rect x="16" y="30" width="7" height="7" rx="1.5" fill="#5EC4E3"/>
+    <line x1="8" y1="8" x2="5" y2="12" stroke="#7DD4ED" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="17" y1="10" x2="15" y2="16" stroke="#7DD4ED" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="23" y1="20" x2="28" y2="24" stroke="#7DD4ED" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="23" y1="30" x2="28" y2="27" stroke="#7DD4ED" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -69,10 +69,7 @@ nav .container {
   font-weight: 800; font-size: 22px; font-style: italic; letter-spacing: 0.5px;
   text-decoration: none; color: var(--white);
 }
-.nav-logo svg { width: 36px; height: 36px; }
-.nav-logo svg rect { fill: rgba(255,255,255,0.85); }
-.nav-logo svg rect:nth-child(odd) { fill: var(--white); }
-.nav-logo svg line { stroke: rgba(255,255,255,0.7); }
+.nav-logo img { height: 36px; width: auto; }
 nav .nav-links .btn-primary,
 nav .nav-links a.btn-primary {
   background: #5EC4E3;
@@ -1647,18 +1644,7 @@ footer .container {
 <nav>
   <div class="container">
     <a href="#" class="nav-logo">
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="2" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-        <rect x="16" y="2" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-        <rect x="16" y="16" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-        <rect x="26" y="10" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-        <rect x="26" y="24" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-        <line x1="10" y1="6" x2="16" y2="6" stroke="#7DD4ED" stroke-width="2"/>
-        <line x1="20" y1="10" x2="20" y2="16" stroke="#7DD4ED" stroke-width="2"/>
-        <line x1="24" y1="20" x2="26" y2="14" stroke="#7DD4ED" stroke-width="2"/>
-        <line x1="24" y1="20" x2="26" y2="28" stroke="#7DD4ED" stroke-width="2"/>
-      </svg>
-      ClinicTech
+      <img src="/logo.svg" alt="ClinicTech" height="36">
     </a>
     <div class="nav-links">
       <a href="#product">Product</a>
