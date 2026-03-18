@@ -1,0 +1,10 @@
+{
+  "name": "clinictech-landing",
+  "version": "1.0.0",
+  "description": "Landing page for ClinicTech — white-label back-office platform for regenerative medicine clinics",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}

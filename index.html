@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClinicTech — Your Clinic's Growth Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-mid: #111D35;
+  --navy-light: #182742;
+  --blue: #3BAADC;
+  --blue-bright: #4FC3F7;
+  --blue-glow: rgba(59, 170, 220, 0.15);
+  --blue-glow-strong: rgba(59, 170, 220, 0.3);
+  --white: #FFFFFF;
+  --gray-100: #F0F4F8;
+  --gray-200: #D9E2EC;
+  --gray-300: #BCCCDC;
+  --gray-400: #9FB3C8;
+  --gray-500: #627D98;
+  --green: #34D399;
+  --green-glow: rgba(52, 211, 153, 0.15);
+  --orange: #FB923C;
+  --red: #F87171;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 0;
+  background: rgba(10, 22, 40, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(59, 170, 220, 0.1);
+  transition: all 0.3s;
+}
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 22px; letter-spacing: -0.5px;
+  text-decoration: none; color: var(--white);
+}
+.nav-logo svg { width: 36px; height: 36px; }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  text-decoration: none; color: var(--gray-400);
+  font-size: 14px; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 30px;
+  background: var(--white);
+  color: var(--navy);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800; font-size: 14px;
+  border: none; border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
+}
+.btn-primary:hover {
+  background: var(--blue-bright);
+  color: var(--navy);
+  box-shadow: 0 0 30px rgba(79, 195, 247, 0.5);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600; font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.btn-secondary:hover {
+  border-color: var(--blue);
+  background: var(--blue-glow);
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 160px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(59, 170, 220, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px 6px 8px;
+  background: var(--blue-glow);
+  border: 1px solid rgba(59, 170, 220, 0.2);
+  border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  color: var(--blue-bright);
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge .dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--gray-400);
+  margin-bottom: 40px;
+  max-width: 520px;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-ctas {
+  display: flex; gap: 16px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+/* Hero Visual - Dashboard Mockup */
+.hero-visual {
+  position: relative;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.dashboard-mockup {
+  background: var(--navy-mid);
+  border: 1px solid rgba(59, 170, 220, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 60px rgba(59, 170, 220, 0.08);
+  position: relative;
+}
+.dashboard-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.dashboard-clinic-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600; font-size: 15px;
+  color: var(--blue-bright);
+}
+.dashboard-dots {
+  display: flex; gap: 6px;
+}
+.dashboard-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.dashboard-dots span:first-child { background: var(--green); }
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--navy-light);
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.stat-label {
+  font-size: 11px; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px; font-weight: 700;
+}
+.stat-value.green { color: var(--green); }
+.stat-value.blue { color: var(--blue-bright); }
+.stat-value.orange { color: var(--orange); }
+.stat-change {
+  font-size: 11px; color: var(--green); margin-top: 4px;
+}
+.pipeline-row {
+  display: flex; gap: 8px; align-items: center;
+  padding: 10px 12px;
+  background: var(--navy-light);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.pipeline-avatar {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--blue-glow), var(--blue-glow-strong));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--blue-bright);
+  flex-shrink: 0;
+}
+.pipeline-info { flex: 1; }
+.pipeline-name { font-size: 13px; font-weight: 600; }
+.pipeline-detail { font-size: 11px; color: var(--gray-500); }
+.pipeline-status {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.status-hot { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+.status-warm { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+.status-new { background: var(--blue-glow); color: var(--blue-bright); }
+.brand-tag {
+  position: absolute;
+  bottom: -12px; right: 24px;
+  padding: 6px 14px;
+  background: var(--navy);
+  border: 1px solid rgba(59, 170, 220, 0.2);
+  border-radius: 8px;
+  font-size: 11px; font-weight: 600; color: var(--gray-400);
+}
+.brand-tag span { color: var(--blue-bright); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== STAT BANNER ===== */
+.stat-banner {
+  padding: 60px 0;
+  border-top: 1px solid rgba(59, 170, 220, 0.08);
+  border-bottom: 1px solid rgba(59, 170, 220, 0.08);
+  background: linear-gradient(180deg, rgba(59, 170, 220, 0.03) 0%, transparent 100%);
+}
+.stat-banner .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.stat-banner-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px; font-weight: 700;
+  color: var(--blue-bright);
+}
+.stat-banner-text {
+  font-size: 20px; color: var(--gray-300);
+  max-width: 600px;
+}
+.stat-banner-text strong { color: var(--white); font-weight: 600; }
+
+/* ===== PROBLEM SECTION ===== */
+.problem {
+  padding: 100px 0;
+}
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+.section-sub {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gray-400);
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pain-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.pain-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pain-card:hover::before { opacity: 1; }
+.pain-card:hover {
+  border-color: rgba(248, 113, 113, 0.2);
+  transform: translateY(-2px);
+}
+.pain-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: rgba(248, 113, 113, 0.1);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+.pain-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.pain-card p {
+  font-size: 14px; line-height: 1.7;
+  color: var(--gray-400);
+}
+.pain-stat {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px; font-weight: 600;
+  color: var(--red);
+}
+
+/* ===== PRODUCT / WHAT YOU GET ===== */
+.product {
+  padding: 100px 0;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 8px;
+}
+.product-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(59, 170, 220, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.product-card:hover {
+  border-color: rgba(59, 170, 220, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; right: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at center, rgba(59, 170, 220, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+.product-card-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  background: var(--blue-glow);
+  border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--blue-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+.product-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px; font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.product-card > p {
+  font-size: 15px; line-height: 1.7;
+  color: var(--gray-400);
+  margin-bottom: 28px;
+  position: relative; z-index: 1;
+}
+.feature-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative; z-index: 1;
+}
+.feature-list li {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 14px; color: var(--gray-300);
+  line-height: 1.5;
+}
+.feature-list li .check {
+  width: 20px; height: 20px; flex-shrink: 0;
+  background: var(--green-glow);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green);
+  font-size: 12px;
+  margin-top: 1px;
+}
+.product-card-visual {
+  margin-top: 32px;
+  background: var(--navy);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative; z-index: 1;
+}
+.mini-portal-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mini-portal-logo {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+}
+.mini-portal-name {
+  font-size: 13px; font-weight: 600;
+}
+.mini-search {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+.mini-kb-items { display: flex; flex-direction: column; gap: 8px; }
+.mini-kb-item {
+  padding: 10px 14px;
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 8px;
+  font-size: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mini-kb-icon {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: var(--blue-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.mini-kb-text { color: var(--gray-300); }
+.mini-kb-tag {
+  margin-left: auto;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--green-glow);
+  color: var(--green);
+}
+
+/* ===== ROI ===== */
+.roi {
+  padding: 100px 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(59, 170, 220, 0.03) 50%, transparent 100%);
+}
+.roi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-top: 48px;
+}
+.roi-calculator {
+  background: var(--navy-mid);
+  border: 1px solid rgba(59, 170, 220, 0.15);
+  border-radius: 20px;
+  padding: 36px;
+}
+.roi-calc-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.roi-calc-title span {
+  font-size: 14px;
+  padding: 3px 10px;
+  background: var(--green-glow);
+  border-radius: 6px;
+  color: var(--green);
+  font-weight: 600;
+}
+.roi-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.roi-row:last-child { border-bottom: none; }
+.roi-label { font-size: 14px; color: var(--gray-400); }
+.roi-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 600;
+}
+.roi-result {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--green-glow);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+.roi-result-label {
+  font-size: 13px; color: var(--green);
+  font-weight: 600; margin-bottom: 4px;
+}
+.roi-result-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px; font-weight: 700;
+  color: var(--green);
+}
+.roi-result-sub {
+  font-size: 12px; color: var(--gray-400);
+  margin-top: 4px;
+}
+.roi-metrics {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.roi-metric {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.roi-metric-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--blue-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.roi-metric h4 {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 6px;
+}
+.roi-metric p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--gray-400);
+}
+
+/* ===== PATIENT FUNNEL ===== */
+.funnel {
+  padding: 100px 0;
+}
+.funnel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.funnel-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.funnel-card:hover {
+  border-color: rgba(59, 170, 220, 0.2);
+  transform: translateY(-2px);
+}
+.funnel-card-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px; font-weight: 700;
+  color: rgba(59, 170, 220, 0.15);
+  position: absolute;
+  top: 16px; right: 24px;
+}
+.funnel-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.funnel-card p {
+  font-size: 14px; line-height: 1.7;
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+.funnel-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--blue-glow);
+  border-radius: 6px;
+  font-size: 11px; font-weight: 600;
+  color: var(--blue-bright);
+}
+
+/* ===== HOW IT WORKS ===== */
+.how {
+  padding: 100px 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(59, 170, 220, 0.03) 50%, transparent 100%);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.step {
+  text-align: center;
+  padding: 40px 32px;
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  position: relative;
+  transition: all 0.3s;
+}
+.step:hover {
+  border-color: rgba(59, 170, 220, 0.2);
+  transform: translateY(-2px);
+}
+.step-number {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--navy);
+  margin: 0 auto 24px;
+}
+.step h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.step p {
+  font-size: 14px; line-height: 1.7;
+  color: var(--gray-400);
+}
+.step-connector {
+  display: none;
+}
+
+/* ===== INTEGRATIONS ===== */
+.integrations {
+  padding: 100px 0;
+}
+.integrations-center {
+  text-align: center;
+}
+.integrations-center .section-title,
+.integrations-center .section-sub {
+  margin-left: auto; margin-right: auto;
+}
+.int-logos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 48px;
+}
+.int-logo {
+  width: 100px; height: 80px;
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+  font-size: 10px; color: var(--gray-500); font-weight: 600;
+}
+.int-logo:hover {
+  border-color: rgba(59, 170, 220, 0.2);
+  transform: translateY(-2px);
+}
+.int-logo-icon {
+  font-size: 24px;
+}
+
+/* ===== PRICING ===== */
+.pricing {
+  padding: 100px 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(59, 170, 220, 0.03) 50%, transparent 100%);
+}
+.pricing-center { text-align: center; }
+.pricing-center .section-title,
+.pricing-center .section-sub {
+  margin-left: auto; margin-right: auto;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.price-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 36px;
+  text-align: left;
+  transition: all 0.3s;
+  position: relative;
+}
+.price-card.featured {
+  border-color: rgba(59, 170, 220, 0.3);
+  box-shadow: 0 0 40px rgba(59, 170, 220, 0.08);
+}
+.price-card.featured::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -12px; left: 50%; transform: translateX(-50%);
+  padding: 4px 16px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+  color: var(--navy);
+  font-size: 11px; font-weight: 700;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.price-tier {
+  font-size: 13px; font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+.price-tagline {
+  font-size: 15px; color: var(--gray-300);
+  margin-bottom: 20px;
+  min-height: 44px;
+}
+.price-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 42px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.price-amount span {
+  font-size: 16px; font-weight: 500;
+  color: var(--gray-500);
+}
+.price-features {
+  list-style: none;
+  margin: 28px 0;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.price-features li {
+  font-size: 13px;
+  color: var(--gray-300);
+  display: flex; align-items: center; gap: 10px;
+}
+.price-features li::before {
+  content: '✓';
+  color: var(--green);
+  font-weight: 700;
+  font-size: 12px;
+}
+.price-cta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+.price-cta-primary {
+  background: var(--white);
+  color: var(--navy);
+  border: none;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
+}
+.price-cta-primary:hover {
+  background: var(--blue-bright);
+  box-shadow: 0 0 30px rgba(79, 195, 247, 0.5);
+}
+.price-cta-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.price-cta-secondary:hover {
+  border-color: var(--blue);
+  background: var(--blue-glow);
+}
+
+/* ===== CTA SECTION ===== */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+}
+.cta-box {
+  background: linear-gradient(135deg, var(--navy-mid) 0%, rgba(59, 170, 220, 0.08) 100%);
+  border: 1px solid rgba(59, 170, 220, 0.2);
+  border-radius: 24px;
+  padding: 72px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.cta-box::before {
+  content: '';
+  position: absolute;
+  top: -100px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(59, 170, 220, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.cta-box h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 40px; font-weight: 700;
+  letter-spacing: -1.5px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.cta-box p {
+  font-size: 17px; color: var(--gray-400);
+  margin-bottom: 36px;
+  position: relative;
+}
+.cta-box .btn-primary {
+  font-size: 16px;
+  padding: 16px 40px;
+  position: relative;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 48px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+footer .container {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600; font-size: 18px;
+  color: var(--gray-400);
+}
+.footer-brand svg { width: 28px; height: 28px; }
+.footer-links {
+  display: flex; gap: 24px;
+}
+.footer-links a {
+  font-size: 13px; color: var(--gray-500);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--white); }
+
+/* ===== ROI INTERACTIVE ===== */
+.roi-input-wrap {
+  display: flex; align-items: center; gap: 14px;
+}
+.roi-input-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--white);
+  min-width: 72px;
+  text-align: right;
+}
+.roi-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 140px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--navy-light);
+  outline: none;
+  cursor: pointer;
+}
+.roi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(59, 170, 220, 0.4);
+  transition: box-shadow 0.2s;
+}
+.roi-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 18px rgba(59, 170, 220, 0.6);
+}
+.roi-slider::-moz-range-thumb {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(59, 170, 220, 0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .hero .container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .hero h1 { font-size: 40px; }
+  .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
+    grid-template-columns: 1fr;
+  }
+  .roi-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .hero-ctas { flex-direction: column; }
+  .nav-links { display: none; }
+  .stat-banner .container { flex-direction: column; gap: 8px; }
+  .section-title { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      ClinicTech
+    </a>
+    <div class="nav-links">
+      <a href="#product">Product</a>
+      <a href="#roi">ROI</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#demo" class="btn-primary">Book a Demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Built for Regenerative Medicine
+      </div>
+      <h1>Your Clinic. Your Brand.<br><span class="highlight">Your Growth Engine.</span></h1>
+      <p class="hero-sub">A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in days.</p>
+      <div class="hero-ctas">
+        <a href="#demo" class="btn-primary">Book a 15-Min Walkthrough →</a>
+        <a href="#product" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-mockup">
+        <div class="dashboard-header">
+          <div class="dashboard-clinic-name">🏥 Your Clinic Name</div>
+          <div class="dashboard-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-label">New Leads</div>
+            <div class="stat-value blue">47</div>
+            <div class="stat-change">↑ 23% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Booked</div>
+            <div class="stat-value green">18</div>
+            <div class="stat-change">↑ 12% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value orange">$94K</div>
+            <div class="stat-change">↑ 31% this month</div>
+          </div>
+        </div>
+        <div class="pipeline-row">
+          <div class="pipeline-avatar">JM</div>
+          <div class="pipeline-info">
+            <div class="pipeline-name">Jennifer M.</div>
+            <div class="pipeline-detail">Knee Stem Cell Therapy</div>
+          </div>
+          <div class="pipeline-status status-hot">Hot Lead</div>
+        </div>
+        <div class="pipeline-row">
+          <div class="pipeline-avatar">RK</div>
+          <div class="pipeline-info">
+            <div class="pipeline-name">Robert K.</div>
+            <div class="pipeline-detail">PRP Treatment Inquiry</div>
+          </div>
+          <div class="pipeline-status status-warm">Follow Up</div>
+        </div>
+        <div class="pipeline-row">
+          <div class="pipeline-avatar">SL</div>
+          <div class="pipeline-info">
+            <div class="pipeline-name">Sarah L.</div>
+            <div class="pipeline-detail">Consultation Request</div>
+          </div>
+          <div class="pipeline-status status-new">New</div>
+        </div>
+      </div>
+      <div class="brand-tag">Branded as <span>Your Clinic</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BANNER -->
+<section class="stat-banner">
+  <div class="container">
+    <div class="stat-banner-number">78%</div>
+    <div class="stat-banner-text">of patients book with <strong>the first clinic that responds.</strong> If your follow-up takes hours, you're funding your competitor's growth.</div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">You didn't go into medicine to manage a tech stack.</h2>
+    <p class="section-sub">You're duct-taping together scheduling software, a CRM you barely use, and a website that doesn't convert. Meanwhile, the multi-location networks have custom software and your leads are going there.</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">⏱️</div>
+        <h3>Leads Fall Through the Cracks</h3>
+        <p>Someone fills out your contact form at 9pm. By the time you see it the next morning, they've already booked with the clinic that replied in 10 minutes.</p>
+        <div class="pain-stat">Avg response time without automation: 47 hours</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🔄</div>
+        <h3>No Patient Reengagement</h3>
+        <p>Past patients who loved their results never hear from you again. No follow-up, no referral prompts, no content to share. Your best marketing channel sits untapped.</p>
+        <div class="pain-stat">80% of revenue comes from 20% of patients</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🛠️</div>
+        <h3>Manual Everything</h3>
+        <p>Copy-pasting between tools, manually tracking who needs a callback, updating spreadsheets. You're spending admin hours on work that should run itself.</p>
+        <div class="pain-stat">15+ hrs/week spent on manual follow-up</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="product" id="product">
+  <div class="container">
+    <div class="section-label">What You Get</div>
+    <h2 class="section-title">Two platforms. Fully branded. Completely yours.</h2>
+    <p class="section-sub">Not another tool to log into. A custom application that looks and feels like you built it yourself.</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-card-badge">Back Office</div>
+        <h3>Design Your Own Back Office</h3>
+        <p>Build the dashboard you actually want. Design how your office works, how leads flow, and what gets automated. Every workflow, every follow-up, every notification is completely custom to your process and runs on autopilot.</p>
+        <ul class="feature-list">
+          <li><span class="check">✓</span> Design your own dashboard layout and views</li>
+          <li><span class="check">✓</span> Build custom automations: leads, follow-ups, reminders</li>
+          <li><span class="check">✓</span> Drag-and-drop workflow builder — no code, no consultants</li>
+          <li><span class="check">✓</span> Every lead gets instant, automated follow-up (email + SMS)</li>
+          <li><span class="check">✓</span> Connects to your calendar, CRM, GoHighLevel, and more</li>
+          <li><span class="check">✓</span> Your branding everywhere — logo, colors, custom domain</li>
+          <li><span class="check">✓</span> Real-time analytics tailored to your KPIs</li>
+        </ul>
+      </div>
+      <div class="product-card">
+        <div class="product-card-badge">Patient Portal</div>
+        <h3>Your Branded Patient Hub</h3>
+        <p>Give patients a place to ask questions, search your knowledge base, and engage with your clinic on their own terms. It's your front door, 24/7.</p>
+        <ul class="feature-list">
+          <li><span class="check">✓</span> Branded portal (your logo, colors, domain)</li>
+          <li><span class="check">✓</span> AI-powered knowledge base search</li>
+          <li><span class="check">✓</span> Patient Q&A and support messaging</li>
+          <li><span class="check">✓</span> Treatment info and prep guides</li>
+          <li><span class="check">✓</span> Consultation booking built in</li>
+          <li><span class="check">✓</span> Mobile-friendly, works on any device</li>
+        </ul>
+        <div class="product-card-visual">
+          <div class="mini-portal-header">
+            <div class="mini-portal-logo">Y</div>
+            <div class="mini-portal-name">Your Clinic Portal</div>
+          </div>
+          <div class="mini-search">🔍 Search treatments, FAQs, recovery info...</div>
+          <div class="mini-kb-items">
+            <div class="mini-kb-item">
+              <div class="mini-kb-icon">📋</div>
+              <div class="mini-kb-text">Stem Cell Therapy: What to Expect</div>
+              <div class="mini-kb-tag">Popular</div>
+            </div>
+            <div class="mini-kb-item">
+              <div class="mini-kb-icon">💉</div>
+              <div class="mini-kb-text">PRP Treatment Recovery Guide</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section class="roi" id="roi">
+  <div class="container">
+    <div class="section-label">The ROI</div>
+    <h2 class="section-title">The math is simple. The impact is not.</h2>
+    <p class="section-sub">Average stem cell procedure: $5,000 to $25,000. How many lost leads can you afford per month?</p>
+    <div class="roi-grid">
+      <div class="roi-calculator">
+        <div class="roi-calc-title">Revenue Recovery Calculator <span>Interactive</span></div>
+        <div class="roi-row">
+          <div class="roi-label">Your monthly leads</div>
+          <div class="roi-input-wrap">
+            <input type="range" id="roiLeads" min="10" max="200" value="40" class="roi-slider">
+            <div class="roi-input-value" id="roiLeadsVal">40</div>
+          </div>
+        </div>
+        <div class="roi-row">
+          <div class="roi-label">Your avg procedure value</div>
+          <div class="roi-input-wrap">
+            <input type="range" id="roiValue" min="2000" max="50000" value="12000" step="1000" class="roi-slider">
+            <div class="roi-input-value" id="roiValueVal">$12,000</div>
+          </div>
+        </div>
+        <div class="roi-row">
+          <div class="roi-label">Leads lost to slow follow-up</div>
+          <div class="roi-value" style="color: var(--red)">~60%</div>
+        </div>
+        <div class="roi-row">
+          <div class="roi-label">Leads recovered with ClinicTech</div>
+          <div class="roi-value" style="color: var(--green)" id="roiRecovered">+14/mo</div>
+        </div>
+        <div class="roi-result">
+          <div class="roi-result-label">Additional Annual Revenue</div>
+          <div class="roi-result-value" id="roiTotal">$168,000+</div>
+          <div class="roi-result-sub">from leads you're already getting</div>
+        </div>
+      </div>
+      <div class="roi-metrics">
+        <div class="roi-metric">
+          <div class="roi-metric-icon">⚡</div>
+          <div>
+            <h4>3-5x more consultations booked</h4>
+            <p>Automated follow-up within minutes, not hours. Clinics using instant response see dramatically higher booking rates from the same lead volume.</p>
+          </div>
+        </div>
+        <div class="roi-metric">
+          <div class="roi-metric-icon">🔁</div>
+          <div>
+            <h4>40% increase in patient reactivation</h4>
+            <p>Automated reengagement brings past patients back for additional treatments, referrals, and follow-up procedures they didn't know you offered.</p>
+          </div>
+        </div>
+        <div class="roi-metric">
+          <div class="roi-metric-icon">⏰</div>
+          <div>
+            <h4>15+ hours/week saved on admin</h4>
+            <p>Stop copy-pasting between tools. Your back office runs itself so you can focus on patients, not spreadsheets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PATIENT FUNNEL -->
+<section class="funnel" id="funnel">
+  <div class="container">
+    <div class="section-label">Patient-Powered Growth</div>
+    <h2 class="section-title">Turn your patients into your top of funnel.</h2>
+    <p class="section-sub">Your best marketing isn't ads. It's your existing patients. ClinicTech auto-generates content and campaigns from your patient data and knowledge base.</p>
+    <div class="funnel-grid">
+      <div class="funnel-card">
+        <div class="funnel-card-number">01</div>
+        <h3>Patient Success Stories</h3>
+        <p>Auto-generated, anonymized success story templates ready to post to your website or social channels. Compliant, compelling, and done for you.</p>
+        <div class="funnel-tag">Auto-Generated</div>
+      </div>
+      <div class="funnel-card">
+        <div class="funnel-card-number">02</div>
+        <h3>Boost Your SEO: Auto-Generated Blog Posts</h3>
+        <p>Fresh, keyword-optimized blog posts generated every week from your knowledge base and treatment offerings. Published straight to your website to drive organic traffic and rank for the searches your patients are already making.</p>
+        <div class="funnel-tag">Weekly Auto-Publish</div>
+      </div>
+      <div class="funnel-card">
+        <div class="funnel-card-number">03</div>
+        <h3>Review &amp; Referral Prompts</h3>
+        <p>Automated prompts triggered after positive outcomes. Patients get a nudge to leave a review or refer a friend at the exact right moment.</p>
+        <div class="funnel-tag">Automated Triggers</div>
+      </div>
+      <div class="funnel-card">
+        <div class="funnel-card-number">04</div>
+        <h3>Social Proof Assets</h3>
+        <p>Branded graphics, testimonial cards, and shareable content your patients can post themselves. Turn word-of-mouth into a scalable channel.</p>
+        <div class="funnel-tag">Drag & Drop</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-label" style="text-align: center;">How It Works</div>
+    <h2 class="section-title" style="text-align: center; margin-left: auto; margin-right: auto;">Live in days. Not months.</h2>
+    <p class="section-sub" style="text-align: center; margin-left: auto; margin-right: auto;">No consultants. No developers. No six-month implementation. Three steps and your custom platform is running.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>We brand it to you</h3>
+        <p>Your logo, your colors, your domain. The back office and patient portal look and feel like your own custom-built platform from day one.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>You build your workflow</h3>
+        <p>Drag and drop your lead stages, follow-up sequences, and portal content. Connect your calendar, email, and CRM. Completely tailored to your process.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Watch your pipeline grow</h3>
+        <p>Leads get followed up automatically. Patients engage through your portal. Content generates itself. You see everything in one place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section class="integrations" id="integrations">
+  <div class="container">
+    <div class="integrations-center">
+      <div class="section-label">Integrations</div>
+      <h2 class="section-title">Connects to tools you already use.</h2>
+      <p class="section-sub">ClinicTech wraps around your existing workflow. No rip-and-replace, no learning curve.</p>
+      <div class="int-logos">
+        <div class="int-logo"><div class="int-logo-icon">📅</div>Google Cal</div>
+        <div class="int-logo"><div class="int-logo-icon">📧</div>Gmail</div>
+        <div class="int-logo"><div class="int-logo-icon">📊</div>HubSpot</div>
+        <div class="int-logo"><div class="int-logo-icon">⚡</div>Salesforce</div>
+        <div class="int-logo"><div class="int-logo-icon">🚀</div>GoHighLevel</div>
+        <div class="int-logo"><div class="int-logo-icon">📋</div>Attio</div>
+        <div class="int-logo"><div class="int-logo-icon">💬</div>Slack</div>
+        <div class="int-logo"><div class="int-logo-icon">📱</div>SMS</div>
+        <div class="int-logo"><div class="int-logo-icon">🌐</div>Your Website</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="pricing-center">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">One recovered lead pays for itself.</h2>
+      <p class="section-sub">No contracts. No setup fees. Cancel anytime.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-tagline">For clinics ready to stop losing leads.</div>
+        <div class="price-amount">$499<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Branded back office</li>
+          <li>Lead tracking &amp; pipeline</li>
+          <li>Automated email follow-up</li>
+          <li>Google Calendar sync</li>
+          <li>Basic analytics</li>
+        </ul>
+        <a href="#demo" class="price-cta price-cta-secondary">Book a Demo</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">Growth</div>
+        <div class="price-tagline">For clinics ready to automate their back office.</div>
+        <div class="price-amount">$999<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Everything in Starter</li>
+          <li>Branded patient portal</li>
+          <li>AI knowledge base</li>
+          <li>SMS + email sequences</li>
+          <li>Content generation engine</li>
+          <li>CRM integration</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#demo" class="price-cta price-cta-primary">Book a Demo</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Network</div>
+        <div class="price-tagline">For multi-location practices ready to scale.</div>
+        <div class="price-amount">$2,499<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Everything in Growth</li>
+          <li>Multi-location support</li>
+          <li>Cross-location analytics</li>
+          <li>Custom integrations</li>
+          <li>White-glove onboarding</li>
+          <li>Dedicated account manager</li>
+        </ul>
+        <a href="#demo" class="price-cta price-cta-secondary">Book a Demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section" id="demo">
+  <div class="container">
+    <div class="cta-box">
+      <h2>See what your clinic's<br>custom platform looks like.</h2>
+      <p>15-minute walkthrough. We'll brand a live preview to your clinic.</p>
+      <a href="#" class="btn-primary">Book Your Walkthrough →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">
+      ClinicTech
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Smooth reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.pain-card, .product-card, .roi-metric, .funnel-card, .step, .price-card, .int-logo').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'all 0.6s ease';
+  observer.observe(el);
+});
+
+// Stagger animation for grid items
+document.querySelectorAll('.pain-grid, .product-grid, .funnel-grid, .steps, .pricing-grid, .int-logos').forEach(grid => {
+  const children = grid.children;
+  Array.from(children).forEach((child, i) => {
+    child.style.transitionDelay = `${i * 0.1}s`;
+  });
+});
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.style.padding = '12px 0';
+    nav.style.borderBottomColor = 'rgba(59, 170, 220, 0.15)';
+  } else {
+    nav.style.padding = '20px 0';
+    nav.style.borderBottomColor = 'rgba(59, 170, 220, 0.1)';
+  }
+});
+
+// ROI Calculator
+const leadsSlider = document.getElementById('roiLeads');
+const valueSlider = document.getElementById('roiValue');
+const leadsVal = document.getElementById('roiLeadsVal');
+const valueVal = document.getElementById('roiValueVal');
+const recoveredEl = document.getElementById('roiRecovered');
+const totalEl = document.getElementById('roiTotal');
+
+function updateROI() {
+  const leads = parseInt(leadsSlider.value);
+  const procedureValue = parseInt(valueSlider.value);
+  const lostRate = 0.6;
+  const recoveryRate = 0.58; // ClinicTech recovers ~58% of lost leads
+  const recovered = Math.round(leads * lostRate * recoveryRate);
+  const annual = recovered * procedureValue * 12;
+  
+  leadsVal.textContent = leads;
+  valueVal.textContent = '$' + procedureValue.toLocaleString();
+  recoveredEl.textContent = '+' + recovered + '/mo';
+  totalEl.textContent = '$' + annual.toLocaleString() + '+';
+  
+  // Animate the result on change
+  totalEl.style.transform = 'scale(1.05)';
+  setTimeout(() => { totalEl.style.transform = 'scale(1)'; }, 150);
+}
+
+leadsSlider.addEventListener('input', updateROI);
+valueSlider.addEventListener('input', updateROI);
+totalEl.style.transition = 'transform 0.15s ease';
+</script>
+
+</body>
+</html>
