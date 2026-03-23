@@ -8,8 +8,18 @@ function getSupabase() {
   );
 }
 
+function cleanClinicName(name: string): string {
+  // Strip everything after common separators (|, –, -, :)
+  let cleaned = name.split(/\s*[|–—:]\s*/)[0].trim();
+  // Remove trailing " - Something"
+  cleaned = cleaned.replace(/\s+-\s+.*$/, "").trim();
+  // Cap at reasonable length
+  if (cleaned.length > 50) cleaned = cleaned.slice(0, 50).trim();
+  return cleaned || name.slice(0, 50);
+}
+
 function generateSlug(name: string): string {
-  return name
+  return cleanClinicName(name)
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")

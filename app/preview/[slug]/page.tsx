@@ -72,6 +72,8 @@ export default function ClinicPreviewPage() {
     );
   }
 
+  // Clean clinic name (strip title tag cruft like "| Botox | PRP...")
+  const displayName = clinic.name.split(/\s*[|–—:]\s*/)[0].replace(/\s+-\s+.*$/, "").trim() || clinic.name;
   const brandHex = clinic.primary_color || null;
 
   // Determine if brand color is light or dark
@@ -131,7 +133,7 @@ export default function ClinicPreviewPage() {
         onViewChange={handleViewChange}
         activePage={activePage}
         onPageChange={setActivePage}
-        clinicName={clinic.name}
+        clinicName={displayName}
         logoUrl={clinic.logo_url}
       />
       <main className="flex-1 overflow-auto pb-12">
