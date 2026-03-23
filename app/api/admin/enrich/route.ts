@@ -38,15 +38,23 @@ async function findOwner(domain: string): Promise<{
       });
 
       const data = await res.json();
-      const profiles = data?.output?.profiles || [];
+      const profiles = data?.output?.data || data?.output?.profiles || [];
 
       if (profiles.length > 0) {
         const p = profiles[0];
-        return {
-          name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
-          title: p.headline || title,
-          linkedinSlug: p.primary_slug || p.url || "",
-        };
+        // Verify this person is actually at the clinic (not a random match)
+        const headline = (p.headline || "").toLowerCase();
+        const domainLower = domain.toLowerCase().replace(/\.(com|net|org|ca|co)$/, "");
+        const clinicInHeadline = headline.includes(domainLower.split(".")[0]) ||
+          headline.includes(title);
+
+        if (clinicInHeadline || profiles.length === 1) {
+          return {
+            name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
+            title: p.headline || title,
+            linkedinSlug: p.primary_slug || "",
+          };
+        }
       }
     } catch {
       continue;

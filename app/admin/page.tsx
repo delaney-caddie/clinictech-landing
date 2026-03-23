@@ -816,15 +816,26 @@ export default function AdminPanel() {
   async function handleEnrich(ids: string[]) {
     setActionLoading("enrich");
     try {
-      await fetch("/api/admin/enrich", {
+      const res = await fetch("/api/admin/enrich", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clinicIds: ids }),
       });
+      const data = await res.json();
       await fetchClinics();
       setSelectedIds(new Set());
+      // Show results
+      const results = data.results || [];
+      const enriched = results.filter((r: any) => r.status === "enriched");
+      const notFound = results.filter((r: any) => r.status === "no_owner_found");
+      if (enriched.length > 0) {
+        const names = enriched.map((r: any) => `${r.owner} (${r.name})`).join(", ");
+        alert(`Enriched: ${names}`);
+      } else if (notFound.length > 0) {
+        alert(`No owner found for: ${notFound.map((r: any) => r.name).join(", ")}. The clinic may not be in Fiber's database.`);
+      }
     } catch {
-      // handle silently
+      alert("Enrichment failed. Check that FIBER_API_KEY is set.");
     }
     setActionLoading(null);
   }
