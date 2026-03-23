@@ -9,9 +9,10 @@ function getSupabase() {
 }
 
 const DOMAIN = process.env.CLINICTECH_DOMAIN || "clinictech.io";
-const SENDER_NAME = process.env.SENDER_NAME || "Delaney";
+const SENDER_NAME = process.env.SENDER_NAME || "Danika";
 const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, ClinicTech";
-const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendly.com/clinictech/intro";
+const SENDER_EMAIL = process.env.SENDER_EMAIL || "danika@clinictech.io";
+const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendar.app.google/WCKTy12it4D4kMkH7";
 
 interface ClinicData {
   id: string;
@@ -33,72 +34,54 @@ function getFirstName(fullName: string | null): string {
 function generateEmail(clinic: ClinicData): { subject: string; body: string; to: string } {
   const previewUrl = `https://${DOMAIN}/preview/${clinic.slug}`;
   const firstName = getFirstName(clinic.contact_name);
-  const greeting = firstName ? `Hi ${firstName}` : "Hi there";
-  const services = clinic.services || [];
-  const servicesSnippet =
-    services.length > 0 ? services.slice(0, 3).join(", ") : "regenerative treatments";
+  const greeting = firstName ? `Hi ${firstName},` : "Hi there,";
 
-  if (clinic.contact_name && services.length > 0) {
-    return {
-      to: clinic.contact_email || `contact@${clinic.website}`,
-      subject: `Built something for ${clinic.name}`,
-      body: `${greeting},
+  const signature = `${SENDER_NAME} Chilibeck\nCofounder & CEO\nClinicTech.io`;
 
-I came across ${clinic.name} and your work in ${servicesSnippet}. I was impressed enough that I actually built a quick preview of what a custom back-office platform could look like for your clinic.
-
-Here it is: ${previewUrl}
-
-It's branded to ${clinic.name} and shows what a purpose-built system for regenerative medicine clinics looks like. Think lead tracking, patient management, AI-assisted follow-ups, and intake forms, all in one place.
-
-Most clinics we talk to are stitching together 4-5 different tools and still dropping leads. This replaces all of that.
-
-Would you be open to a 15-minute walkthrough this week? Happy to show you how it would work with your actual workflow.
-
-${SENDER_NAME}
-${SENDER_TITLE}
-
-P.S. That preview is live and interactive. Click around, it's all real.`,
-    };
-  }
-
+  // Primary template — personalized with name
   if (clinic.contact_name) {
     return {
       to: clinic.contact_email || `contact@${clinic.website}`,
-      subject: `Quick question for ${clinic.name}`,
-      body: `${greeting},
+      subject: `Quick mockup for ${clinic.name}`,
+      body: `${greeting}
 
-I've been researching regenerative medicine clinics and ${clinic.name} caught my attention. I put together a quick preview of what a custom platform could look like for your practice:
+My team was looking at your ${clinic.name} site and put together a quick mockup of what a more streamlined patient experience and backend system could look like: ${previewUrl}
 
-${previewUrl}
+Just a rough concept, but the idea is to show how you could:
+• centralize protocols, case studies, and patient info in one place
+• give patients a simple way to understand their treatment instead of PDFs and back-and-forth
+• tighten up how inquiries get handled so fewer leads slip through the cracks
 
-We're building ClinicTech specifically for clinics like yours. It handles lead tracking, patient intake, appointment management, and AI-powered follow-ups, all branded to your clinic.
+For context, most regen med clinics we talk to are leaving a lot on the table just from slow response times and manual follow-up. Even converting 2-5 more patients a month from leads you're already getting can mean $150K-$500K+ in additional annual revenue.
 
-Curious if managing leads and patient communications is a pain point for your team? Most clinic owners we talk to say it's their biggest bottleneck after clinical work.
+Would love to walk you through the mockup and show you how we could build something like this for your clinic.
 
-Happy to jump on a quick call if you're interested: ${CALENDAR_LINK}
+Open to a quick call next week?
 
-${SENDER_NAME}
-${SENDER_TITLE}`,
+${signature}`,
     };
   }
 
+  // Fallback — no contact name
   return {
     to: clinic.contact_email || `info@${clinic.website}`,
-    subject: `Built a custom preview for ${clinic.name}`,
-    body: `Hi,
+    subject: `Custom mockup for ${clinic.name}`,
+    body: `Hi there,
 
-I put together a custom preview of what a back-office platform could look like for ${clinic.name}:
+My team put together a quick mockup of what a more streamlined patient experience and backend system could look like for ${clinic.name}: ${previewUrl}
 
-${previewUrl}
+Just a rough concept, but the idea is to show how you could:
+• centralize protocols, case studies, and patient info in one place
+• give patients a simple way to understand their treatment instead of PDFs and back-and-forth
+• tighten up how inquiries get handled so fewer leads slip through the cracks
 
-It's branded to your clinic and shows how ClinicTech handles lead tracking, patient management, AI-assisted follow-ups, and intake, all purpose-built for regenerative medicine.
+For context, most regen med clinics we talk to are leaving a lot on the table just from slow response times and manual follow-up. Even converting 2-5 more patients a month from leads you're already getting can mean $150K-$500K+ in additional annual revenue.
 
-We're working with a handful of clinics in the space and would love to include ${clinic.name}. Happy to walk you through it.
+Would love to walk you through the mockup and show you how we could build something like this for your clinic.
 
-Would a 15-minute call work this week? ${CALENDAR_LINK}
+Open to a quick call next week?
 
-${SENDER_NAME}
-${SENDER_TITLE}`,
+${signature}`,
   };
 }
 

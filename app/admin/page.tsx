@@ -801,14 +801,20 @@ export default function AdminPanel() {
   async function handleSend(clinicId: string) {
     setActionLoading(clinicId);
     try {
-      await fetch("/api/admin/send", {
+      const res = await fetch("/api/admin/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clinicId }),
       });
+      const data = await res.json();
       await fetchClinics();
+      if (data.emailSent) {
+        alert(`Email sent to ${data.to}`);
+      } else {
+        alert(data.message || "Marked as sent");
+      }
     } catch {
-      // handle silently
+      alert("Send failed");
     }
     setActionLoading(null);
   }
