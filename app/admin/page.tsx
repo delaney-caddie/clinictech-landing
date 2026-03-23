@@ -798,6 +798,47 @@ export default function AdminPanel() {
     setActionLoading(null);
   }
 
+  async function handleBulkDraft(ids: string[]) {
+    setActionLoading("bulk-draft");
+    let drafted = 0;
+    for (const id of ids) {
+      try {
+        await fetch("/api/admin/draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clinicId: id }),
+        });
+        drafted++;
+      } catch { /* continue */ }
+    }
+    await fetchClinics();
+    setSelectedIds(new Set());
+    setActionLoading(null);
+    alert(`Drafted ${drafted} email(s)`);
+  }
+
+  async function handleBulkSend(ids: string[]) {
+    setActionLoading("bulk-send");
+    let sent = 0;
+    let emailed = 0;
+    for (const id of ids) {
+      try {
+        const res = await fetch("/api/admin/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clinicId: id }),
+        });
+        const data = await res.json();
+        sent++;
+        if (data.emailSent) emailed++;
+      } catch { /* continue */ }
+    }
+    await fetchClinics();
+    setSelectedIds(new Set());
+    setActionLoading(null);
+    alert(`${sent} moved to pipeline.${emailed > 0 ? ` ${emailed} email(s) sent.` : " Set up Gmail to send automatically."}`);
+  }
+
   async function handleSend(clinicId: string) {
     setActionLoading(clinicId);
     try {
@@ -1093,44 +1134,71 @@ export default function AdminPanel() {
 
           {/* ─── PREVIEWS TAB ─── */}
           {activePage === "previews" && !loading && (
-            <ClinicTable
-              clinics={previewClinics}
-              onSelect={setSelectedClinic}
-              actions={(clinic) => (
-                <div style={{ display: "flex", gap: 4 }}>
-                  {clinic.slug && (
-                    <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                      <button className="action-btn"><ExternalLink size={12} /> View</button>
-                    </a>
-                  )}
-                  <button
-                    className="action-btn"
-                    onClick={() => handleEnrich([clinic.id])}
-                    disabled={actionLoading === "enrich"}
-                    style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
-                  >
-                    {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> {clinic.contact_phone ? "Enriched" : "Enrich"}</>}
-                  </button>
+            <>
+              {selectedIds.size > 0 && (
+                <div className="bulk-bar">
+                  <span>{selectedIds.size} selected</span>
                   <button
                     className="action-btn primary"
-                    onClick={() => handleDraft(clinic.id)}
-                    disabled={actionLoading === clinic.id}
+                    style={{ fontSize: 12 }}
+                    onClick={() => handleBulkDraft(Array.from(selectedIds))}
+                    disabled={actionLoading === "bulk-draft"}
                   >
-                    {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft Outreach</>}
+                    {actionLoading === "bulk-draft" ? <><Loader2 size={12} className="spin" /> Drafting...</> : <><Mail size={12} /> Draft All</>}
                   </button>
-                  {(draftPreviews[clinic.id] || clinic.scraped_data?.draft) && (
-                    <button className="action-btn success" onClick={() => setSelectedClinic(clinic)}>
-                      <CheckCircle2 size={12} /> Draft Ready
-                    </button>
-                  )}
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#C4B5FD", borderColor: "#7C3AED" }}
+                    onClick={() => handleEnrich(Array.from(selectedIds))}
+                    disabled={actionLoading === "enrich"}
+                  >
+                    {actionLoading === "enrich" ? <><Loader2 size={12} className="spin" /> Enriching...</> : <><Users size={12} /> Enrich All</>}
+                  </button>
+                  <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>Clear</button>
                 </div>
               )}
-            />
+              <ClinicTable
+                clinics={previewClinics}
+                onSelect={setSelectedClinic}
+                selectedIds={selectedIds}
+                onToggleSelect={toggleId}
+                showCheckboxes
+                actions={(clinic) => (
+                  <div style={{ display: "flex", gap: 4 }}>
+                    {clinic.slug && (
+                      <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                        <button className="action-btn"><ExternalLink size={12} /> View</button>
+                      </a>
+                    )}
+                    <button className="action-btn primary" onClick={() => handleDraft(clinic.id)} disabled={actionLoading === clinic.id}>
+                      {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft</>}
+                    </button>
+                    {(draftPreviews[clinic.id] || clinic.scraped_data?.draft) && (
+                      <button className="action-btn success" onClick={() => setSelectedClinic(clinic)}>
+                        <CheckCircle2 size={12} /> Ready
+                      </button>
+                    )}
+                  </div>
+                )}
+              />
+            </>
           )}
 
           {/* ─── OUTREACH TAB ─── */}
           {activePage === "outreach" && !loading && (
             <div className="admin-table-wrap">
+              {outreachClinics.length > 1 && (
+                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                  <button
+                    className="action-btn success"
+                    style={{ fontSize: 13, padding: "8px 16px" }}
+                    onClick={() => handleBulkSend(outreachClinics.map(c => c.id))}
+                    disabled={actionLoading === "bulk-send"}
+                  >
+                    {actionLoading === "bulk-send" ? <><Loader2 size={14} className="spin" /> Sending...</> : <><Send size={14} /> Approve &amp; Send All ({outreachClinics.length})</>}
+                  </button>
+                </div>
+              )}
               {outreachClinics.length === 0 ? (
                 <div className="empty-state">
                   <Mail size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
