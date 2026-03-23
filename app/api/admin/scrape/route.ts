@@ -29,8 +29,17 @@ function generateSlug(name: string): string {
 
 // ─── Lightweight scrape (fetch HTML, extract colors + services) ───
 
+// WordPress Gutenberg default palette — appears on every WP site, never brand colors
+const WP_DEFAULT_COLORS = new Set([
+  "#FF6900", "#FCB900", "#7BDCB5", "#00D084", "#8ED1FC",
+  "#0693E3", "#ABB8C3", "#CF2E2E", "#F78DA7", "#9B51E0",
+  "#FDD79A", "#FAFAE1", "#FAACA8",
+]);
+
 function isViableColor(hex: string): boolean {
   const stripped = hex.replace("#", "").toUpperCase();
+  const full = `#${stripped}`;
+  if (WP_DEFAULT_COLORS.has(full)) return false; // WordPress default palette
   if (/^([0-9A-F])\1{5}$/.test(stripped)) return false; // pure grey
   if (stripped === "000000" || stripped === "FFFFFF") return false;
   const r = parseInt(stripped.slice(0, 2), 16);
