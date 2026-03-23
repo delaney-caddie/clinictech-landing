@@ -644,6 +644,109 @@ function ClinicTable({
   );
 }
 
+function EditableDraftCard({ clinic, actionLoading, onSend, onSkip, onSaveDraft }: {
+  clinic: Clinic;
+  actionLoading: string | null;
+  onSend: (id: string) => void;
+  onSkip: () => void;
+  onSaveDraft: (id: string, draft: { to: string; subject: string; body: string }) => void;
+}) {
+  const draft = clinic.scraped_data?.draft;
+  if (!draft) return null;
+
+  const [editing, setEditing] = useState(false);
+  const [to, setTo] = useState(draft.to || "");
+  const [subject, setSubject] = useState(draft.subject || "");
+  const [body, setBody] = useState(draft.body || "");
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    setSaving(true);
+    await onSaveDraft(clinic.id, { to, subject, body });
+    setSaving(false);
+    setEditing(false);
+  }
+
+  return (
+    <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 16 }}>{clinic.name}</div>
+          <div style={{ fontSize: 12, color: "#64748B", marginTop: 2 }}>
+            {clinic.location || ""}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {!editing && (
+            <button className="action-btn" onClick={() => setEditing(true)}>
+              ✏️ Edit
+            </button>
+          )}
+          {editing && (
+            <button className="action-btn primary" onClick={handleSave} disabled={saving}>
+              {saving ? <Loader2 size={12} className="spin" /> : "Save"}
+            </button>
+          )}
+          {editing && (
+            <button className="action-btn" onClick={() => { setEditing(false); setTo(draft.to); setSubject(draft.subject); setBody(draft.body); }}>
+              Cancel
+            </button>
+          )}
+          {!editing && (
+            <>
+              <button
+                className="action-btn success"
+                onClick={() => onSend(clinic.id)}
+                disabled={actionLoading === clinic.id}
+              >
+                {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Approve &amp; Send</>}
+              </button>
+              <button className="action-btn" onClick={onSkip}>Skip</button>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="draft-preview">
+        {editing ? (
+          <>
+            <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 4 }}>To</label>
+              <input
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+                style={{ width: "100%", padding: "8px 12px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 13, fontFamily: "inherit", outline: "none" }}
+              />
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 4 }}>Subject</label>
+              <input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                style={{ width: "100%", padding: "8px 12px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 13, fontFamily: "inherit", fontWeight: 600, outline: "none" }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 4 }}>Body</label>
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                rows={14}
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 13, lineHeight: 1.6, fontFamily: "inherit", resize: "vertical", outline: "none" }}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="draft-to">To: {to}</div>
+            <div className="draft-subject">Subject: {subject}</div>
+            <div className="draft-body">{body}</div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AnalyticsTab() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1206,36 +1309,23 @@ export default function AdminPanel() {
                   <div className="empty-state-sub">Generate email drafts from the Previews tab first.</div>
                 </div>
               ) : (
-                outreachClinics.map((clinic) => {
-                  const draft = clinic.scraped_data?.draft;
-                  if (!draft) return null;
-                  return (
-                    <div key={clinic.id} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20, marginBottom: 12 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-                        <div>
-                          <div style={{ fontWeight: 700, fontSize: 16 }}>{clinic.name}</div>
-                          <div style={{ fontSize: 12, color: "#64748B", marginTop: 2 }}>
-                            To: {draft.to} | {clinic.location || "Unknown location"}
-                          </div>
-                        </div>
-                        <div style={{ display: "flex", gap: 6 }}>
-                          <button
-                            className="action-btn success"
-                            onClick={() => handleSend(clinic.id)}
-                            disabled={actionLoading === clinic.id}
-                          >
-                            {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Approve &amp; Send</>}
-                          </button>
-                          <button className="action-btn" onClick={() => handleStatusChange(clinic.id, "new")}>Skip</button>
-                        </div>
-                      </div>
-                      <div className="draft-preview">
-                        <div className="draft-subject">Subject: {draft.subject}</div>
-                        <div className="draft-body">{draft.body}</div>
-                      </div>
-                    </div>
-                  );
-                })
+                outreachClinics.map((clinic) => (
+                  <EditableDraftCard
+                    key={clinic.id}
+                    clinic={clinic}
+                    actionLoading={actionLoading}
+                    onSend={handleSend}
+                    onSkip={() => handleStatusChange(clinic.id, "new")}
+                    onSaveDraft={async (id, draft) => {
+                      await fetch("/api/admin/status", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ clinicId: id, updateDraft: draft }),
+                      });
+                      await fetchClinics();
+                    }}
+                  />
+                ))
               )}
             </div>
           )}
