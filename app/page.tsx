@@ -165,6 +165,10 @@ nav .nav-links a.btn-primary:hover {
   transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--white); }
+.nav-mobile-cta { display: none; }
+@media (max-width: 900px) {
+  .nav-mobile-cta { display: inline-flex; }
+}
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 32px;
@@ -1691,6 +1695,7 @@ footer .container {
 }
 
 /* ===== RESPONSIVE ===== */
+/* ===== TABLET ===== */
 @media (max-width: 900px) {
   .hero .container {
     grid-template-columns: 1fr;
@@ -1713,6 +1718,95 @@ footer .container {
   .nav-links { display: none; }
   .stat-banner .container { flex-direction: column; gap: 8px; }
   .section-title { font-size: 32px; }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  .container { padding: 0 16px; }
+
+  /* Nav */
+  nav { padding: 14px 0; }
+  .nav-logo { font-size: 18px; gap: 8px; }
+  .nav-logo svg { width: 28px; height: 28px; }
+
+  /* Hero */
+  .hero { padding: 120px 0 60px; }
+  .hero h1 { font-size: 28px; letter-spacing: 0; line-height: 1.2; }
+  .hero-badge { font-size: 11px; padding: 4px 12px 4px 6px; }
+  .hero-sub { font-size: 15px; line-height: 1.6; }
+  .hero-ctas { gap: 10px; }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-secondary { width: 100%; justify-content: center; padding: 14px 20px; font-size: 14px; }
+
+  /* CRM Builder mockup */
+  .crm-builder { display: none; }
+  .activity-toast { display: none; }
+  .brand-tag { display: none; }
+
+  /* Stat banner */
+  .stat-banner { padding: 40px 0; }
+  .stat-banner-number { font-size: 36px; }
+  .stat-banner-text { font-size: 16px; }
+
+  /* Sections */
+  .problem, .product, .funnel { padding: 60px 0; }
+  .backoffice-section, .portal-section { padding: 60px 0; }
+  .section-label { font-size: 11px; letter-spacing: 1.5px; }
+  .section-title { font-size: 26px; letter-spacing: 0; line-height: 1.2; }
+  .section-sub { font-size: 14px; margin-bottom: 32px; }
+
+  /* Pain cards */
+  .pain-card { padding: 24px; }
+  .pain-card h3 { font-size: 16px; }
+  .pain-card p { font-size: 13px; }
+
+  /* Back office section */
+  .backoffice-grid, .portal-grid { gap: 28px; }
+  .backoffice-mockup { overflow-x: auto; }
+  .bo-sidebar { min-width: 320px; }
+  .backoffice-feature h4 { font-size: 13px; }
+  .backoffice-feature p { font-size: 11px; }
+
+  /* Portal mockup */
+  .portal-mockup { overflow: hidden; }
+  .portal-chat-msg { max-width: 95%; font-size: 11px; }
+  .portal-kb-uploads { flex-wrap: wrap; }
+
+  /* Success stories */
+  .success-stories-showcase { gap: 28px; }
+  .ss-actions { flex-direction: column; gap: 6px; }
+  .ss-queue { flex-direction: column; gap: 6px; }
+
+  /* ROI */
+  .roi { padding: 60px 0; }
+  .roi-calculator { padding: 24px; }
+  .roi-result-value { font-size: 28px; }
+  .roi-metric { padding: 16px; }
+  .roi-slider { width: 100px; }
+
+  /* Funnel cards */
+  .funnel-card { padding: 24px; }
+  .funnel-card h3 { font-size: 16px; }
+
+  /* Steps */
+  .how { padding: 60px 0; }
+  .step { padding: 28px 20px; }
+  .step h3 { font-size: 17px; }
+
+  /* Integrations */
+  .int-logos { gap: 10px; }
+  .int-logo { width: 80px; height: 64px; font-size: 9px; }
+
+  /* CTA */
+  .cta-section { padding: 60px 0; }
+  .cta-box { padding: 40px 20px; border-radius: 16px; }
+  .cta-box h2 { font-size: 26px; letter-spacing: 0; }
+  .cta-box p { font-size: 14px; }
+  .cta-box .btn-primary { font-size: 14px; padding: 14px 28px; }
+
+  /* Footer */
+  footer .container { flex-direction: column; gap: 16px; text-align: center; }
+  .footer-links { justify-content: center; }
 }
       `}</style>
 
@@ -1738,6 +1832,7 @@ footer .container {
             <a href="#roi">ROI</a>
             <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Demo</a>
           </div>
+          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary nav-mobile-cta" style={{padding: "10px 20px", fontSize: 13}}>Book a Demo</a>
         </div>
       </nav>
 
