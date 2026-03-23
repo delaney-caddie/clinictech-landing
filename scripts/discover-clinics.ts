@@ -32,8 +32,8 @@ if (!GOOGLE_API_KEY) {
 
 const SEARCH_QUERIES = [
   "stem cell therapy clinic",
-  "regenerative medicine clinic",
-  "PRP therapy clinic",
+  "stem cell treatment center",
+  "regenerative medicine stem cell clinic",
 ];
 
 // ─── No geocoding needed — Places text search handles location in query ───

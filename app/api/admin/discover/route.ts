@@ -10,9 +10,31 @@ function getSupabase() {
 
 const SEARCH_QUERIES = [
   "stem cell therapy clinic",
-  "regenerative medicine clinic",
-  "PRP therapy clinic",
+  "stem cell treatment center",
+  "regenerative medicine stem cell clinic",
 ];
+
+// Filter out medspas, cosmetic-only, and unrelated results
+const EXCLUDE_TYPES = ["spa", "beauty_salon", "hair_care", "skin_care_clinic"];
+const EXCLUDE_KEYWORDS = [
+  "medspa", "med spa", "aesthetics", "aesthetic", "dermatology",
+  "botox", "filler", "laser", "facial", "waxing", "lash",
+  "chiropractic", "chiropractor", "massage",
+];
+
+function isRelevantClinic(place: PlaceResult): boolean {
+  const name = place.name.toLowerCase();
+  // If name explicitly mentions stem cell or regenerative, always include
+  if (name.includes("stem cell") || name.includes("regenerat") || name.includes("prp")) return true;
+  // Exclude if types are purely cosmetic/spa
+  const hasOnlyExcludedTypes = place.types.length > 0 &&
+    place.types.filter(t => !["health", "point_of_interest", "establishment", "service", "store"].includes(t))
+      .every(t => EXCLUDE_TYPES.includes(t));
+  if (hasOnlyExcludedTypes) return false;
+  // Exclude by name keywords
+  if (EXCLUDE_KEYWORDS.some(kw => name.includes(kw))) return false;
+  return true;
+}
 
 interface PlaceResult {
   name: string;
@@ -105,7 +127,7 @@ export async function POST(req: NextRequest) {
       allResults.push(...results);
     }
 
-    const unique = deduplicateByDomain(allResults);
+    const unique = deduplicateByDomain(allResults).filter(isRelevantClinic);
 
     // If save flag is set, add to Supabase
     if (save) {
