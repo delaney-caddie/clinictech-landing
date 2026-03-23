@@ -13,7 +13,43 @@ const FIBER_BASE = "https://api.fiber.ai/v1";
 
 // ─── Step 1: Find owner via Kitchen Sink Person ───
 
-async function findOwner(domain: string): Promise<{
+function isPersonAtClinic(person: any, domain: string, clinicName?: string): boolean {
+  const headline = (person.headline || "").toLowerCase();
+  const domainBase = domain.toLowerCase().replace(/\.(com|net|org|ca|co|io)$/, "").replace(/^www\./, "");
+
+  // Check headline mentions the clinic
+  if (headline.includes(domainBase.split(".")[0])) return true;
+
+  // Check if clinic name appears in headline
+  if (clinicName) {
+    const nameLower = clinicName.toLowerCase();
+    if (headline.includes(nameLower)) return true;
+    // Check first significant word of clinic name
+    const firstWord = nameLower.split(/\s+/).find(w => w.length > 3);
+    if (firstWord && headline.includes(firstWord)) return true;
+  }
+
+  // Check work experiences for the domain
+  const experiences = person.experiences || [];
+  for (const exp of experiences) {
+    if (exp.is_current) {
+      const compName = (exp.company_name || "").toLowerCase();
+      if (compName.includes(domainBase.split(".")[0])) return true;
+      if (clinicName) {
+        const nameLower = clinicName.toLowerCase();
+        if (compName.includes(nameLower) || nameLower.includes(compName)) return true;
+      }
+    }
+  }
+
+  // Known false positives
+  const name = (person.name || "").toLowerCase();
+  if (name.includes("sahil bloom") || name.includes("gary neville")) return false;
+
+  return false;
+}
+
+async function findOwner(domain: string, clinicName?: string): Promise<{
   name: string;
   title: string;
   linkedinSlug: string;
@@ -22,7 +58,7 @@ async function findOwner(domain: string): Promise<{
   if (!apiKey) return null;
 
   // Try different job titles in priority order
-  const jobTitles = ["owner", "founder", "ceo", "medical director", "director"];
+  const jobTitles = ["owner", "founder", "ceo", "medical director"];
 
   for (const title of jobTitles) {
     try {
@@ -33,22 +69,16 @@ async function findOwner(domain: string): Promise<{
           apiKey,
           companyDomain: { value: domain },
           jobTitle: { value: title },
-          numProfiles: 1,
+          numProfiles: 5,
         }),
       });
 
       const data = await res.json();
-      const profiles = data?.output?.data || data?.output?.profiles || [];
+      const profiles = data?.output?.data || [];
 
-      if (profiles.length > 0) {
-        const p = profiles[0];
-        // Verify this person is actually at the clinic (not a random match)
-        const headline = (p.headline || "").toLowerCase();
-        const domainLower = domain.toLowerCase().replace(/\.(com|net|org|ca|co)$/, "");
-        const clinicInHeadline = headline.includes(domainLower.split(".")[0]) ||
-          headline.includes(title);
-
-        if (clinicInHeadline || profiles.length === 1) {
+      // Find the first person who is ACTUALLY at this clinic
+      for (const p of profiles) {
+        if (isPersonAtClinic(p, domain, clinicName)) {
           return {
             name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
             title: p.headline || title,
@@ -132,7 +162,7 @@ export async function POST(req: NextRequest) {
 
       try {
         // Step 1: Find the owner
-        const owner = await findOwner(clinic.website);
+        const owner = await findOwner(clinic.website, clinic.name);
 
         if (!owner) {
           results.push({ id, name: clinic.name, status: "no_owner_found" });
