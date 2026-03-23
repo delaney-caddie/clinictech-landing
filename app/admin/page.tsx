@@ -248,7 +248,7 @@ function formatDate(d: string | null): string {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function DetailPanel({ clinic, onClose, onStatusChange }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void }) {
+function DetailPanel({ clinic, onClose, onStatusChange, onEnrich }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void }) {
   const [statusOpen, setStatusOpen] = useState(false);
 
   const timeline = [
@@ -389,6 +389,13 @@ function DetailPanel({ clinic, onClose, onStatusChange }: { clinic: Clinic; onCl
                 <Send size={12} /> Mark Sent
               </button>
             )}
+            <button
+              className="action-btn"
+              onClick={() => onEnrich(clinic.id)}
+              style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
+            >
+              <Users size={12} /> {clinic.contact_phone ? "Re-Enrich" : "Enrich Contact"}
+            </button>
             {clinic.slug && (
               <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
                 <button className="action-btn"><ExternalLink size={12} /> View Preview</button>
@@ -1042,16 +1049,14 @@ export default function AdminPanel() {
                       <button className="action-btn"><ExternalLink size={12} /> View</button>
                     </a>
                   )}
-                  {!clinic.contact_phone && (
-                    <button
-                      className="action-btn"
-                      onClick={() => handleEnrich([clinic.id])}
-                      disabled={actionLoading === "enrich"}
-                      style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
-                    >
-                      {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
-                    </button>
-                  )}
+                  <button
+                    className="action-btn"
+                    onClick={() => handleEnrich([clinic.id])}
+                    disabled={actionLoading === "enrich"}
+                    style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
+                  >
+                    {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> {clinic.contact_phone ? "Enriched" : "Enrich"}</>}
+                  </button>
                   <button
                     className="action-btn primary"
                     onClick={() => handleDraft(clinic.id)}
@@ -1143,6 +1148,11 @@ export default function AdminPanel() {
                 onSelect={setSelectedClinic}
                 actions={(clinic) => (
                   <div style={{ display: "flex", gap: 4 }}>
+                    {!clinic.contact_phone && (
+                      <button className="action-btn" onClick={() => handleEnrich([clinic.id])} disabled={actionLoading === "enrich"} style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}>
+                        {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
+                      </button>
+                    )}
                     {clinic.status !== "call_flagged" && (
                       <button className="action-btn danger" onClick={() => handleStatusChange(clinic.id, "call_flagged")}>
                         <Phone size={12} /> Flag Call
@@ -1185,6 +1195,10 @@ export default function AdminPanel() {
           onClose={() => setSelectedClinic(null)}
           onStatusChange={(id, status) => {
             handleStatusChange(id, status);
+            setSelectedClinic(null);
+          }}
+          onEnrich={(id) => {
+            handleEnrich([id]);
             setSelectedClinic(null);
           }}
         />
