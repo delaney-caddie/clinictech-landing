@@ -72,13 +72,41 @@ export default function ClinicPreviewPage() {
     );
   }
 
-  // Apply brand color as CSS custom property
-  const brandStyle = clinic.primary_color ? {
-    "--brand-color": clinic.primary_color,
-  } as React.CSSProperties : {};
+  // Apply brand color by overriding sidebar CSS custom properties
+  useEffect(() => {
+    if (!clinic?.primary_color) return;
+    const hex = clinic.primary_color;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    // Set CSS custom properties on :root to override the OKLCh theme
+    const style = document.documentElement.style;
+    style.setProperty("--sidebar", `${r} ${g} ${b}`);
+    // Override sidebar background with the brand color
+    const sidebar = document.querySelector("[class*='bg-sidebar']") as HTMLElement;
+    if (sidebar) {
+      sidebar.style.backgroundColor = hex;
+      sidebar.style.color = "#ffffff";
+    }
+    // Override active nav and buttons
+    const styleEl = document.createElement("style");
+    styleEl.textContent = `
+      .bg-sidebar { background-color: ${hex} !important; }
+      .bg-sidebar-primary { background-color: rgba(255,255,255,0.15) !important; }
+      .bg-sidebar-accent { background-color: rgba(255,255,255,0.08) !important; }
+      .text-sidebar-foreground { color: #ffffff !important; }
+      .text-sidebar-primary-foreground { color: #ffffff !important; }
+      .border-sidebar-border { border-color: rgba(255,255,255,0.12) !important; }
+      .text-sidebar-foreground\\/70 { color: rgba(255,255,255,0.7) !important; }
+      .hover\\:text-sidebar-foreground:hover { color: #ffffff !important; }
+      .hover\\:bg-sidebar-accent:hover { background-color: rgba(255,255,255,0.12) !important; }
+    `;
+    document.head.appendChild(styleEl);
+    return () => { styleEl.remove(); };
+  }, [clinic?.primary_color]);
 
   return (
-    <div className="flex min-h-screen" style={brandStyle}>
+    <div className="flex min-h-screen">
       <SidebarNav
         view={view}
         onViewChange={handleViewChange}

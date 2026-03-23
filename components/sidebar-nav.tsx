@@ -177,10 +177,10 @@ export function SidebarNav({ view, onViewChange, activePage, onPageChange, clini
           {!collapsed && (
             <div className="flex-1 overflow-hidden">
               <p className="truncate text-sm font-medium text-sidebar-foreground">
-                {view === "dashboard" ? "ClinicTech Admin" : "Jennifer M."}
+                {view === "dashboard" ? `${clinicName || "Clinic"} Admin` : "Jennifer M."}
               </p>
               <p className="truncate text-xs text-sidebar-foreground/60">
-                {view === "dashboard" ? "admin@clinictech.com" : "patient@example.com"}
+                {view === "dashboard" ? "admin@clinic.com" : "patient@example.com"}
               </p>
             </div>
           )}

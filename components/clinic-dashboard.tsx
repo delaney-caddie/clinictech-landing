@@ -491,7 +491,7 @@ export function ClinicDashboard({ activePage, clinicName }: ClinicDashboardProps
     return (
       <div className="p-6">
         {selectedProfile && <ProfileModal />}
-        {renderPageHeader("This Week at ClinicTech", "March 13 - March 19, 2026")}
+        {renderPageHeader(`This Week at ${clinicName || "Your Clinic"}`, "March 13 - March 19, 2026")}
         
         {/* Quick Stats Row */}
         <div className="mb-6 grid grid-cols-5 gap-4">
