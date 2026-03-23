@@ -164,27 +164,74 @@ function extractEmails(text: string): string[] {
   );
 }
 
-async function fetchWithFirecrawl(url: string): Promise<string> {
+interface FirecrawlBranding {
+  primaryColor: string | null;
+  secondaryColor: string | null;
+  logo: string | null;
+  favicon: string | null;
+}
+
+async function fetchBrandingFromFirecrawl(url: string): Promise<FirecrawlBranding | null> {
   const firecrawlKey = process.env.FIRECRAWL_API_KEY;
-  if (!firecrawlKey) throw new Error("no_firecrawl");
+  if (!firecrawlKey) return null;
 
-  const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${firecrawlKey}`,
-    },
-    body: JSON.stringify({
-      url,
-      formats: ["html"],
-      waitFor: 3000,
-    }),
-    signal: AbortSignal.timeout(30000),
-  });
+  try {
+    const res = await fetch("https://api.firecrawl.dev/v2/scrape", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${firecrawlKey}`,
+      },
+      body: JSON.stringify({
+        url,
+        formats: ["branding"],
+      }),
+      signal: AbortSignal.timeout(30000),
+    });
 
-  const data = await res.json();
-  if (!data.success || !data.data?.html) throw new Error("firecrawl_failed");
-  return data.data.html;
+    const data = await res.json();
+    if (!data.success || !data.data?.branding) return null;
+
+    const branding = data.data.branding;
+    const colors = branding.colors || {};
+    const images = branding.images || {};
+
+    return {
+      primaryColor: colors.primary || colors.accent || null,
+      secondaryColor: colors.secondary || null,
+      logo: images.logo || branding.logo || null,
+      favicon: images.favicon || null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchHtmlFromFirecrawl(url: string): Promise<string | null> {
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY;
+  if (!firecrawlKey) return null;
+
+  try {
+    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${firecrawlKey}`,
+      },
+      body: JSON.stringify({
+        url,
+        formats: ["html"],
+        waitFor: 3000,
+      }),
+      signal: AbortSignal.timeout(30000),
+    });
+
+    const data = await res.json();
+    if (!data.success || !data.data?.html) return null;
+    return data.data.html;
+  } catch {
+    return null;
+  }
 }
 
 async function scrapeWebsite(website: string): Promise<{
@@ -196,11 +243,15 @@ async function scrapeWebsite(website: string): Promise<{
   try {
     const url = website.startsWith("http") ? website : `https://${website}`;
 
-    // Try Firecrawl first (renders JS, much better), fall back to basic fetch
+    // Try Firecrawl branding endpoint first (best quality)
+    const branding = await fetchBrandingFromFirecrawl(url);
+
+    // Get HTML for services/emails extraction
     let html: string;
-    try {
-      html = await fetchWithFirecrawl(url);
-    } catch {
+    const firecrawlHtml = await fetchHtmlFromFirecrawl(url);
+    if (firecrawlHtml) {
+      html = firecrawlHtml;
+    } else {
       const res = await fetch(url, {
         headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
         signal: AbortSignal.timeout(10000),
@@ -208,66 +259,14 @@ async function scrapeWebsite(website: string): Promise<{
       html = await res.text();
     }
 
-    const primaryColor = extractBrandColor(html);
+    // Use Firecrawl branding colors if available, otherwise extract from HTML
+    const primaryColor = branding?.primaryColor || extractBrandColor(html);
 
     const services = extractServices(html);
     const emails = extractEmails(html);
 
-    // Try to find logo — match actual logo images only
-    let logoUrl: string | null = null;
-    const logoPatterns = [
-      // class contains "logo" with src
-      /class="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
-      /src="([^"]+)"[^>]*class="[^"]*logo[^"]*"/i,
-      // class contains "logo" with data-src (lazy loaded)
-      /class="[^"]*logo[^"]*"[^>]*data-src="([^"]+)"/i,
-      // alt contains "logo" with src
-      /alt="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
-      /src="([^"]+)"[^>]*alt="[^"]*logo[^"]*"/i,
-      // id contains "logo"
-      /id="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
-      // Common header image patterns
-      /class="[^"]*(?:site-logo|header-logo|navbar-brand|custom-logo)[^"]*"[^>]*src="([^"]+)"/i,
-      /class="[^"]*(?:site-logo|header-logo|navbar-brand|custom-logo)[^"]*"[^>]*data-src="([^"]+)"/i,
-      // WordPress custom logo
-      /class="[^"]*custom-logo[^"]*"[^>]*src="([^"]+)"/i,
-      // srcset on logo elements (take first URL)
-      /class="[^"]*logo[^"]*"[^>]*srcset="([^\s,"]+)/i,
-      // Link with logo in rel (favicon as last resort)
-      /<link[^>]*rel="icon"[^>]*href="([^"]+)"/i,
-      /<link[^>]*rel="apple-touch-icon"[^>]*href="([^"]+)"/i,
-    ];
-    for (const pattern of logoPatterns) {
-      const match = html.match(pattern);
-      if (match?.[1]) {
-        let src = match[1];
-        // Skip broken/placeholder URLs
-        if (src.includes("${") || src.includes("{{")) continue;
-        if (src.length > 500) continue;
-        if (src.startsWith("data:")) continue;
-        // Skip certification/partner logos (common false positives)
-        const srcLower = src.toLowerCase();
-        if (srcLower.includes("certification") || srcLower.includes("accredit") ||
-            srcLower.includes("partner") || srcLower.includes("association") ||
-            srcLower.includes("greyscale") || srcLower.includes("grayscale") ||
-            srcLower.includes("award") || srcLower.includes("badge")) continue;
-        // Resolve to absolute URL
-        if (src.startsWith("http")) logoUrl = src;
-        else if (src.startsWith("//")) logoUrl = `https:${src}`;
-        else if (src.startsWith("/")) logoUrl = `${new URL(url).origin}${src}`;
-        else logoUrl = `${new URL(url).origin}/${src}`;
-        break;
-      }
-    }
-
-    // If no logo found, try the site's favicon (almost always works)
-    if (!logoUrl) {
-      const faviconUrl = `${new URL(url).origin}/favicon.ico`;
-      try {
-        const favRes = await fetch(faviconUrl, { method: "HEAD", signal: AbortSignal.timeout(3000) });
-        if (favRes.ok) logoUrl = faviconUrl;
-      } catch { /* skip */ }
-    }
+    // Use Firecrawl logo if available, otherwise skip (text fallback is cleaner)
+    const logoUrl = branding?.logo || branding?.favicon || null;
 
     return { primaryColor, services, contactEmail: emails[0] || null, logoUrl };
   } catch {

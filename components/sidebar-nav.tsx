@@ -69,7 +69,15 @@ export function SidebarNav({ view, onViewChange, activePage, onPageChange, clini
       {/* Logo */}
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-3">
         <div className={cn("flex items-center gap-2", collapsed && "justify-center w-full")}>
-          {collapsed ? (
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={clinicName || "Clinic"}
+              style={{ width: collapsed ? 32 : 140, height: "auto", maxHeight: 36 }}
+              className="shrink-0 object-contain"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+          ) : collapsed ? (
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-sm font-bold shrink-0">
               {(clinicName || "CT").charAt(0)}
             </div>
