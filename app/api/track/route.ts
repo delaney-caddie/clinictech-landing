@@ -80,6 +80,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "tracking failed" }, { status: 500 });
     }
 
+    // Auto-flag clinic for call queue when preview is first opened
+    // Only on initial page load (not navigation/duration events)
+    if (page_path === "/" || !page_path) {
+      const supabase = getSupabase();
+      const { data: clinicData } = await supabase
+        .from("clinics")
+        .select("status")
+        .eq("id", clinic.id)
+        .single();
+
+      // If clinic is in preview_sent status, move to call_flagged
+      // (they opened the preview — time to follow up)
+      if (clinicData && clinicData.status === "preview_sent") {
+        await supabase
+          .from("clinics")
+          .update({
+            status: "call_flagged",
+            call_flagged_at: new Date().toISOString(),
+          })
+          .eq("id", clinic.id);
+      }
+    }
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Track error:", err);

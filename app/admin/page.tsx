@@ -1,27 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Search, Plus, Globe, Eye, Mail, Phone, MoreHorizontal,
-  Sparkles, RefreshCw, ExternalLink, CheckCircle2, Clock,
+  RefreshCw, ExternalLink, CheckCircle2, Clock,
   AlertCircle, XCircle, Send, Target, Settings, Calendar,
-  PhoneCall,
+  PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown,
 } from "lucide-react";
 
-/* ─── Sample Data ─── */
-const CLINICS = [
-  { id: 1, name: "ResCore Stem Cell", website: "rescore.com", logo: "", primaryColor: "#1B6B4A", status: "preview_sent", previewSlug: "rescore", externalPreviewUrl: null, contactName: "Steve", contactEmail: "steve@rescore.com", contactPhone: "(555) 100-2000", location: "Austin, TX", services: ["Stem Cell Therapy", "PRP", "Exosomes"], scrapedAt: "Mar 20", previewAt: "Mar 20", emailedAt: "Mar 21", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Beta client. Warm lead. Preview sent via V0 mockup." },
-  { id: 2, name: "BioXcellerator", website: "bioxcellerator.com", logo: "", primaryColor: "#0066CC", status: "preview_sent", previewSlug: "bioxcellerator", externalPreviewUrl: null, contactName: "Dr. Martinez", contactEmail: "info@bioxcellerator.com", contactPhone: "(555) 200-3000", location: "Medellin, CO", services: ["Stem Cell Therapy", "Anti-Aging"], scrapedAt: "Mar 19", previewAt: "Mar 19", emailedAt: "Mar 20", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Large operation, high value target." },
-  { id: 3, name: "Dynamic Stem Cell Therapy", website: "dynamicstemcelltherapy.com", logo: "", primaryColor: "#8B2252", status: "meeting_booked", previewSlug: "dynamic-stem-cell", externalPreviewUrl: "https://v0.dev/chat/dynamic-stem-cell-preview", contactName: "Dr. Gaveck", contactEmail: "info@dynamicstemcelltherapy.com", contactPhone: null, location: "Las Vegas, NV", services: ["Stem Cell", "PRP", "Joint Therapy"], scrapedAt: "Mar 18", previewAt: "Mar 18", emailedAt: "Mar 19", followUp1: null, followUp2: null, callFlag: false, meetingBooked: true, calledAt: null, notes: "Meeting booked! Responded to initial preview email." },
-  { id: 4, name: "Prodromos Stem Cell", website: "prodromosstemcell.com", logo: "", primaryColor: "#1a1a2e", status: "preview_sent", previewSlug: "prodromos", externalPreviewUrl: null, contactName: "Chloe", contactEmail: "contact@prodromos.com", contactPhone: "(555) 400-5000", location: "Chicago, IL", services: ["ACL Repair", "Stem Cell", "Sports Medicine"], scrapedAt: "Mar 15", previewAt: "Mar 15", emailedAt: "Mar 16", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Preview sent. Awaiting response." },
-  { id: 5, name: "Pagdin Health", website: "pagdinhealth.com", logo: "", primaryColor: "#2E7D32", status: "meeting_booked", previewSlug: "pagdin-health", externalPreviewUrl: "https://v0.dev/chat/pagdin-health-preview", contactName: "Dr. Pagdin", contactEmail: "info@pagdinhealth.com", contactPhone: null, location: "Kelowna, BC", services: ["Regenerative Medicine", "IV Therapy", "Hormone Therapy"], scrapedAt: "Mar 17", previewAt: "Mar 17", emailedAt: "Mar 18", followUp1: null, followUp2: null, callFlag: false, meetingBooked: true, calledAt: null, notes: "Meeting booked! Very interested in the platform." },
-  { id: 6, name: "Kopi Stem Cell", website: "kopistemcell.com", logo: "", primaryColor: "#D4A843", status: "preview_sent", previewSlug: "kopi-stem-cell", externalPreviewUrl: null, contactName: null, contactEmail: "info@kopistemcell.com", contactPhone: null, location: "Jakarta, ID", services: ["Stem Cell Therapy"], scrapedAt: "Mar 20", previewAt: "Mar 20", emailedAt: "Mar 21", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "International clinic. Preview sent." },
-  { id: 7, name: "ISSCA Member Clinic", website: "example-regen.com", logo: "", primaryColor: "#4A90D9", status: "preview_sent", previewSlug: "issca-member", externalPreviewUrl: null, contactName: "Dr. Kim", contactEmail: "drkim@example-regen.com", contactPhone: "(555) 700-8000", location: "Los Angeles, CA", services: ["Stem Cell", "Regenerative Medicine"], scrapedAt: "Mar 21", previewAt: "Mar 22", emailedAt: "Mar 22", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Preview sent same day as generation." },
-];
+/* ─── Types ─── */
 
-type Clinic = (typeof CLINICS)[number];
+interface Clinic {
+  id: string;
+  name: string;
+  slug: string;
+  website: string;
+  logo_url: string | null;
+  primary_color: string | null;
+  services: string[] | null;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  location: string | null;
+  status: string;
+  source: string | null;
+  scraped_at: string | null;
+  scraped_data: any;
+  preview_sent_at: string | null;
+  emailed_at: string | null;
+  follow_up_1_at: string | null;
+  follow_up_2_at: string | null;
+  call_flagged_at: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ComponentType<{ size: number }> }> = {
+interface DiscoveredClinic {
+  name: string;
+  address: string;
+  website: string | null;
+  phone: string | null;
+  rating: number | null;
+  totalRatings: number | null;
+  placeId: string;
+  types: string[];
+}
+
+interface AnalyticsData {
+  total_views: number;
+  unique_visitors: number;
+  clinics: {
+    clinic_id: string;
+    slug: string;
+    total_views: number;
+    unique_visitors: number;
+    last_viewed: string;
+  }[];
+  message?: string;
+}
+
+interface Draft {
+  subject: string;
+  body: string;
+  to: string;
+}
+
+/* ─── Constants ─── */
+
+type StatusConfigEntry = { label: string; color: string; bg: string; icon: React.ComponentType<{ size: number }> };
+
+const STATUS_CONFIG: Record<string, StatusConfigEntry> = {
   new:               { label: "New",              color: "#6B7280", bg: "#F3F4F6", icon: Plus },
   scraped:           { label: "Scraped",          color: "#8B5CF6", bg: "#F5F3FF", icon: Globe },
   preview_generated: { label: "Preview Ready",    color: "#2563EB", bg: "#EFF6FF", icon: Eye },
@@ -29,14 +77,17 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
   emailed:           { label: "Emailed",          color: "#059669", bg: "#ECFDF5", icon: Mail },
   follow_up_1:       { label: "Follow-up 1",      color: "#D97706", bg: "#FFFBEB", icon: Clock },
   follow_up_2:       { label: "Follow-up 2",      color: "#EA580C", bg: "#FFF7ED", icon: AlertCircle },
-  meeting_booked:    { label: "Meeting Booked",     color: "#7C3AED", bg: "#F5F3FF", icon: Calendar },
-  called:            { label: "Called",             color: "#0EA5E9", bg: "#F0F9FF", icon: PhoneCall },
-  call_flagged:      { label: "Call Flagged",       color: "#DC2626", bg: "#FEF2F2", icon: Phone },
-  converted:         { label: "Converted",          color: "#16A34A", bg: "#F0FDF4", icon: CheckCircle2 },
-  lost:              { label: "Lost",               color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
+  meeting_booked:    { label: "Meeting Booked",   color: "#7C3AED", bg: "#F5F3FF", icon: Calendar },
+  called:            { label: "Called",            color: "#0EA5E9", bg: "#F0F9FF", icon: PhoneCall },
+  call_flagged:      { label: "Call Flagged",      color: "#DC2626", bg: "#FEF2F2", icon: Phone },
+  converted:         { label: "Converted",         color: "#16A34A", bg: "#F0FDF4", icon: CheckCircle2 },
+  lost:              { label: "Lost",              color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
 };
 
-const PIPELINE_ORDER = ["new","scraped","preview_generated","preview_sent","emailed","follow_up_1","follow_up_2","meeting_booked","called","call_flagged","converted","lost"];
+const PIPELINE_STATUSES = [
+  "preview_sent", "emailed", "follow_up_1", "follow_up_2",
+  "meeting_booked", "called", "call_flagged", "converted", "lost",
+];
 
 /* ─── Styles ─── */
 const styles = `
@@ -66,7 +117,7 @@ const styles = `
   .search-box input { border: none; background: transparent; font-size: 13px; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; outline: none; flex: 1; color: #0F172A; }
   .search-box input::placeholder { color: #94A3B8; }
 
-  /* Pipeline summary */
+  /* Pipeline chips */
   .pipeline-bar { display: flex; gap: 6px; padding: 16px 28px; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; }
   .pipeline-chip { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; white-space: nowrap; border: 1px solid transparent; }
   .pipeline-chip:hover { opacity: 0.85; }
@@ -93,6 +144,7 @@ const styles = `
   /* Action buttons */
   .action-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #E2E8F0; background: #fff; cursor: pointer; color: #475569; transition: all 0.15s; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
   .action-btn:hover { background: #F1F5F9; border-color: #CBD5E1; }
+  .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .action-btn.primary { background: #0F172A; color: #F1F5F9; border-color: #0F172A; }
   .action-btn.primary:hover { background: #1E293B; }
   .action-btn.danger { color: #DC2626; border-color: #FCA5A5; }
@@ -102,16 +154,13 @@ const styles = `
 
   /* Stats bar */
   .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; padding: 20px 28px; }
-  .preview-links { display: flex; flex-direction: column; gap: 6px; }
-  .preview-link-row { background: #F1F5F9; border-radius: 8px; padding: 8px 12px; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
-  .preview-link-label { font-size: 10px; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
   .stat-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px; }
   .stat-label { font-size: 12px; font-weight: 500; color: #64748B; }
   .stat-value { font-size: 28px; font-weight: 700; margin-top: 2px; }
   .stat-sub { font-size: 11px; color: #94A3B8; margin-top: 4px; }
 
   /* Detail panel */
-  .detail-panel { position: fixed; right: 0; top: 0; width: 420px; height: 100vh; background: #fff; border-left: 1px solid #E2E8F0; box-shadow: -4px 0 20px rgba(0,0,0,0.06); z-index: 50; overflow-y: auto; }
+  .detail-panel { position: fixed; right: 0; top: 0; width: 420px; height: 100vh; background: #fff; border-left: 1px solid #E2E8F0; box-shadow: -4px 0 20px rgba(0,0,0,0.06); z-index: 50; overflow-y: auto; animation: slideIn 0.2s ease-out; }
   .detail-header { padding: 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; }
   .detail-body { padding: 20px; }
   .detail-section { margin-bottom: 20px; }
@@ -128,15 +177,60 @@ const styles = `
   .timeline-label { font-weight: 600; color: #0F172A; }
   .timeline-date { color: #94A3B8; }
   .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #E2E8F0; }
+  .preview-links { display: flex; flex-direction: column; gap: 6px; }
+  .preview-link-row { background: #F1F5F9; border-radius: 8px; padding: 8px 12px; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .preview-link-label { font-size: 10px; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
 
   /* Overlay */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.15); z-index: 40; }
-
   @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-  .detail-panel { animation: slideIn 0.2s ease-out; }
+
+  /* Discover tab */
+  .discover-search { display: flex; gap: 12px; padding: 28px; }
+  .discover-input { flex: 1; padding: 14px 18px; font-size: 15px; border: 2px solid #E2E8F0; border-radius: 10px; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s; }
+  .discover-input:focus { border-color: #0F172A; }
+  .discover-results { padding: 0 28px 28px; }
+  .discover-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; }
+  .discover-card:hover { border-color: #CBD5E1; background: #FAFBFD; }
+  .discover-card.selected { border-color: #0F172A; background: #F8FAFC; }
+  .discover-check { width: 20px; height: 20px; border: 2px solid #CBD5E1; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .discover-check.checked { background: #0F172A; border-color: #0F172A; color: #fff; }
+  .discover-info { flex: 1; min-width: 0; }
+  .discover-name { font-weight: 600; font-size: 14px; }
+  .discover-address { font-size: 12px; color: #64748B; margin-top: 2px; }
+  .discover-meta { display: flex; gap: 12px; margin-top: 4px; font-size: 11px; color: #94A3B8; }
+
+  /* Draft preview */
+  .draft-preview { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px; margin-top: 12px; }
+  .draft-subject { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+  .draft-to { font-size: 12px; color: #64748B; margin-bottom: 12px; }
+  .draft-body { font-size: 13px; line-height: 1.6; color: #475569; white-space: pre-wrap; }
+
+  /* Loading */
+  .loading-center { display: flex; align-items: center; justify-content: center; padding: 60px; color: #94A3B8; gap: 10px; font-size: 14px; }
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 60px 28px; color: #94A3B8; }
+  .empty-state-title { font-size: 16px; font-weight: 600; color: #64748B; margin-bottom: 6px; }
+  .empty-state-sub { font-size: 13px; }
+
+  /* Checkbox */
+  .cb { width: 16px; height: 16px; border: 2px solid #CBD5E1; border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.1s; }
+  .cb.checked { background: #0F172A; border-color: #0F172A; }
+
+  /* Status dropdown */
+  .status-dropdown { position: relative; }
+  .status-menu { position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 30; min-width: 180px; padding: 4px; }
+  .status-menu-item { padding: 8px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .status-menu-item:hover { background: #F1F5F9; }
+
+  /* Bulk bar */
+  .bulk-bar { display: flex; align-items: center; gap: 12px; padding: 12px 28px; background: #0F172A; color: #F1F5F9; font-size: 13px; }
 `;
 
-/* ─── Components ─── */
+/* ─── Helper Components ─── */
 
 function StatusBadge({ status }: { status: string }) {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.new;
@@ -149,19 +243,24 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void }) {
+function formatDate(d: string | null): string {
+  if (!d) return "-";
+  return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function DetailPanel({ clinic, onClose, onStatusChange }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void }) {
+  const [statusOpen, setStatusOpen] = useState(false);
+
   const timeline = [
-    { label: "Added to pipeline", date: clinic.notes?.includes("A4M") ? "A4M directory" : "Manual", done: true },
-    { label: "Website scraped", date: clinic.scrapedAt, done: !!clinic.scrapedAt },
-    { label: "Preview generated", date: clinic.previewAt, done: !!clinic.previewAt },
-    { label: "Preview sent", date: clinic.emailedAt, done: !!clinic.emailedAt },
-    { label: "Follow-up 1", date: clinic.followUp1, done: !!clinic.followUp1 },
-    { label: "Follow-up 2", date: clinic.followUp2, done: !!clinic.followUp2 },
-    { label: "Meeting booked", date: clinic.meetingBooked ? "Yes" : null, done: clinic.meetingBooked },
-    { label: "Called", date: clinic.calledAt, done: !!clinic.calledAt },
-    { label: "Call flagged", date: clinic.callFlag ? "Yes" : null, done: clinic.callFlag },
+    { label: "Added to pipeline", date: formatDate(clinic.created_at), done: true },
+    { label: "Website scraped", date: formatDate(clinic.scraped_at), done: !!clinic.scraped_at },
+    { label: "Preview sent", date: formatDate(clinic.preview_sent_at), done: !!clinic.preview_sent_at },
+    { label: "Emailed", date: formatDate(clinic.emailed_at), done: !!clinic.emailed_at },
+    { label: "Follow-up 1", date: formatDate(clinic.follow_up_1_at), done: !!clinic.follow_up_1_at },
+    { label: "Follow-up 2", date: formatDate(clinic.follow_up_2_at), done: !!clinic.follow_up_2_at },
+    { label: "Call flagged", date: formatDate(clinic.call_flagged_at), done: !!clinic.call_flagged_at },
   ];
-  const currentIdx = timeline.findLastIndex(t => t.done);
+  const currentIdx = timeline.findLastIndex((t) => t.done);
 
   return (
     <>
@@ -170,7 +269,9 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
         <div className="detail-header">
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div className="color-dot" style={{ background: clinic.primaryColor, width: 20, height: 20 }} />
+              {clinic.primary_color && (
+                <div className="color-dot" style={{ background: clinic.primary_color, width: 20, height: 20 }} />
+              )}
               <span style={{ fontSize: 18, fontWeight: 700 }}>{clinic.name}</span>
             </div>
             <div className="clinic-website" style={{ marginTop: 4 }}>
@@ -183,51 +284,83 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
         <div className="detail-body">
           <div className="detail-section">
             <div className="detail-section-title">Status</div>
-            <StatusBadge status={clinic.status} />
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <StatusBadge status={clinic.status} />
+              <div className="status-dropdown">
+                <button className="action-btn" onClick={() => setStatusOpen(!statusOpen)}>
+                  <ChevronDown size={12} /> Change
+                </button>
+                {statusOpen && (
+                  <div className="status-menu">
+                    {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+                      <div
+                        key={key}
+                        className="status-menu-item"
+                        onClick={() => {
+                          onStatusChange(clinic.id, key);
+                          setStatusOpen(false);
+                        }}
+                      >
+                        <span className="status-badge" style={{ background: cfg.bg, color: cfg.color, padding: "2px 6px", fontSize: 10 }}>
+                          {cfg.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="detail-section">
             <div className="detail-section-title">Contact</div>
-            <div className="detail-field"><span className="detail-field-label">Name</span><span className="detail-field-value">{clinic.contactName || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Email</span><span className="detail-field-value">{clinic.contactEmail || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Phone</span><span className="detail-field-value">{clinic.contactPhone || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Location</span><span className="detail-field-value">{clinic.location}</span></div>
+            <div className="detail-field"><span className="detail-field-label">Name</span><span className="detail-field-value">{clinic.contact_name || "Unknown"}</span></div>
+            <div className="detail-field"><span className="detail-field-label">Email</span><span className="detail-field-value">{clinic.contact_email || "Unknown"}</span></div>
+            <div className="detail-field"><span className="detail-field-label">Phone</span><span className="detail-field-value">{clinic.contact_phone || "Unknown"}</span></div>
+            <div className="detail-field"><span className="detail-field-label">Location</span><span className="detail-field-value">{clinic.location || "Unknown"}</span></div>
           </div>
 
           <div className="detail-section">
             <div className="detail-section-title">Brand</div>
+            {clinic.primary_color && (
+              <div className="detail-field">
+                <span className="detail-field-label">Primary Color</span>
+                <span className="detail-field-value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div className="color-dot" style={{ background: clinic.primary_color }} />
+                  {clinic.primary_color}
+                </span>
+              </div>
+            )}
             <div className="detail-field">
-              <span className="detail-field-label">Primary Color</span>
-              <span className="detail-field-value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div className="color-dot" style={{ background: clinic.primaryColor }} />
-                {clinic.primaryColor}
-              </span>
+              <span className="detail-field-label">Services</span>
+              <span className="detail-field-value">{clinic.services && clinic.services.length > 0 ? clinic.services.join(", ") : "Not scraped"}</span>
             </div>
-            <div className="detail-field"><span className="detail-field-label">Services</span><span className="detail-field-value">{clinic.services.length > 0 ? clinic.services.join(", ") : "Not scraped"}</span></div>
           </div>
 
-          {(clinic.previewSlug || clinic.externalPreviewUrl) && (
+          {clinic.slug && (
             <div className="detail-section">
-              <div className="detail-section-title">Preview Links</div>
+              <div className="detail-section-title">Preview</div>
               <div className="preview-links">
-                {clinic.previewSlug && (
-                  <div className="preview-link-row">
-                    <div>
-                      <div className="preview-link-label">ClinicTech Preview</div>
-                      <code style={{ color: "#0F172A", fontSize: 12 }}>clinictech.io/preview/{clinic.previewSlug}</code>
-                    </div>
-                    <ExternalLink size={14} style={{ color: "#64748B", cursor: "pointer" }} />
+                <div className="preview-link-row">
+                  <div>
+                    <div className="preview-link-label">Preview URL</div>
+                    <code style={{ color: "#0F172A", fontSize: 12 }}>/preview/{clinic.slug}</code>
                   </div>
-                )}
-                {clinic.externalPreviewUrl && (
-                  <div className="preview-link-row">
-                    <div>
-                      <div className="preview-link-label">External Mockup</div>
-                      <code style={{ color: "#0F172A", fontSize: 12 }}>{clinic.externalPreviewUrl.replace(/https?:\/\//, "").slice(0, 40)}...</code>
-                    </div>
+                  <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer">
                     <ExternalLink size={14} style={{ color: "#64748B", cursor: "pointer" }} />
-                  </div>
-                )}
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {clinic.scraped_data?.draft && (
+            <div className="detail-section">
+              <div className="detail-section-title">Email Draft</div>
+              <div className="draft-preview">
+                <div className="draft-to">To: {clinic.scraped_data.draft.to}</div>
+                <div className="draft-subject">Subject: {clinic.scraped_data.draft.subject}</div>
+                <div className="draft-body">{clinic.scraped_data.draft.body}</div>
               </div>
             </div>
           )}
@@ -239,26 +372,28 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
                 <div key={i} className="timeline-item">
                   <div className={`timeline-dot ${t.done ? (i === currentIdx ? "active" : "done") : ""}`} />
                   <span className="timeline-label">{t.label}</span>
-                  {t.date && <span className="timeline-date"> &mdash; {t.date}</span>}
+                  {t.date !== "-" && <span className="timeline-date"> &mdash; {t.date}</span>}
                 </div>
               ))}
             </div>
           </div>
 
-          {clinic.notes && (
-            <div className="detail-section">
-              <div className="detail-section-title">Notes</div>
-              <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.6 }}>{clinic.notes}</p>
-            </div>
-          )}
-
           <div className="detail-actions">
-            {!clinic.scrapedAt && <button className="action-btn primary"><Globe size={12} /> Scrape Website</button>}
-            {clinic.scrapedAt && !clinic.previewAt && <button className="action-btn primary"><Eye size={12} /> Generate Preview</button>}
-            {clinic.previewAt && !clinic.emailedAt && <button className="action-btn primary"><Send size={12} /> Send Preview Email</button>}
-            {clinic.emailedAt && !clinic.callFlag && <button className="action-btn danger"><Phone size={12} /> Flag for Call</button>}
-            {clinic.previewSlug && <button className="action-btn"><ExternalLink size={12} /> View Preview</button>}
-            <button className="action-btn"><Mail size={12} /> Send Email</button>
+            {clinic.status === "new" && (
+              <button className="action-btn primary" onClick={() => onStatusChange(clinic.id, "scraped")}>
+                <Globe size={12} /> Generate Preview
+              </button>
+            )}
+            {(clinic.status === "scraped" || clinic.status === "preview_generated") && (
+              <button className="action-btn primary" onClick={() => onStatusChange(clinic.id, "preview_sent")}>
+                <Send size={12} /> Mark Sent
+              </button>
+            )}
+            {clinic.slug && (
+              <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                <button className="action-btn"><ExternalLink size={12} /> View Preview</button>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -266,42 +401,469 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
   );
 }
 
+/* ─── Tab Components ─── */
+
+function DiscoverTab({ onRefresh }: { onRefresh: () => void }) {
+  const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<DiscoveredClinic[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [adding, setAdding] = useState(false);
+  const [addedCount, setAddedCount] = useState<number | null>(null);
+
+  async function handleDiscover() {
+    if (!location.trim()) return;
+    setLoading(true);
+    setResults([]);
+    setSelected(new Set());
+    setAddedCount(null);
+    try {
+      const res = await fetch("/api/admin/discover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location: location.trim() }),
+      });
+      const data = await res.json();
+      setResults(data.clinics || []);
+    } catch {
+      // handle error silently
+    }
+    setLoading(false);
+  }
+
+  function toggleSelect(placeId: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(placeId)) next.delete(placeId);
+      else next.add(placeId);
+      return next;
+    });
+  }
+
+  function selectAll() {
+    if (selected.size === results.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(results.map((r) => r.placeId)));
+    }
+  }
+
+  async function handleAdd() {
+    setAdding(true);
+    try {
+      const res = await fetch("/api/admin/discover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location: location.trim(), save: true }),
+      });
+      const data = await res.json();
+      setAddedCount(data.added || 0);
+      onRefresh();
+    } catch {
+      // handle error silently
+    }
+    setAdding(false);
+  }
+
+  return (
+    <>
+      <div className="discover-search">
+        <input
+          className="discover-input"
+          placeholder="Enter a city to find clinics... (e.g. Austin, TX)"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleDiscover()}
+        />
+        <button className="action-btn primary" style={{ padding: "12px 24px", fontSize: 14 }} onClick={handleDiscover} disabled={loading || !location.trim()}>
+          {loading ? <><Loader2 size={14} className="spin" /> Searching...</> : <><Search size={14} /> Discover</>}
+        </button>
+      </div>
+
+      {loading && (
+        <div className="loading-center">
+          <Loader2 size={20} className="spin" />
+          Searching Google Places...
+        </div>
+      )}
+
+      {!loading && results.length > 0 && (
+        <div className="discover-results">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <span style={{ fontSize: 14, fontWeight: 600 }}>{results.length} clinics found</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="action-btn" onClick={selectAll}>
+                {selected.size === results.length ? "Deselect All" : "Select All"}
+              </button>
+              {selected.size > 0 && (
+                <button className="action-btn primary" onClick={handleAdd} disabled={adding}>
+                  {adding ? <><Loader2 size={12} className="spin" /> Adding...</> : <><Plus size={12} /> Add {selected.size} to Pipeline</>}
+                </button>
+              )}
+              {selected.size === 0 && (
+                <button className="action-btn primary" onClick={handleAdd} disabled={adding}>
+                  {adding ? <><Loader2 size={12} className="spin" /> Adding...</> : <><Plus size={12} /> Add All to Pipeline</>}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {addedCount !== null && (
+            <div style={{ padding: "10px 14px", background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 8, marginBottom: 12, fontSize: 13, color: "#166534" }}>
+              Added {addedCount} new clinics to the pipeline.
+            </div>
+          )}
+
+          {results.map((r) => (
+            <div key={r.placeId} className={`discover-card ${selected.has(r.placeId) ? "selected" : ""}`} onClick={() => toggleSelect(r.placeId)}>
+              <div className={`discover-check ${selected.has(r.placeId) ? "checked" : ""}`}>
+                {selected.has(r.placeId) && <CheckCircle2 size={14} />}
+              </div>
+              <div className="discover-info">
+                <div className="discover-name">{r.name}</div>
+                <div className="discover-address"><MapPin size={11} /> {r.address}</div>
+                <div className="discover-meta">
+                  {r.website && <span><Globe size={10} /> {r.website.replace(/https?:\/\/(www\.)?/, "").split("/")[0]}</span>}
+                  {r.phone && <span><Phone size={10} /> {r.phone}</span>}
+                  {r.rating && <span><Star size={10} /> {r.rating}/5 ({r.totalRatings})</span>}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!loading && results.length === 0 && !addedCount && (
+        <div className="empty-state">
+          <Search size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
+          <div className="empty-state-title">Discover new clinics</div>
+          <div className="empty-state-sub">Enter a city name above to search Google Places for stem cell and regenerative medicine clinics.</div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ClinicTable({
+  clinics,
+  onSelect,
+  selectedIds,
+  onToggleSelect,
+  showCheckboxes,
+  actions,
+}: {
+  clinics: Clinic[];
+  onSelect: (c: Clinic) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  showCheckboxes?: boolean;
+  actions?: (clinic: Clinic) => React.ReactNode;
+}) {
+  return (
+    <div className="admin-table-wrap">
+      <div className="admin-table">
+        <table>
+          <thead>
+            <tr>
+              {showCheckboxes && <th style={{ width: 40 }}></th>}
+              <th>Clinic</th>
+              <th>Status</th>
+              <th>Contact</th>
+              <th>Source</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clinics.map((clinic) => (
+              <tr key={clinic.id} style={{ cursor: "pointer" }} onClick={() => onSelect(clinic)}>
+                {showCheckboxes && (
+                  <td onClick={(e) => e.stopPropagation()}>
+                    <div
+                      className={`cb ${selectedIds?.has(clinic.id) ? "checked" : ""}`}
+                      onClick={() => onToggleSelect?.(clinic.id)}
+                    >
+                      {selectedIds?.has(clinic.id) && <CheckCircle2 size={10} color="#fff" />}
+                    </div>
+                  </td>
+                )}
+                <td>
+                  <div className="clinic-name">{clinic.name}</div>
+                  <div className="clinic-website"><Globe size={11} /> {clinic.website}</div>
+                  {clinic.location && <div className="clinic-location">{clinic.location}</div>}
+                </td>
+                <td><StatusBadge status={clinic.status} /></td>
+                <td>
+                  {clinic.contact_name ? (
+                    <div>
+                      <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>
+                      <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_email}</div>
+                    </div>
+                  ) : (
+                    <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not found</span>
+                  )}
+                </td>
+                <td><span style={{ fontSize: 12, color: "#64748B" }}>{clinic.source || "-"}</span></td>
+                <td><span style={{ fontSize: 12, color: "#64748B" }}>{formatDate(clinic.created_at)}</span></td>
+                <td onClick={(e) => e.stopPropagation()}>
+                  {actions ? actions(clinic) : (
+                    <button className="action-btn" title="More"><MoreHorizontal size={12} /></button>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {clinics.length === 0 && (
+              <tr>
+                <td colSpan={showCheckboxes ? 8 : 7} style={{ textAlign: "center", padding: 40, color: "#94A3B8" }}>
+                  No clinics in this view
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function AnalyticsTab() {
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/analytics")
+      .then((r) => r.json())
+      .then(setData)
+      .catch(() => setData({ total_views: 0, unique_visitors: 0, clinics: [], message: "Failed to load" }))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div className="loading-center"><Loader2 size={20} className="spin" /> Loading analytics...</div>;
+  }
+
+  if (!data || data.total_views === 0) {
+    return (
+      <div className="empty-state">
+        <BarChart3 size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
+        <div className="empty-state-title">No analytics data yet</div>
+        <div className="empty-state-sub">{data?.message || "Preview view tracking will appear here once clinics start viewing their previews."}</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="stats-bar" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+        <div className="stat-card">
+          <div className="stat-label">Total Views</div>
+          <div className="stat-value">{data.total_views}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">Unique Visitors</div>
+          <div className="stat-value">{data.unique_visitors}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">Clinics Tracked</div>
+          <div className="stat-value">{data.clinics.length}</div>
+        </div>
+      </div>
+      <div className="admin-table-wrap">
+        <div className="admin-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Clinic</th>
+                <th>Total Views</th>
+                <th>Unique Visitors</th>
+                <th>Last Viewed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.clinics.map((c) => (
+                <tr key={c.clinic_id}>
+                  <td style={{ fontWeight: 600 }}>{c.slug}</td>
+                  <td>{c.total_views}</td>
+                  <td>{c.unique_visitors}</td>
+                  <td style={{ fontSize: 12, color: "#64748B" }}>{formatDate(c.last_viewed)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ─── Main Admin Panel ─── */
+
 export default function AdminPanel() {
-  const [clinics] = useState(CLINICS);
+  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
-  const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [activePage, setActivePage] = useState("pipeline");
+  const [activePage, setActivePage] = useState("discover");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [draftPreviews, setDraftPreviews] = useState<Record<string, Draft>>({});
 
-  const filtered = clinics
-    .filter(c => filterStatus === "all" || c.status === filterStatus)
-    .filter(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.website.toLowerCase().includes(searchTerm.toLowerCase()));
+  const fetchClinics = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/clinics");
+      const data = await res.json();
+      setClinics(data.clinics || []);
+    } catch {
+      // handle silently
+    }
+    setLoading(false);
+  }, []);
 
-  const statusCounts: Record<string, number> = {};
-  clinics.forEach(c => { statusCounts[c.status] = (statusCounts[c.status] || 0) + 1; });
+  useEffect(() => {
+    fetchClinics();
+  }, [fetchClinics]);
 
+  // Filter helpers
+  const filtered = clinics.filter(
+    (c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.website.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const newClinics = filtered.filter((c) => c.status === "new");
+  const previewClinics = filtered.filter((c) => c.status === "scraped" || c.status === "preview_generated");
+  const outreachClinics = filtered.filter((c) => c.scraped_data?.draft);
+  const pipelineClinics = filtered.filter((c) => PIPELINE_STATUSES.includes(c.status));
+
+  // Counts for nav
+  const counts = {
+    discover: 0,
+    new_clinics: clinics.filter((c) => c.status === "new").length,
+    previews: clinics.filter((c) => c.status === "scraped" || c.status === "preview_generated").length,
+    outreach: clinics.filter((c) => c.scraped_data?.draft).length,
+    pipeline: clinics.filter((c) => PIPELINE_STATUSES.includes(c.status)).length,
+    analytics: 0,
+    settings: 0,
+  };
+
+  // Actions
+  async function handleScrape(ids: string[]) {
+    setActionLoading("scrape");
+    try {
+      await fetch("/api/admin/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: ids }),
+      });
+      await fetchClinics();
+      setSelectedIds(new Set());
+    } catch {
+      // handle silently
+    }
+    setActionLoading(null);
+  }
+
+  async function handleDraft(clinicId: string) {
+    setActionLoading(clinicId);
+    try {
+      const res = await fetch("/api/admin/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId }),
+      });
+      const data = await res.json();
+      if (data.draft) {
+        setDraftPreviews((prev) => ({ ...prev, [clinicId]: data.draft }));
+      }
+      await fetchClinics();
+    } catch {
+      // handle silently
+    }
+    setActionLoading(null);
+  }
+
+  async function handleSend(clinicId: string) {
+    setActionLoading(clinicId);
+    try {
+      await fetch("/api/admin/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId }),
+      });
+      await fetchClinics();
+    } catch {
+      // handle silently
+    }
+    setActionLoading(null);
+  }
+
+  async function handleStatusChange(clinicId: string, status: string) {
+    try {
+      await fetch("/api/admin/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId, status }),
+      });
+      await fetchClinics();
+      // Update selected clinic if open
+      if (selectedClinic?.id === clinicId) {
+        const updated = clinics.find((c) => c.id === clinicId);
+        if (updated) setSelectedClinic({ ...updated, status });
+      }
+    } catch {
+      // handle silently
+    }
+  }
+
+  function toggleId(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  // Pipeline filter
+  const [pipelineFilter, setPipelineFilter] = useState("all");
+  const pipelineFiltered = pipelineFilter === "all" ? pipelineClinics : pipelineClinics.filter((c) => c.status === pipelineFilter);
+
+  const pipelineStatusCounts: Record<string, number> = {};
+  pipelineClinics.forEach((c) => {
+    pipelineStatusCounts[c.status] = (pipelineStatusCounts[c.status] || 0) + 1;
+  });
+
+  // Nav items
   const navItems = [
-    { id: "pipeline", label: "Pipeline", icon: Target, count: clinics.length },
-    { id: "previews", label: "Previews", icon: Eye, count: clinics.filter(c => c.previewSlug).length },
-    { id: "outreach", label: "Outreach", icon: Send, count: clinics.filter(c => c.emailedAt).length },
-    { id: "meetings", label: "Meetings", icon: Calendar, count: clinics.filter(c => c.meetingBooked).length },
-    { id: "calls", label: "Call Queue", icon: Phone, count: clinics.filter(c => c.callFlag).length },
-    { id: "called", label: "Called", icon: PhoneCall, count: clinics.filter(c => c.calledAt).length },
-    { id: "settings", label: "Settings", icon: Settings },
+    { id: "discover", label: "Discover", icon: Search, count: undefined },
+    { id: "new_clinics", label: "New Clinics", icon: Plus, count: counts.new_clinics || undefined },
+    { id: "previews", label: "Previews", icon: Eye, count: counts.previews || undefined },
+    { id: "outreach", label: "Outreach", icon: Send, count: counts.outreach || undefined },
+    { id: "pipeline", label: "Pipeline", icon: Target, count: counts.pipeline || undefined },
+    { id: "analytics", label: "Analytics", icon: BarChart3, count: undefined },
+    { id: "settings", label: "Settings", icon: Settings, count: undefined },
   ];
+
+  const pageTitles: Record<string, string> = {
+    discover: "Discover Clinics",
+    new_clinics: "New Clinics",
+    previews: "Preview Manager",
+    outreach: "Outreach",
+    pipeline: "Pipeline",
+    analytics: "Analytics",
+    settings: "Settings",
+  };
 
   return (
     <>
       <style>{styles}</style>
       <div className="admin">
+        {/* Sidebar */}
         <div className="admin-sidebar">
           <div className="admin-sidebar-header">
             <div className="admin-brand">ClinicTech</div>
             <div className="admin-brand-sub">OUTBOUND ENGINE</div>
           </div>
           <div className="admin-nav">
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <div
                 key={item.id}
                 className={`admin-nav-item ${activePage === item.id ? "active" : ""}`}
@@ -336,154 +898,255 @@ export default function AdminPanel() {
           </div>
         </div>
 
+        {/* Main */}
         <div className="admin-main">
           <div className="admin-topbar">
             <div className="admin-topbar-left">
-              <h1 style={{ fontSize: 18, fontWeight: 700 }}>
-                {activePage === "pipeline" && "Clinic Pipeline"}
-                {activePage === "previews" && "Preview Manager"}
-                {activePage === "outreach" && "Outreach Tracker"}
-                {activePage === "meetings" && "Meetings Booked"}
-                {activePage === "calls" && "Call Queue"}
-                {activePage === "called" && "Called"}
-                {activePage === "settings" && "Settings"}
-              </h1>
-              <div className="search-box">
-                <Search size={14} style={{ color: "#94A3B8" }} />
-                <input
-                  placeholder="Search clinics..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                />
-              </div>
+              <h1 style={{ fontSize: 18, fontWeight: 700 }}>{pageTitles[activePage] || "Admin"}</h1>
+              {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && (
+                <div className="search-box">
+                  <Search size={14} style={{ color: "#94A3B8" }} />
+                  <input
+                    placeholder="Search clinics..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              )}
             </div>
             <div className="admin-topbar-right">
-              <button className="action-btn"><RefreshCw size={12} /> Run Agent</button>
-              <button className="action-btn primary"><Plus size={12} /> Add Clinic</button>
+              <button className="action-btn" onClick={fetchClinics}><RefreshCw size={12} /> Refresh</button>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="stats-bar">
-            <div className="stat-card">
-              <div className="stat-label">Total Clinics</div>
-              <div className="stat-value">{clinics.length}</div>
-              <div className="stat-sub">In pipeline</div>
+          {/* Stats bar — shown on non-discover/analytics/settings tabs */}
+          {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && (
+            <div className="stats-bar">
+              <div className="stat-card">
+                <div className="stat-label">Total Clinics</div>
+                <div className="stat-value">{clinics.length}</div>
+                <div className="stat-sub">In database</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">New</div>
+                <div className="stat-value">{clinics.filter((c) => c.status === "new").length}</div>
+                <div className="stat-sub">Awaiting scrape</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Previews Ready</div>
+                <div className="stat-value">{clinics.filter((c) => c.status === "scraped" || c.status === "preview_generated").length}</div>
+                <div className="stat-sub">Ready for outreach</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Sent</div>
+                <div className="stat-value" style={{ color: "#0891B2" }}>{clinics.filter((c) => c.preview_sent_at).length}</div>
+                <div className="stat-sub">Previews sent</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Meetings</div>
+                <div className="stat-value" style={{ color: "#7C3AED" }}>{clinics.filter((c) => c.status === "meeting_booked").length}</div>
+                <div className="stat-sub">Booked</div>
+              </div>
             </div>
-            <div className="stat-card">
-              <div className="stat-label">Previews Generated</div>
-              <div className="stat-value">{clinics.filter(c => c.previewSlug).length}</div>
-              <div className="stat-sub">{clinics.filter(c => c.previewSlug && !c.emailedAt).length} pending send</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Emails Sent</div>
-              <div className="stat-value">{clinics.filter(c => c.emailedAt).length}</div>
-              <div className="stat-sub">This month</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Meetings Booked</div>
-              <div className="stat-value" style={{ color: "#7C3AED" }}>{clinics.filter(c => c.meetingBooked).length}</div>
-              <div className="stat-sub">From outreach</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Conversion</div>
-              <div className="stat-value" style={{ color: "#059669" }}>{clinics.filter(c => c.status === "converted").length}</div>
-              <div className="stat-sub">Customers</div>
-            </div>
-          </div>
+          )}
 
-          {/* Pipeline filter chips */}
-          <div className="pipeline-bar">
-            <div
-              className={`pipeline-chip ${filterStatus === "all" ? "active" : ""}`}
-              style={{ background: "#F1F5F9", color: "#475569" }}
-              onClick={() => setFilterStatus("all")}
-            >
-              All ({clinics.length})
-            </div>
-            {PIPELINE_ORDER.filter(s => statusCounts[s]).map(s => {
-              const cfg = STATUS_CONFIG[s];
-              return (
-                <div
-                  key={s}
-                  className={`pipeline-chip ${filterStatus === s ? "active" : ""}`}
-                  style={{ background: cfg.bg, color: cfg.color }}
-                  onClick={() => setFilterStatus(s)}
-                >
-                  {cfg.label} ({statusCounts[s]})
+          {/* Loading state */}
+          {loading && activePage !== "discover" && activePage !== "analytics" && (
+            <div className="loading-center"><Loader2 size={20} className="spin" /> Loading clinics...</div>
+          )}
+
+          {/* ─── DISCOVER TAB ─── */}
+          {activePage === "discover" && <DiscoverTab onRefresh={fetchClinics} />}
+
+          {/* ─── NEW CLINICS TAB ─── */}
+          {activePage === "new_clinics" && !loading && (
+            <>
+              {selectedIds.size > 0 && (
+                <div className="bulk-bar">
+                  <span>{selectedIds.size} selected</span>
+                  <button
+                    className="action-btn primary"
+                    style={{ fontSize: 12 }}
+                    onClick={() => handleScrape(Array.from(selectedIds))}
+                    disabled={actionLoading === "scrape"}
+                  >
+                    {actionLoading === "scrape" ? <><Loader2 size={12} className="spin" /> Generating...</> : <><Eye size={12} /> Generate Previews</>}
+                  </button>
+                  <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>
+                    Clear
+                  </button>
                 </div>
-              );
-            })}
-          </div>
+              )}
+              <ClinicTable
+                clinics={newClinics}
+                onSelect={setSelectedClinic}
+                selectedIds={selectedIds}
+                onToggleSelect={toggleId}
+                showCheckboxes
+                actions={(clinic) => (
+                  <div style={{ display: "flex", gap: 4 }}>
+                    <button
+                      className="action-btn primary"
+                      onClick={() => handleScrape([clinic.id])}
+                      disabled={actionLoading === "scrape"}
+                    >
+                      <Eye size={12} /> Generate Preview
+                    </button>
+                  </div>
+                )}
+              />
+            </>
+          )}
 
-          {/* Table */}
-          <div className="admin-table-wrap">
-            <div className="admin-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Clinic</th>
-                    <th>Status</th>
-                    <th>Brand</th>
-                    <th>Contact</th>
-                    <th>Preview</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map(clinic => (
-                    <tr key={clinic.id} style={{ cursor: "pointer" }} onClick={() => setSelectedClinic(clinic)}>
-                      <td>
-                        <div className="clinic-name">{clinic.name}</div>
-                        <div className="clinic-website"><Globe size={11} /> {clinic.website}</div>
-                        <div className="clinic-location">{clinic.location}</div>
-                      </td>
-                      <td><StatusBadge status={clinic.status} /></td>
-                      <td>
-                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <div className="color-dot" style={{ background: clinic.primaryColor }} />
-                          <span style={{ fontSize: 12, color: "#64748B" }}>{clinic.primaryColor}</span>
-                        </div>
-                      </td>
-                      <td>
-                        {clinic.contactName ? (
-                          <div>
-                            <div style={{ fontWeight: 500 }}>{clinic.contactName}</div>
-                            <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contactEmail}</div>
+          {/* ─── PREVIEWS TAB ─── */}
+          {activePage === "previews" && !loading && (
+            <ClinicTable
+              clinics={previewClinics}
+              onSelect={setSelectedClinic}
+              actions={(clinic) => (
+                <div style={{ display: "flex", gap: 4 }}>
+                  {clinic.slug && (
+                    <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                      <button className="action-btn"><ExternalLink size={12} /> View</button>
+                    </a>
+                  )}
+                  <button
+                    className="action-btn primary"
+                    onClick={() => handleDraft(clinic.id)}
+                    disabled={actionLoading === clinic.id}
+                  >
+                    {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft Outreach</>}
+                  </button>
+                  {(draftPreviews[clinic.id] || clinic.scraped_data?.draft) && (
+                    <button className="action-btn success" onClick={() => setSelectedClinic(clinic)}>
+                      <CheckCircle2 size={12} /> Draft Ready
+                    </button>
+                  )}
+                </div>
+              )}
+            />
+          )}
+
+          {/* ─── OUTREACH TAB ─── */}
+          {activePage === "outreach" && !loading && (
+            <div className="admin-table-wrap">
+              {outreachClinics.length === 0 ? (
+                <div className="empty-state">
+                  <Mail size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
+                  <div className="empty-state-title">No drafts pending</div>
+                  <div className="empty-state-sub">Generate email drafts from the Previews tab first.</div>
+                </div>
+              ) : (
+                outreachClinics.map((clinic) => {
+                  const draft = clinic.scraped_data?.draft;
+                  if (!draft) return null;
+                  return (
+                    <div key={clinic.id} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20, marginBottom: 12 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: 16 }}>{clinic.name}</div>
+                          <div style={{ fontSize: 12, color: "#64748B", marginTop: 2 }}>
+                            To: {draft.to} | {clinic.location || "Unknown location"}
                           </div>
-                        ) : (
-                          <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not found</span>
-                        )}
-                      </td>
-                      <td>
-                        {clinic.previewSlug ? (
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <code style={{ fontSize: 11, background: "#F1F5F9", padding: "2px 6px", borderRadius: 4 }}>/{clinic.previewSlug}</code>
-                            <ExternalLink size={12} style={{ color: "#64748B" }} />
-                          </div>
-                        ) : (
-                          <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not generated</span>
-                        )}
-                      </td>
-                      <td onClick={e => e.stopPropagation()}>
-                        <div style={{ display: "flex", gap: 4 }}>
-                          {!clinic.scrapedAt && <button className="action-btn" title="Scrape"><Globe size={12} /></button>}
-                          {clinic.scrapedAt && !clinic.previewAt && <button className="action-btn" title="Generate preview"><Eye size={12} /></button>}
-                          {clinic.previewAt && !clinic.emailedAt && <button className="action-btn" title="Send email"><Send size={12} /></button>}
-                          {clinic.callFlag && <button className="action-btn danger" title="Call"><Phone size={12} /></button>}
-                          <button className="action-btn" title="More"><MoreHorizontal size={12} /></button>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <button
+                            className="action-btn success"
+                            onClick={() => handleSend(clinic.id)}
+                            disabled={actionLoading === clinic.id}
+                          >
+                            {actionLoading === clinic.id ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Approve &amp; Send</>}
+                          </button>
+                          <button className="action-btn" onClick={() => handleStatusChange(clinic.id, "new")}>Skip</button>
+                        </div>
+                      </div>
+                      <div className="draft-preview">
+                        <div className="draft-subject">Subject: {draft.subject}</div>
+                        <div className="draft-body">{draft.body}</div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
-          </div>
+          )}
+
+          {/* ─── PIPELINE TAB ─── */}
+          {activePage === "pipeline" && !loading && (
+            <>
+              <div className="pipeline-bar">
+                <div
+                  className={`pipeline-chip ${pipelineFilter === "all" ? "active" : ""}`}
+                  style={{ background: "#F1F5F9", color: "#475569" }}
+                  onClick={() => setPipelineFilter("all")}
+                >
+                  All ({pipelineClinics.length})
+                </div>
+                {PIPELINE_STATUSES.filter((s) => pipelineStatusCounts[s]).map((s) => {
+                  const cfg = STATUS_CONFIG[s];
+                  return (
+                    <div
+                      key={s}
+                      className={`pipeline-chip ${pipelineFilter === s ? "active" : ""}`}
+                      style={{ background: cfg.bg, color: cfg.color }}
+                      onClick={() => setPipelineFilter(s)}
+                    >
+                      {cfg.label} ({pipelineStatusCounts[s]})
+                    </div>
+                  );
+                })}
+              </div>
+              <ClinicTable
+                clinics={pipelineFiltered}
+                onSelect={setSelectedClinic}
+                actions={(clinic) => (
+                  <div style={{ display: "flex", gap: 4 }}>
+                    {clinic.status !== "call_flagged" && (
+                      <button className="action-btn danger" onClick={() => handleStatusChange(clinic.id, "call_flagged")}>
+                        <Phone size={12} /> Flag Call
+                      </button>
+                    )}
+                    {clinic.status !== "meeting_booked" && (
+                      <button className="action-btn success" onClick={() => handleStatusChange(clinic.id, "meeting_booked")}>
+                        <Calendar size={12} /> Meeting
+                      </button>
+                    )}
+                    {clinic.status !== "converted" && (
+                      <button className="action-btn" style={{ color: "#16A34A", borderColor: "#86EFAC" }} onClick={() => handleStatusChange(clinic.id, "converted")}>
+                        <CheckCircle2 size={12} /> Convert
+                      </button>
+                    )}
+                  </div>
+                )}
+              />
+            </>
+          )}
+
+          {/* ─── ANALYTICS TAB ─── */}
+          {activePage === "analytics" && <AnalyticsTab />}
+
+          {/* ─── SETTINGS TAB ─── */}
+          {activePage === "settings" && (
+            <div className="empty-state">
+              <Settings size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
+              <div className="empty-state-title">Settings</div>
+              <div className="empty-state-sub">Configuration options will be available here.</div>
+            </div>
+          )}
         </div>
       </div>
 
-      {selectedClinic && <DetailPanel clinic={selectedClinic} onClose={() => setSelectedClinic(null)} />}
+      {/* Detail Panel */}
+      {selectedClinic && (
+        <DetailPanel
+          clinic={selectedClinic}
+          onClose={() => setSelectedClinic(null)}
+          onStatusChange={(id, status) => {
+            handleStatusChange(id, status);
+            setSelectedClinic(null);
+          }}
+        />
+      )}
     </>
   );
 }
