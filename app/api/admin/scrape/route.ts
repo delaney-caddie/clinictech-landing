@@ -155,6 +155,29 @@ function extractEmails(text: string): string[] {
   );
 }
 
+async function fetchWithFirecrawl(url: string): Promise<string> {
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY;
+  if (!firecrawlKey) throw new Error("no_firecrawl");
+
+  const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${firecrawlKey}`,
+    },
+    body: JSON.stringify({
+      url,
+      formats: ["html"],
+      waitFor: 3000,
+    }),
+    signal: AbortSignal.timeout(30000),
+  });
+
+  const data = await res.json();
+  if (!data.success || !data.data?.html) throw new Error("firecrawl_failed");
+  return data.data.html;
+}
+
 async function scrapeWebsite(website: string): Promise<{
   primaryColor: string | null;
   services: string[];
@@ -163,11 +186,18 @@ async function scrapeWebsite(website: string): Promise<{
 }> {
   try {
     const url = website.startsWith("http") ? website : `https://${website}`;
-    const res = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
-      signal: AbortSignal.timeout(10000),
-    });
-    const html = await res.text();
+
+    // Try Firecrawl first (renders JS, much better), fall back to basic fetch
+    let html: string;
+    try {
+      html = await fetchWithFirecrawl(url);
+    } catch {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
+        signal: AbortSignal.timeout(10000),
+      });
+      html = await res.text();
+    }
 
     const primaryColor = extractBrandColor(html);
 

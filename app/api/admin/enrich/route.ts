@@ -11,54 +11,97 @@ function getSupabase() {
 const FIBER_KEY = () => process.env.FIBER_API_KEY;
 const FIBER_BASE = "https://api.fiber.ai/v1";
 
-// ─── Step 1: Find the owner/decision-maker via People Search ───
+// ─── Step 1: Find owner via combined-search (async start + poll) ───
 
 async function findOwner(domain: string): Promise<{
   name: string | null;
   title: string | null;
   linkedinUrl: string | null;
 } | null> {
-  const res = await fetch(`${FIBER_BASE}/people-search`, {
+  // Start the search
+  const startRes = await fetch(`${FIBER_BASE}/combined-search/start`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       apiKey: FIBER_KEY(),
-      searchParams: {
-        currentCompanies: [{ domain }],
+      companyParams: {
+        domains: [domain],
+      },
+      personParams: {
         jobTitleV2: {
           anyOf: [
             { type: "static-groups", groups: ["founder", "c-suite"] },
             { type: "term", term: "owner" },
             { type: "term", term: "medical director" },
-            { type: "term", term: "practice manager" },
-            { type: "term", term: "doctor" },
           ],
         },
       },
-      limit: 3,
+      personLimit: 3,
     }),
   });
 
-  const data = await res.json();
-  const profiles = data?.profiles || data?.results || [];
+  const startData = await startRes.json();
+  const searchId = startData?.output?.searchID;
+  if (!searchId) return null;
 
-  if (!profiles.length) return null;
+  // Poll for results (max 30 seconds)
+  for (let i = 0; i < 15; i++) {
+    await new Promise(r => setTimeout(r, 2000));
 
-  // Pick the best match — prefer founder/owner/CEO over others
-  const ranked = profiles.sort((a: any, b: any) => {
-    const titleA = (a.headline || a.current_job?.title || "").toLowerCase();
-    const titleB = (b.headline || b.current_job?.title || "").toLowerCase();
-    const scoreA = titleA.includes("owner") ? 3 : titleA.includes("founder") ? 3 : titleA.includes("ceo") ? 2 : titleA.includes("director") ? 1 : 0;
-    const scoreB = titleB.includes("owner") ? 3 : titleB.includes("founder") ? 3 : titleB.includes("ceo") ? 2 : titleB.includes("director") ? 1 : 0;
-    return scoreB - scoreA;
-  });
+    const pollRes = await fetch(`${FIBER_BASE}/combined-search/poll`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey: FIBER_KEY(),
+        searchID: searchId,
+      }),
+    });
 
-  const best = ranked[0];
-  return {
-    name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
-    title: best.headline || best.current_job?.title || null,
-    linkedinUrl: best.url || best.linkedin_url || (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
-  };
+    const pollData = await pollRes.json();
+    const output = pollData?.output;
+
+    if (output?.done) {
+      const companies = output?.companies || [];
+      // Look through companies for people
+      for (const company of companies) {
+        const people = company?.people || [];
+        if (people.length > 0) {
+          // Rank: owner > founder > CEO > director
+          const ranked = people.sort((a: any, b: any) => {
+            const tA = (a.headline || a.current_job?.title || "").toLowerCase();
+            const tB = (b.headline || b.current_job?.title || "").toLowerCase();
+            const sA = tA.includes("owner") ? 4 : tA.includes("founder") ? 3 : tA.includes("ceo") ? 2 : tA.includes("director") ? 1 : 0;
+            const sB = tB.includes("owner") ? 4 : tB.includes("founder") ? 3 : tB.includes("ceo") ? 2 : tB.includes("director") ? 1 : 0;
+            return sB - sA;
+          });
+
+          const best = ranked[0];
+          return {
+            name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
+            title: best.headline || best.current_job?.title || null,
+            linkedinUrl: best.url || best.linkedin_url ||
+              (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
+          };
+        }
+      }
+
+      // No people found in companies — try the people array directly
+      const people = output?.people || [];
+      if (people.length > 0) {
+        const best = people[0];
+        return {
+          name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
+          title: best.headline || best.current_job?.title || null,
+          linkedinUrl: best.url || best.linkedin_url ||
+            (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
+        };
+      }
+
+      return null;
+    }
+  }
+
+  return null; // Timed out
 }
 
 // ─── Step 2: Get contact details from LinkedIn URL ───
@@ -88,11 +131,11 @@ async function getContactDetails(linkedinUrl: string): Promise<{
   const emails = profile.emails || [];
   const phones = profile.phoneNumbers || [];
 
-  const personalEmail = emails.find((e: any) => e.type === "personal" && e.status !== "invalid")?.email || null;
-  const workEmail = emails.find((e: any) => e.type === "work" && e.status !== "invalid")?.email || null;
-  const phone = phones.find((p: any) => p.type === "mobile")?.number || phones[0]?.number || null;
-
-  return { personalEmail, workEmail, phone };
+  return {
+    personalEmail: emails.find((e: any) => e.type === "personal" && e.status !== "invalid")?.email || null,
+    workEmail: emails.find((e: any) => e.type === "work" && e.status !== "invalid")?.email || null,
+    phone: phones.find((p: any) => p.type === "mobile")?.number || phones[0]?.number || null,
+  };
 }
 
 // ─── Main API Route ───
@@ -130,51 +173,47 @@ export async function POST(req: NextRequest) {
         // Step 1: Find the owner
         const owner = await findOwner(clinic.website);
 
-        if (!owner?.linkedinUrl) {
-          // Save whatever name we found even without LinkedIn
-          if (owner?.name) {
-            await supabase.from("clinics").update({
-              contact_name: owner.name,
-              contact_title: owner.title,
-              updated_at: new Date().toISOString(),
-            }).eq("id", id);
-          }
-          results.push({
-            id, name: clinic.name, status: "no_linkedin",
-            owner: owner?.name || undefined,
-          });
+        if (!owner) {
+          results.push({ id, name: clinic.name, status: "no_owner_found" });
+          continue;
+        }
+
+        // Save name/title even if no LinkedIn
+        const update: Record<string, unknown> = {
+          contact_name: owner.name,
+          contact_title: owner.title,
+          updated_at: new Date().toISOString(),
+        };
+
+        if (!owner.linkedinUrl) {
+          await supabase.from("clinics").update(update).eq("id", id);
+          results.push({ id, name: clinic.name, status: "name_only", owner: owner.name || undefined });
           continue;
         }
 
         // Step 2: Get contact details
         const contact = await getContactDetails(owner.linkedinUrl);
 
-        // Save to Supabase
-        const update: Record<string, unknown> = {
-          contact_name: owner.name,
-          contact_title: owner.title,
-          updated_at: new Date().toISOString(),
-          scraped_data: {
-            linkedin_url: owner.linkedinUrl,
-            personal_email: contact.personalEmail,
-            work_email: contact.workEmail,
-            phone: contact.phone,
-            enriched_at: new Date().toISOString(),
-          },
+        // Build scraped_data with enrichment info
+        const existingData = (await supabase.from("clinics").select("scraped_data").eq("id", id).single())?.data?.scraped_data || {};
+        update.scraped_data = {
+          ...(typeof existingData === "object" ? existingData : {}),
+          linkedin_url: owner.linkedinUrl,
+          personal_email: contact.personalEmail,
+          work_email: contact.workEmail,
+          phone: contact.phone,
+          owner_title: owner.title,
+          enriched_at: new Date().toISOString(),
         };
 
-        // Use personal email first, then work email
         if (contact.personalEmail) update.contact_email = contact.personalEmail;
         else if (contact.workEmail) update.contact_email = contact.workEmail;
-
         if (contact.phone) update.contact_phone = contact.phone;
 
         await supabase.from("clinics").update(update).eq("id", id);
 
         results.push({
-          id,
-          name: clinic.name,
-          status: "enriched",
+          id, name: clinic.name, status: "enriched",
           owner: owner.name || undefined,
           email: contact.personalEmail || contact.workEmail || undefined,
           phone: contact.phone || undefined,
