@@ -11,142 +11,207 @@ function getSupabase() {
 const FIBER_KEY = () => process.env.FIBER_API_KEY;
 const FIBER_BASE = "https://api.fiber.ai/v1";
 
-// ─── Step 1: Find owner via combined-search (async start + poll) ───
+// ─── Fiber: Find people at a company ───
 
-async function findOwner(domain: string): Promise<{
+async function fiberFindPeople(domain: string): Promise<{
   name: string | null;
   title: string | null;
   linkedinUrl: string | null;
 } | null> {
-  // Start the search
-  const startRes = await fetch(`${FIBER_BASE}/combined-search/start`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      apiKey: FIBER_KEY(),
-      companyParams: {
-        domains: [domain],
-      },
-      personParams: {
-        jobTitleV2: {
-          anyOf: [
-            { type: "static-groups", groups: ["founder", "c-suite"] },
-            { type: "term", term: "owner" },
-            { type: "term", term: "medical director" },
-          ],
+  const apiKey = FIBER_KEY();
+  if (!apiKey) return null;
+
+  try {
+    // Start combined search
+    const startRes = await fetch(`${FIBER_BASE}/combined-search/start`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey,
+        companyParams: {
+          exactCompanyV2: {
+            anyOf: [{ identifier: "domain", domain }],
+          },
         },
-      },
-      personLimit: 3,
-    }),
-  });
+        profileParams: {
+          jobTitleV2: {
+            anyOf: [
+              { type: "static-groups", groups: ["founder", "c-suite"] },
+              { type: "term", term: "owner" },
+              { type: "term", term: "medical director" },
+            ],
+          },
+        },
+        maxProfiles: 5,
+        maxCompanies: 1,
+      }),
+    });
 
-  const startData = await startRes.json();
-  const searchId = startData?.output?.searchID;
-  if (!searchId) return null;
+    const startData = await startRes.json();
+    const searchId = startData?.output?.searchID;
+    if (!searchId) return null;
 
-  // Poll for results (max 30 seconds)
-  for (let i = 0; i < 15; i++) {
-    await new Promise(r => setTimeout(r, 2000));
+    // Poll for results (max 20 seconds)
+    for (let i = 0; i < 10; i++) {
+      await new Promise(r => setTimeout(r, 2000));
 
-    const pollRes = await fetch(`${FIBER_BASE}/combined-search/poll`, {
+      const pollRes = await fetch(`${FIBER_BASE}/combined-search/poll`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apiKey, searchId, entityType: "profile" }),
+      });
+
+      const pollData = await pollRes.json();
+      const items = pollData?.output?.data?.items || [];
+
+      if (items.length > 0) {
+        // Rank by job title relevance
+        const ranked = items.sort((a: any, b: any) => {
+          const tA = (a.headline || "").toLowerCase();
+          const tB = (b.headline || "").toLowerCase();
+          const score = (t: string) =>
+            t.includes("owner") ? 5 : t.includes("founder") ? 4 : t.includes("ceo") ? 3 :
+            t.includes("director") ? 2 : t.includes("doctor") || t.includes("md") || t.includes("dr.") ? 1 : 0;
+          return score(tB) - score(tA);
+        });
+
+        const best = ranked[0];
+        return {
+          name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
+          title: best.headline || null,
+          linkedinUrl: best.url || (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
+        };
+      }
+
+      // If done with no results, break
+      if (pollData?.output?.data?.nextCursor === null && items.length === 0) break;
+    }
+  } catch (err) {
+    console.error("Fiber search error:", err);
+  }
+
+  // Retry without job title filter
+  try {
+    const startRes = await fetch(`${FIBER_BASE}/combined-search/start`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         apiKey: FIBER_KEY(),
-        searchID: searchId,
+        companyParams: {
+          exactCompanyV2: {
+            anyOf: [{ identifier: "domain", domain }],
+          },
+        },
+        maxProfiles: 5,
+        maxCompanies: 1,
       }),
     });
 
+    const startData = await startRes.json();
+    const searchId = startData?.output?.searchID;
+    if (!searchId) return null;
+
+    await new Promise(r => setTimeout(r, 8000));
+
+    const pollRes = await fetch(`${FIBER_BASE}/combined-search/poll`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ apiKey: FIBER_KEY(), searchId, entityType: "profile" }),
+    });
+
     const pollData = await pollRes.json();
-    const output = pollData?.output;
-
-    if (output?.done) {
-      const companies = output?.companies || [];
-      // Look through companies for people
-      for (const company of companies) {
-        const people = company?.people || [];
-        if (people.length > 0) {
-          // Rank: owner > founder > CEO > director
-          const ranked = people.sort((a: any, b: any) => {
-            const tA = (a.headline || a.current_job?.title || "").toLowerCase();
-            const tB = (b.headline || b.current_job?.title || "").toLowerCase();
-            const sA = tA.includes("owner") ? 4 : tA.includes("founder") ? 3 : tA.includes("ceo") ? 2 : tA.includes("director") ? 1 : 0;
-            const sB = tB.includes("owner") ? 4 : tB.includes("founder") ? 3 : tB.includes("ceo") ? 2 : tB.includes("director") ? 1 : 0;
-            return sB - sA;
-          });
-
-          const best = ranked[0];
-          return {
-            name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
-            title: best.headline || best.current_job?.title || null,
-            linkedinUrl: best.url || best.linkedin_url ||
-              (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
-          };
-        }
-      }
-
-      // No people found in companies — try the people array directly
-      const people = output?.people || [];
-      if (people.length > 0) {
-        const best = people[0];
-        return {
-          name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
-          title: best.headline || best.current_job?.title || null,
-          linkedinUrl: best.url || best.linkedin_url ||
-            (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
-        };
-      }
-
-      return null;
+    const items = pollData?.output?.data?.items || [];
+    if (items.length > 0) {
+      const best = items[0];
+      return {
+        name: best.name || `${best.first_name || ""} ${best.last_name || ""}`.trim() || null,
+        title: best.headline || null,
+        linkedinUrl: best.url || (best.primary_slug ? `https://www.linkedin.com/in/${best.primary_slug}` : null),
+      };
     }
-  }
+  } catch { /* ignore */ }
 
-  return null; // Timed out
+  return null;
 }
 
-// ─── Step 2: Get contact details from LinkedIn URL ───
+// ─── Fiber: Get contact details from LinkedIn URL ───
 
 async function getContactDetails(linkedinUrl: string): Promise<{
   personalEmail: string | null;
   workEmail: string | null;
   phone: string | null;
 }> {
-  const res = await fetch(`${FIBER_BASE}/contact-details/single`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      apiKey: FIBER_KEY(),
-      linkedinUrl,
-      enrichmentType: {
-        getWorkEmails: true,
-        getPersonalEmails: true,
-        getPhoneNumbers: true,
-      },
-    }),
-  });
+  try {
+    const res = await fetch(`${FIBER_BASE}/contact-details/single`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey: FIBER_KEY(),
+        linkedinUrl,
+        enrichmentType: {
+          getWorkEmails: true,
+          getPersonalEmails: true,
+          getPhoneNumbers: true,
+        },
+      }),
+    });
 
-  const data = await res.json();
-  const profile = data?.output?.profile || data?.profile || {};
+    const data = await res.json();
+    const profile = data?.output?.profile || {};
+    const emails = profile.emails || [];
+    const phones = profile.phoneNumbers || [];
 
-  const emails = profile.emails || [];
-  const phones = profile.phoneNumbers || [];
+    return {
+      personalEmail: emails.find((e: any) => e.type === "personal" && e.status !== "invalid")?.email || null,
+      workEmail: emails.find((e: any) => e.type === "work" && e.status !== "invalid")?.email || null,
+      phone: phones.find((p: any) => p.type === "mobile")?.number || phones[0]?.number || null,
+    };
+  } catch {
+    return { personalEmail: null, workEmail: null, phone: null };
+  }
+}
 
-  return {
-    personalEmail: emails.find((e: any) => e.type === "personal" && e.status !== "invalid")?.email || null,
-    workEmail: emails.find((e: any) => e.type === "work" && e.status !== "invalid")?.email || null,
-    phone: phones.find((p: any) => p.type === "mobile")?.number || phones[0]?.number || null,
-  };
+// ─── Fallback: Scrape website for doctor/owner name ───
+
+async function scrapeForOwner(website: string): Promise<{ name: string | null; title: string | null }> {
+  try {
+    const url = website.startsWith("http") ? website : `https://${website}`;
+
+    // Try /about, /team, /our-team pages
+    const pages = [url, `${url}/about`, `${url}/about-us`, `${url}/team`, `${url}/our-team`];
+
+    for (const pageUrl of pages) {
+      try {
+        const res = await fetch(pageUrl, {
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
+          signal: AbortSignal.timeout(5000),
+          redirect: "follow",
+        });
+        if (!res.ok) continue;
+        const html = await res.text();
+
+        // Look for doctor names: "Dr. First Last" or "First Last, MD"
+        const drPattern = /(?:Dr\.?\s+)([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})/g;
+        const mdPattern = /([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\s*,?\s*(?:MD|M\.D\.|DO|D\.O\.|NMD|ND|DC)/g;
+
+        let match;
+        if ((match = drPattern.exec(html))) {
+          return { name: `Dr. ${match[1]}`, title: "Physician" };
+        }
+        if ((match = mdPattern.exec(html))) {
+          return { name: `Dr. ${match[1]}`, title: "Physician" };
+        }
+      } catch { continue; }
+    }
+  } catch { /* ignore */ }
+
+  return { name: null, title: null };
 }
 
 // ─── Main API Route ───
 
 export async function POST(req: NextRequest) {
   try {
-    const apiKey = FIBER_KEY();
-    if (!apiKey) {
-      return NextResponse.json({ error: "FIBER_API_KEY not configured" }, { status: 500 });
-    }
-
     const body = await req.json();
     const clinicIds: string[] = body.clinicIds || (body.clinicId ? [body.clinicId] : []);
 
@@ -160,7 +225,7 @@ export async function POST(req: NextRequest) {
     for (const id of clinicIds) {
       const { data: clinic } = await supabase
         .from("clinics")
-        .select("id, name, website")
+        .select("id, name, website, scraped_data")
         .eq("id", id)
         .single();
 
@@ -170,38 +235,42 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        // Step 1: Find the owner
-        const owner = await findOwner(clinic.website);
+        // Try Fiber first
+        let owner = await fiberFindPeople(clinic.website);
 
-        if (!owner) {
+        // Fallback: scrape website for doctor name
+        if (!owner?.name) {
+          const scraped = await scrapeForOwner(clinic.website);
+          if (scraped.name) {
+            owner = { name: scraped.name, title: scraped.title, linkedinUrl: null };
+          }
+        }
+
+        if (!owner?.name) {
           results.push({ id, name: clinic.name, status: "no_owner_found" });
           continue;
         }
 
-        // Save name/title even if no LinkedIn
         const update: Record<string, unknown> = {
           contact_name: owner.name,
           contact_title: owner.title,
           updated_at: new Date().toISOString(),
         };
 
-        if (!owner.linkedinUrl) {
-          await supabase.from("clinics").update(update).eq("id", id);
-          results.push({ id, name: clinic.name, status: "name_only", owner: owner.name || undefined });
-          continue;
+        // Get contact details if we have LinkedIn
+        let contact = { personalEmail: null as string | null, workEmail: null as string | null, phone: null as string | null };
+        if (owner.linkedinUrl) {
+          contact = await getContactDetails(owner.linkedinUrl);
         }
 
-        // Step 2: Get contact details
-        const contact = await getContactDetails(owner.linkedinUrl);
-
-        // Build scraped_data with enrichment info
-        const existingData = (await supabase.from("clinics").select("scraped_data").eq("id", id).single())?.data?.scraped_data || {};
+        // Merge with existing scraped_data
+        const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};
         update.scraped_data = {
-          ...(typeof existingData === "object" ? existingData : {}),
+          ...existing,
           linkedin_url: owner.linkedinUrl,
           personal_email: contact.personalEmail,
           work_email: contact.workEmail,
-          phone: contact.phone,
+          owner_phone: contact.phone,
           owner_title: owner.title,
           enriched_at: new Date().toISOString(),
         };
