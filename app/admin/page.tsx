@@ -1016,6 +1016,14 @@ export default function AdminPanel() {
                     >
                       <Eye size={12} /> Generate Preview
                     </button>
+                    <button
+                      className="action-btn"
+                      onClick={() => handleEnrich([clinic.id])}
+                      disabled={actionLoading === "enrich"}
+                      style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
+                    >
+                      {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
+                    </button>
                   </div>
                 )}
               />

@@ -79,28 +79,39 @@ function extractBrandColor(html: string): string | null {
     }
   }
 
-  // 4. Colors from inline styles on headers, navs, buttons
-  const inlineStylePatterns = [
-    /style="[^"]*background(?:-color)?:\s*#([0-9a-fA-F]{6})/gi,
-    /style="[^"]*(?:^|;)\s*color:\s*#([0-9a-fA-F]{6})/gi,
-  ];
-  const inlineColors: string[] = [];
-  for (const pattern of inlineStylePatterns) {
-    let match;
-    while ((match = pattern.exec(html))) {
-      const hex = `#${match[1].toUpperCase()}`;
-      if (isViableColor(hex)) inlineColors.push(hex);
-    }
-  }
-  if (inlineColors.length > 0) {
-    // Most frequent inline style color
-    const freq: Record<string, number> = {};
-    inlineColors.forEach(c => { freq[c] = (freq[c] || 0) + 1; });
-    const top = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
-    if (top) return top[0];
+  // 4. Extract rgb/rgba colors and convert to hex
+  const rgbaPattern = /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/g;
+  const rgbColors: string[] = [];
+  let rm;
+  while ((rm = rgbaPattern.exec(html))) {
+    const r = parseInt(rm[1]), g = parseInt(rm[2]), b = parseInt(rm[3]);
+    const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase();
+    if (isViableColor(hex)) rgbColors.push(hex);
   }
 
-  // 5. Fallback: most frequent viable color in entire HTML, weighted by position
+  // 5. Colors from button/CTA backgrounds (highest signal for brand)
+  const buttonColorPattern = /(?:button|btn|cta|book|schedule|get-started|learn-more)[^}]{0,200}?(?:background(?:-color)?|color)\s*:\s*(?:#([0-9a-fA-F]{6})|rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3}))/gi;
+  let bm;
+  while ((bm = buttonColorPattern.exec(html))) {
+    let hex;
+    if (bm[1]) {
+      hex = `#${bm[1].toUpperCase()}`;
+    } else if (bm[2]) {
+      const r = parseInt(bm[2]), g = parseInt(bm[3]), b = parseInt(bm[4]);
+      hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase();
+    }
+    if (hex && isViableColor(hex)) return hex;
+  }
+
+  // 6. Most frequent rgb/rgba color
+  if (rgbColors.length > 0) {
+    const freq: Record<string, number> = {};
+    rgbColors.forEach(c => { freq[c] = (freq[c] || 0) + 1; });
+    const top = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
+    if (top && top[1] >= 1) return top[0];
+  }
+
+  // 7. Fallback: most frequent viable hex color in entire HTML, weighted by position
   const hexPattern = /#([0-9a-fA-F]{6})\b/g;
   const freq: Record<string, { count: number; position: number }> = {};
   let m;
