@@ -165,10 +165,7 @@ nav .nav-links a.btn-primary:hover {
   transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--white); }
-.nav-mobile-cta { display: none; }
-@media (max-width: 900px) {
-  .nav-mobile-cta { display: inline-flex; }
-}
+.nav-mobile-cta { display: none !important; }
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 32px;
@@ -1716,6 +1713,7 @@ footer .container {
   }
   .hero-ctas { flex-direction: column; }
   .nav-links { display: none; }
+  .nav-mobile-cta { display: inline-flex !important; }
   .stat-banner .container { flex-direction: column; gap: 8px; }
   .section-title { font-size: 32px; }
 }
