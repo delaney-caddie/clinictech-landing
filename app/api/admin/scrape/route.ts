@@ -19,21 +19,75 @@ function generateSlug(name: string): string {
 
 // ─── Lightweight scrape (fetch HTML, extract colors + services) ───
 
-function extractHexColors(html: string): string[] {
-  const hexPattern = /#(?:[0-9a-fA-F]{6})\b/g;
-  const matches = html.match(hexPattern) || [];
-  const unique = [...new Set(matches.map(c => c.toUpperCase()))];
-  return unique.filter(c => {
-    const stripped = c.replace("#", "");
-    if (/^([0-9a-f])\1{5}$/i.test(stripped)) return false;
-    if (stripped === "000000" || stripped === "FFFFFF") return false;
-    const r = parseInt(stripped.slice(0, 2), 16);
-    const g = parseInt(stripped.slice(2, 4), 16);
-    const b = parseInt(stripped.slice(4, 6), 16);
-    if (r > 240 && g > 240 && b > 240) return false;
-    if (r < 15 && g < 15 && b < 15) return false;
-    return true;
-  });
+function isViableColor(hex: string): boolean {
+  const stripped = hex.replace("#", "").toUpperCase();
+  if (/^([0-9A-F])\1{5}$/.test(stripped)) return false; // pure grey
+  if (stripped === "000000" || stripped === "FFFFFF") return false;
+  const r = parseInt(stripped.slice(0, 2), 16);
+  const g = parseInt(stripped.slice(2, 4), 16);
+  const b = parseInt(stripped.slice(4, 6), 16);
+  if (r > 230 && g > 230 && b > 230) return false; // too light
+  if (r < 20 && g < 20 && b < 20) return false; // too dark
+  // Skip pure greys (r ≈ g ≈ b)
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  if (max - min < 20) return false;
+  return true;
+}
+
+function extractBrandColor(html: string): string | null {
+  // 1. Meta theme-color (most reliable)
+  const themeColor = html.match(/<meta[^>]*name=["']theme-color["'][^>]*content=["']([^"']+)["']/i)?.[1];
+  if (themeColor && themeColor.startsWith("#") && isViableColor(themeColor)) {
+    return themeColor.toUpperCase();
+  }
+
+  // 2. CSS custom properties (--primary, --brand, --accent, --main-color, etc.)
+  const cssVarPatterns = [
+    /--(?:primary|brand|main|accent)(?:-color)?:\s*#([0-9a-fA-F]{6})/gi,
+    /--(?:primary|brand|main|accent)(?:-color)?:\s*#([0-9a-fA-F]{3})\b/gi,
+  ];
+  for (const pattern of cssVarPatterns) {
+    let match;
+    while ((match = pattern.exec(html))) {
+      let hex = match[1].toUpperCase();
+      if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      const full = `#${hex}`;
+      if (isViableColor(full)) return full;
+    }
+  }
+
+  // 3. Colors from nav/header/button backgrounds (high signal)
+  const highSignalPatterns = [
+    /(?:nav|header|\.nav|\.header|\.btn-primary|\.button-primary)[^}]*?(?:background(?:-color)?)\s*:\s*#([0-9a-fA-F]{6})/gi,
+    /(?:background(?:-color)?)\s*:\s*#([0-9a-fA-F]{6})[^}]*?(?:nav|header|button)/gi,
+  ];
+  for (const pattern of highSignalPatterns) {
+    let match;
+    while ((match = pattern.exec(html))) {
+      const full = `#${match[1].toUpperCase()}`;
+      if (isViableColor(full)) return full;
+    }
+  }
+
+  // 4. Fallback: most frequent viable color, weighted towards early-appearing ones
+  const hexPattern = /#([0-9a-fA-F]{6})\b/g;
+  const freq: Record<string, { count: number; position: number }> = {};
+  let m;
+  while ((m = hexPattern.exec(html))) {
+    const hex = `#${m[1].toUpperCase()}`;
+    if (!isViableColor(hex)) continue;
+    if (!freq[hex]) freq[hex] = { count: 0, position: m.index };
+    freq[hex].count++;
+  }
+  // Score = count * 2 + earlier position bonus
+  const scored = Object.entries(freq)
+    .map(([hex, { count, position }]) => ({
+      hex,
+      score: count * 2 + Math.max(0, 10 - position / 1000),
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  return scored[0]?.hex || null;
 }
 
 function extractServices(text: string): string[] {
@@ -74,12 +128,7 @@ async function scrapeWebsite(website: string): Promise<{
     });
     const html = await res.text();
 
-    const colors = extractHexColors(html);
-    // Most frequent non-grey color
-    const colorFreq: Record<string, number> = {};
-    colors.forEach(c => { colorFreq[c] = (colorFreq[c] || 0) + 1; });
-    const sorted = Object.entries(colorFreq).sort((a, b) => b[1] - a[1]);
-    const primaryColor = sorted[0]?.[0] || null;
+    const primaryColor = extractBrandColor(html);
 
     const services = extractServices(html);
     const emails = extractEmails(html);

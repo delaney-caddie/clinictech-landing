@@ -92,6 +92,7 @@ export default function ClinicPreviewPage() {
         activePage={activePage}
         onPageChange={setActivePage}
         clinicName={clinic.name}
+        logoUrl={clinic.logo_url}
       />
       <main className="flex-1 overflow-auto pb-12">
         {view === "dashboard" ? (

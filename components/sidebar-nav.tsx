@@ -30,6 +30,7 @@ interface SidebarNavProps {
   activePage: string
   onPageChange: (page: string) => void
   clinicName?: string
+  logoUrl?: string | null
 }
 
 const dashboardNavItems = [
@@ -54,7 +55,7 @@ const portalNavItems = [
   { id: "appointments", label: "Appointments", icon: Calendar },
 ]
 
-export function SidebarNav({ view, onViewChange, activePage, onPageChange, clinicName }: SidebarNavProps) {
+export function SidebarNav({ view, onViewChange, activePage, onPageChange, clinicName, logoUrl }: SidebarNavProps) {
   const [collapsed, setCollapsed] = useState(false)
   const navItems = view === "dashboard" ? dashboardNavItems : portalNavItems
 
@@ -68,7 +69,14 @@ export function SidebarNav({ view, onViewChange, activePage, onPageChange, clini
       {/* Logo */}
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-3">
         <div className={cn("flex items-center gap-2", collapsed && "justify-center w-full")}>
-          {collapsed ? (
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={clinicName || "Clinic"}
+              style={{ width: collapsed ? 32 : 140, height: "auto", maxHeight: 40 }}
+              className="shrink-0 object-contain"
+            />
+          ) : collapsed ? (
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-sm font-bold shrink-0">
               {(clinicName || "CT").charAt(0)}
             </div>
