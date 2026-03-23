@@ -133,29 +133,43 @@ async function scrapeWebsite(website: string): Promise<{
     const services = extractServices(html);
     const emails = extractEmails(html);
 
-    // Try to find logo — only match actual logo images, not og:image or hero images
+    // Try to find logo — match actual logo images only
     let logoUrl: string | null = null;
     const logoPatterns = [
-      // class contains "logo" and has src
+      // class contains "logo" with src
       /class="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
       /src="([^"]+)"[^>]*class="[^"]*logo[^"]*"/i,
-      // alt contains "logo"
+      // class contains "logo" with data-src (lazy loaded)
+      /class="[^"]*logo[^"]*"[^>]*data-src="([^"]+)"/i,
+      // alt contains "logo" with src
       /alt="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
       /src="([^"]+)"[^>]*alt="[^"]*logo[^"]*"/i,
       // id contains "logo"
       /id="[^"]*logo[^"]*"[^>]*src="([^"]+)"/i,
+      // Common header image patterns
+      /class="[^"]*(?:site-logo|header-logo|navbar-brand|custom-logo)[^"]*"[^>]*src="([^"]+)"/i,
+      /class="[^"]*(?:site-logo|header-logo|navbar-brand|custom-logo)[^"]*"[^>]*data-src="([^"]+)"/i,
+      // WordPress custom logo
+      /class="[^"]*custom-logo[^"]*"[^>]*src="([^"]+)"/i,
+      // srcset on logo elements (take first URL)
+      /class="[^"]*logo[^"]*"[^>]*srcset="([^\s,"]+)/i,
+      // Link with logo in rel (favicon as last resort)
+      /<link[^>]*rel="icon"[^>]*href="([^"]+)"/i,
+      /<link[^>]*rel="apple-touch-icon"[^>]*href="([^"]+)"/i,
     ];
     for (const pattern of logoPatterns) {
       const match = html.match(pattern);
       if (match?.[1]) {
-        const src = match[1];
-        // Skip if it looks like a photo/hero image (jpg/jpeg usually aren't logos)
-        if (/\.(jpg|jpeg)$/i.test(src)) continue;
-        // Skip very long URLs (usually tracking/ad images)
-        if (src.length > 300) continue;
+        let src = match[1];
+        // Skip very long URLs (tracking pixels)
+        if (src.length > 500) continue;
+        // Skip data: URIs
+        if (src.startsWith("data:")) continue;
+        // Resolve to absolute URL
         if (src.startsWith("http")) logoUrl = src;
         else if (src.startsWith("//")) logoUrl = `https:${src}`;
         else if (src.startsWith("/")) logoUrl = `${new URL(url).origin}${src}`;
+        else logoUrl = `${new URL(url).origin}/${src}`;
         break;
       }
     }

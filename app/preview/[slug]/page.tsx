@@ -95,6 +95,7 @@ export default function ClinicPreviewPage() {
     <div className="flex min-h-screen">
       {brandHex && (
         <style>{`
+          /* Sidebar branding */
           .bg-sidebar { background-color: ${brandHex} !important; }
           .bg-sidebar-primary { background-color: ${activeBg} !important; }
           .bg-sidebar-accent { background-color: ${accentBg} !important; }
@@ -105,6 +106,24 @@ export default function ClinicPreviewPage() {
           .hover\\:text-sidebar-foreground:hover { color: ${textColor} !important; }
           .hover\\:bg-sidebar-accent:hover { background-color: ${accentBg} !important; }
           .hover\\:bg-sidebar-accent\\/80:hover { background-color: ${accentBg} !important; }
+
+          /* Main content — primary color overrides */
+          .bg-primary { background-color: ${brandHex} !important; }
+          .text-primary { color: ${brandHex} !important; }
+          .bg-primary\\/10 { background-color: ${brandHex}1a !important; }
+          .bg-primary\\/15 { background-color: ${brandHex}26 !important; }
+          .bg-primary\\/20 { background-color: ${brandHex}33 !important; }
+          .border-primary { border-color: ${brandHex} !important; }
+          .ring-primary { --tw-ring-color: ${brandHex} !important; }
+          .text-primary-foreground { color: ${isLight ? "#1a1a2e" : "#ffffff"} !important; }
+          .bg-primary-foreground\\/20 { background-color: ${isLight ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.2)"} !important; }
+          .text-primary-foreground\\/70 { color: ${isLight ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.7)"} !important; }
+
+          /* Secondary — slightly lighter/different shade */
+          .bg-secondary { background-color: ${brandHex}cc !important; }
+          .text-secondary { color: ${brandHex}cc !important; }
+          .bg-secondary\\/15 { background-color: ${brandHex}26 !important; }
+          .bg-secondary\\/20 { background-color: ${brandHex}33 !important; }
         `}</style>
       )}
       <SidebarNav
