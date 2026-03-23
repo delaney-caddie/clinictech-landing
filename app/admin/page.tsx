@@ -4,18 +4,19 @@ import { useState } from "react";
 import {
   Search, Plus, Globe, Eye, Mail, Phone, MoreHorizontal,
   Sparkles, RefreshCw, ExternalLink, CheckCircle2, Clock,
-  AlertCircle, XCircle, Send, Target, Settings,
+  AlertCircle, XCircle, Send, Target, Settings, Calendar,
+  PhoneCall,
 } from "lucide-react";
 
 /* ─── Sample Data ─── */
 const CLINICS = [
-  { id: 1, name: "ResCore Stem Cell", website: "rescore.com", logo: "", primaryColor: "#1B6B4A", status: "preview_sent", previewSlug: "rescore", contactName: "Steve", contactEmail: "steve@rescore.com", contactPhone: "(555) 100-2000", location: "Austin, TX", services: ["Stem Cell Therapy", "PRP", "Exosomes"], scrapedAt: "Mar 20", previewAt: "Mar 20", emailedAt: "Mar 21", followUp1: "Mar 24", followUp2: null, callFlag: false, notes: "Beta client. Warm lead." },
-  { id: 2, name: "BioXcellerator", website: "bioxcellerator.com", logo: "", primaryColor: "#0066CC", status: "emailed", previewSlug: "bioxcellerator", contactName: "Dr. Martinez", contactEmail: "info@bioxcellerator.com", contactPhone: "(555) 200-3000", location: "Medellin, CO", services: ["Stem Cell Therapy", "Anti-Aging"], scrapedAt: "Mar 19", previewAt: "Mar 19", emailedAt: "Mar 20", followUp1: null, followUp2: null, callFlag: false, notes: "Large operation, high value target." },
-  { id: 3, name: "Dynamic Stem Cell Therapy", website: "dynamicstemcelltherapy.com", logo: "", primaryColor: "#8B2252", status: "scraped", previewSlug: "dynamic-stem-cell", contactName: null, contactEmail: "info@dynamicstemcell.com", contactPhone: null, location: "Las Vegas, NV", services: ["Stem Cell", "PRP", "Joint Therapy"], scrapedAt: "Mar 21", previewAt: null, emailedAt: null, followUp1: null, followUp2: null, callFlag: false, notes: "" },
-  { id: 4, name: "Prodromos Stem Cell", website: "prodromosstemcell.com", logo: "", primaryColor: "#1a1a2e", status: "call_flagged", previewSlug: "prodromos", contactName: "Chloe", contactEmail: "contact@prodromos.com", contactPhone: "(555) 400-5000", location: "Chicago, IL", services: ["ACL Repair", "Stem Cell", "Sports Medicine"], scrapedAt: "Mar 15", previewAt: "Mar 15", emailedAt: "Mar 16", followUp1: "Mar 19", followUp2: "Mar 22", callFlag: true, notes: "No email response after 2 follow-ups. Call priority." },
-  { id: 5, name: "Pagdin Health", website: "pagdinhealth.com", logo: "", primaryColor: "#2E7D32", status: "new", previewSlug: null, contactName: null, contactEmail: null, contactPhone: null, location: "Kelowna, BC", services: [], scrapedAt: null, previewAt: null, emailedAt: null, followUp1: null, followUp2: null, callFlag: false, notes: "Found via A4M directory." },
-  { id: 6, name: "Kopi Stem Cell", website: "kopistemcell.com", logo: "", primaryColor: "#D4A843", status: "new", previewSlug: null, contactName: null, contactEmail: null, contactPhone: null, location: "Jakarta, ID", services: [], scrapedAt: null, previewAt: null, emailedAt: null, followUp1: null, followUp2: null, callFlag: false, notes: "" },
-  { id: 7, name: "ISSCA Member Clinic", website: "example-regen.com", logo: "", primaryColor: "#4A90D9", status: "preview_generated", previewSlug: "issca-member", contactName: "Dr. Kim", contactEmail: "drkim@example-regen.com", contactPhone: "(555) 700-8000", location: "Los Angeles, CA", services: ["Stem Cell", "Regenerative Medicine"], scrapedAt: "Mar 21", previewAt: "Mar 22", emailedAt: null, followUp1: null, followUp2: null, callFlag: false, notes: "Preview ready, pending send." },
+  { id: 1, name: "ResCore Stem Cell", website: "rescore.com", logo: "", primaryColor: "#1B6B4A", status: "preview_sent", previewSlug: "rescore", externalPreviewUrl: null, contactName: "Steve", contactEmail: "steve@rescore.com", contactPhone: "(555) 100-2000", location: "Austin, TX", services: ["Stem Cell Therapy", "PRP", "Exosomes"], scrapedAt: "Mar 20", previewAt: "Mar 20", emailedAt: "Mar 21", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Beta client. Warm lead. Preview sent via V0 mockup." },
+  { id: 2, name: "BioXcellerator", website: "bioxcellerator.com", logo: "", primaryColor: "#0066CC", status: "preview_sent", previewSlug: "bioxcellerator", externalPreviewUrl: null, contactName: "Dr. Martinez", contactEmail: "info@bioxcellerator.com", contactPhone: "(555) 200-3000", location: "Medellin, CO", services: ["Stem Cell Therapy", "Anti-Aging"], scrapedAt: "Mar 19", previewAt: "Mar 19", emailedAt: "Mar 20", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Large operation, high value target." },
+  { id: 3, name: "Dynamic Stem Cell Therapy", website: "dynamicstemcelltherapy.com", logo: "", primaryColor: "#8B2252", status: "meeting_booked", previewSlug: "dynamic-stem-cell", externalPreviewUrl: "https://v0.dev/chat/dynamic-stem-cell-preview", contactName: "Dr. Gaveck", contactEmail: "info@dynamicstemcelltherapy.com", contactPhone: null, location: "Las Vegas, NV", services: ["Stem Cell", "PRP", "Joint Therapy"], scrapedAt: "Mar 18", previewAt: "Mar 18", emailedAt: "Mar 19", followUp1: null, followUp2: null, callFlag: false, meetingBooked: true, calledAt: null, notes: "Meeting booked! Responded to initial preview email." },
+  { id: 4, name: "Prodromos Stem Cell", website: "prodromosstemcell.com", logo: "", primaryColor: "#1a1a2e", status: "preview_sent", previewSlug: "prodromos", externalPreviewUrl: null, contactName: "Chloe", contactEmail: "contact@prodromos.com", contactPhone: "(555) 400-5000", location: "Chicago, IL", services: ["ACL Repair", "Stem Cell", "Sports Medicine"], scrapedAt: "Mar 15", previewAt: "Mar 15", emailedAt: "Mar 16", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Preview sent. Awaiting response." },
+  { id: 5, name: "Pagdin Health", website: "pagdinhealth.com", logo: "", primaryColor: "#2E7D32", status: "meeting_booked", previewSlug: "pagdin-health", externalPreviewUrl: "https://v0.dev/chat/pagdin-health-preview", contactName: "Dr. Pagdin", contactEmail: "info@pagdinhealth.com", contactPhone: null, location: "Kelowna, BC", services: ["Regenerative Medicine", "IV Therapy", "Hormone Therapy"], scrapedAt: "Mar 17", previewAt: "Mar 17", emailedAt: "Mar 18", followUp1: null, followUp2: null, callFlag: false, meetingBooked: true, calledAt: null, notes: "Meeting booked! Very interested in the platform." },
+  { id: 6, name: "Kopi Stem Cell", website: "kopistemcell.com", logo: "", primaryColor: "#D4A843", status: "preview_sent", previewSlug: "kopi-stem-cell", externalPreviewUrl: null, contactName: null, contactEmail: "info@kopistemcell.com", contactPhone: null, location: "Jakarta, ID", services: ["Stem Cell Therapy"], scrapedAt: "Mar 20", previewAt: "Mar 20", emailedAt: "Mar 21", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "International clinic. Preview sent." },
+  { id: 7, name: "ISSCA Member Clinic", website: "example-regen.com", logo: "", primaryColor: "#4A90D9", status: "preview_sent", previewSlug: "issca-member", externalPreviewUrl: null, contactName: "Dr. Kim", contactEmail: "drkim@example-regen.com", contactPhone: "(555) 700-8000", location: "Los Angeles, CA", services: ["Stem Cell", "Regenerative Medicine"], scrapedAt: "Mar 21", previewAt: "Mar 22", emailedAt: "Mar 22", followUp1: null, followUp2: null, callFlag: false, meetingBooked: false, calledAt: null, notes: "Preview sent same day as generation." },
 ];
 
 type Clinic = (typeof CLINICS)[number];
@@ -28,12 +29,14 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
   emailed:           { label: "Emailed",          color: "#059669", bg: "#ECFDF5", icon: Mail },
   follow_up_1:       { label: "Follow-up 1",      color: "#D97706", bg: "#FFFBEB", icon: Clock },
   follow_up_2:       { label: "Follow-up 2",      color: "#EA580C", bg: "#FFF7ED", icon: AlertCircle },
-  call_flagged:      { label: "Call Flagged",      color: "#DC2626", bg: "#FEF2F2", icon: Phone },
-  converted:         { label: "Converted",         color: "#16A34A", bg: "#F0FDF4", icon: CheckCircle2 },
-  lost:              { label: "Lost",              color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
+  meeting_booked:    { label: "Meeting Booked",     color: "#7C3AED", bg: "#F5F3FF", icon: Calendar },
+  called:            { label: "Called",             color: "#0EA5E9", bg: "#F0F9FF", icon: PhoneCall },
+  call_flagged:      { label: "Call Flagged",       color: "#DC2626", bg: "#FEF2F2", icon: Phone },
+  converted:         { label: "Converted",          color: "#16A34A", bg: "#F0FDF4", icon: CheckCircle2 },
+  lost:              { label: "Lost",               color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
 };
 
-const PIPELINE_ORDER = ["new","scraped","preview_generated","preview_sent","emailed","follow_up_1","follow_up_2","call_flagged","converted","lost"];
+const PIPELINE_ORDER = ["new","scraped","preview_generated","preview_sent","emailed","follow_up_1","follow_up_2","meeting_booked","called","call_flagged","converted","lost"];
 
 /* ─── Styles ─── */
 const styles = `
@@ -99,6 +102,9 @@ const styles = `
 
   /* Stats bar */
   .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; padding: 20px 28px; }
+  .preview-links { display: flex; flex-direction: column; gap: 6px; }
+  .preview-link-row { background: #F1F5F9; border-radius: 8px; padding: 8px 12px; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .preview-link-label { font-size: 10px; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
   .stat-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px; }
   .stat-label { font-size: 12px; font-weight: 500; color: #64748B; }
   .stat-value { font-size: 28px; font-weight: 700; margin-top: 2px; }
@@ -151,6 +157,8 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
     { label: "Preview sent", date: clinic.emailedAt, done: !!clinic.emailedAt },
     { label: "Follow-up 1", date: clinic.followUp1, done: !!clinic.followUp1 },
     { label: "Follow-up 2", date: clinic.followUp2, done: !!clinic.followUp2 },
+    { label: "Meeting booked", date: clinic.meetingBooked ? "Yes" : null, done: clinic.meetingBooked },
+    { label: "Called", date: clinic.calledAt, done: !!clinic.calledAt },
     { label: "Call flagged", date: clinic.callFlag ? "Yes" : null, done: clinic.callFlag },
   ];
   const currentIdx = timeline.findLastIndex(t => t.done);
@@ -198,12 +206,28 @@ function DetailPanel({ clinic, onClose }: { clinic: Clinic; onClose: () => void 
             <div className="detail-field"><span className="detail-field-label">Services</span><span className="detail-field-value">{clinic.services.length > 0 ? clinic.services.join(", ") : "Not scraped"}</span></div>
           </div>
 
-          {clinic.previewSlug && (
+          {(clinic.previewSlug || clinic.externalPreviewUrl) && (
             <div className="detail-section">
-              <div className="detail-section-title">Preview Link</div>
-              <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 13, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <code style={{ color: "#0F172A" }}>clinictech.io/preview/{clinic.previewSlug}</code>
-                <ExternalLink size={14} style={{ color: "#64748B", cursor: "pointer" }} />
+              <div className="detail-section-title">Preview Links</div>
+              <div className="preview-links">
+                {clinic.previewSlug && (
+                  <div className="preview-link-row">
+                    <div>
+                      <div className="preview-link-label">ClinicTech Preview</div>
+                      <code style={{ color: "#0F172A", fontSize: 12 }}>clinictech.io/preview/{clinic.previewSlug}</code>
+                    </div>
+                    <ExternalLink size={14} style={{ color: "#64748B", cursor: "pointer" }} />
+                  </div>
+                )}
+                {clinic.externalPreviewUrl && (
+                  <div className="preview-link-row">
+                    <div>
+                      <div className="preview-link-label">External Mockup</div>
+                      <code style={{ color: "#0F172A", fontSize: 12 }}>{clinic.externalPreviewUrl.replace(/https?:\/\//, "").slice(0, 40)}...</code>
+                    </div>
+                    <ExternalLink size={14} style={{ color: "#64748B", cursor: "pointer" }} />
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -261,7 +285,9 @@ export default function AdminPanel() {
     { id: "pipeline", label: "Pipeline", icon: Target, count: clinics.length },
     { id: "previews", label: "Previews", icon: Eye, count: clinics.filter(c => c.previewSlug).length },
     { id: "outreach", label: "Outreach", icon: Send, count: clinics.filter(c => c.emailedAt).length },
+    { id: "meetings", label: "Meetings", icon: Calendar, count: clinics.filter(c => c.meetingBooked).length },
     { id: "calls", label: "Call Queue", icon: Phone, count: clinics.filter(c => c.callFlag).length },
+    { id: "called", label: "Called", icon: PhoneCall, count: clinics.filter(c => c.calledAt).length },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -317,7 +343,9 @@ export default function AdminPanel() {
                 {activePage === "pipeline" && "Clinic Pipeline"}
                 {activePage === "previews" && "Preview Manager"}
                 {activePage === "outreach" && "Outreach Tracker"}
+                {activePage === "meetings" && "Meetings Booked"}
                 {activePage === "calls" && "Call Queue"}
+                {activePage === "called" && "Called"}
                 {activePage === "settings" && "Settings"}
               </h1>
               <div className="search-box">
@@ -353,13 +381,13 @@ export default function AdminPanel() {
               <div className="stat-sub">This month</div>
             </div>
             <div className="stat-card">
-              <div className="stat-label">Call Flagged</div>
-              <div className="stat-value" style={{ color: "#DC2626" }}>{clinics.filter(c => c.callFlag).length}</div>
-              <div className="stat-sub">Need outreach</div>
+              <div className="stat-label">Meetings Booked</div>
+              <div className="stat-value" style={{ color: "#7C3AED" }}>{clinics.filter(c => c.meetingBooked).length}</div>
+              <div className="stat-sub">From outreach</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Conversion</div>
-              <div className="stat-value" style={{ color: "#059669" }}>0</div>
+              <div className="stat-value" style={{ color: "#059669" }}>{clinics.filter(c => c.status === "converted").length}</div>
               <div className="stat-sub">Customers</div>
             </div>
           </div>
