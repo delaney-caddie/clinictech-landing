@@ -248,7 +248,7 @@ function formatDate(d: string | null): string {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function DetailPanel({ clinic, onClose, onStatusChange, onEnrich }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void }) {
+function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, onRescrape }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void }) {
   const [statusOpen, setStatusOpen] = useState(false);
 
   const timeline = [
@@ -384,6 +384,14 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich }: { clinic: Cl
                 <Globe size={12} /> Generate Preview
               </button>
             )}
+            <button className="action-btn" onClick={() => onRescrape(clinic.id)}>
+              <RefreshCw size={12} /> Re-scrape
+            </button>
+            {clinic.logo_url && (
+              <button className="action-btn" onClick={() => onClearLogo(clinic.id)} style={{ color: "#DC2626", borderColor: "#FCA5A5" }}>
+                <XCircle size={12} /> Use Text Logo
+              </button>
+            )}
             {(clinic.status === "scraped" || clinic.status === "preview_generated") && (
               <button className="action-btn primary" onClick={() => onStatusChange(clinic.id, "preview_sent")}>
                 <Send size={12} /> Mark Sent
@@ -394,8 +402,11 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich }: { clinic: Cl
               onClick={() => onEnrich(clinic.id)}
               style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
             >
-              <Users size={12} /> {clinic.contact_phone ? "Re-Enrich" : "Enrich Contact"}
+              <Users size={12} /> {clinic.contact_name ? "Re-Enrich" : "Enrich Contact"}
             </button>
+            <a href={`https://${clinic.website}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+              <button className="action-btn"><Globe size={12} /> Open Website</button>
+            </a>
             {clinic.slug && (
               <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
                 <button className="action-btn"><ExternalLink size={12} /> View Preview</button>
@@ -818,6 +829,32 @@ export default function AdminPanel() {
     setActionLoading(null);
   }
 
+  async function handleClearLogo(clinicId: string) {
+    try {
+      await fetch("/api/admin/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId, clearLogo: true }),
+      });
+      await fetchClinics();
+      setSelectedClinic(null);
+    } catch { /* handle silently */ }
+  }
+
+  async function handleRescrape(clinicId: string) {
+    setActionLoading("scrape");
+    try {
+      await fetch("/api/admin/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: [clinicId] }),
+      });
+      await fetchClinics();
+      setSelectedClinic(null);
+    } catch { /* handle silently */ }
+    setActionLoading(null);
+  }
+
   async function handleStatusChange(clinicId: string, status: string) {
     try {
       await fetch("/api/admin/status", {
@@ -1201,6 +1238,8 @@ export default function AdminPanel() {
             handleEnrich([id]);
             setSelectedClinic(null);
           }}
+          onClearLogo={(id) => handleClearLogo(id)}
+          onRescrape={(id) => handleRescrape(id)}
         />
       )}
     </>

@@ -26,13 +26,24 @@ const VALID_STATUSES = [
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { clinicId, status } = body;
+    const { clinicId, status, clearLogo } = body;
 
-    if (!clinicId || !status) {
-      return NextResponse.json(
-        { error: "clinicId and status are required" },
-        { status: 400 }
-      );
+    if (!clinicId) {
+      return NextResponse.json({ error: "clinicId is required" }, { status: 400 });
+    }
+
+    // Handle clear logo action
+    if (clearLogo) {
+      const { error } = await getSupabase()
+        .from("clinics")
+        .update({ logo_url: null, updated_at: new Date().toISOString() })
+        .eq("id", clinicId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ ok: true, action: "logo_cleared" });
+    }
+
+    if (!status) {
+      return NextResponse.json({ error: "status is required" }, { status: 400 });
     }
 
     if (!VALID_STATUSES.includes(status)) {

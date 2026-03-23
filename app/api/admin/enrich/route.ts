@@ -66,12 +66,18 @@ function extractDoctorNames(html: string): { name: string; title: string }[] {
     }
   }
 
-  // "Owner" or "Founder" near a name
-  const ownerPattern = /(?:owner|founder|ceo|medical director|clinic director)[^<]{0,50}?([A-Z][a-z]+\s+[A-Z][a-z]+)/gi;
+  // "Owner" or "Founder" near a name — strict: name must be capitalized properly
+  const ownerPattern = /(?:owner|founder|ceo|medical director|clinic director)[^<]{0,50}?([A-Z][a-z]{2,15}\s+[A-Z][a-z]{2,15})/gi;
   while ((m = ownerPattern.exec(html))) {
     const name = m[1].trim();
-    if (!seen.has(name.toLowerCase()) && name.length > 4) {
-      seen.add(name.toLowerCase());
+    // Filter out common false positives
+    const lower = name.toLowerCase();
+    if (lower.includes("have") || lower.includes("that") || lower.includes("this") ||
+        lower.includes("with") || lower.includes("from") || lower.includes("your") ||
+        lower.includes("will") || lower.includes("also") || lower.includes("more") ||
+        lower.includes("our") || lower.includes("the") || lower.includes("and")) continue;
+    if (!seen.has(lower) && name.length > 5) {
+      seen.add(lower);
       results.push({ name, title: "Owner" });
     }
   }
