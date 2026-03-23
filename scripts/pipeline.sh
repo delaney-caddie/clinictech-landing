@@ -21,16 +21,31 @@ if [ -z "$1" ]; then
   echo "==================="
   echo ""
   echo "Usage:"
-  echo "  ./clinictech-pipeline.sh <clinic-website-url>    Scrape + draft email"
-  echo "  ./clinictech-pipeline.sh --draft [slug]          Draft emails only"
-  echo "  ./clinictech-pipeline.sh --draft                 Draft all pending emails"
+  echo "  ./scripts/pipeline.sh <clinic-website-url>       Scrape + draft email"
+  echo "  ./scripts/pipeline.sh --discover \"City, ST\"      Find clinics in an area"
+  echo "  ./scripts/pipeline.sh --discover \"City\" --scrape  Find + scrape + draft"
+  echo "  ./scripts/pipeline.sh --draft [slug]              Draft emails only"
+  echo "  ./scripts/pipeline.sh --draft                     Draft all pending"
   echo ""
   echo "Examples:"
-  echo "  ./clinictech-pipeline.sh https://rescore.com"
-  echo "  ./clinictech-pipeline.sh --draft rescore"
-  echo "  ./clinictech-pipeline.sh --draft"
+  echo "  ./scripts/pipeline.sh https://rescore.com"
+  echo "  ./scripts/pipeline.sh --discover \"Austin, TX\""
+  echo "  ./scripts/pipeline.sh --discover \"Miami, FL\" --scrape"
+  echo "  ./scripts/pipeline.sh --draft rescore"
   echo ""
   exit 1
+fi
+
+# Discovery mode
+if [ "$1" == "--discover" ]; then
+  shift
+  LOCATION=$1
+  shift
+  echo ""
+  echo "🔍 Discovering clinics in: $LOCATION"
+  echo ""
+  npx ts-node scripts/discover-clinics.ts "$LOCATION" $@
+  exit 0
 fi
 
 # Draft-only mode
