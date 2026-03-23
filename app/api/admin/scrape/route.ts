@@ -69,7 +69,28 @@ function extractBrandColor(html: string): string | null {
     }
   }
 
-  // 4. Fallback: most frequent viable color, weighted towards early-appearing ones
+  // 4. Colors from inline styles on headers, navs, buttons
+  const inlineStylePatterns = [
+    /style="[^"]*background(?:-color)?:\s*#([0-9a-fA-F]{6})/gi,
+    /style="[^"]*(?:^|;)\s*color:\s*#([0-9a-fA-F]{6})/gi,
+  ];
+  const inlineColors: string[] = [];
+  for (const pattern of inlineStylePatterns) {
+    let match;
+    while ((match = pattern.exec(html))) {
+      const hex = `#${match[1].toUpperCase()}`;
+      if (isViableColor(hex)) inlineColors.push(hex);
+    }
+  }
+  if (inlineColors.length > 0) {
+    // Most frequent inline style color
+    const freq: Record<string, number> = {};
+    inlineColors.forEach(c => { freq[c] = (freq[c] || 0) + 1; });
+    const top = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
+    if (top) return top[0];
+  }
+
+  // 5. Fallback: most frequent viable color in entire HTML, weighted by position
   const hexPattern = /#([0-9a-fA-F]{6})\b/g;
   const freq: Record<string, { count: number; position: number }> = {};
   let m;
@@ -79,7 +100,6 @@ function extractBrandColor(html: string): string | null {
     if (!freq[hex]) freq[hex] = { count: 0, position: m.index };
     freq[hex].count++;
   }
-  // Score = count * 2 + earlier position bonus
   const scored = Object.entries(freq)
     .map(([hex, { count, position }]) => ({
       hex,
@@ -161,10 +181,16 @@ async function scrapeWebsite(website: string): Promise<{
       const match = html.match(pattern);
       if (match?.[1]) {
         let src = match[1];
-        // Skip very long URLs (tracking pixels)
+        // Skip broken/placeholder URLs
+        if (src.includes("${") || src.includes("{{")) continue;
         if (src.length > 500) continue;
-        // Skip data: URIs
         if (src.startsWith("data:")) continue;
+        // Skip certification/partner logos (common false positives)
+        const srcLower = src.toLowerCase();
+        if (srcLower.includes("certification") || srcLower.includes("accredit") ||
+            srcLower.includes("partner") || srcLower.includes("association") ||
+            srcLower.includes("greyscale") || srcLower.includes("grayscale") ||
+            srcLower.includes("award") || srcLower.includes("badge")) continue;
         // Resolve to absolute URL
         if (src.startsWith("http")) logoUrl = src;
         else if (src.startsWith("//")) logoUrl = `https:${src}`;
@@ -172,6 +198,15 @@ async function scrapeWebsite(website: string): Promise<{
         else logoUrl = `${new URL(url).origin}/${src}`;
         break;
       }
+    }
+
+    // If no logo found, try the site's favicon (almost always works)
+    if (!logoUrl) {
+      const faviconUrl = `${new URL(url).origin}/favicon.ico`;
+      try {
+        const favRes = await fetch(faviconUrl, { method: "HEAD", signal: AbortSignal.timeout(3000) });
+        if (favRes.ok) logoUrl = faviconUrl;
+      } catch { /* skip */ }
     }
 
     return { primaryColor, services, contactEmail: emails[0] || null, logoUrl };
