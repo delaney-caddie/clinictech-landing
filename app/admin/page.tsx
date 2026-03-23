@@ -293,6 +293,20 @@ export default function AdminPanel() {
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22C55E" }} />
               <span style={{ fontSize: 12, color: "#94A3B8" }}>Ready to run</span>
             </div>
+            <button
+              onClick={async () => {
+                await fetch("/api/admin/logout", { method: "POST" });
+                window.location.href = "/admin/login";
+              }}
+              style={{
+                marginTop: 12, width: "100%", padding: "8px 0",
+                background: "transparent", border: "1px solid #334155",
+                borderRadius: 8, color: "#94A3B8", fontSize: 12,
+                cursor: "pointer", fontWeight: 600,
+              }}
+            >
+              Sign Out
+            </button>
           </div>
         </div>
 

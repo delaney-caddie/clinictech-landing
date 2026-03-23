@@ -10,10 +10,12 @@ import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error("Supabase env vars not configured");
+  return createClient(url, key);
+}
 
 function hashIP(ip: string): string {
   // Hash the IP for privacy - we can still count unique visitors
@@ -40,7 +42,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Get clinic ID from slug
-    const { data: clinic } = await supabase
+    const { data: clinic } = await getSupabase()
       .from("clinics")
       .select("id")
       .eq("slug", slug)
@@ -59,7 +61,7 @@ export async function POST(req: NextRequest) {
     const referrer = req.headers.get("referer") || body.referrer || null;
 
     // Insert view record
-    const { error } = await supabase.from("preview_views").insert({
+    const { error } = await getSupabase().from("preview_views").insert({
       clinic_id: clinic.id,
       slug,
       ip_hash: hashIP(ip),
@@ -90,7 +92,7 @@ export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug");
   if (slug) {
     // Fire and forget
-    const { data: clinic } = await supabase
+    const { data: clinic } = await getSupabase()
       .from("clinics")
       .select("id")
       .eq("slug", slug)
@@ -98,7 +100,7 @@ export async function GET(req: NextRequest) {
 
     if (clinic) {
       const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-      await supabase.from("preview_views").insert({
+      await getSupabase().from("preview_views").insert({
         clinic_id: clinic.id,
         slug,
         ip_hash: hashIP(ip),
