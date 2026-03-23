@@ -5,7 +5,7 @@ import {
   Search, Plus, Globe, Eye, Mail, Phone, MoreHorizontal,
   RefreshCw, ExternalLink, CheckCircle2, Clock,
   AlertCircle, XCircle, Send, Target, Settings, Calendar,
-  PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown,
+  PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown, Users,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -795,6 +795,22 @@ export default function AdminPanel() {
     setActionLoading(null);
   }
 
+  async function handleEnrich(ids: string[]) {
+    setActionLoading("enrich");
+    try {
+      await fetch("/api/admin/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: ids }),
+      });
+      await fetchClinics();
+      setSelectedIds(new Set());
+    } catch {
+      // handle silently
+    }
+    setActionLoading(null);
+  }
+
   async function handleStatusChange(clinicId: string, status: string) {
     try {
       await fetch("/api/admin/status", {
@@ -972,6 +988,14 @@ export default function AdminPanel() {
                   >
                     {actionLoading === "scrape" ? <><Loader2 size={12} className="spin" /> Generating...</> : <><Eye size={12} /> Generate Previews</>}
                   </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#C4B5FD", borderColor: "#7C3AED" }}
+                    onClick={() => handleEnrich(Array.from(selectedIds))}
+                    disabled={actionLoading === "enrich"}
+                  >
+                    {actionLoading === "enrich" ? <><Loader2 size={12} className="spin" /> Enriching...</> : <><Users size={12} /> Enrich Contacts</>}
+                  </button>
                   <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>
                     Clear
                   </button>
@@ -1009,6 +1033,16 @@ export default function AdminPanel() {
                     <a href={`/preview/${clinic.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
                       <button className="action-btn"><ExternalLink size={12} /> View</button>
                     </a>
+                  )}
+                  {!clinic.contact_phone && (
+                    <button
+                      className="action-btn"
+                      onClick={() => handleEnrich([clinic.id])}
+                      disabled={actionLoading === "enrich"}
+                      style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
+                    >
+                      {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
+                    </button>
                   )}
                   <button
                     className="action-btn primary"
