@@ -8,159 +8,95 @@ function getSupabase() {
   );
 }
 
-// ─── Scrape website for owner/doctor name and email ───
+const FIBER_KEY = () => process.env.FIBER_API_KEY;
+const FIBER_BASE = "https://api.fiber.ai/v1";
 
-async function fetchPage(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
-      signal: AbortSignal.timeout(8000),
-      redirect: "follow",
-    });
-    if (!res.ok) return null;
-    return await res.text();
-  } catch {
-    return null;
-  }
-}
+// ─── Step 1: Find owner via Kitchen Sink Person ───
 
-async function fetchWithFirecrawl(url: string): Promise<string | null> {
-  const key = process.env.FIRECRAWL_API_KEY;
-  if (!key) return null;
-  try {
-    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${key}` },
-      body: JSON.stringify({ url, formats: ["html"], waitFor: 3000 }),
-      signal: AbortSignal.timeout(30000),
-    });
-    const data = await res.json();
-    return data.success ? data.data?.html || null : null;
-  } catch {
-    return null;
-  }
-}
+async function findOwner(domain: string): Promise<{
+  name: string;
+  title: string;
+  linkedinSlug: string;
+} | null> {
+  const apiKey = FIBER_KEY();
+  if (!apiKey) return null;
 
-function extractDoctorNames(html: string): { name: string; title: string }[] {
-  const results: { name: string; title: string }[] = [];
-  const seen = new Set<string>();
+  // Try different job titles in priority order
+  const jobTitles = ["owner", "founder", "ceo", "medical director", "director"];
 
-  // "Dr. First Last" pattern
-  const drPattern = /Dr\.?\s+([A-Z][a-z]+(?:\s+[A-Z]\.?)?\s+[A-Z][a-z]+)/g;
-  let m;
-  while ((m = drPattern.exec(html))) {
-    const name = `Dr. ${m[1].trim()}`;
-    if (!seen.has(name.toLowerCase())) {
-      seen.add(name.toLowerCase());
-      results.push({ name, title: "Physician" });
+  for (const title of jobTitles) {
+    try {
+      const res = await fetch(`${FIBER_BASE}/kitchen-sink/person`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey,
+          companyDomain: { value: domain },
+          jobTitle: { value: title },
+          numProfiles: 1,
+        }),
+      });
+
+      const data = await res.json();
+      const profiles = data?.output?.profiles || [];
+
+      if (profiles.length > 0) {
+        const p = profiles[0];
+        return {
+          name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
+          title: p.headline || title,
+          linkedinSlug: p.primary_slug || p.url || "",
+        };
+      }
+    } catch {
+      continue;
     }
   }
 
-  // "First Last, MD" or "First Last, DO" etc.
-  const mdPattern = /([A-Z][a-z]+(?:\s+[A-Z]\.?)?\s+[A-Z][a-z]+)\s*,?\s*(?:MD|M\.D\.|DO|D\.O\.|NMD|N\.D\.|DC|D\.C\.|PhD|DAOM)/g;
-  while ((m = mdPattern.exec(html))) {
-    const name = `Dr. ${m[1].trim()}`;
-    if (!seen.has(name.toLowerCase())) {
-      seen.add(name.toLowerCase());
-      results.push({ name, title: "Physician" });
-    }
-  }
-
-  // "Owner" or "Founder" near a name — strict: name must be capitalized properly
-  const ownerPattern = /(?:owner|founder|ceo|medical director|clinic director)[^<]{0,50}?([A-Z][a-z]{2,15}\s+[A-Z][a-z]{2,15})/gi;
-  while ((m = ownerPattern.exec(html))) {
-    const name = m[1].trim();
-    // Filter out common false positives
-    const lower = name.toLowerCase();
-    if (lower.includes("have") || lower.includes("that") || lower.includes("this") ||
-        lower.includes("with") || lower.includes("from") || lower.includes("your") ||
-        lower.includes("will") || lower.includes("also") || lower.includes("more") ||
-        lower.includes("our") || lower.includes("the") || lower.includes("and")) continue;
-    if (!seen.has(lower) && name.length > 5) {
-      seen.add(lower);
-      results.push({ name, title: "Owner" });
-    }
-  }
-
-  return results;
+  return null;
 }
 
-function extractEmails(html: string): string[] {
-  const pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-  const matches = html.match(pattern) || [];
-  return [...new Set(matches)].filter(e =>
-    !e.includes("example.com") &&
-    !e.includes("wixpress") &&
-    !e.includes("sentry") &&
-    !e.includes("wordpress") &&
-    !e.includes("gravatar") &&
-    !e.includes("schema.org") &&
-    !e.includes("googleapis") &&
-    !e.endsWith(".svg") &&
-    !e.endsWith(".png") &&
-    !e.endsWith(".jpg")
-  );
-}
+// ─── Step 2: Get contact details ───
 
-async function enrichFromWebsite(website: string): Promise<{
-  ownerName: string | null;
-  ownerTitle: string | null;
-  email: string | null;
+async function getContactDetails(linkedinSlug: string): Promise<{
+  personalEmail: string | null;
+  workEmail: string | null;
+  mobilePhone: string | null;
 }> {
-  const baseUrl = website.startsWith("http") ? website : `https://${website}`;
+  try {
+    const res = await fetch(`${FIBER_BASE}/contact-details/single`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey: FIBER_KEY(),
+        linkedinUrl: linkedinSlug,
+      }),
+    });
 
-  // Pages to scrape for owner/doctor info
-  const pagePaths = ["", "/about", "/about-us", "/team", "/our-team", "/doctors", "/providers", "/staff"];
-  const allDoctors: { name: string; title: string }[] = [];
-  const allEmails: string[] = [];
+    const data = await res.json();
+    const profile = data?.output?.profile || {};
+    const emails = profile.emails || [];
+    const phones = profile.phoneNumbers || [];
 
-  for (const path of pagePaths) {
-    const pageUrl = `${baseUrl}${path}`;
-
-    // Try Firecrawl first (renders JS), fall back to basic fetch
-    let html = await fetchWithFirecrawl(pageUrl);
-    if (!html) html = await fetchPage(pageUrl);
-    if (!html) continue;
-
-    const doctors = extractDoctorNames(html);
-    allDoctors.push(...doctors);
-
-    const emails = extractEmails(html);
-    allEmails.push(...emails);
-
-    // Stop after finding a doctor name (don't scrape all pages unnecessarily)
-    if (doctors.length > 0) break;
+    return {
+      personalEmail: emails.find((e: any) => e.type === "personal")?.email || null,
+      workEmail: emails.find((e: any) => e.type === "work")?.email || null,
+      mobilePhone: phones.find((p: any) => p.type === "mobile")?.number || null,
+    };
+  } catch {
+    return { personalEmail: null, workEmail: null, mobilePhone: null };
   }
-
-  // Dedupe emails
-  const uniqueEmails = [...new Set(allEmails)];
-
-  // Prefer owner/founder over generic doctor
-  const ranked = allDoctors.sort((a, b) => {
-    const score = (t: string) =>
-      t.toLowerCase().includes("owner") ? 3 :
-      t.toLowerCase().includes("founder") ? 3 :
-      t.toLowerCase().includes("director") ? 2 : 1;
-    return score(b.title) - score(a.title);
-  });
-
-  // Find an email that looks personal (has a name in it) vs generic (info@, contact@)
-  const personalEmail = uniqueEmails.find(e => {
-    const local = e.split("@")[0].toLowerCase();
-    return !["info", "contact", "hello", "admin", "support", "office", "reception", "team", "careers", "hr", "billing", "appointments"].includes(local);
-  });
-
-  return {
-    ownerName: ranked[0]?.name || null,
-    ownerTitle: ranked[0]?.title || null,
-    email: personalEmail || uniqueEmails[0] || null,
-  };
 }
 
 // ─── Main API Route ───
 
 export async function POST(req: NextRequest) {
   try {
+    const apiKey = FIBER_KEY();
+    if (!apiKey) {
+      return NextResponse.json({ error: "FIBER_API_KEY not configured" }, { status: 500 });
+    }
+
     const body = await req.json();
     const clinicIds: string[] = body.clinicIds || (body.clinicId ? [body.clinicId] : []);
 
@@ -169,7 +105,10 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = getSupabase();
-    const results: { id: string; name: string; status: string; owner?: string; email?: string }[] = [];
+    const results: {
+      id: string; name: string; status: string;
+      owner?: string; personalEmail?: string; workEmail?: string; phone?: string;
+    }[] = [];
 
     for (const id of clinicIds) {
       const { data: clinic } = await supabase
@@ -184,40 +123,54 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        const enriched = await enrichFromWebsite(clinic.website);
+        // Step 1: Find the owner
+        const owner = await findOwner(clinic.website);
 
-        if (!enriched.ownerName && !enriched.email) {
-          results.push({ id, name: clinic.name, status: "no_data_found" });
+        if (!owner) {
+          results.push({ id, name: clinic.name, status: "no_owner_found" });
           continue;
         }
 
+        // Step 2: Get their contact details
+        const contact = owner.linkedinSlug
+          ? await getContactDetails(owner.linkedinSlug)
+          : { personalEmail: null, workEmail: null, mobilePhone: null };
+
+        // Save to Supabase
         const update: Record<string, unknown> = {
+          contact_name: owner.name,
+          contact_title: owner.title,
           updated_at: new Date().toISOString(),
         };
 
-        if (enriched.ownerName) {
-          update.contact_name = enriched.ownerName;
-          update.contact_title = enriched.ownerTitle;
-        }
-        if (enriched.email) {
-          update.contact_email = enriched.email;
-        }
+        // Prefer personal email, then work email
+        if (contact.personalEmail) update.contact_email = contact.personalEmail;
+        else if (contact.workEmail) update.contact_email = contact.workEmail;
 
-        // Merge with existing scraped_data
+        // Save mobile phone (personal direct dial)
+        if (contact.mobilePhone) update.contact_phone = contact.mobilePhone;
+
+        // Merge enrichment data into scraped_data
         const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};
         update.scraped_data = {
           ...existing,
           enriched_at: new Date().toISOString(),
-          enriched_owner: enriched.ownerName,
-          enriched_email: enriched.email,
+          owner_name: owner.name,
+          owner_title: owner.title,
+          linkedin_slug: owner.linkedinSlug,
+          personal_email: contact.personalEmail,
+          work_email: contact.workEmail,
+          mobile_phone: contact.mobilePhone,
         };
 
         await supabase.from("clinics").update(update).eq("id", id);
 
         results.push({
           id, name: clinic.name, status: "enriched",
-          owner: enriched.ownerName || undefined,
-          email: enriched.email || undefined,
+          owner: owner.name,
+          personalEmail: contact.personalEmail || undefined,
+          workEmail: contact.workEmail || undefined,
+          phone: contact.mobilePhone || undefined,
         });
       } catch (err: any) {
         results.push({ id, name: clinic.name, status: `error: ${err.message?.slice(0, 100)}` });
