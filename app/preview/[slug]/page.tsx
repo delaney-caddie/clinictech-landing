@@ -74,16 +74,37 @@ export default function ClinicPreviewPage() {
 
   const brandHex = clinic.primary_color || null;
 
+  // Determine if brand color is light or dark
+  function isLightColor(hex: string): boolean {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    // Perceived luminance formula
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.55;
+  }
+
+  const isLight = brandHex ? isLightColor(brandHex) : false;
+  const textColor = isLight ? "#1a1a2e" : "#ffffff";
+  const textMuted = isLight ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.7)";
+  const borderColor = isLight ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.12)";
+  const accentBg = isLight ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.08)";
+  const activeBg = isLight ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.15)";
+
   return (
     <div className="flex min-h-screen">
       {brandHex && (
         <style>{`
           .bg-sidebar { background-color: ${brandHex} !important; }
-          .bg-sidebar-primary { background-color: rgba(255,255,255,0.15) !important; }
-          .bg-sidebar-accent { background-color: rgba(255,255,255,0.08) !important; }
-          .text-sidebar-foreground { color: #ffffff !important; }
-          .text-sidebar-primary-foreground { color: #ffffff !important; }
-          .border-sidebar-border { border-color: rgba(255,255,255,0.12) !important; }
+          .bg-sidebar-primary { background-color: ${activeBg} !important; }
+          .bg-sidebar-accent { background-color: ${accentBg} !important; }
+          .text-sidebar-foreground { color: ${textColor} !important; }
+          .text-sidebar-primary-foreground { color: ${textColor} !important; }
+          .border-sidebar-border { border-color: ${borderColor} !important; }
+          .text-sidebar-foreground\\/70 { color: ${textMuted} !important; }
+          .hover\\:text-sidebar-foreground:hover { color: ${textColor} !important; }
+          .hover\\:bg-sidebar-accent:hover { background-color: ${accentBg} !important; }
+          .hover\\:bg-sidebar-accent\\/80:hover { background-color: ${accentBg} !important; }
         `}</style>
       )}
       <SidebarNav
