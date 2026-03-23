@@ -54,6 +54,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface ClinicDashboardProps {
   activePage: string
+  clinicName?: string
 }
 
 interface Lead {
@@ -318,7 +319,7 @@ const recentActivity = [
   { id: 4, type: "call", message: "Phone call logged with Robert K.", time: "25m ago", icon: Phone, color: "bg-secondary/15 text-secondary" },
 ]
 
-export function ClinicDashboard({ activePage }: ClinicDashboardProps) {
+export function ClinicDashboard({ activePage, clinicName }: ClinicDashboardProps) {
   const [leads] = useState<Lead[]>(initialLeads)
   const [leadsView, setLeadsView] = useState<"kanban" | "table">("kanban")
   const [leadsTab, setLeadsTab] = useState<"leads" | "pipeline">("leads")

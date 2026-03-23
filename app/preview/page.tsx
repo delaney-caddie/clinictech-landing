@@ -28,12 +28,13 @@ function PreviewContent() {
         onViewChange={handleViewChange}
         activePage={activePage}
         onPageChange={setActivePage}
+        clinicName={clinicName}
       />
       <main className="flex-1 overflow-auto pb-12">
         {view === "dashboard" ? (
-          <ClinicDashboard activePage={activePage} />
+          <ClinicDashboard activePage={activePage} clinicName={clinicName} />
         ) : (
-          <PatientPortal activePage={activePage} />
+          <PatientPortal activePage={activePage} clinicName={clinicName} />
         )}
       </main>
 
@@ -42,14 +43,24 @@ function PreviewContent() {
         <span className="text-xs text-gray-400">
           Powered by <span className="font-semibold text-white">ClinicTech</span>
         </span>
-        <a
-          href="https://calendar.app.google/WCKTy12it4D4kMkH7"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-500"
-        >
-          Book a Demo
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            href="https://clinictech.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md border border-gray-600 px-3 py-1 text-xs font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
+          >
+            More Info
+          </a>
+          <a
+            href="https://calendar.app.google/WCKTy12it4D4kMkH7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-500"
+          >
+            Book a Demo
+          </a>
+        </div>
       </div>
     </div>
   )

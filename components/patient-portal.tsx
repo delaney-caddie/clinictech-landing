@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge"
 
 interface PatientPortalProps {
   activePage: string
+  clinicName?: string
 }
 
 const patientData = {
@@ -100,7 +101,7 @@ const faqs = [
   { q: "How do I care for the treatment site?", category: "Care" },
 ]
 
-export function PatientPortal({ activePage }: PatientPortalProps) {
+export function PatientPortal({ activePage, clinicName }: PatientPortalProps) {
   const [chatMessage, setChatMessage] = useState("")
   const [chatHistory, setChatHistory] = useState<{ role: "user" | "ai"; message: string }[]>([
     {
