@@ -1,0 +1,54 @@
+import type { Metadata } from "next";
+import { DM_Sans, DM_Serif_Display, Nunito } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const dmSerif = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+});
+
+export const metadata: Metadata = {
+  title: "ClinicTech — Your Clinic's Growth Engine",
+  description: "A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in days.",
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180" },
+    ],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} ${nunito.variable}`}>
+      <body>
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  );
+}
