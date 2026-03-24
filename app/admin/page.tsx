@@ -824,6 +824,73 @@ function EditableDraftCard({ clinic, actionLoading, onSend, onSkip, onSaveDraft 
   );
 }
 
+function SettingsTab() {
+  const [gmailStatus, setGmailStatus] = useState<{ connected: boolean; authUrl?: string; error?: string } | null>(null);
+  const [checking, setChecking] = useState(false);
+
+  async function checkGmail() {
+    setChecking(true);
+    try {
+      const res = await fetch("/api/admin/gmail");
+      const data = await res.json();
+      setGmailStatus(data);
+    } catch {
+      setGmailStatus({ connected: false, error: "Failed to check" });
+    }
+    setChecking(false);
+  }
+
+  return (
+    <div style={{ padding: 28 }}>
+      <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 24, maxWidth: 600 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Email Integration</h3>
+        <p style={{ fontSize: 13, color: "#64748B", marginBottom: 16, lineHeight: 1.6 }}>
+          Connect Gmail to send outreach emails directly from the platform. Emails will be sent from Danika&apos;s account.
+        </p>
+
+        {!gmailStatus && (
+          <button className="action-btn primary" onClick={checkGmail} disabled={checking}>
+            {checking ? <><Loader2 size={12} className="spin" /> Checking...</> : "Check Gmail Connection"}
+          </button>
+        )}
+
+        {gmailStatus?.connected && (
+          <div style={{ padding: 12, background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 8, fontSize: 13, color: "#166534", display: "flex", alignItems: "center", gap: 8 }}>
+            <CheckCircle2 size={16} /> Gmail connected and ready to send
+          </div>
+        )}
+
+        {gmailStatus && !gmailStatus.connected && !gmailStatus.error && gmailStatus.authUrl && (
+          <div>
+            <p style={{ fontSize: 13, color: "#DC2626", marginBottom: 12 }}>Gmail not connected.</p>
+            <a href={gmailStatus.authUrl} target="_blank" rel="noopener noreferrer">
+              <button className="action-btn primary">Connect Gmail via Composio</button>
+            </a>
+          </div>
+        )}
+
+        {gmailStatus && !gmailStatus.connected && !gmailStatus.authUrl && (
+          <div style={{ padding: 12, background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8, fontSize: 13, color: "#DC2626" }}>
+            {gmailStatus.error || "Gmail not configured. Set COMPOSIO_API_KEY in environment variables."}
+          </div>
+        )}
+      </div>
+
+      <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 24, maxWidth: 600, marginTop: 16 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Email Signature</h3>
+        <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8, padding: 16, fontSize: 13, lineHeight: 1.6, color: "#475569" }}>
+          <strong>Danika Chilibeck</strong><br />
+          Cofounder &amp; CEO<br />
+          ClinicTech.io
+        </div>
+        <p style={{ fontSize: 11, color: "#94A3B8", marginTop: 8 }}>
+          Update SENDER_NAME and SENDER_TITLE in environment variables to change.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function AnalyticsTab() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1467,13 +1534,7 @@ export default function AdminPanel() {
           {activePage === "analytics" && <AnalyticsTab />}
 
           {/* ─── SETTINGS TAB ─── */}
-          {activePage === "settings" && (
-            <div className="empty-state">
-              <Settings size={40} style={{ color: "#CBD5E1", marginBottom: 12 }} />
-              <div className="empty-state-title">Settings</div>
-              <div className="empty-state-sub">Configuration options will be available here.</div>
-            </div>
-          )}
+          {activePage === "settings" && <SettingsTab />}
         </div>
       </div>
 
