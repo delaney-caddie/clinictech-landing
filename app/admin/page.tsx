@@ -6,6 +6,7 @@ import {
   RefreshCw, ExternalLink, CheckCircle2, Clock,
   AlertCircle, XCircle, Send, Target, Settings, Calendar,
   PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown, Users,
+  Link, UserSearch,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -248,7 +249,118 @@ function formatDate(d: string | null): string {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, onRescrape, onSaveProfile }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void> }) {
+interface LinkedInResult {
+  name: string;
+  headline: string;
+  url: string;
+}
+
+function DecisionMakerSection({ clinic, onEnrichFromLinkedIn }: { clinic: Clinic; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void }) {
+  const [searching, setSearching] = useState(false);
+  const [results, setResults] = useState<LinkedInResult[]>([]);
+  const [searched, setSearched] = useState(false);
+  const [manualUrl, setManualUrl] = useState("");
+  const [enriching, setEnriching] = useState(false);
+
+  async function handleSearch() {
+    setSearching(true);
+    setResults([]);
+    setSearched(false);
+    try {
+      const res = await fetch("/api/admin/linkedin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId: clinic.id }),
+      });
+      const data = await res.json();
+      setResults(data.profiles || []);
+    } catch {
+      // silent
+    }
+    setSearching(false);
+    setSearched(true);
+  }
+
+  async function handleSelectProfile(url: string) {
+    setEnriching(true);
+    onEnrichFromLinkedIn(clinic.id, url);
+    setEnriching(false);
+  }
+
+  async function handleManualEnrich() {
+    if (!manualUrl.trim()) return;
+    setEnriching(true);
+    onEnrichFromLinkedIn(clinic.id, manualUrl.trim());
+    setEnriching(false);
+    setManualUrl("");
+  }
+
+  return (
+    <div className="detail-section">
+      <div className="detail-section-title">Find Decision Maker</div>
+
+      {/* Manual LinkedIn URL input */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+        <input
+          value={manualUrl}
+          onChange={(e) => setManualUrl(e.target.value)}
+          placeholder="Paste LinkedIn URL..."
+          style={{ flex: 1, padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 12, fontFamily: "inherit", outline: "none" }}
+        />
+        <button
+          className="action-btn"
+          onClick={handleManualEnrich}
+          disabled={!manualUrl.trim() || enriching}
+          style={{ color: "#7C3AED", borderColor: "#C4B5FD", whiteSpace: "nowrap" }}
+        >
+          {enriching ? <Loader2 size={12} className="spin" /> : <><Link size={12} /> Enrich</>}
+        </button>
+      </div>
+
+      {/* Auto-search button */}
+      <button
+        className="action-btn"
+        onClick={handleSearch}
+        disabled={searching}
+        style={{ width: "100%", justifyContent: "center", marginBottom: 10, color: "#2563EB", borderColor: "#93C5FD" }}
+      >
+        {searching ? <><Loader2 size={12} className="spin" /> Searching LinkedIn...</> : <><UserSearch size={12} /> Search LinkedIn for Owner</>}
+      </button>
+
+      {/* Results */}
+      {searched && results.length === 0 && !searching && (
+        <div style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", padding: "8px 0" }}>
+          No LinkedIn profiles found. Try pasting a URL manually.
+        </div>
+      )}
+
+      {results.length > 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {results.map((profile, i) => (
+            <div
+              key={i}
+              onClick={() => handleSelectProfile(profile.url)}
+              style={{
+                background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8,
+                padding: "10px 12px", cursor: "pointer", transition: "all 0.15s",
+              }}
+              onMouseOver={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#93C5FD"; (e.currentTarget as HTMLDivElement).style.background = "#EFF6FF"; }}
+              onMouseOut={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#E2E8F0"; (e.currentTarget as HTMLDivElement).style.background = "#F8FAFC"; }}
+            >
+              <div style={{ fontWeight: 600, fontSize: 13 }}>{profile.name}</div>
+              {profile.headline && <div style={{ fontSize: 11, color: "#64748B", marginTop: 2 }}>{profile.headline}</div>}
+              <div style={{ fontSize: 11, color: "#2563EB", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                <ExternalLink size={10} /> {profile.url.replace("https://www.linkedin.com/in/", "")}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLinkedIn, onClearLogo, onRescrape, onSaveProfile }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void> }) {
   const [statusOpen, setStatusOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -257,6 +369,7 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
     contact_email: clinic.contact_email || "",
     contact_phone: clinic.contact_phone || "",
     contact_title: (clinic as any).contact_title || "",
+    linkedin_url: clinic.scraped_data?.linkedin_url || "",
     location: clinic.location || "",
     website: clinic.website || "",
     primary_color: clinic.primary_color || "",
@@ -269,7 +382,9 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
 
   async function handleSave() {
     setSaving(true);
-    await onSaveProfile(clinic.id, editData);
+    // Extract linkedin_url to save into scraped_data separately
+    const { linkedin_url, ...profileData } = editData;
+    await onSaveProfile(clinic.id, { ...profileData, linkedin_url });
     setSaving(false);
     setEditing(false);
   }
@@ -357,6 +472,7 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
                   { label: "Title", field: "contact_title", placeholder: "Owner, Medical Director" },
                   { label: "Email", field: "contact_email", placeholder: "jane@clinic.com" },
                   { label: "Phone", field: "contact_phone", placeholder: "+1 (555) 123-4567" },
+                  { label: "LinkedIn URL", field: "linkedin_url", placeholder: "https://linkedin.com/in/dr-jane-smith" },
                   { label: "Location", field: "location", placeholder: "City, State" },
                   { label: "Website", field: "website", placeholder: "clinicname.com" },
                   { label: "Brand Color", field: "primary_color", placeholder: "#1A2B3C" },
@@ -389,6 +505,14 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
                 <div className="detail-field"><span className="detail-field-label">Title</span><span className="detail-field-value">{(clinic as any).contact_title || "Unknown"}</span></div>
                 <div className="detail-field"><span className="detail-field-label">Email</span><span className="detail-field-value">{clinic.contact_email || "Unknown"}</span></div>
                 <div className="detail-field"><span className="detail-field-label">Phone</span><span className="detail-field-value">{clinic.contact_phone || "Unknown"}</span></div>
+                {clinic.scraped_data?.linkedin_url && (
+                  <div className="detail-field">
+                    <span className="detail-field-label">LinkedIn</span>
+                    <a href={clinic.scraped_data.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ color: "#2563EB", fontSize: 12, textDecoration: "none", display: "flex", alignItems: "center", gap: 4 }}>
+                      <ExternalLink size={11} /> Profile
+                    </a>
+                  </div>
+                )}
                 <div className="detail-field"><span className="detail-field-label">Location</span><span className="detail-field-value">{clinic.location || "Unknown"}</span></div>
                 {(clinic as any).notes && (
                   <div className="detail-field"><span className="detail-field-label">Notes</span><span className="detail-field-value" style={{ fontSize: 12, maxWidth: 200, textAlign: "right" }}>{(clinic as any).notes}</span></div>
@@ -396,6 +520,8 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
               </>
             )}
           </div>
+
+          <DecisionMakerSection clinic={clinic} onEnrichFromLinkedIn={onEnrichFromLinkedIn} />
 
           <div className="detail-section">
             <div className="detail-section-title">Brand</div>
@@ -438,6 +564,28 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
                 <div className="draft-to">To: {clinic.scraped_data.draft.to}</div>
                 <div className="draft-subject">Subject: {clinic.scraped_data.draft.subject}</div>
                 <div className="draft-body">{clinic.scraped_data.draft.body}</div>
+              </div>
+            </div>
+          )}
+
+          {clinic.scraped_data?.followup_1_draft && (
+            <div className="detail-section">
+              <div className="detail-section-title">Follow-up 1 Draft</div>
+              <div className="draft-preview">
+                <div className="draft-to">To: {clinic.scraped_data.followup_1_draft.to}</div>
+                <div className="draft-subject">Subject: {clinic.scraped_data.followup_1_draft.subject}</div>
+                <div className="draft-body">{clinic.scraped_data.followup_1_draft.body}</div>
+              </div>
+            </div>
+          )}
+
+          {clinic.scraped_data?.followup_2_draft && (
+            <div className="detail-section">
+              <div className="detail-section-title">Follow-up 2 Draft</div>
+              <div className="draft-preview">
+                <div className="draft-to">To: {clinic.scraped_data.followup_2_draft.to}</div>
+                <div className="draft-subject">Subject: {clinic.scraped_data.followup_2_draft.subject}</div>
+                <div className="draft-body">{clinic.scraped_data.followup_2_draft.body}</div>
               </div>
             </div>
           )}
@@ -1134,6 +1282,68 @@ export default function AdminPanel() {
     setActionLoading(null);
   }
 
+  async function handleEnrichFromLinkedIn(clinicId: string, linkedinUrl: string) {
+    setActionLoading("enrich");
+    try {
+      const res = await fetch("/api/admin/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: [clinicId], linkedinUrl }),
+      });
+      const data = await res.json();
+      await fetchClinics();
+      const results = data.results || [];
+      const enriched = results.filter((r: any) => r.status === "enriched");
+      if (enriched.length > 0) {
+        const r = enriched[0];
+        alert(`Enriched from LinkedIn: ${r.personalEmail || r.workEmail || "no email found"}${r.phone ? `, ${r.phone}` : ""}`);
+      } else {
+        alert("Enrichment completed but no contact details found.");
+      }
+      setSelectedClinic(null);
+    } catch {
+      alert("Enrichment from LinkedIn failed.");
+    }
+    setActionLoading(null);
+  }
+
+  async function handleFollowupDraft(clinicId: string, followupNumber: 1 | 2) {
+    setActionLoading(`followup-${followupNumber}-${clinicId}`);
+    try {
+      await fetch("/api/admin/followup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId, followupNumber }),
+      });
+      await fetchClinics();
+    } catch {
+      alert("Failed to draft follow-up.");
+    }
+    setActionLoading(null);
+  }
+
+  async function handleSendFollowup(clinicId: string, followupNumber: 1 | 2) {
+    const draftKey = followupNumber === 1 ? "followup_1_draft" : "followup_2_draft";
+    setActionLoading(`send-followup-${followupNumber}-${clinicId}`);
+    try {
+      const res = await fetch("/api/admin/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicId, draftKey }),
+      });
+      const data = await res.json();
+      await fetchClinics();
+      if (data.emailSent) {
+        alert(`Follow-up ${followupNumber} sent to ${data.to}`);
+      } else {
+        alert(data.message || `Follow-up ${followupNumber} marked as sent`);
+      }
+    } catch {
+      alert("Send failed");
+    }
+    setActionLoading(null);
+  }
+
   async function handleClearLogo(clinicId: string) {
     try {
       await fetch("/api/admin/status", {
@@ -1503,7 +1713,49 @@ export default function AdminPanel() {
                 clinics={pipelineFiltered}
                 onSelect={setSelectedClinic}
                 actions={(clinic) => (
-                  <div style={{ display: "flex", gap: 4 }}>
+                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                    {/* Follow-up 1 buttons — available when preview_sent or emailed */}
+                    {(clinic.status === "preview_sent" || clinic.status === "emailed") && !clinic.scraped_data?.followup_1_draft && (
+                      <button
+                        className="action-btn"
+                        onClick={() => handleFollowupDraft(clinic.id, 1)}
+                        disabled={actionLoading === `followup-1-${clinic.id}`}
+                        style={{ color: "#D97706", borderColor: "#FCD34D" }}
+                      >
+                        {actionLoading === `followup-1-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft F/U 1</>}
+                      </button>
+                    )}
+                    {(clinic.status === "preview_sent" || clinic.status === "emailed") && clinic.scraped_data?.followup_1_draft && (
+                      <button
+                        className="action-btn"
+                        onClick={() => handleSendFollowup(clinic.id, 1)}
+                        disabled={actionLoading === `send-followup-1-${clinic.id}`}
+                        style={{ color: "#D97706", borderColor: "#FCD34D" }}
+                      >
+                        {actionLoading === `send-followup-1-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Send F/U 1</>}
+                      </button>
+                    )}
+                    {/* Follow-up 2 buttons — available when follow_up_1 */}
+                    {clinic.status === "follow_up_1" && !clinic.scraped_data?.followup_2_draft && (
+                      <button
+                        className="action-btn"
+                        onClick={() => handleFollowupDraft(clinic.id, 2)}
+                        disabled={actionLoading === `followup-2-${clinic.id}`}
+                        style={{ color: "#EA580C", borderColor: "#FDBA74" }}
+                      >
+                        {actionLoading === `followup-2-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft F/U 2</>}
+                      </button>
+                    )}
+                    {clinic.status === "follow_up_1" && clinic.scraped_data?.followup_2_draft && (
+                      <button
+                        className="action-btn"
+                        onClick={() => handleSendFollowup(clinic.id, 2)}
+                        disabled={actionLoading === `send-followup-2-${clinic.id}`}
+                        style={{ color: "#EA580C", borderColor: "#FDBA74" }}
+                      >
+                        {actionLoading === `send-followup-2-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Send F/U 2</>}
+                      </button>
+                    )}
                     {!clinic.contact_phone && (
                       <button className="action-btn" onClick={() => handleEnrich([clinic.id])} disabled={actionLoading === "enrich"} style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}>
                         {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
@@ -1551,13 +1803,22 @@ export default function AdminPanel() {
             handleEnrich([id]);
             setSelectedClinic(null);
           }}
+          onEnrichFromLinkedIn={(id, linkedinUrl) => {
+            handleEnrichFromLinkedIn(id, linkedinUrl);
+          }}
           onClearLogo={(id) => handleClearLogo(id)}
           onRescrape={(id) => handleRescrape(id)}
           onSaveProfile={async (id, data) => {
+            // Extract linkedin_url and save it into scraped_data
+            const { linkedin_url, ...profileFields } = data as any;
+            const payload: any = { clinicId: id, updateProfile: profileFields };
+            if (linkedin_url !== undefined) {
+              payload.updateScrapedData = { linkedin_url };
+            }
             await fetch("/api/admin/status", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ clinicId: id, updateProfile: data }),
+              body: JSON.stringify(payload),
             });
             await fetchClinics();
             setSelectedClinic(null);

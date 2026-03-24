@@ -67,7 +67,7 @@ async function sendViaNodemailer(to: string, subject: string, body: string): Pro
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { clinicId } = body;
+    const { clinicId, draftKey } = body;
 
     if (!clinicId) {
       return NextResponse.json({ error: "clinicId is required" }, { status: 400 });
@@ -85,9 +85,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "clinic not found" }, { status: 404 });
     }
 
-    const draft = clinic.scraped_data?.draft;
+    // Support follow-up drafts via draftKey parameter
+    const key = draftKey || "draft";
+    const draft = clinic.scraped_data?.[key];
     if (!draft) {
-      return NextResponse.json({ error: "no draft found — generate a draft first" }, { status: 400 });
+      return NextResponse.json({ error: `no ${key} found — generate a draft first` }, { status: 400 });
     }
 
     // Try Composio first, then Nodemailer fallback
@@ -99,15 +101,26 @@ export async function POST(req: NextRequest) {
       method = "nodemailer";
     }
 
-    // Update status regardless
+    // Determine status and timestamp fields based on draft type
+    let statusUpdate: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
+
+    if (key === "followup_1_draft") {
+      statusUpdate.status = "follow_up_1";
+      statusUpdate.follow_up_1_at = new Date().toISOString();
+    } else if (key === "followup_2_draft") {
+      statusUpdate.status = "follow_up_2";
+      statusUpdate.follow_up_2_at = new Date().toISOString();
+    } else {
+      statusUpdate.status = "preview_sent";
+      statusUpdate.preview_sent_at = new Date().toISOString();
+      statusUpdate.emailed_at = new Date().toISOString();
+    }
+
     const { error } = await supabase
       .from("clinics")
-      .update({
-        status: "preview_sent",
-        preview_sent_at: new Date().toISOString(),
-        emailed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
+      .update(statusUpdate)
       .eq("id", clinicId);
 
     if (error) {

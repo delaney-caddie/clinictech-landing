@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
     // Handle profile update
     if (body.updateProfile) {
       const profile = body.updateProfile;
+      const supabase = getSupabase();
       const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
       if (profile.contact_name !== undefined) update.contact_name = profile.contact_name || null;
       if (profile.contact_email !== undefined) update.contact_email = profile.contact_email || null;
@@ -54,7 +55,15 @@ export async function POST(req: NextRequest) {
       if (profile.website !== undefined) update.website = profile.website || null;
       if (profile.primary_color !== undefined) update.primary_color = profile.primary_color || null;
       if (profile.notes !== undefined) update.notes = profile.notes || null;
-      const { error } = await getSupabase().from("clinics").update(update).eq("id", clinicId);
+
+      // Merge additional fields into scraped_data if provided
+      if (body.updateScrapedData) {
+        const { data: clinic } = await supabase.from("clinics").select("scraped_data").eq("id", clinicId).single();
+        const existing = typeof clinic?.scraped_data === "object" && clinic?.scraped_data ? clinic.scraped_data : {};
+        update.scraped_data = { ...existing, ...body.updateScrapedData };
+      }
+
+      const { error } = await supabase.from("clinics").update(update).eq("id", clinicId);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ ok: true, action: "profile_updated" });
     }

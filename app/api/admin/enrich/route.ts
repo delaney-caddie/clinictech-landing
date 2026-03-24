@@ -136,6 +136,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+    const linkedinUrl: string | undefined = body.linkedinUrl;
     const clinicIds: string[] = body.clinicIds || (body.clinicId ? [body.clinicId] : []);
 
     if (clinicIds.length === 0) {
@@ -151,7 +152,7 @@ export async function POST(req: NextRequest) {
     for (const id of clinicIds) {
       const { data: clinic } = await supabase
         .from("clinics")
-        .select("id, name, website, scraped_data")
+        .select("id, name, website, scraped_data, contact_name, contact_title")
         .eq("id", id)
         .single();
 
@@ -161,25 +162,42 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        // Step 1: Find the owner
-        const owner = await findOwner(clinic.website, clinic.name);
+        let owner: { name: string; title: string; linkedinSlug: string } | null = null;
+        let contact = { personalEmail: null as string | null, workEmail: null as string | null, mobilePhone: null as string | null };
 
-        if (!owner) {
-          results.push({ id, name: clinic.name, status: "no_owner_found" });
-          continue;
+        if (linkedinUrl) {
+          // Direct LinkedIn URL path — skip kitchen-sink, go straight to contact-details
+          const slug = linkedinUrl.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\/?/, "").replace(/\/$/, "");
+          contact = await getContactDetails(slug);
+
+          // Use the LinkedIn URL as the slug; name comes from Fiber response or we keep existing
+          owner = {
+            name: clinic.scraped_data?.owner_name || clinic.contact_name || "",
+            title: clinic.scraped_data?.owner_title || "",
+            linkedinSlug: slug,
+          };
+        } else {
+          // Original path: Find owner via Kitchen Sink Person search
+          owner = await findOwner(clinic.website, clinic.name);
+
+          if (!owner) {
+            results.push({ id, name: clinic.name, status: "no_owner_found" });
+            continue;
+          }
+
+          // Get their contact details
+          contact = owner.linkedinSlug
+            ? await getContactDetails(owner.linkedinSlug)
+            : { personalEmail: null, workEmail: null, mobilePhone: null };
         }
-
-        // Step 2: Get their contact details
-        const contact = owner.linkedinSlug
-          ? await getContactDetails(owner.linkedinSlug)
-          : { personalEmail: null, workEmail: null, mobilePhone: null };
 
         // Save to Supabase
         const update: Record<string, unknown> = {
-          contact_name: owner.name,
-          contact_title: owner.title,
           updated_at: new Date().toISOString(),
         };
+
+        if (owner.name) update.contact_name = owner.name;
+        if (owner.title) update.contact_title = owner.title;
 
         // Prefer personal email, then work email
         if (contact.personalEmail) update.contact_email = contact.personalEmail;
@@ -196,6 +214,7 @@ export async function POST(req: NextRequest) {
           owner_name: owner.name,
           owner_title: owner.title,
           linkedin_slug: owner.linkedinSlug,
+          linkedin_url: linkedinUrl || (owner.linkedinSlug ? `https://www.linkedin.com/in/${owner.linkedinSlug}` : null),
           personal_email: contact.personalEmail,
           work_email: contact.workEmail,
           mobile_phone: contact.mobilePhone,
