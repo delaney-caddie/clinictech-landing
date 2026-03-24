@@ -1812,18 +1812,7 @@ footer .container {
       <nav ref={navRef}>
         <div className="container">
           <a href="#" className="nav-logo">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="2" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <rect x="16" y="2" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-              <rect x="16" y="16" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <rect x="26" y="10" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-              <rect x="26" y="24" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <line x1="10" y1="6" x2="16" y2="6" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="20" y1="10" x2="20" y2="16" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="24" y1="20" x2="26" y2="14" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="24" y1="20" x2="26" y2="28" stroke="#7DD4ED" strokeWidth="2"/>
-            </svg>
-            ClinicTech
+            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 32, width: "auto"}} />
           </a>
           <div className="nav-links">
             <a href="#product">Product</a>
@@ -2498,18 +2487,7 @@ footer .container {
       <footer>
         <div className="container">
           <div className="footer-brand">
-            <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="2" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <rect x="16" y="2" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-              <rect x="16" y="16" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <rect x="26" y="10" width="8" height="8" rx="1.5" fill="#7DD4ED"/>
-              <rect x="26" y="24" width="8" height="8" rx="1.5" fill="#5EC4E3"/>
-              <line x1="10" y1="6" x2="16" y2="6" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="20" y1="10" x2="20" y2="16" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="24" y1="20" x2="26" y2="14" stroke="#7DD4ED" strokeWidth="2"/>
-              <line x1="24" y1="20" x2="26" y2="28" stroke="#7DD4ED" strokeWidth="2"/>
-            </svg>
-            ClinicTech
+            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 24, width: "auto", opacity: 0.6}} />
           </div>
           <div className="footer-links">
             <a href="#">Privacy</a>
