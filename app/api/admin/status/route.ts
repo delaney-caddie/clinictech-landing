@@ -42,6 +42,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, action: "logo_cleared" });
     }
 
+    // Handle profile update
+    if (body.updateProfile) {
+      const profile = body.updateProfile;
+      const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
+      if (profile.contact_name !== undefined) update.contact_name = profile.contact_name || null;
+      if (profile.contact_email !== undefined) update.contact_email = profile.contact_email || null;
+      if (profile.contact_phone !== undefined) update.contact_phone = profile.contact_phone || null;
+      if (profile.contact_title !== undefined) update.contact_title = profile.contact_title || null;
+      if (profile.location !== undefined) update.location = profile.location || null;
+      if (profile.website !== undefined) update.website = profile.website || null;
+      if (profile.primary_color !== undefined) update.primary_color = profile.primary_color || null;
+      if (profile.notes !== undefined) update.notes = profile.notes || null;
+      const { error } = await getSupabase().from("clinics").update(update).eq("id", clinicId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ ok: true, action: "profile_updated" });
+    }
+
     // Handle draft update
     if (updateDraft) {
       const supabase = getSupabase();

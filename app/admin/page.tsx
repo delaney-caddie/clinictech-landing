@@ -248,8 +248,31 @@ function formatDate(d: string | null): string {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, onRescrape }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void }) {
+function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, onRescrape, onSaveProfile }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void> }) {
   const [statusOpen, setStatusOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editData, setEditData] = useState({
+    contact_name: clinic.contact_name || "",
+    contact_email: clinic.contact_email || "",
+    contact_phone: clinic.contact_phone || "",
+    contact_title: (clinic as any).contact_title || "",
+    location: clinic.location || "",
+    website: clinic.website || "",
+    primary_color: clinic.primary_color || "",
+    notes: (clinic as any).notes || "",
+  });
+
+  function handleEditChange(field: string, value: string) {
+    setEditData(prev => ({ ...prev, [field]: value }));
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    await onSaveProfile(clinic.id, editData);
+    setSaving(false);
+    setEditing(false);
+  }
 
   const timeline = [
     { label: "Added to pipeline", date: formatDate(clinic.created_at), done: true },
@@ -313,11 +336,65 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onClearLogo, o
           </div>
 
           <div className="detail-section">
-            <div className="detail-section-title">Contact</div>
-            <div className="detail-field"><span className="detail-field-label">Name</span><span className="detail-field-value">{clinic.contact_name || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Email</span><span className="detail-field-value">{clinic.contact_email || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Phone</span><span className="detail-field-value">{clinic.contact_phone || "Unknown"}</span></div>
-            <div className="detail-field"><span className="detail-field-label">Location</span><span className="detail-field-value">{clinic.location || "Unknown"}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div className="detail-section-title" style={{ margin: 0 }}>Contact</div>
+              {!editing && (
+                <button className="action-btn" style={{ fontSize: 11 }} onClick={() => setEditing(true)}>✏️ Edit</button>
+              )}
+              {editing && (
+                <div style={{ display: "flex", gap: 4 }}>
+                  <button className="action-btn primary" style={{ fontSize: 11 }} onClick={handleSave} disabled={saving}>
+                    {saving ? "Saving..." : "Save"}
+                  </button>
+                  <button className="action-btn" style={{ fontSize: 11 }} onClick={() => setEditing(false)}>Cancel</button>
+                </div>
+              )}
+            </div>
+            {editing ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { label: "Name", field: "contact_name", placeholder: "Dr. Jane Smith" },
+                  { label: "Title", field: "contact_title", placeholder: "Owner, Medical Director" },
+                  { label: "Email", field: "contact_email", placeholder: "jane@clinic.com" },
+                  { label: "Phone", field: "contact_phone", placeholder: "+1 (555) 123-4567" },
+                  { label: "Location", field: "location", placeholder: "City, State" },
+                  { label: "Website", field: "website", placeholder: "clinicname.com" },
+                  { label: "Brand Color", field: "primary_color", placeholder: "#1A2B3C" },
+                  { label: "Notes", field: "notes", placeholder: "Internal notes..." },
+                ].map(({ label, field, placeholder }) => (
+                  <div key={field}>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 2 }}>{label}</label>
+                    {field === "notes" ? (
+                      <textarea
+                        value={(editData as any)[field]}
+                        onChange={(e) => handleEditChange(field, e.target.value)}
+                        placeholder={placeholder}
+                        rows={3}
+                        style={{ width: "100%", padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 13, fontFamily: "inherit", resize: "vertical", outline: "none" }}
+                      />
+                    ) : (
+                      <input
+                        value={(editData as any)[field]}
+                        onChange={(e) => handleEditChange(field, e.target.value)}
+                        placeholder={placeholder}
+                        style={{ width: "100%", padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 13, fontFamily: "inherit", outline: "none", ...(field === "primary_color" ? { fontFamily: "monospace" } : {}) }}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div className="detail-field"><span className="detail-field-label">Name</span><span className="detail-field-value">{clinic.contact_name || "Unknown"}</span></div>
+                <div className="detail-field"><span className="detail-field-label">Title</span><span className="detail-field-value">{(clinic as any).contact_title || "Unknown"}</span></div>
+                <div className="detail-field"><span className="detail-field-label">Email</span><span className="detail-field-value">{clinic.contact_email || "Unknown"}</span></div>
+                <div className="detail-field"><span className="detail-field-label">Phone</span><span className="detail-field-value">{clinic.contact_phone || "Unknown"}</span></div>
+                <div className="detail-field"><span className="detail-field-label">Location</span><span className="detail-field-value">{clinic.location || "Unknown"}</span></div>
+                {(clinic as any).notes && (
+                  <div className="detail-field"><span className="detail-field-label">Notes</span><span className="detail-field-value" style={{ fontSize: 12, maxWidth: 200, textAlign: "right" }}>{(clinic as any).notes}</span></div>
+                )}
+              </>
+            )}
           </div>
 
           <div className="detail-section">
@@ -1415,6 +1492,15 @@ export default function AdminPanel() {
           }}
           onClearLogo={(id) => handleClearLogo(id)}
           onRescrape={(id) => handleRescrape(id)}
+          onSaveProfile={async (id, data) => {
+            await fetch("/api/admin/status", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ clinicId: id, updateProfile: data }),
+            });
+            await fetchClinics();
+            setSelectedClinic(null);
+          }}
         />
       )}
     </>
