@@ -8,147 +8,196 @@ function getSupabase() {
   );
 }
 
-const FIRECRAWL_KEY = () => process.env.FIRECRAWL_API_KEY;
-const FIRECRAWL_BASE = "https://api.firecrawl.dev/v1";
+const FIBER_KEY = () => process.env.FIBER_API_KEY;
+const FIBER_BASE = "https://api.fiber.ai/v1";
 
 interface LinkedInProfile {
   name: string;
   headline: string;
+  slug: string;
   url: string;
+  source: string;
 }
 
-function extractLinkedInProfiles(markdown: string): LinkedInProfile[] {
-  const profiles: LinkedInProfile[] = [];
-  const seen = new Set<string>();
+// Strategy 1: Kitchen-sink with company domain + job title
+async function findViaKitchenSink(domain: string, clinicName: string): Promise<LinkedInProfile[]> {
+  const apiKey = FIBER_KEY();
+  if (!apiKey) return [];
 
-  // Match LinkedIn profile URLs — various formats from Google search results
-  const urlRegex = /https?:\/\/(?:www\.)?linkedin\.com\/in\/([a-zA-Z0-9_-]+)/g;
-  let match;
+  const results: LinkedInProfile[] = [];
+  const titles = ["owner", "founder", "ceo", "medical director"];
 
-  while ((match = urlRegex.exec(markdown)) !== null) {
-    const slug = match[1];
-    const url = `https://www.linkedin.com/in/${slug}`;
+  for (const title of titles) {
+    try {
+      const res = await fetch(`${FIBER_BASE}/kitchen-sink/person`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey,
+          companyDomain: { value: domain },
+          jobTitle: { value: title },
+          numProfiles: 3,
+        }),
+      });
+      const data = await res.json();
+      const profiles = data?.output?.data || [];
 
-    if (seen.has(slug)) continue;
-    seen.add(slug);
+      for (const p of profiles) {
+        const headline = (p.headline || "").toLowerCase();
+        const domainBase = domain.split(".")[0].toLowerCase();
+        const nameWords = clinicName.toLowerCase().split(/\s+/).filter((w: string) => w.length > 3);
 
-    // Try to extract name and headline from surrounding text
-    // Look backwards and forwards from the URL position for context
-    const start = Math.max(0, match.index - 300);
-    const end = Math.min(markdown.length, match.index + 300);
-    const context = markdown.substring(start, end);
+        const relevant = headline.includes(domainBase) ||
+          nameWords.some((w: string) => headline.includes(w)) ||
+          (p.tenures || []).some((t: any) => {
+            const cn = (t.company_name || "").toLowerCase();
+            return cn.includes(domainBase) || nameWords.some((w: string) => cn.includes(w));
+          });
 
-    // Try to extract a name — typically appears as bold text or link text near the URL
-    let name = "";
-    let headline = "";
-
-    // Pattern: "Name - Title" or "Name – Title" (common in Google snippets)
-    const namePatterns = [
-      /\*\*([A-Z][a-zA-Z.'\s-]{2,40})\*\*/,
-      /\[([A-Z][a-zA-Z.'\s-]{2,40})\]/,
-      /^#+\s*([A-Z][a-zA-Z.'\s-]{2,40})/m,
-    ];
-
-    for (const pattern of namePatterns) {
-      const nameMatch = context.match(pattern);
-      if (nameMatch) {
-        name = nameMatch[1].trim();
-        break;
+        if (relevant && p.primary_slug) {
+          results.push({
+            name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
+            headline: p.headline || title,
+            slug: p.primary_slug,
+            url: `https://linkedin.com/in/${p.primary_slug}`,
+            source: "fiber",
+          });
+        }
       }
-    }
-
-    // Pattern: "Title at Company" or "Title | Company" from LinkedIn snippets
-    const headlinePatterns = [
-      /[-–—]\s*(.{10,100}?)(?:\n|\.\.\.|\|)/,
-      /(?:title|headline)[:\s]+(.{10,80})/i,
-    ];
-
-    for (const pattern of headlinePatterns) {
-      const hlMatch = context.match(pattern);
-      if (hlMatch) {
-        headline = hlMatch[1].trim().replace(/\*\*/g, "").replace(/\[|\]/g, "");
-        break;
-      }
-    }
-
-    // Clean up the slug to make a readable name if we didn't find one
-    if (!name) {
-      name = slug
-        .replace(/-\w{6,10}$/, "") // remove trailing ID hash
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase())
-        .trim();
-    }
-
-    profiles.push({ name, headline, url });
+      if (results.length > 0) break;
+    } catch { continue; }
   }
+  return results;
+}
 
-  return profiles;
+// Strategy 2: Scrape clinic website for LinkedIn profile URLs, then look up via kitchen-sink
+async function findViaWebsite(domain: string): Promise<LinkedInProfile[]> {
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY;
+  const apiKey = FIBER_KEY();
+  if (!firecrawlKey || !apiKey) return [];
+
+  try {
+    const url = domain.startsWith("http") ? domain : `https://${domain}`;
+    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+      body: JSON.stringify({ url, formats: ["html"], waitFor: 3000 }),
+      signal: AbortSignal.timeout(20000),
+    });
+    const data = await res.json();
+    const html = data?.data?.html || "";
+
+    // Find LinkedIn /in/ profile URLs on the site
+    const slugs = [...new Set(
+      (html.match(/linkedin\.com\/in\/([a-zA-Z0-9_-]+)/g) || [])
+        .map((m: string) => m.replace(/.*linkedin\.com\/in\//, ""))
+        .filter((s: string) => s.length > 3 && !s.includes("share"))
+    )];
+
+    const results: LinkedInProfile[] = [];
+    for (const slug of slugs.slice(0, 5)) {
+      try {
+        const ksRes = await fetch(`${FIBER_BASE}/kitchen-sink/person`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            apiKey,
+            profileIdentifier: { identifier: "linkedinSlug", value: slug },
+            numProfiles: 1,
+          }),
+        });
+        const ksData = await ksRes.json();
+        const profiles = ksData?.output?.data || [];
+        if (profiles.length > 0) {
+          const p = profiles[0];
+          results.push({
+            name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
+            headline: p.headline || "",
+            slug: p.primary_slug || slug,
+            url: `https://linkedin.com/in/${p.primary_slug || slug}`,
+            source: "website",
+          });
+        }
+      } catch { continue; }
+    }
+    return results;
+  } catch { return []; }
+}
+
+// Strategy 3: Google search for owner LinkedIn profile
+async function findViaGoogle(clinicName: string): Promise<LinkedInProfile[]> {
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY;
+  if (!firecrawlKey) return [];
+
+  try {
+    const query = `"${clinicName}" owner OR founder OR "medical director" site:linkedin.com/in`;
+    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}&num=5`;
+
+    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firecrawlKey}` },
+      body: JSON.stringify({ url: googleUrl, formats: ["markdown"] }),
+      signal: AbortSignal.timeout(20000),
+    });
+    const data = await res.json();
+    const markdown = data?.data?.markdown || "";
+
+    const results: LinkedInProfile[] = [];
+    const lines = markdown.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      const slugMatch = lines[i].match(/linkedin\.com\/in\/([a-zA-Z0-9_-]+)/);
+      if (slugMatch) {
+        const slug = slugMatch[1];
+        const context = lines.slice(Math.max(0, i - 2), i + 3).join(" ");
+        const nameMatch = context.match(/([A-Z][a-z]+(?:\s+[A-Z]\.?)?\s+[A-Z][a-z]+)/);
+        results.push({
+          name: nameMatch?.[1] || slug.replace(/-/g, " ").replace(/\d+$/, "").trim(),
+          headline: context.slice(0, 100).replace(/[#\[\]()]/g, "").trim(),
+          slug,
+          url: `https://linkedin.com/in/${slug}`,
+          source: "google",
+        });
+      }
+    }
+    return results.slice(0, 5);
+  } catch { return []; }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const firecrawlKey = FIRECRAWL_KEY();
-    if (!firecrawlKey) {
-      return NextResponse.json({ error: "FIRECRAWL_API_KEY not configured" }, { status: 500 });
-    }
+    const { clinicId } = await req.json();
+    if (!clinicId) return NextResponse.json({ error: "clinicId required" }, { status: 400 });
 
-    const body = await req.json();
-    const { clinicId } = body;
-
-    if (!clinicId) {
-      return NextResponse.json({ error: "clinicId is required" }, { status: 400 });
-    }
-
-    const supabase = getSupabase();
-
-    const { data: clinic, error: fetchError } = await supabase
+    const { data: clinic } = await getSupabase()
       .from("clinics")
-      .select("id, name, website")
+      .select("name, website")
       .eq("id", clinicId)
       .single();
 
-    if (fetchError || !clinic) {
-      return NextResponse.json({ error: "clinic not found" }, { status: 404 });
-    }
+    if (!clinic) return NextResponse.json({ error: "clinic not found" }, { status: 404 });
 
-    // Build a Google search query targeting decision makers on LinkedIn
-    const clinicName = clinic.name.replace(/['"]/g, "");
-    const query = `"${clinicName}" owner OR founder OR "medical director" OR CEO site:linkedin.com/in`;
-    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}&num=10`;
+    // Run all 3 strategies in parallel
+    const [fiberResults, websiteResults, googleResults] = await Promise.all([
+      findViaKitchenSink(clinic.website, clinic.name),
+      findViaWebsite(clinic.website),
+      findViaGoogle(clinic.name),
+    ]);
 
-    // Use Firecrawl to scrape the Google search results page
-    const scrapeRes = await fetch(`${FIRECRAWL_BASE}/scrape`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${firecrawlKey}`,
-      },
-      body: JSON.stringify({
-        url: googleUrl,
-        formats: ["markdown"],
-      }),
+    // Combine and deduplicate by slug
+    const all = [...fiberResults, ...websiteResults, ...googleResults];
+    const seen = new Set<string>();
+    const unique = all.filter(p => {
+      if (!p.slug || seen.has(p.slug)) return false;
+      seen.add(p.slug);
+      return true;
     });
 
-    if (!scrapeRes.ok) {
-      const errText = await scrapeRes.text();
-      console.error("Firecrawl scrape failed:", errText);
-      return NextResponse.json({ error: "Failed to search Google via Firecrawl" }, { status: 502 });
-    }
-
-    const scrapeData = await scrapeRes.json();
-    const markdown = scrapeData?.data?.markdown || "";
-
-    if (!markdown) {
-      return NextResponse.json({ profiles: [], message: "No results from Google search" });
-    }
-
-    // Extract LinkedIn profiles from the markdown
-    const profiles = extractLinkedInProfiles(markdown).slice(0, 5);
-
-    return NextResponse.json({ profiles });
-  } catch (err) {
-    console.error("POST /api/admin/linkedin error:", err);
-    return NextResponse.json({ error: "server error" }, { status: 500 });
+    return NextResponse.json({
+      profiles: unique,
+      sources: { fiber: fiberResults.length, website: websiteResults.length, google: googleResults.length },
+    });
+  } catch (err: any) {
+    console.error("LinkedIn lookup error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
