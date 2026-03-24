@@ -166,16 +166,43 @@ export async function POST(req: NextRequest) {
         let contact = { personalEmail: null as string | null, workEmail: null as string | null, mobilePhone: null as string | null };
 
         if (linkedinUrl) {
-          // Direct LinkedIn URL path — skip kitchen-sink, go straight to contact-details
+          // Direct LinkedIn URL path — use kitchen-sink to get verified profile, then contact-details for email/phone
           const slug = linkedinUrl.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\/?/, "").replace(/\/$/, "");
-          contact = await getContactDetails(slug);
 
-          // Use the LinkedIn URL as the slug; name comes from Fiber response or we keep existing
-          owner = {
-            name: clinic.scraped_data?.owner_name || clinic.contact_name || "",
-            title: clinic.scraped_data?.owner_title || "",
-            linkedinSlug: slug,
-          };
+          // Step 1: Kitchen-sink lookup for verified name + headline
+          try {
+            const ksRes = await fetch(`${FIBER_BASE}/kitchen-sink/person`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                apiKey,
+                profileIdentifier: { identifier: "linkedinSlug", value: slug },
+                numProfiles: 1,
+              }),
+            });
+            const ksData = await ksRes.json();
+            const profiles = ksData?.output?.data || [];
+            if (profiles.length > 0) {
+              const p = profiles[0];
+              owner = {
+                name: p.name || `${p.first_name || ""} ${p.last_name || ""}`.trim(),
+                title: p.headline || "",
+                linkedinSlug: p.primary_slug || slug,
+              };
+            }
+          } catch { /* fall through */ }
+
+          // Fallback if kitchen-sink didn't return a name
+          if (!owner) {
+            owner = {
+              name: clinic.contact_name || "",
+              title: clinic.scraped_data?.owner_title || "",
+              linkedinSlug: slug,
+            };
+          }
+
+          // Step 2: Contact-details for email + phone
+          contact = await getContactDetails(slug);
         } else {
           // Original path: Find owner via Kitchen Sink Person search
           owner = await findOwner(clinic.website, clinic.name);
