@@ -1812,7 +1812,7 @@ footer .container {
       <nav ref={navRef}>
         <div className="container">
           <a href="#" className="nav-logo">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 60, width: "auto"}} />
+            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 120, width: "auto"}} />
           </a>
           <div className="nav-links">
             <a href="#product">Product</a>
