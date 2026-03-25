@@ -1,8 +1,80 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+
+function HeroDnaAnimation({ onComplete }: { onComplete: () => void }) {
+  const [phase, setPhase] = useState<'active' | 'fading' | 'done'>('active');
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 768)) {
+      setPhase('done');
+      onComplete();
+      return;
+    }
+    const t1 = setTimeout(() => setPhase('fading'), 2500);
+    const t2 = setTimeout(() => { setPhase('done'); onComplete(); }, 3500);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [onComplete]);
+
+  if (phase === 'done') return null;
+
+  const particles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: `${(i * 37 + 13) % 100}%`,
+    top: `${(i * 53 + 7) % 100}%`,
+    size: 2 + (i % 4) * 2,
+    delay: (i * 0.2) % 2.5,
+    duration: 2.5 + (i % 3),
+  })), []);
+
+  return (
+    <div className={`hero-dna ${phase === 'fading' ? 'hero-dna-fade' : ''}`}>
+      <svg viewBox="0 0 400 500" className="hero-dna-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#3730A3" />
+            <stop offset="50%" stopColor="#5EC4E3" />
+            <stop offset="100%" stopColor="#7DD4ED" />
+          </linearGradient>
+          <linearGradient id="hg2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#7DD4ED" />
+            <stop offset="50%" stopColor="#5EC4E3" />
+            <stop offset="100%" stopColor="#3730A3" />
+          </linearGradient>
+          <filter id="dnaGlow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        {/* Left strand */}
+        <path d="M80,0 C80,50 320,80 320,130 C320,180 80,210 80,260 C80,310 320,340 320,390 C320,440 80,470 80,500" fill="none" stroke="url(#hg1)" strokeWidth="3" opacity="0.6" className="dna-strand-anim"/>
+        {/* Right strand */}
+        <path d="M320,0 C320,50 80,80 80,130 C80,180 320,210 320,260 C320,310 80,340 80,390 C80,440 320,470 320,500" fill="none" stroke="url(#hg2)" strokeWidth="3" opacity="0.6" className="dna-strand-anim" style={{animationDelay: "0.3s"}}/>
+        {/* Rungs + nodes */}
+        {Array.from({length: 12}, (_, i) => {
+          const y = 20 + i * 40;
+          const phase2 = (i / 11) * Math.PI * 2;
+          const x1 = 200 + Math.sin(phase2) * 120;
+          const x2 = 200 - Math.sin(phase2) * 120;
+          return (
+            <g key={i} style={{animation: `rungAppear 0.5s ease ${i * 0.1}s both`}}>
+              <line x1={x1} y1={y} x2={x2} y2={y} stroke="url(#hg1)" strokeWidth="1" opacity="0.2"/>
+              <circle cx={x1} cy={y} r="5" fill="url(#hg1)" filter="url(#dnaGlow)" opacity="0.8" className="dna-node-pulse" style={{animationDelay: `${i * 0.15}s`}}/>
+              <circle cx={x2} cy={y} r="5" fill="url(#hg2)" filter="url(#dnaGlow)" opacity="0.8" className="dna-node-pulse" style={{animationDelay: `${i * 0.15 + 0.5}s`}}/>
+            </g>
+          );
+        })}
+      </svg>
+      {/* Particles */}
+      {particles.map(p => (
+        <div key={p.id} className="dna-particle" style={{left: p.left, top: p.top, width: p.size, height: p.size, animationDelay: `${p.delay}s`, animationDuration: `${p.duration}s`}}/>
+      ))}
+    </div>
+  );
+}
 
 export default function LandingPage() {
+  const [introComplete, setIntroComplete] = useState(false);
+  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
+  const [heroEmail, setHeroEmail] = useState("");
+  const [heroEmailStatus, setHeroEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [leads, setLeads] = useState(40);
   const [procedureValue, setProcedureValue] = useState(12000);
   const totalRef = useRef<HTMLDivElement>(null);
@@ -203,32 +275,96 @@ nav .nav-links a.btn-primary:hover {
 }
 
 /* ===== HERO ===== */
-.hero {
-  padding: 160px 0 120px;
+.hero-fullwidth {
   position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -200px; right: -200px;
-  width: 800px; height: 800px;
-  background: radial-gradient(circle, rgba(55, 48, 163, 0.04) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -100px; left: -100px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(55, 48, 163, 0.03) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  padding: 160px 0 80px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--white);
+}
+.hero-dna-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-dna-wave {
+  width: 100%;
+  height: 100%;
+  animation: waveFloat 8s ease-in-out infinite alternate;
+}
+@keyframes waveFloat {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-20px) scale(1.02); }
+}
+.dna-wave-path {
+  animation: waveDash 6s linear infinite;
+  stroke-dasharray: 200 100;
+}
+.dna-wave-2 {
+  animation-delay: -3s;
+  animation-duration: 7s;
+}
+@keyframes waveDash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -600; }
+}
+.dna-rung-line {
+  animation: rungPulse 2s ease-in-out infinite alternate;
+}
+@keyframes rungPulse {
+  0% { opacity: 0.03; }
+  100% { opacity: 0.08; }
+}
+.dna-bg-node {
+  animation: bgNodePulse 3s ease-in-out infinite alternate;
+}
+@keyframes bgNodePulse {
+  0% { opacity: 0.08; r: 3; }
+  100% { opacity: 0.2; r: 5; }
+}
+.hero-centered {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 24px;
+}
+.hero-main-title {
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.hero-centered-sub {
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 36px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.hero-centered-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  animation: fadeUp 0.8s ease 0.6s both;
+}
+.hero-pipeline-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 60px auto 0;
+  padding: 0 24px;
+  animation: fadeUp 0.8s ease 0.8s both;
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -552,7 +688,7 @@ nav .nav-links a.btn-primary:hover {
 
 /* ===== PROBLEM SECTION ===== */
 .problem {
-  padding: 120px 0;
+  padding: 120px 0 60px;
 }
 .section-label {
   font-size: 13px;
@@ -988,6 +1124,106 @@ nav .nav-links a.btn-primary:hover {
 .funnel {
   padding: 100px 0;
 }
+.funnel-mockup {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  margin-top: 48px;
+  margin-bottom: 40px;
+}
+.funnel-toolbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 12px; font-weight: 700;
+}
+.funnel-toolbar-dots { display: flex; gap: 5px; }
+.funnel-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
+.funnel-toolbar-dots span:nth-child(1) { background: #FF5F57; }
+.funnel-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
+.funnel-toolbar-dots span:nth-child(3) { background: #28C840; }
+.funnel-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.funnel-body-left {
+  padding: 20px;
+  border-right: 1px solid rgba(0,0,0,0.06);
+}
+.funnel-body-right {
+  padding: 20px;
+}
+.funnel-body-title {
+  font-size: 11px; font-weight: 800; color: var(--text-primary);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+.funnel-content-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--gray-100);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.funnel-content-item:last-child { margin-bottom: 0; }
+.funnel-content-left {
+  display: flex; align-items: center; gap: 10px;
+}
+.funnel-content-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.funnel-content-icon.blog { background: rgba(59,130,246,0.1); }
+.funnel-content-icon.story { background: rgba(168,85,247,0.1); }
+.funnel-content-icon.social { background: rgba(34,197,94,0.1); }
+.funnel-content-name {
+  font-size: 12px; font-weight: 700; color: var(--text-primary);
+}
+.funnel-content-meta {
+  font-size: 9px; color: var(--text-muted); margin-top: 1px;
+}
+.funnel-content-status {
+  font-size: 8px; font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 100px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.funnel-content-status.published { background: rgba(34,197,94,0.1); color: var(--green); }
+.funnel-content-status.scheduled { background: rgba(245,158,11,0.1); color: #F59E0B; }
+.funnel-content-status.draft { background: rgba(0,0,0,0.05); color: var(--text-muted); }
+.funnel-review-stat {
+  background: var(--gray-100);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.funnel-review-stat:last-child { margin-bottom: 0; }
+.funnel-review-number {
+  font-size: 24px; font-weight: 800; color: var(--text-primary);
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+}
+.funnel-review-label {
+  font-size: 10px; color: var(--text-muted); margin-top: 2px;
+}
+.funnel-review-bar {
+  height: 4px; border-radius: 2px; background: rgba(0,0,0,0.06);
+  margin-top: 8px; overflow: hidden;
+}
+.funnel-review-bar-fill {
+  height: 100%; border-radius: 2px;
+}
+@media (max-width: 768px) {
+  .funnel-body { grid-template-columns: 1fr; }
+  .funnel-body-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.06); }
+}
 .funnel-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1301,7 +1537,7 @@ footer .container {
 
 /* ===== BACK OFFICE SECTION ===== */
 .backoffice-section {
-  padding: 120px 0;
+  padding: 60px 0 120px;
 }
 .backoffice-grid {
   display: grid;
@@ -1691,14 +1927,42 @@ footer .container {
   box-shadow: 0 0 10px rgba(94, 196, 227, 0.4);
 }
 
+/* ===== HERO DNA ANIMATION ===== */
+.hero-dna {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(55, 48, 163, 0.06) 0%, transparent 70%);
+  animation: dnaIn 0.8s ease forwards;
+  overflow: hidden; border-radius: 16px;
+}
+.hero-dna-fade { animation: dnaOut 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes dnaIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes dnaOut { 0% { opacity: 1; } 100% { opacity: 0; filter: blur(6px); transform: scale(0.96); } }
+.hero-dna-svg { width: 80%; height: 80%; animation: dnaRotate 4s linear infinite; }
+@keyframes dnaRotate { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+.dna-strand-anim { stroke-dasharray: 30 15; animation: strandDash 2s linear infinite; }
+@keyframes strandDash { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -90; } }
+.dna-node-pulse { animation: dnaPulse 1.5s ease-in-out infinite alternate; }
+@keyframes dnaPulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes rungAppear { 0% { opacity: 0; } 100% { opacity: 1; } }
+.dna-particle {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle, rgba(94, 196, 227, 0.6), rgba(55, 48, 163, 0.2));
+  box-shadow: 0 0 6px rgba(94, 196, 227, 0.3);
+  animation: dnaFloat 3s ease-in-out infinite alternate, dnaFade 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes dnaFloat { 0% { transform: translate(0, 0); } 100% { transform: translate(8px, -12px); } }
+@keyframes dnaFade { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.5; } }
+.crm-hidden { opacity: 0; transform: translateY(8px); }
+.crm-revealed { animation: crmReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes crmReveal { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .hero-dna { display: none; } .crm-hidden { opacity: 1; transform: none; } }
 /* ===== RESPONSIVE ===== */
 /* ===== TABLET ===== */
 @media (max-width: 900px) {
-  .hero .container {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  .hero h1 { font-size: 40px; }
+  .hero-main-title { font-size: 44px; }
+  .hero-centered-ctas { flex-direction: column; align-items: center; }
   .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
     grid-template-columns: 1fr;
   }
@@ -1728,8 +1992,13 @@ footer .container {
   .nav-logo svg { width: 28px; height: 28px; }
 
   /* Hero */
-  .hero { padding: 120px 0 60px; }
-  .hero h1 { font-size: 28px; letter-spacing: 0; line-height: 1.2; }
+  .hero-fullwidth { min-height: 80vh; }
+  .hero-main-title { font-size: 32px; letter-spacing: 0; }
+  .hero-centered-sub { font-size: 15px; }
+  .hero-centered-ctas { flex-direction: column; gap: 10px; }
+  .hero-centered-ctas .btn-primary,
+  .hero-centered-ctas .btn-secondary { width: 100%; justify-content: center; }
+  .hero-dna-bg { opacity: 0.5; }
   .hero-badge { font-size: 11px; padding: 4px 12px 4px 6px; }
   .hero-sub { font-size: 15px; line-height: 1.6; }
   .hero-ctas { gap: 10px; }
@@ -1823,23 +2092,94 @@ footer .container {
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="container">
-          <div className="hero-content">
-            <div className="hero-badge">
-              <span className="dot"></span>
-              Built for Regenerative Medicine Clinics
-            </div>
-            <h1>Your Clinic. Your Brand.<br/><span className="highlight">Your Growth Engine.</span></h1>
-            <p className="hero-sub">A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in days.</p>
-            <div className="hero-ctas">
-              <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book a 15-Min Walkthrough \u2192"}</a>
-              <a href="#product" className="btn-secondary">See How It Works</a>
-            </div>
+      {/* HERO — Full-width DNA background with centered text */}
+      <section className="hero-fullwidth">
+        {/* Flowing DNA background */}
+        <div className="hero-dna-bg">
+          <svg viewBox="0 0 1200 800" className="hero-dna-wave" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="waveGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#3730A3" stopOpacity="0.08"/>
+                <stop offset="50%" stopColor="#5EC4E3" stopOpacity="0.12"/>
+                <stop offset="100%" stopColor="#7DD4ED" stopOpacity="0.06"/>
+              </linearGradient>
+              <linearGradient id="waveGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#7DD4ED" stopOpacity="0.06"/>
+                <stop offset="50%" stopColor="#5EC4E3" stopOpacity="0.1"/>
+                <stop offset="100%" stopColor="#3730A3" stopOpacity="0.08"/>
+              </linearGradient>
+            </defs>
+            {/* Helix strand 1 */}
+            <path className="dna-wave-path" d="M-100,400 C100,200 300,600 500,350 C700,100 900,500 1100,300 C1300,100 1500,400 1500,400" fill="none" stroke="url(#waveGrad1)" strokeWidth="60" strokeLinecap="round"/>
+            {/* Helix strand 2 */}
+            <path className="dna-wave-path dna-wave-2" d="M-100,350 C100,550 300,150 500,400 C700,650 900,250 1100,450 C1300,650 1500,350 1500,350" fill="none" stroke="url(#waveGrad2)" strokeWidth="60" strokeLinecap="round"/>
+            {/* Connecting rungs */}
+            {Array.from({length: 15}, (_, i) => {
+              const x = 50 + i * 80;
+              return <line key={i} x1={x} y1="300" x2={x} y2="450" stroke="rgba(94, 196, 227, 0.06)" strokeWidth="2" className="dna-rung-line" style={{animationDelay: `${i * 0.2}s`}}/>;
+            })}
+            {/* Nodes */}
+            {Array.from({length: 12}, (_, i) => {
+              const x = 80 + i * 100;
+              return (
+                <g key={i}>
+                  <circle cx={x} cy={350 + Math.sin(i * 0.8) * 60} r="4" fill="rgba(55, 48, 163, 0.15)" className="dna-bg-node" style={{animationDelay: `${i * 0.15}s`}}/>
+                  <circle cx={x + 30} cy={400 - Math.sin(i * 0.8) * 60} r="3" fill="rgba(94, 196, 227, 0.12)" className="dna-bg-node" style={{animationDelay: `${i * 0.15 + 0.5}s`}}/>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+
+        {/* Centered hero content */}
+        <div className="hero-centered">
+          <div className="hero-badge" style={{justifyContent: "center"}}>
+            <span className="dot"></span>
+            Built for Regenerative Medicine Clinics
           </div>
-          <div className="hero-visual">
-            <div className="crm-builder">
+          <h1 className="hero-main-title">Your Clinic. Your Brand.<br/><span style={{color: "var(--primary)"}}>Your Growth Engine.</span></h1>
+          <p className="hero-centered-sub">A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in weeks.</p>
+          <div className="hero-centered-ctas">
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{padding: "16px 36px", fontSize: 16}}>{"Book a 15-Min Walkthrough \u2192"}</a>
+            {heroEmailStatus === "sent" ? (
+              <span className="btn-secondary" style={{padding: "16px 36px", fontSize: 16, opacity: 0.85, cursor: "default"}}>{"Check your inbox soon! ✓"}</span>
+            ) : (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!heroEmail || heroEmailStatus === "sending") return;
+                  setHeroEmailStatus("sending");
+                  try {
+                    const res = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: heroEmail }) });
+                    if (res.ok) { setHeroEmailStatus("sent"); } else { setHeroEmailStatus("error"); }
+                  } catch { setHeroEmailStatus("error"); }
+                }}
+                style={{display: "inline-flex"}}
+              >
+                <input
+                  type="email"
+                  required
+                  placeholder="See How It Works →"
+                  value={heroEmail}
+                  onChange={(e) => { setHeroEmail(e.target.value); if (heroEmailStatus === "error") setHeroEmailStatus("idle"); }}
+                  onFocus={(e) => { e.target.placeholder = "Enter your email"; }}
+                  onBlur={(e) => { if (!e.target.value) e.target.placeholder = "See How It Works →"; }}
+                  className="btn-secondary"
+                  style={{padding: "16px 36px", fontSize: 16, cursor: "pointer", textAlign: "center", minWidth: 240, border: heroEmailStatus === "error" ? "1.5px solid #ef4444" : undefined}}
+                />
+                {heroEmail && (
+                  <button type="submit" className="btn-primary" style={{padding: "16px 24px", fontSize: 16, cursor: "pointer", marginLeft: 8}} disabled={heroEmailStatus === "sending"}>
+                    {heroEmailStatus === "sending" ? "…" : "→"}
+                  </button>
+                )}
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* Pipeline Builder visual */}
+        <div className="hero-pipeline-wrap">
+          <div className="crm-builder">
               <div className="crm-builder-toolbar">
                 <div className="crm-toolbar-left">
                   <div className="crm-toolbar-dots"><span></span><span></span><span></span></div>
@@ -1970,7 +2310,6 @@ footer .container {
               </div>
               <span className="toast-time">Just now</span>
             </div>
-          </div>
         </div>
       </section>
 
@@ -1985,9 +2324,9 @@ footer .container {
       {/* PROBLEM */}
       <section className="problem" id="problem">
         <div className="container">
-          <div className="section-label">The Problem</div>
+          <div className="section-label"></div>
           <h2 className="section-title">You didn&apos;t go into regenerative medicine to manage a tech stack.</h2>
-          <p className="section-sub">You&apos;re duct-taping together scheduling software, a CRM you barely use, and a website that doesn&apos;t convert. Meanwhile, the multi-location networks have custom software and your leads are going there.</p>
+          <p className="section-sub">You&apos;re duct-taping together scheduling software, a CRM you barely use, and a website that doesn&apos;t convert.</p>
           <div className="pain-grid">
             <div className="pain-card">
               <div className="pain-icon">{"⏱️"}</div>
@@ -2330,72 +2669,72 @@ footer .container {
           <div className="section-label">Patient-Powered Growth</div>
           <h2 className="section-title">Turn your patients into your top of funnel.</h2>
           <p className="section-sub">Your best marketing isn&apos;t ads. It&apos;s your existing patients. ClinicTech auto-generates content and campaigns from your patient data and knowledge base.</p>
-          <div className="success-stories-showcase">
-            <div className="success-stories-visual">
-              <div className="ss-mockup">
-                <div className="ss-header">
-                  <div className="ss-header-dots"><span></span><span></span><span></span></div>
-                  Success Story Generator
+
+          <div className="funnel-mockup">
+            <div className="funnel-toolbar">
+              <div className="funnel-toolbar-dots"><span></span><span></span><span></span></div>
+              Growth Engine
+            </div>
+            <div className="funnel-body">
+              <div className="funnel-body-left">
+                <div className="funnel-body-title">Content Queue</div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon blog">{"📝"}</div>
+                    <div>
+                      <div className="funnel-content-name">5 Signs You Need Regenerative Therapy</div>
+                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 1,200 words</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status published">Published</div>
                 </div>
-                <div className="ss-body">
-                  <div className="ss-badge">{"✨"} AI-Generated &middot; Ready to Publish</div>
-                  <div className="ss-card-preview">
-                    <div className="ss-card-quote">&ldquo;After years of knee pain, I was skeptical about stem cell therapy. Six weeks after my treatment, I&apos;m hiking again. The team made the entire process seamless.&rdquo;</div>
-                    <div className="ss-card-patient">
-                      <div className="ss-card-avatar">JM</div>
-                      <div className="ss-card-info">
-                        <div className="ss-card-name">Jennifer M.</div>
-                        <div className="ss-card-treatment">Knee Stem Cell Therapy &middot; 6 weeks post</div>
-                      </div>
-                      <div className="ss-card-stars">{"★★★★★"}</div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon story">{"✨"}</div>
+                    <div>
+                      <div className="funnel-content-name">Jennifer M. — Knee Stem Cell Recovery</div>
+                      <div className="funnel-content-meta">Success story &middot; Auto-generated &middot; HIPAA compliant</div>
                     </div>
                   </div>
-                  <div className="ss-actions">
-                    <div className="ss-action-btn publish">{"📤"} Publish to Website</div>
-                    <div className="ss-action-btn edit">{"✏️"} Edit Story</div>
-                    <div className="ss-action-btn edit">{"📱"} Share to Social</div>
-                  </div>
-                  <div className="ss-queue">
-                    <div className="ss-queue-item">
-                      <div className="ss-queue-name"><span className="ss-queue-dot ready"></span>Robert K.</div>
-                      <div className="ss-queue-status">PRP Treatment &middot; Ready</div>
-                    </div>
-                    <div className="ss-queue-item">
-                      <div className="ss-queue-name"><span className="ss-queue-dot draft"></span>Sarah L.</div>
-                      <div className="ss-queue-status">Shoulder PRP &middot; Draft</div>
-                    </div>
-                    <div className="ss-queue-item">
-                      <div className="ss-queue-name"><span className="ss-queue-dot ready"></span>David R.</div>
-                      <div className="ss-queue-status">Hip Regen &middot; Ready</div>
+                  <div className="funnel-content-status scheduled">Scheduled</div>
+                </div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon social">{"📱"}</div>
+                    <div>
+                      <div className="funnel-content-name">Patient Testimonial Card — Robert K.</div>
+                      <div className="funnel-content-meta">Social graphic &middot; Branded template</div>
                     </div>
                   </div>
+                  <div className="funnel-content-status draft">Draft</div>
+                </div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon blog">{"📝"}</div>
+                    <div>
+                      <div className="funnel-content-name">PRP vs. Cortisone: What Patients Should Know</div>
+                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 950 words</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status published">Published</div>
                 </div>
               </div>
-            </div>
-            <div>
-              <h3 style={{fontSize:"26px",fontWeight:800,fontStyle:"italic",marginBottom:"12px"}}>Patient Success Stories</h3>
-              <p style={{fontSize:"15px",lineHeight:1.7,color:"var(--text-secondary)",marginBottom:"20px"}}>Auto-generated, anonymized success story templates ready to post to your website or social channels. Compliant, compelling, and done for you.</p>
-              <div className="backoffice-features" style={{marginTop:0}}>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"🤖"}</div>
-                  <div>
-                    <h4>AI-Written from Patient Data</h4>
-                    <p>Generates compelling stories from treatment outcomes. Anonymized and HIPAA-compliant by default.</p>
-                  </div>
+              <div className="funnel-body-right">
+                <div className="funnel-body-title">Reviews &amp; Referrals</div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">4.9</div>
+                  <div className="funnel-review-label">Average Rating &middot; 127 reviews</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "94%", background: "var(--green)"}} /></div>
                 </div>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"📤"}</div>
-                  <div>
-                    <h4>One-Click Publish</h4>
-                    <p>Push to your website, social media, or email campaigns. Branded graphics included.</p>
-                  </div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">38</div>
+                  <div className="funnel-review-label">Review prompts sent this month</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "76%", background: "var(--navy)"}} /></div>
                 </div>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"📊"}</div>
-                  <div>
-                    <h4>Pipeline of Stories</h4>
-                    <p>Queue of ready-to-publish stories auto-generated as patients complete treatment milestones.</p>
-                  </div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">12</div>
+                  <div className="funnel-review-label">Referrals generated</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "48%", background: "#8B5CF6"}} /></div>
                 </div>
               </div>
             </div>
@@ -2403,22 +2742,16 @@ footer .container {
 
           <div className="funnel-grid">
             <div className="funnel-card">
-              <div className="funnel-card-number">02</div>
-              <h3>Boost Your SEO: Auto-Generated Blog Posts</h3>
-              <p>Fresh, keyword-optimized blog posts generated every week from your knowledge base and treatment offerings. Published straight to your website to drive organic traffic and rank for the searches your patients are already making.</p>
+              <div className="funnel-card-number">01</div>
+              <h3>Auto-Generated Content Engine</h3>
+              <p>AI-written success stories, blog posts, and SEO content generated from your patient data and knowledge base. HIPAA-compliant, branded to you, and published to your website and social channels on autopilot.</p>
               <div className="funnel-tag">Weekly Auto-Publish</div>
             </div>
             <div className="funnel-card">
-              <div className="funnel-card-number">03</div>
-              <h3>Review &amp; Referral Prompts</h3>
-              <p>Automated prompts triggered after positive outcomes. Patients get a nudge to leave a review or refer a friend at the exact right moment.</p>
+              <div className="funnel-card-number">02</div>
+              <h3>Reviews, Referrals &amp; Social Proof</h3>
+              <p>Automated review and referral prompts triggered after positive outcomes. Branded testimonial cards and shareable graphics your patients can post themselves. Word-of-mouth, systematized.</p>
               <div className="funnel-tag">Automated Triggers</div>
-            </div>
-            <div className="funnel-card">
-              <div className="funnel-card-number">04</div>
-              <h3>Social Proof Assets</h3>
-              <p>Branded graphics, testimonial cards, and shareable content your patients can post themselves. Turn word-of-mouth into a scalable channel.</p>
-              <div className="funnel-tag">{"Drag & Drop"}</div>
             </div>
           </div>
         </div>

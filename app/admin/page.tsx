@@ -1039,6 +1039,79 @@ function SettingsTab() {
   );
 }
 
+interface Lead {
+  id: string;
+  email: string;
+  source: string;
+  created_at: string;
+}
+
+function InboundLeadsTab() {
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/leads")
+      .then((r) => r.json())
+      .then((d) => setLeads(d.leads || []))
+      .catch(() => setLeads([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", padding: 60 }}>
+        <Loader2 size={24} className="spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="admin-table-wrap">
+      <div style={{ marginBottom: 16, fontSize: 13, color: "#64748B" }}>
+        {leads.length} lead{leads.length !== 1 ? "s" : ""} captured
+      </div>
+      <div className="admin-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Source</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.length === 0 ? (
+              <tr>
+                <td colSpan={3} style={{ textAlign: "center", color: "#94A3B8", padding: 40 }}>
+                  No inbound leads yet
+                </td>
+              </tr>
+            ) : (
+              leads.map((lead) => (
+                <tr key={lead.id}>
+                  <td style={{ fontWeight: 600 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <Mail size={14} style={{ color: "#64748B" }} />
+                      {lead.email}
+                    </div>
+                  </td>
+                  <td>{lead.source || "landing_hero"}</td>
+                  <td style={{ color: "#64748B" }}>
+                    {new Date(lead.created_at).toLocaleDateString("en-US", {
+                      month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit",
+                    })}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function AnalyticsTab() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1413,6 +1486,7 @@ export default function AdminPanel() {
     { id: "previews", label: "Previews", icon: Eye, count: counts.previews || undefined },
     { id: "outreach", label: "Outreach", icon: Send, count: counts.outreach || undefined },
     { id: "pipeline", label: "Pipeline", icon: Target, count: counts.pipeline || undefined },
+    { id: "inbound", label: "Inbound Leads", icon: Mail, count: undefined },
     { id: "analytics", label: "Analytics", icon: BarChart3, count: undefined },
     { id: "settings", label: "Settings", icon: Settings, count: undefined },
   ];
@@ -1423,6 +1497,7 @@ export default function AdminPanel() {
     previews: "Preview Manager",
     outreach: "Outreach",
     pipeline: "Pipeline",
+    inbound: "Inbound Leads",
     analytics: "Analytics",
     settings: "Settings",
   };
@@ -1478,7 +1553,7 @@ export default function AdminPanel() {
           <div className="admin-topbar">
             <div className="admin-topbar-left">
               <h1 style={{ fontSize: 18, fontWeight: 700 }}>{pageTitles[activePage] || "Admin"}</h1>
-              {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && (
+              {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && (
                 <div className="search-box">
                   <Search size={14} style={{ color: "#94A3B8" }} />
                   <input
@@ -1495,7 +1570,7 @@ export default function AdminPanel() {
           </div>
 
           {/* Stats bar — shown on non-discover/analytics/settings tabs */}
-          {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && (
+          {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && (
             <div className="stats-bar">
               <div className="stat-card">
                 <div className="stat-label">Total Clinics</div>
@@ -1526,7 +1601,7 @@ export default function AdminPanel() {
           )}
 
           {/* Loading state */}
-          {loading && activePage !== "discover" && activePage !== "analytics" && (
+          {loading && activePage !== "discover" && activePage !== "analytics" && activePage !== "inbound" && (
             <div className="loading-center"><Loader2 size={20} className="spin" /> Loading clinics...</div>
           )}
 
@@ -1783,6 +1858,8 @@ export default function AdminPanel() {
           )}
 
           {/* ─── ANALYTICS TAB ─── */}
+          {activePage === "inbound" && <InboundLeadsTab />}
+
           {activePage === "analytics" && <AnalyticsTab />}
 
           {/* ─── SETTINGS TAB ─── */}
