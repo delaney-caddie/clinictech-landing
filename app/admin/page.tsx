@@ -499,7 +499,7 @@ function AdditionalContactsSection({ clinic, onSave }: { clinic: Clinic; onSave:
   );
 }
 
-function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLinkedIn, onClearLogo, onRescrape, onSaveProfile }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void> }) {
+function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLinkedIn, onClearLogo, onRescrape, onSaveProfile, onDelete }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void>; onDelete: (id: string) => void }) {
   const [statusOpen, setStatusOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -777,6 +777,13 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLi
                 <button className="action-btn"><ExternalLink size={12} /> View Preview</button>
               </a>
             )}
+            <button
+              className="action-btn"
+              style={{ color: "#DC2626", borderColor: "#FCA5A5" }}
+              onClick={() => { if (confirm(`Remove "${clinic.name}" from the pipeline? This cannot be undone.`)) onDelete(clinic.id); }}
+            >
+              <XCircle size={12} /> Remove Clinic
+            </button>
           </div>
         </div>
       </div>
@@ -1601,6 +1608,20 @@ export default function AdminPanel() {
     }
   }
 
+  async function handleDeleteClinic(clinicId: string) {
+    try {
+      await fetch("/api/admin/clinics", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: clinicId }),
+      });
+      if (selectedClinic?.id === clinicId) setSelectedClinic(null);
+      await fetchClinics();
+    } catch {
+      // handle silently
+    }
+  }
+
   function toggleId(id: string) {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -2024,6 +2045,7 @@ export default function AdminPanel() {
             await fetchClinics();
             setSelectedClinic(null);
           }}
+          onDelete={(id) => handleDeleteClinic(id)}
         />
       )}
     </>

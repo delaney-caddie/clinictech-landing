@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 function getSupabase() {
   return createClient(
@@ -9,6 +10,12 @@ function getSupabase() {
 }
 
 export async function GET() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session")?.value;
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { data, error } = await getSupabase()
       .from("leads")
