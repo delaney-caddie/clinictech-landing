@@ -71,23 +71,34 @@ interface Draft {
 type StatusConfigEntry = { label: string; color: string; bg: string; icon: React.ComponentType<{ size: number }> };
 
 const STATUS_CONFIG: Record<string, StatusConfigEntry> = {
-  new:               { label: "New",              color: "#6B7280", bg: "#F3F4F6", icon: Plus },
-  scraped:           { label: "Scraped",          color: "#8B5CF6", bg: "#F5F3FF", icon: Globe },
-  preview_generated: { label: "Preview Ready",    color: "#2563EB", bg: "#EFF6FF", icon: Eye },
-  preview_sent:      { label: "Preview Sent",     color: "#0891B2", bg: "#ECFEFF", icon: Send },
-  emailed:           { label: "Emailed",          color: "#059669", bg: "#ECFDF5", icon: Mail },
-  follow_up_1:       { label: "Follow-up 1",      color: "#D97706", bg: "#FFFBEB", icon: Clock },
-  follow_up_2:       { label: "Follow-up 2",      color: "#EA580C", bg: "#FFF7ED", icon: AlertCircle },
-  meeting_booked:    { label: "Meeting Booked",   color: "#7C3AED", bg: "#F5F3FF", icon: Calendar },
-  called:            { label: "Called",            color: "#0EA5E9", bg: "#F0F9FF", icon: PhoneCall },
-  call_flagged:      { label: "Call Flagged",      color: "#DC2626", bg: "#FEF2F2", icon: Phone },
+  new:               { label: "New Lead",          color: "#6B7280", bg: "#F3F4F6", icon: Plus },
+  scraped:           { label: "Scraped",           color: "#8B5CF6", bg: "#F5F3FF", icon: Globe },
+  preview_generated: { label: "Preview Ready",     color: "#2563EB", bg: "#EFF6FF", icon: Eye },
+  preview_sent:      { label: "Preview Sent",      color: "#0891B2", bg: "#ECFEFF", icon: Send },
+  cold_call_1:       { label: "Cold Call 1",       color: "#7C3AED", bg: "#F5F3FF", icon: PhoneCall },
+  follow_up_1:       { label: "Follow Up Email 1", color: "#D97706", bg: "#FFFBEB", icon: Mail },
+  cold_call_2:       { label: "Cold Call 2",       color: "#6D28D9", bg: "#EDE9FE", icon: PhoneCall },
+  follow_up_2:       { label: "Follow Up Email 2", color: "#EA580C", bg: "#FFF7ED", icon: Mail },
+  follow_up_3:       { label: "Follow Up Email 3", color: "#C2410C", bg: "#FFF7ED", icon: Mail },
+  cold_call_3:       { label: "Cold Call 3",       color: "#5B21B6", bg: "#EDE9FE", icon: PhoneCall },
+  text_message_1:    { label: "Text Message 1",    color: "#0891B2", bg: "#ECFEFF", icon: Send },
+  interested:        { label: "Interested",        color: "#2563EB", bg: "#EFF6FF", icon: Star },
+  meeting_booked:    { label: "Meeting Booked",    color: "#059669", bg: "#ECFDF5", icon: Calendar },
   converted:         { label: "Converted",         color: "#16A34A", bg: "#F0FDF4", icon: CheckCircle2 },
-  lost:              { label: "Lost",              color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
+  cold:              { label: "Cold",              color: "#94A3B8", bg: "#F8FAFC", icon: Clock },
+  closed_lost:       { label: "Closed Lost",       color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
+  // Legacy statuses for backward compat
+  emailed:           { label: "Emailed",           color: "#059669", bg: "#ECFDF5", icon: Mail },
+  called:            { label: "Called",             color: "#0EA5E9", bg: "#F0F9FF", icon: PhoneCall },
+  call_flagged:      { label: "Call Flagged",       color: "#DC2626", bg: "#FEF2F2", icon: Phone },
+  lost:              { label: "Lost",               color: "#9CA3AF", bg: "#F9FAFB", icon: XCircle },
 };
 
 const PIPELINE_STATUSES = [
-  "preview_sent", "emailed", "follow_up_1", "follow_up_2",
-  "meeting_booked", "called", "call_flagged", "converted", "lost",
+  "new", "preview_generated", "preview_sent",
+  "cold_call_1", "follow_up_1", "cold_call_2", "follow_up_2",
+  "follow_up_3", "cold_call_3", "text_message_1",
+  "interested", "meeting_booked", "converted", "cold", "closed_lost",
 ];
 
 /* ─── Styles ─── */
@@ -123,6 +134,25 @@ const styles = `
   .pipeline-chip { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; white-space: nowrap; border: 1px solid transparent; }
   .pipeline-chip:hover { opacity: 0.85; }
   .pipeline-chip.active { border-color: currentColor; box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
+
+  /* Kanban */
+  .kanban { display: flex; gap: 12px; padding: 20px 28px; overflow-x: auto; min-height: calc(100vh - 200px); align-items: flex-start; }
+  .kanban-col { min-width: 260px; max-width: 280px; flex: 1; background: #F1F5F9; border-radius: 12px; display: flex; flex-direction: column; max-height: calc(100vh - 220px); }
+  .kanban-col-header { padding: 14px 16px 10px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+  .kanban-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+  .kanban-col-count { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,0.06); }
+  .kanban-col-body { padding: 0 10px 10px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .kanban-card { background: #fff; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid #E2E8F0; }
+  .kanban-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .kanban-card-name { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kanban-card-detail { font-size: 11px; color: #64748B; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kanban-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .kanban-card-tag { font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .kanban-card-actions { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+  .kanban-card-actions .action-btn { font-size: 10px; padding: 3px 8px; }
+  .kanban-card.dragging { opacity: 0.4; transform: rotate(2deg); }
+  .kanban-col.drag-over .kanban-col-body { background: rgba(99,102,241,0.06); border-radius: 8px; }
+  .kanban-drop-indicator { height: 3px; background: #6366F1; border-radius: 2px; margin: 2px 0; transition: opacity 0.15s; }
 
   /* Table */
   .admin-table-wrap { padding: 20px 28px; }
@@ -360,6 +390,115 @@ function DecisionMakerSection({ clinic, onEnrichFromLinkedIn }: { clinic: Clinic
   );
 }
 
+interface AdditionalContact {
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+}
+
+function AdditionalContactsSection({ clinic, onSave }: { clinic: Clinic; onSave: (id: string, data: Record<string, unknown>) => Promise<void> }) {
+  const contacts: AdditionalContact[] = clinic.scraped_data?.additional_contacts || [];
+  const [adding, setAdding] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState<AdditionalContact>({ name: "", title: "", email: "", phone: "" });
+
+  async function handleAdd() {
+    if (!form.name.trim() && !form.email.trim()) return;
+    setSaving(true);
+    const updated = [...contacts, { ...form }];
+    const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};
+    await fetch("/api/admin/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clinicId: clinic.id, updateProfile: {}, updateScrapedData: { additional_contacts: updated } }),
+    });
+    // Refresh by calling onSave with empty to trigger refetch
+    await onSave(clinic.id, {});
+    setForm({ name: "", title: "", email: "", phone: "" });
+    setAdding(false);
+    setSaving(false);
+  }
+
+  async function handleRemove(idx: number) {
+    const updated = contacts.filter((_, i) => i !== idx);
+    await fetch("/api/admin/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clinicId: clinic.id, updateProfile: {}, updateScrapedData: { additional_contacts: updated } }),
+    });
+    await onSave(clinic.id, {});
+  }
+
+  return (
+    <div className="detail-section">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <div className="detail-section-title" style={{ margin: 0 }}>People</div>
+        {!adding && (
+          <button className="action-btn" style={{ fontSize: 11, color: "#2563EB", borderColor: "#93C5FD" }} onClick={() => setAdding(true)}>
+            <Plus size={12} /> Add Person
+          </button>
+        )}
+      </div>
+
+      {contacts.map((c, i) => (
+        <div key={i} style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8, padding: "10px 12px", marginBottom: 8 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 13 }}>{c.name || "Unnamed"}</div>
+              {c.title && <div style={{ fontSize: 11, color: "#64748B" }}>{c.title}</div>}
+            </div>
+            <button className="action-btn" style={{ fontSize: 10, color: "#DC2626", borderColor: "#FECACA", padding: "2px 6px" }} onClick={() => handleRemove(i)}>
+              <XCircle size={10} />
+            </button>
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 6, fontSize: 11, color: "#475569" }}>
+            {c.email && <span style={{ display: "flex", alignItems: "center", gap: 3 }}><Mail size={10} /> {c.email}</span>}
+            {c.phone && <span style={{ display: "flex", alignItems: "center", gap: 3 }}><Phone size={10} /> {c.phone}</span>}
+          </div>
+        </div>
+      ))}
+
+      {adding && (
+        <div style={{ background: "#F8FAFC", border: "1px solid #93C5FD", borderRadius: 8, padding: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { key: "name", placeholder: "Full name", label: "Name" },
+              { key: "title", placeholder: "e.g. Medical Director, Office Manager", label: "Title" },
+              { key: "email", placeholder: "email@clinic.com", label: "Email" },
+              { key: "phone", placeholder: "+1 (555) 123-4567", label: "Phone" },
+            ].map(({ key, placeholder, label }) => (
+              <div key={key}>
+                <label style={{ fontSize: 10, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 2 }}>{label}</label>
+                <input
+                  value={(form as any)[key]}
+                  onChange={(e) => setForm(prev => ({ ...prev, [key]: e.target.value }))}
+                  placeholder={placeholder}
+                  style={{ width: "100%", padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 12, fontFamily: "inherit", outline: "none" }}
+                />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
+            <button className="action-btn primary" style={{ fontSize: 11 }} onClick={handleAdd} disabled={saving}>
+              {saving ? "Saving..." : "Add"}
+            </button>
+            <button className="action-btn" style={{ fontSize: 11 }} onClick={() => { setAdding(false); setForm({ name: "", title: "", email: "", phone: "" }); }}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {contacts.length === 0 && !adding && (
+        <div style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", padding: "8px 0" }}>
+          No additional contacts yet
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLinkedIn, onClearLogo, onRescrape, onSaveProfile }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void> }) {
   const [statusOpen, setStatusOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -522,6 +661,7 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLi
           </div>
 
           <DecisionMakerSection clinic={clinic} onEnrichFromLinkedIn={onEnrichFromLinkedIn} />
+          <AdditionalContactsSection clinic={clinic} onSave={onSaveProfile} />
 
           <div className="detail-section">
             <div className="detail-section-title">Brand</div>
@@ -1225,7 +1365,7 @@ export default function AdminPanel() {
     new_clinics: clinics.filter((c) => c.status === "new").length,
     previews: clinics.filter((c) => c.status === "scraped" || c.status === "preview_generated").length,
     outreach: clinics.filter((c) => c.scraped_data?.draft).length,
-    pipeline: clinics.filter((c) => PIPELINE_STATUSES.includes(c.status)).length,
+    pipeline: clinics.filter((c) => PIPELINE_STATUSES.includes(c.status) && c.status !== "new" && c.status !== "preview_generated" && c.status !== "scraped").length,
     analytics: 0,
     settings: 0,
   };
@@ -1470,8 +1610,10 @@ export default function AdminPanel() {
     });
   }
 
-  // Pipeline filter
+  // Pipeline / Kanban
   const [pipelineFilter, setPipelineFilter] = useState("all");
+  const [dragClinicId, setDragClinicId] = useState<string | null>(null);
+  const [dragOverCol, setDragOverCol] = useState<string | null>(null);
   const pipelineFiltered = pipelineFilter === "all" ? pipelineClinics : pipelineClinics.filter((c) => c.status === pipelineFilter);
 
   const pipelineStatusCounts: Record<string, number> = {};
@@ -1759,102 +1901,84 @@ export default function AdminPanel() {
             </div>
           )}
 
-          {/* ─── PIPELINE TAB ─── */}
+          {/* ─── PIPELINE TAB — Kanban ─── */}
           {activePage === "pipeline" && !loading && (
-            <>
-              <div className="pipeline-bar">
-                <div
-                  className={`pipeline-chip ${pipelineFilter === "all" ? "active" : ""}`}
-                  style={{ background: "#F1F5F9", color: "#475569" }}
-                  onClick={() => setPipelineFilter("all")}
-                >
-                  All ({pipelineClinics.length})
-                </div>
-                {PIPELINE_STATUSES.filter((s) => pipelineStatusCounts[s]).map((s) => {
-                  const cfg = STATUS_CONFIG[s];
-                  return (
-                    <div
-                      key={s}
-                      className={`pipeline-chip ${pipelineFilter === s ? "active" : ""}`}
-                      style={{ background: cfg.bg, color: cfg.color }}
-                      onClick={() => setPipelineFilter(s)}
-                    >
-                      {cfg.label} ({pipelineStatusCounts[s]})
+            <div className="kanban">
+              {PIPELINE_STATUSES.map((status) => {
+                const cfg = STATUS_CONFIG[status];
+                const colClinics = filtered.filter((c) => c.status === status || (status === "preview_generated" && c.status === "scraped"));
+                return (
+                  <div
+                    className={`kanban-col ${dragOverCol === status ? "drag-over" : ""}`}
+                    key={status}
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDragOverCol(status); }}
+                    onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setDragOverCol(status); }}
+                    onDragLeave={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const { clientX, clientY } = e;
+                      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+                        setDragOverCol(null);
+                      }
+                    }}
+                    onDrop={async (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const droppedId = e.dataTransfer.getData("text/plain") || dragClinicId;
+                      setDragOverCol(null);
+                      if (droppedId) {
+                        setDragClinicId(null);
+                        await handleStatusChange(droppedId, status);
+                      }
+                    }}
+                  >
+                    <div className="kanban-col-header">
+                      <div className="kanban-col-title" style={{ color: cfg.color }}>
+                        <cfg.icon size={14} />
+                        {cfg.label}
+                      </div>
+                      <div className="kanban-col-count">{colClinics.length}</div>
                     </div>
-                  );
-                })}
-              </div>
-              <ClinicTable
-                clinics={pipelineFiltered}
-                onSelect={setSelectedClinic}
-                actions={(clinic) => (
-                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                    {/* Follow-up 1 buttons — available when preview_sent or emailed */}
-                    {(clinic.status === "preview_sent" || clinic.status === "emailed") && !clinic.scraped_data?.followup_1_draft && (
-                      <button
-                        className="action-btn"
-                        onClick={() => handleFollowupDraft(clinic.id, 1)}
-                        disabled={actionLoading === `followup-1-${clinic.id}`}
-                        style={{ color: "#D97706", borderColor: "#FCD34D" }}
-                      >
-                        {actionLoading === `followup-1-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft F/U 1</>}
-                      </button>
-                    )}
-                    {(clinic.status === "preview_sent" || clinic.status === "emailed") && clinic.scraped_data?.followup_1_draft && (
-                      <button
-                        className="action-btn"
-                        onClick={() => handleSendFollowup(clinic.id, 1)}
-                        disabled={actionLoading === `send-followup-1-${clinic.id}`}
-                        style={{ color: "#D97706", borderColor: "#FCD34D" }}
-                      >
-                        {actionLoading === `send-followup-1-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Send F/U 1</>}
-                      </button>
-                    )}
-                    {/* Follow-up 2 buttons — available when follow_up_1 */}
-                    {clinic.status === "follow_up_1" && !clinic.scraped_data?.followup_2_draft && (
-                      <button
-                        className="action-btn"
-                        onClick={() => handleFollowupDraft(clinic.id, 2)}
-                        disabled={actionLoading === `followup-2-${clinic.id}`}
-                        style={{ color: "#EA580C", borderColor: "#FDBA74" }}
-                      >
-                        {actionLoading === `followup-2-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Mail size={12} /> Draft F/U 2</>}
-                      </button>
-                    )}
-                    {clinic.status === "follow_up_1" && clinic.scraped_data?.followup_2_draft && (
-                      <button
-                        className="action-btn"
-                        onClick={() => handleSendFollowup(clinic.id, 2)}
-                        disabled={actionLoading === `send-followup-2-${clinic.id}`}
-                        style={{ color: "#EA580C", borderColor: "#FDBA74" }}
-                      >
-                        {actionLoading === `send-followup-2-${clinic.id}` ? <Loader2 size={12} className="spin" /> : <><Send size={12} /> Send F/U 2</>}
-                      </button>
-                    )}
-                    {!clinic.contact_phone && (
-                      <button className="action-btn" onClick={() => handleEnrich([clinic.id])} disabled={actionLoading === "enrich"} style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}>
-                        {actionLoading === "enrich" ? <Loader2 size={12} className="spin" /> : <><Users size={12} /> Enrich</>}
-                      </button>
-                    )}
-                    {clinic.status !== "call_flagged" && (
-                      <button className="action-btn danger" onClick={() => handleStatusChange(clinic.id, "call_flagged")}>
-                        <Phone size={12} /> Flag Call
-                      </button>
-                    )}
-                    {clinic.status !== "meeting_booked" && (
-                      <button className="action-btn success" onClick={() => handleStatusChange(clinic.id, "meeting_booked")}>
-                        <Calendar size={12} /> Meeting
-                      </button>
-                    )}
-                    {clinic.status !== "converted" && (
-                      <button className="action-btn" style={{ color: "#16A34A", borderColor: "#86EFAC" }} onClick={() => handleStatusChange(clinic.id, "converted")}>
-                        <CheckCircle2 size={12} /> Convert
-                      </button>
-                    )}
+                    <div className="kanban-col-body">
+                      {dragOverCol === status && dragClinicId && (
+                        <div className="kanban-drop-indicator" />
+                      )}
+                      {colClinics.map((clinic) => (
+                        <div
+                          className={`kanban-card ${dragClinicId === clinic.id ? "dragging" : ""}`}
+                          key={clinic.id}
+                          draggable
+                          onDragStart={(e) => { e.dataTransfer.setData("text/plain", clinic.id); e.dataTransfer.effectAllowed = "move"; setDragClinicId(clinic.id); }}
+                          onDragEnd={() => { setDragClinicId(null); setDragOverCol(null); }}
+                          onClick={() => setSelectedClinic(clinic)}
+                        >
+                          <div className="kanban-card-name">{clinic.name}</div>
+                          <div className="kanban-card-detail">
+                            {clinic.contact_name || clinic.location || clinic.website}
+                          </div>
+                          <div className="kanban-card-meta">
+                            {clinic.contact_email && (
+                              <div className="kanban-card-tag" style={{ background: cfg.bg, color: cfg.color }}>
+                                {clinic.contact_email.split("@")[0]}
+                              </div>
+                            )}
+                            {clinic.contact_phone && (
+                              <div className="kanban-card-tag" style={{ background: "#F0F9FF", color: "#0EA5E9" }}>
+                                Phone
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {colClinics.length === 0 && !dragOverCol && (
+                        <div style={{ padding: "20px 12px", textAlign: "center", fontSize: 11, color: "#94A3B8" }}>
+                          No clinics
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
-              />
-            </>
+                );
+              })}
+            </div>
           )}
 
           {/* ─── ANALYTICS TAB ─── */}
