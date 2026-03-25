@@ -278,12 +278,29 @@ nav .nav-links a.btn-primary:hover {
 .hero-fullwidth {
   position: relative;
   padding: 160px 0 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   background: var(--white);
+}
+.hero-split {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.hero-split-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hero-split-right {
+  position: relative;
+  transform: scale(0.85);
+  transform-origin: center center;
 }
 .hero-dna-bg {
   position: absolute;
@@ -327,15 +344,11 @@ nav .nav-links a.btn-primary:hover {
   100% { opacity: 0.2; r: 5; }
 }
 .hero-centered {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 800px;
-  padding: 0 24px;
+  text-align: left;
 }
 .hero-main-title {
   font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 64px;
+  font-size: 56px;
   font-weight: 800;
   font-style: italic;
   line-height: 1.1;
@@ -345,25 +358,21 @@ nav .nav-links a.btn-primary:hover {
   animation: fadeUp 0.8s ease 0.2s both;
 }
 .hero-centered-sub {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto 36px;
+  max-width: 580px;
+  margin: 0 0 36px;
   animation: fadeUp 0.8s ease 0.4s both;
 }
 .hero-centered-ctas {
   display: flex;
   gap: 16px;
-  justify-content: center;
+  justify-content: flex-start;
   animation: fadeUp 0.8s ease 0.6s both;
 }
 .hero-pipeline-wrap {
   position: relative;
-  z-index: 1;
-  max-width: 1000px;
-  margin: 60px auto 0;
-  padding: 0 24px;
   animation: fadeUp 0.8s ease 0.8s both;
 }
 .hero-badge {
@@ -677,8 +686,8 @@ nav .nav-links a.btn-primary:hover {
 }
 .stat-banner-number {
   font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 48px; font-weight: 700;
-  color: #0E9AC0;
+  font-size: 48px; font-weight: 900;
+  color: var(--navy);
 }
 .stat-banner-text {
   font-size: 20px; color: var(--text-secondary);
@@ -1961,6 +1970,10 @@ footer .container {
 /* ===== RESPONSIVE ===== */
 /* ===== TABLET ===== */
 @media (max-width: 900px) {
+  .hero-split { grid-template-columns: 1fr; gap: 40px; }
+  .hero-split-left { align-items: center; text-align: center; }
+  .hero-centered { text-align: center; }
+  .hero-centered-sub { margin: 0 auto 36px; }
   .hero-main-title { font-size: 44px; }
   .hero-centered-ctas { flex-direction: column; align-items: center; }
   .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
@@ -2006,6 +2019,7 @@ footer .container {
   .hero-ctas .btn-secondary { width: 100%; justify-content: center; padding: 14px 20px; font-size: 14px; }
 
   /* CRM Builder mockup */
+  .hero-split-right { display: none; }
   .crm-builder { display: none; }
   .activity-toast { display: none; }
   .brand-tag { display: none; }
@@ -2131,18 +2145,19 @@ footer .container {
           </svg>
         </div>
 
-        {/* Centered hero content */}
+        <div className="hero-split">
+        <div className="hero-split-left">
         <div className="hero-centered">
-          <div className="hero-badge" style={{justifyContent: "center"}}>
+          <div className="hero-badge">
             <span className="dot"></span>
             Built for Regenerative Medicine Clinics
           </div>
           <h1 className="hero-main-title">Your Clinic. Your Brand.<br/><span style={{color: "var(--primary)"}}>Your Growth Engine.</span></h1>
           <p className="hero-centered-sub">A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in weeks.</p>
           <div className="hero-centered-ctas">
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{padding: "16px 36px", fontSize: 16}}>{"Book a 15-Min Walkthrough \u2192"}</a>
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Demo</a>
             {heroEmailStatus === "sent" ? (
-              <span className="btn-secondary" style={{padding: "16px 36px", fontSize: 16, opacity: 0.85, cursor: "default"}}>{"Check your inbox soon! ✓"}</span>
+              <span className="btn-secondary" style={{opacity: 0.85, cursor: "default"}}>{"Check your inbox soon! ✓"}</span>
             ) : (
               <form
                 onSubmit={async (e) => {
@@ -2165,10 +2180,10 @@ footer .container {
                   onFocus={(e) => { e.target.placeholder = "Enter your email"; }}
                   onBlur={(e) => { if (!e.target.value) e.target.placeholder = "See How It Works →"; }}
                   className="btn-secondary"
-                  style={{padding: "16px 36px", fontSize: 16, cursor: "pointer", textAlign: "center", minWidth: 240, border: heroEmailStatus === "error" ? "1.5px solid #ef4444" : undefined}}
+                  style={{cursor: "pointer", textAlign: "center", minWidth: 200, border: heroEmailStatus === "error" ? "1.5px solid #ef4444" : undefined}}
                 />
                 {heroEmail && (
-                  <button type="submit" className="btn-primary" style={{padding: "16px 24px", fontSize: 16, cursor: "pointer", marginLeft: 8}} disabled={heroEmailStatus === "sending"}>
+                  <button type="submit" className="btn-primary" style={{cursor: "pointer", marginLeft: 8}} disabled={heroEmailStatus === "sending"}>
                     {heroEmailStatus === "sending" ? "…" : "→"}
                   </button>
                 )}
@@ -2176,7 +2191,9 @@ footer .container {
             )}
           </div>
         </div>
+        </div>
 
+        <div className="hero-split-right">
         {/* Pipeline Builder visual */}
         <div className="hero-pipeline-wrap">
           <div className="crm-builder">
@@ -2310,6 +2327,8 @@ footer .container {
               </div>
               <span className="toast-time">Just now</span>
             </div>
+        </div>
+        </div>
         </div>
       </section>
 
