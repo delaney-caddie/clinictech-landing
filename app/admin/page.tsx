@@ -6,7 +6,7 @@ import {
   RefreshCw, ExternalLink, CheckCircle2, Clock,
   AlertCircle, XCircle, Send, Target, Settings, Calendar,
   PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown, Users,
-  Link, UserSearch,
+  Link, UserSearch, MessageSquare, TrendingUp,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -1193,6 +1193,346 @@ interface Lead {
   created_at: string;
 }
 
+/* ─── Product Feedback Tab ─── */
+
+const FEATURE_CATEGORIES = [
+  {
+    name: "Scheduling & Appointments",
+    features: [
+      { id: "apt_calendar", name: "Appointment calendar", desc: "Full calendar view, room/resource allocation, procedure duration blocking" },
+      { id: "staff_assign", name: "Staff assignment per procedure", desc: "Assign providers to specific procedures" },
+      { id: "waitlist", name: "Waitlist management", desc: "Manage patient waitlists for popular time slots" },
+      { id: "recurring_apt", name: "Recurring appointment series", desc: "E.g., PRP 3-session protocols" },
+    ],
+  },
+  {
+    name: "Patient Management",
+    features: [
+      { id: "treatment_tracking", name: "Patient treatment tracking", desc: "Protocols, sessions completed vs planned, injection sites, dosing" },
+      { id: "outcomes_tracking", name: "Patient outcomes tracking", desc: "Pain scores, ROM, patient-reported outcomes over time" },
+      { id: "photo_gallery", name: "Before/after photo gallery", desc: "Organized by treatment type, consent status" },
+      { id: "patient_education", name: "Patient education content", desc: "Pre/post procedure instructions, FAQ automation" },
+      { id: "digital_intake", name: "Digital intake forms", desc: "Online patient intake and registration" },
+    ],
+  },
+  {
+    name: "Revenue & Billing",
+    features: [
+      { id: "revenue_dash", name: "Revenue dashboard", desc: "Collected vs outstanding, daily/weekly/monthly views" },
+      { id: "payment_plans", name: "Payment plan management", desc: "Stem cell treatments are $5k-$25k+ out-of-pocket" },
+      { id: "invoicing", name: "Invoice generation", desc: "Create and send invoices" },
+      { id: "insurance_verify", name: "Insurance verification", desc: "For clinics that accept insurance" },
+    ],
+  },
+  {
+    name: "Inventory & Supply Chain",
+    features: [
+      { id: "biologics_inv", name: "Biologics inventory tracking", desc: "Exosome vials, PRP kits, stem cell products" },
+      { id: "expiration_alerts", name: "Expiration date alerts", desc: "Cold chain tracking and expiry management" },
+      { id: "lot_tracking", name: "Lot number tracking", desc: "Tied to patients for compliance" },
+      { id: "reorder_alerts", name: "Reorder alerts", desc: "Supplier management and auto-reorder" },
+    ],
+  },
+  {
+    name: "Compliance & Documentation",
+    features: [
+      { id: "consent_mgmt", name: "Consent and document management", desc: "E-signatures, treatment-specific waivers" },
+      { id: "audit_trail", name: "Audit trail", desc: "Who got what product, from what lot, on what date" },
+      { id: "fda_compliance", name: "FDA 21 CFR Part 1271 logging", desc: "Compliance logging for tissue products" },
+      { id: "adverse_events", name: "Adverse event reporting", desc: "Track and report adverse events" },
+    ],
+  },
+  {
+    name: "Marketing & Growth",
+    features: [
+      { id: "lead_attribution", name: "Lead source attribution", desc: "Marketing ROI tracking" },
+      { id: "referral_network", name: "Referral network management", desc: "Which doctors/PTs send patients, referral fees" },
+      { id: "case_study_builder", name: "Case study builder", desc: "Pull from outcomes data" },
+      { id: "review_automation", name: "Review/testimonial automation", desc: "Automated review request campaigns" },
+    ],
+  },
+  {
+    name: "Staff & Operations",
+    features: [
+      { id: "staff_dash", name: "Staff/provider dashboard", desc: "Who's on today, procedures per provider, utilization" },
+      { id: "multi_location", name: "Multi-location rollup", desc: "Aggregate dashboard across clinic locations" },
+      { id: "protocol_templates", name: "Treatment protocol templates", desc: "Standardized protocols for new providers" },
+      { id: "lab_tracking", name: "Lab/processing tracking", desc: "Harvest-to-injection timelines for in-house processing" },
+    ],
+  },
+  {
+    name: "Follow-up & Retention",
+    features: [
+      { id: "followup_protocols", name: "Clinical follow-up protocols", desc: "Structured check-ins at 2wk, 6wk, 3mo, 6mo" },
+      { id: "recall_automation", name: "Recall automation", desc: "Bring patients back for maintenance treatments" },
+      { id: "satisfaction_surveys", name: "Patient satisfaction surveys", desc: "NPS, post-treatment feedback" },
+    ],
+  },
+  {
+    name: "Platform Capabilities",
+    features: [
+      { id: "custom_dashboard", name: "Customizable dashboard", desc: "Drag-and-drop widgets, role-based views per clinic" },
+      { id: "ai_automations", name: "AI automations", desc: "Smart follow-ups, appointment reminders, lead scoring, protocol suggestions" },
+      { id: "tool_connections", name: "Tool connections", desc: "EHR integrations, Google Calendar, payment processors, lab systems" },
+      { id: "unified_inbox", name: "Unified inbox", desc: "All patient comms in one place: email, SMS, portal messages, calls" },
+      { id: "ai_interface", name: "AI-first interface", desc: "Natural language queries, AI-assisted charting, smart scheduling" },
+    ],
+  },
+];
+
+interface FeatureVote {
+  count: number;
+  timestamps: number[];
+}
+
+function ProductFeedbackTab() {
+  const [votes, setVotes] = useState<Record<string, FeatureVote>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      return JSON.parse(localStorage.getItem("ct_feature_votes") || "{}");
+    } catch { return {}; }
+  });
+  const [sortBy, setSortBy] = useState<"most" | "alpha" | "category">("most");
+  const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set(FEATURE_CATEGORIES.map(c => c.name)));
+  const [customFeatures, setCustomFeatures] = useState<{ id: string; name: string; desc: string; category: string }[]>(() => {
+    if (typeof window === "undefined") return [];
+    try { return JSON.parse(localStorage.getItem("ct_custom_features") || "[]"); } catch { return []; }
+  });
+  const [addingTo, setAddingTo] = useState<string | null>(null);
+  const [newName, setNewName] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+
+  function saveVotes(updated: Record<string, FeatureVote>) {
+    setVotes(updated);
+    localStorage.setItem("ct_feature_votes", JSON.stringify(updated));
+  }
+
+  function addCustomFeature(category: string) {
+    if (!newName.trim()) return;
+    const id = `custom_${Date.now()}`;
+    const updated = [...customFeatures, { id, name: newName.trim(), desc: newDesc.trim(), category }];
+    setCustomFeatures(updated);
+    localStorage.setItem("ct_custom_features", JSON.stringify(updated));
+    setNewName("");
+    setNewDesc("");
+    setAddingTo(null);
+  }
+
+  function removeCustomFeature(id: string) {
+    const updated = customFeatures.filter(f => f.id !== id);
+    setCustomFeatures(updated);
+    localStorage.setItem("ct_custom_features", JSON.stringify(updated));
+    const updatedVotes = { ...votes };
+    delete updatedVotes[id];
+    saveVotes(updatedVotes);
+  }
+
+  function handleVote(featureId: string) {
+    const existing = votes[featureId] || { count: 0, timestamps: [] };
+    saveVotes({
+      ...votes,
+      [featureId]: { count: existing.count + 1, timestamps: [...existing.timestamps, Date.now()] },
+    });
+  }
+
+  function handleReset() {
+    if (confirm("Reset all feature votes to zero? This cannot be undone.")) {
+      saveVotes({});
+    }
+  }
+
+  function toggleCat(name: string) {
+    setExpandedCats(prev => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name); else next.add(name);
+      return next;
+    });
+  }
+
+  function getWeeklyCount(featureId: string): number {
+    const v = votes[featureId];
+    if (!v) return 0;
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    return v.timestamps.filter(t => t > weekAgo).length;
+  }
+
+  // All features flat for sorting/top 5
+  const allFeatures = [
+    ...FEATURE_CATEGORIES.flatMap(cat => cat.features.map(f => ({ ...f, category: cat.name, count: votes[f.id]?.count || 0 }))),
+    ...customFeatures.map(f => ({ ...f, count: votes[f.id]?.count || 0 })),
+  ];
+  const top5 = [...allFeatures].sort((a, b) => b.count - a.count).filter(f => f.count > 0).slice(0, 5);
+  const maxCount = top5[0]?.count || 1;
+
+  // For "most requested" sort, flatten and sort
+  const sortedCategories = sortBy === "category" ? FEATURE_CATEGORIES :
+    sortBy === "alpha" ? [...FEATURE_CATEGORIES].map(cat => ({
+      ...cat,
+      features: [...cat.features].sort((a, b) => a.name.localeCompare(b.name)),
+    })).sort((a, b) => a.name.localeCompare(b.name)) :
+    FEATURE_CATEGORIES;
+
+  return (
+    <div style={{ padding: "20px 28px", maxWidth: 900 }}>
+      {/* Top bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div style={{ display: "flex", gap: 6 }}>
+          {(["most", "alpha", "category"] as const).map(s => (
+            <button
+              key={s}
+              className={`pipeline-chip ${sortBy === s ? "active" : ""}`}
+              style={{ background: sortBy === s ? "#EFF6FF" : "#F1F5F9", color: sortBy === s ? "#2563EB" : "#475569" }}
+              onClick={() => setSortBy(s)}
+            >
+              {s === "most" ? "Most Requested" : s === "alpha" ? "A-Z" : "By Category"}
+            </button>
+          ))}
+        </div>
+        <button className="action-btn" style={{ color: "#DC2626", borderColor: "#FCA5A5" }} onClick={handleReset}>
+          <RefreshCw size={12} /> Reset All
+        </button>
+      </div>
+
+      {/* Top 5 chart */}
+      {top5.length > 0 && (
+        <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20, marginBottom: 24 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            <TrendingUp size={14} /> Top Requested Features
+          </div>
+          {top5.map((f, i) => (
+            <div key={f.id} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: i < top5.length - 1 ? 10 : 0 }}>
+              <div style={{ width: 18, fontSize: 12, fontWeight: 700, color: "#64748B", textAlign: "right" }}>#{i + 1}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>{f.name}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#2563EB" }}>{f.count}</span>
+                </div>
+                <div style={{ height: 6, background: "#F1F5F9", borderRadius: 3, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${(f.count / maxCount) * 100}%`, background: "linear-gradient(90deg, #3B82F6, #6366F1)", borderRadius: 3, transition: "width 0.3s" }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Categories */}
+      {sortedCategories.map(cat => {
+        const expanded = expandedCats.has(cat.name);
+        const catCustom = customFeatures.filter(f => f.category === cat.name);
+        const allCatFeatures = [...cat.features, ...catCustom];
+        const catTotal = allCatFeatures.reduce((sum, f) => sum + (votes[f.id]?.count || 0), 0);
+        const features = sortBy === "most"
+          ? [...allCatFeatures].sort((a, b) => (votes[b.id]?.count || 0) - (votes[a.id]?.count || 0))
+          : allCatFeatures;
+
+        return (
+          <div key={cat.name} style={{ marginBottom: 12 }}>
+            <div
+              onClick={() => toggleCat(cat.name)}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "12px 16px", background: "#fff", border: "1px solid #E2E8F0",
+                borderRadius: expanded ? "12px 12px 0 0" : 12, cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <ChevronDown size={14} style={{ transform: expanded ? "rotate(0deg)" : "rotate(-90deg)", transition: "transform 0.15s", color: "#64748B" }} />
+                <span style={{ fontSize: 13, fontWeight: 700 }}>{cat.name}</span>
+              </div>
+              {catTotal > 0 && (
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#2563EB", background: "#EFF6FF", padding: "2px 8px", borderRadius: 10 }}>
+                  {catTotal} vote{catTotal !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+            {expanded && (
+              <div style={{ border: "1px solid #E2E8F0", borderTop: "none", borderRadius: "0 0 12px 12px", overflow: "hidden" }}>
+                {features.map((f, i) => {
+                  const count = votes[f.id]?.count || 0;
+                  const weekly = getWeeklyCount(f.id);
+                  const isCustom = f.id.startsWith("custom_");
+                  return (
+                    <div
+                      key={f.id}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        padding: "12px 16px",
+                        borderBottom: i < features.length - 1 ? "1px solid #F1F5F9" : "none",
+                        background: i % 2 === 0 ? "#FAFBFD" : "#fff",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }}>
+                          {f.name}
+                          {isCustom && <span style={{ fontSize: 9, color: "#8B5CF6", background: "#F5F3FF", padding: "1px 5px", borderRadius: 4, fontWeight: 700 }}>Custom</span>}
+                        </div>
+                        <div style={{ fontSize: 11, color: "#64748B", marginTop: 2 }}>{f.desc}</div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, marginLeft: 16 }}>
+                        {weekly > 0 && (
+                          <span style={{ fontSize: 9, color: "#059669", fontWeight: 600 }}>{weekly} this week</span>
+                        )}
+                        <span style={{ fontSize: 14, fontWeight: 800, color: count > 0 ? "#0F172A" : "#CBD5E1", minWidth: 24, textAlign: "right" }}>{count}</span>
+                        <button
+                          className="action-btn primary"
+                          style={{ fontSize: 11, padding: "4px 10px" }}
+                          onClick={() => handleVote(f.id)}
+                        >
+                          +1
+                        </button>
+                        {isCustom && (
+                          <button
+                            className="action-btn"
+                            style={{ fontSize: 10, padding: "3px 6px", color: "#DC2626", borderColor: "#FCA5A5" }}
+                            onClick={() => removeCustomFeature(f.id)}
+                          >
+                            <XCircle size={10} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                {/* Add feature */}
+                {addingTo === cat.name ? (
+                  <div style={{ padding: "12px 16px", background: "#F8FAFC", display: "flex", flexDirection: "column", gap: 6 }}>
+                    <input
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      placeholder="Feature name"
+                      autoFocus
+                      style={{ padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 12, outline: "none" }}
+                    />
+                    <input
+                      value={newDesc}
+                      onChange={(e) => setNewDesc(e.target.value)}
+                      placeholder="Short description (optional)"
+                      style={{ padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6, fontSize: 12, outline: "none" }}
+                    />
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button className="action-btn primary" style={{ fontSize: 11 }} onClick={() => addCustomFeature(cat.name)}>Add</button>
+                      <button className="action-btn" style={{ fontSize: 11 }} onClick={() => { setAddingTo(null); setNewName(""); setNewDesc(""); }}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => setAddingTo(cat.name)}
+                    style={{ padding: "10px 16px", fontSize: 12, color: "#64748B", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, borderTop: "1px solid #F1F5F9" }}
+                  >
+                    <Plus size={12} /> Add feature
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function InboundLeadsTab() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1650,6 +1990,7 @@ export default function AdminPanel() {
     { id: "outreach", label: "Outreach", icon: Send, count: counts.outreach || undefined },
     { id: "pipeline", label: "Pipeline", icon: Target, count: counts.pipeline || undefined },
     { id: "inbound", label: "Inbound Leads", icon: Mail, count: undefined },
+    { id: "feedback", label: "Product Feedback", icon: MessageSquare, count: undefined },
     { id: "analytics", label: "Analytics", icon: BarChart3, count: undefined },
     { id: "settings", label: "Settings", icon: Settings, count: undefined },
   ];
@@ -1661,6 +2002,7 @@ export default function AdminPanel() {
     outreach: "Outreach",
     pipeline: "Pipeline",
     inbound: "Inbound Leads",
+    feedback: "Product Feedback",
     analytics: "Analytics",
     settings: "Settings",
   };
@@ -1716,7 +2058,7 @@ export default function AdminPanel() {
           <div className="admin-topbar">
             <div className="admin-topbar-left">
               <h1 style={{ fontSize: 18, fontWeight: 700 }}>{pageTitles[activePage] || "Admin"}</h1>
-              {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && (
+              {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && activePage !== "feedback" && (
                 <div className="search-box">
                   <Search size={14} style={{ color: "#94A3B8" }} />
                   <input
@@ -1733,7 +2075,7 @@ export default function AdminPanel() {
           </div>
 
           {/* Stats bar — shown on non-discover/analytics/settings tabs */}
-          {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && (
+          {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && activePage !== "feedback" && (
             <div className="stats-bar">
               <div className="stat-card">
                 <div className="stat-label">Total Clinics</div>
@@ -1764,7 +2106,7 @@ export default function AdminPanel() {
           )}
 
           {/* Loading state */}
-          {loading && activePage !== "discover" && activePage !== "analytics" && activePage !== "inbound" && (
+          {loading && activePage !== "discover" && activePage !== "analytics" && activePage !== "inbound" && activePage !== "feedback" && (
             <div className="loading-center"><Loader2 size={20} className="spin" /> Loading clinics...</div>
           )}
 
@@ -2004,6 +2346,8 @@ export default function AdminPanel() {
 
           {/* ─── ANALYTICS TAB ─── */}
           {activePage === "inbound" && <InboundLeadsTab />}
+
+          {activePage === "feedback" && <ProductFeedbackTab />}
 
           {activePage === "analytics" && <AnalyticsTab />}
 
