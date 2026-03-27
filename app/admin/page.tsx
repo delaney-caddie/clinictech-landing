@@ -6,7 +6,7 @@ import {
   RefreshCw, ExternalLink, CheckCircle2, Clock,
   AlertCircle, XCircle, Send, Target, Settings, Calendar,
   PhoneCall, BarChart3, Loader2, MapPin, Star, ChevronDown, Users,
-  Link, UserSearch, MessageSquare, TrendingUp,
+  Link, UserSearch, MessageSquare, TrendingUp, Download, Zap, Copy,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -184,7 +184,7 @@ const styles = `
   .action-btn.success:hover { background: #ECFDF5; }
 
   /* Stats bar */
-  .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; padding: 20px 28px; }
+  .stats-bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 20px 28px; }
   .stat-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px; }
   .stat-label { font-size: 12px; font-weight: 500; color: #64748B; }
   .stat-value { font-size: 28px; font-weight: 700; margin-top: 2px; }
@@ -499,6 +499,84 @@ function AdditionalContactsSection({ clinic, onSave }: { clinic: Clinic; onSave:
   );
 }
 
+function AuditFindingsSection({ clinic }: { clinic: Clinic }) {
+  const findings: string[] | undefined = clinic.scraped_data?.audit_findings;
+  const hasAudit = Array.isArray(findings) && findings.length === 3;
+  const [auditing, setAuditing] = useState(false);
+
+  async function handleAuditSingle() {
+    setAuditing(true);
+    try {
+      const res = await fetch("/api/admin/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: [clinic.id] }),
+      });
+      if (!res.ok) throw new Error("Audit failed");
+      const data = await res.json();
+      const result = data.results?.[0];
+      if (result?.status === "audited") {
+        alert(`Audit complete: ${result.findings.length} findings`);
+        window.location.reload();
+      } else {
+        alert(result?.reason || "Audit could not be completed");
+      }
+    } catch {
+      alert("Audit failed");
+    }
+    setAuditing(false);
+  }
+
+  function copyFindings() {
+    if (!findings) return;
+    const text = findings.map((f: string, i: number) => `${i + 1}) ${f}`).join("\n");
+    navigator.clipboard.writeText(text);
+    alert("Findings copied to clipboard");
+  }
+
+  return (
+    <div className="detail-section">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <div className="detail-section-title" style={{ margin: 0 }}>Audit Findings</div>
+        {hasAudit && (
+          <button className="action-btn" style={{ fontSize: 11 }} onClick={copyFindings}>
+            <Copy size={11} /> Copy
+          </button>
+        )}
+      </div>
+
+      {hasAudit ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {findings!.map((f: string, i: number) => (
+            <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+              <span style={{
+                flexShrink: 0, width: 22, height: 22, borderRadius: "50%",
+                background: "#FEF3C7", color: "#D97706", fontSize: 11, fontWeight: 700,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {i + 1}
+              </span>
+              <span style={{ fontSize: 13, color: "#334155", lineHeight: "1.4" }}>{f}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <div style={{ fontSize: 12, color: "#94A3B8", marginBottom: 8 }}>Not audited yet</div>
+          <button
+            className="action-btn"
+            onClick={handleAuditSingle}
+            disabled={auditing || !clinic.scraped_data || Object.keys(clinic.scraped_data).length === 0}
+            style={{ color: "#D97706", borderColor: "#FCD34D" }}
+          >
+            {auditing ? <><Loader2 size={12} className="spin" /> Auditing...</> : <><Zap size={12} /> Run Audit</>}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLinkedIn, onClearLogo, onRescrape, onSaveProfile, onDelete }: { clinic: Clinic; onClose: () => void; onStatusChange: (id: string, status: string) => void; onEnrich: (id: string) => void; onEnrichFromLinkedIn: (id: string, linkedinUrl: string) => void; onClearLogo: (id: string) => void; onRescrape: (id: string) => void; onSaveProfile: (id: string, data: Record<string, unknown>) => Promise<void>; onDelete: (id: string) => void }) {
   const [statusOpen, setStatusOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -679,6 +757,9 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLi
               <span className="detail-field-value">{clinic.services && clinic.services.length > 0 ? clinic.services.join(", ") : "Not scraped"}</span>
             </div>
           </div>
+
+          {/* Audit Findings */}
+          <AuditFindingsSection clinic={clinic} />
 
           {clinic.slug && (
             <div className="detail-section">
@@ -982,7 +1063,14 @@ function ClinicTable({
                   <div className="clinic-website"><Globe size={11} /> {clinic.website}</div>
                   {clinic.location && <div className="clinic-location">{clinic.location}</div>}
                 </td>
-                <td><StatusBadge status={clinic.status} /></td>
+                <td>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <StatusBadge status={clinic.status} />
+                    {Array.isArray(clinic.scraped_data?.audit_findings) && clinic.scraped_data.audit_findings.length === 3 && (
+                      <span className="status-badge" style={{ background: "#ECFDF5", color: "#059669", fontSize: 10 }}>Audited</span>
+                    )}
+                  </div>
+                </td>
                 <td>
                   {clinic.contact_name ? (
                     <div>
@@ -1707,10 +1795,15 @@ export default function AdminPanel() {
   const pipelineClinics = filtered.filter((c) => PIPELINE_STATUSES.includes(c.status));
 
   // Counts for nav
+  const auditedClinics = filtered.filter(
+    (c) => Array.isArray(c.scraped_data?.audit_findings) && c.scraped_data.audit_findings.length === 3
+  );
+
   const counts = {
     discover: 0,
     new_clinics: clinics.filter((c) => c.status === "new").length,
     previews: clinics.filter((c) => c.status === "scraped" || c.status === "preview_generated").length,
+    audited: clinics.filter((c) => Array.isArray(c.scraped_data?.audit_findings) && c.scraped_data.audit_findings.length === 3).length,
     outreach: clinics.filter((c) => c.scraped_data?.draft).length,
     pipeline: clinics.filter((c) => PIPELINE_STATUSES.includes(c.status) && c.status !== "new" && c.status !== "preview_generated" && c.status !== "scraped").length,
     analytics: 0,
@@ -1867,6 +1960,77 @@ export default function AdminPanel() {
     setActionLoading(null);
   }
 
+  async function handleAudit(ids: string[]) {
+    setActionLoading("audit");
+    try {
+      const res = await fetch("/api/admin/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: ids }),
+      });
+      const data = await res.json();
+      await fetchClinics();
+      setSelectedIds(new Set());
+      const results = data.results || [];
+      const audited = results.filter((r: any) => r.status === "audited").length;
+      const skipped = results.filter((r: any) => r.status === "skipped").length;
+      alert(`Audited ${audited} clinic(s)${skipped > 0 ? `. ${skipped} skipped (no scraped data).` : "."}`);
+    } catch {
+      alert("Audit failed. Check that ANTHROPIC_API_KEY is set.");
+    }
+    setActionLoading(null);
+  }
+
+  async function handleExport(ids?: string[]) {
+    setActionLoading("export");
+    try {
+      // If no ids provided, export all audited clinics with email
+      const exportIds = ids && ids.length > 0
+        ? ids
+        : clinics
+            .filter((c) =>
+              c.contact_email &&
+              Array.isArray(c.scraped_data?.audit_findings) &&
+              c.scraped_data.audit_findings.length === 3
+            )
+            .map((c) => c.id);
+
+      if (exportIds.length === 0) {
+        alert("No clinics to export (need email + audit findings).");
+        setActionLoading(null);
+        return;
+      }
+
+      const res = await fetch("/api/admin/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clinicIds: exportIds }),
+      });
+
+      if (!res.ok) throw new Error("Export failed");
+
+      const totalCount = res.headers.get("X-Total-Count") || "0";
+      const withEmail = res.headers.get("X-With-Email") || "0";
+      const withoutEmail = res.headers.get("X-Without-Email") || "0";
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.headers.get("Content-Disposition")?.match(/filename="(.+)"/)?.[1]
+        || `clinictech-outreach-${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      const msg = `CSV downloaded — ${totalCount} clinics (${withEmail} with email, ${withoutEmail} without).`;
+      alert(msg);
+    } catch {
+      alert("Export failed.");
+    }
+    setActionLoading(null);
+  }
+
   async function handleFollowupDraft(clinicId: string, followupNumber: 1 | 2) {
     setActionLoading(`followup-${followupNumber}-${clinicId}`);
     try {
@@ -1971,6 +2135,15 @@ export default function AdminPanel() {
     });
   }
 
+  function selectPage(list: Clinic[], pageSize = 25) {
+    const ids = list.slice(0, pageSize).map((c) => c.id);
+    setSelectedIds(new Set(ids));
+  }
+
+  function selectAll(list: Clinic[]) {
+    setSelectedIds(new Set(list.map((c) => c.id)));
+  }
+
   // Pipeline / Kanban
   const [pipelineFilter, setPipelineFilter] = useState("all");
   const [dragClinicId, setDragClinicId] = useState<string | null>(null);
@@ -1987,6 +2160,7 @@ export default function AdminPanel() {
     { id: "discover", label: "Discover", icon: Search, count: undefined },
     { id: "new_clinics", label: "New Clinics", icon: Plus, count: counts.new_clinics || undefined },
     { id: "previews", label: "Previews", icon: Eye, count: counts.previews || undefined },
+    { id: "audited", label: "Audited", icon: Zap, count: counts.audited || undefined },
     { id: "outreach", label: "Outreach", icon: Send, count: counts.outreach || undefined },
     { id: "pipeline", label: "Pipeline", icon: Target, count: counts.pipeline || undefined },
     { id: "inbound", label: "Inbound Leads", icon: Mail, count: undefined },
@@ -1999,6 +2173,7 @@ export default function AdminPanel() {
     discover: "Discover Clinics",
     new_clinics: "New Clinics",
     previews: "Preview Manager",
+    audited: "Audited Clinics",
     outreach: "Outreach",
     pipeline: "Pipeline",
     inbound: "Inbound Leads",
@@ -2070,6 +2245,14 @@ export default function AdminPanel() {
               )}
             </div>
             <div className="admin-topbar-right">
+              <button
+                className="action-btn"
+                onClick={() => handleExport(selectedIds.size > 0 ? Array.from(selectedIds) : undefined)}
+                disabled={actionLoading === "export"}
+                style={{ color: "#059669", borderColor: "#6EE7B7" }}
+              >
+                {actionLoading === "export" ? <><Loader2 size={12} className="spin" /> Exporting...</> : <><Download size={12} /> Export for Instantly</>}
+              </button>
               <button className="action-btn" onClick={fetchClinics}><RefreshCw size={12} /> Refresh</button>
             </div>
           </div>
@@ -2098,6 +2281,11 @@ export default function AdminPanel() {
                 <div className="stat-sub">Previews sent</div>
               </div>
               <div className="stat-card">
+                <div className="stat-label">Audited</div>
+                <div className="stat-value" style={{ color: "#D97706" }}>{clinics.filter((c) => Array.isArray(c.scraped_data?.audit_findings) && c.scraped_data.audit_findings.length === 3).length}</div>
+                <div className="stat-sub">With findings</div>
+              </div>
+              <div className="stat-card">
                 <div className="stat-label">Meetings</div>
                 <div className="stat-value" style={{ color: "#7C3AED" }}>{clinics.filter((c) => c.status === "meeting_booked").length}</div>
                 <div className="stat-sub">Booked</div>
@@ -2116,6 +2304,20 @@ export default function AdminPanel() {
           {/* ─── NEW CLINICS TAB ─── */}
           {activePage === "new_clinics" && !loading && (
             <>
+              {/* Selection helpers */}
+              <div style={{ display: "flex", gap: 8, padding: "12px 28px 0", alignItems: "center" }}>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectPage(newClinics)}>
+                  Select 25
+                </button>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectAll(newClinics)}>
+                  Select All ({newClinics.length})
+                </button>
+                {selectedIds.size > 0 && (
+                  <button className="action-btn" style={{ fontSize: 12, color: "#94A3B8" }} onClick={() => setSelectedIds(new Set())}>
+                    Clear Selection
+                  </button>
+                )}
+              </div>
               {selectedIds.size > 0 && (
                 <div className="bulk-bar">
                   <span>{selectedIds.size} selected</span>
@@ -2134,6 +2336,22 @@ export default function AdminPanel() {
                     disabled={actionLoading === "enrich"}
                   >
                     {actionLoading === "enrich" ? <><Loader2 size={12} className="spin" /> Enriching...</> : <><Users size={12} /> Enrich Contacts</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#FCD34D", borderColor: "#D97706" }}
+                    onClick={() => handleAudit(Array.from(selectedIds))}
+                    disabled={actionLoading === "audit"}
+                  >
+                    {actionLoading === "audit" ? <><Loader2 size={12} className="spin" /> Auditing...</> : <><Zap size={12} /> Run Audit</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#6EE7B7", borderColor: "#059669" }}
+                    onClick={() => handleExport(Array.from(selectedIds))}
+                    disabled={actionLoading === "export"}
+                  >
+                    {actionLoading === "export" ? <><Loader2 size={12} className="spin" /> Exporting...</> : <><Download size={12} /> Export CSV</>}
                   </button>
                   <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>
                     Clear
@@ -2172,6 +2390,19 @@ export default function AdminPanel() {
           {/* ─── PREVIEWS TAB ─── */}
           {activePage === "previews" && !loading && (
             <>
+              <div style={{ display: "flex", gap: 8, padding: "12px 28px 0", alignItems: "center" }}>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectPage(previewClinics)}>
+                  Select 25
+                </button>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectAll(previewClinics)}>
+                  Select All ({previewClinics.length})
+                </button>
+                {selectedIds.size > 0 && (
+                  <button className="action-btn" style={{ fontSize: 12, color: "#94A3B8" }} onClick={() => setSelectedIds(new Set())}>
+                    Clear Selection
+                  </button>
+                )}
+              </div>
               {selectedIds.size > 0 && (
                 <div className="bulk-bar">
                   <span>{selectedIds.size} selected</span>
@@ -2190,6 +2421,22 @@ export default function AdminPanel() {
                     disabled={actionLoading === "enrich"}
                   >
                     {actionLoading === "enrich" ? <><Loader2 size={12} className="spin" /> Enriching...</> : <><Users size={12} /> Enrich All</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#FCD34D", borderColor: "#D97706" }}
+                    onClick={() => handleAudit(Array.from(selectedIds))}
+                    disabled={actionLoading === "audit"}
+                  >
+                    {actionLoading === "audit" ? <><Loader2 size={12} className="spin" /> Auditing...</> : <><Zap size={12} /> Run Audit</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#6EE7B7", borderColor: "#059669" }}
+                    onClick={() => handleExport(Array.from(selectedIds))}
+                    disabled={actionLoading === "export"}
+                  >
+                    {actionLoading === "export" ? <><Loader2 size={12} className="spin" /> Exporting...</> : <><Download size={12} /> Export CSV</>}
                   </button>
                   <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>Clear</button>
                 </div>
@@ -2218,6 +2465,157 @@ export default function AdminPanel() {
                   </div>
                 )}
               />
+            </>
+          )}
+
+          {/* ─── AUDITED TAB ─── */}
+          {activePage === "audited" && !loading && (
+            <>
+              <div style={{ display: "flex", gap: 8, padding: "12px 28px 0", alignItems: "center" }}>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectPage(auditedClinics)}>
+                  Select 25
+                </button>
+                <button className="action-btn" style={{ fontSize: 12 }} onClick={() => selectAll(auditedClinics)}>
+                  Select All ({auditedClinics.length})
+                </button>
+                {selectedIds.size > 0 && (
+                  <button className="action-btn" style={{ fontSize: 12, color: "#94A3B8" }} onClick={() => setSelectedIds(new Set())}>
+                    Clear Selection
+                  </button>
+                )}
+              </div>
+              {selectedIds.size > 0 && (
+                <div className="bulk-bar">
+                  <span>{selectedIds.size} selected</span>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#C4B5FD", borderColor: "#7C3AED" }}
+                    onClick={() => handleEnrich(Array.from(selectedIds))}
+                    disabled={actionLoading === "enrich"}
+                  >
+                    {actionLoading === "enrich" ? <><Loader2 size={12} className="spin" /> Enriching...</> : <><Users size={12} /> Enrich Contacts</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#FCD34D", borderColor: "#D97706" }}
+                    onClick={() => handleAudit(Array.from(selectedIds))}
+                    disabled={actionLoading === "audit"}
+                  >
+                    {actionLoading === "audit" ? <><Loader2 size={12} className="spin" /> Re-auditing...</> : <><Zap size={12} /> Re-Audit</>}
+                  </button>
+                  <button
+                    className="action-btn"
+                    style={{ fontSize: 12, color: "#6EE7B7", borderColor: "#059669" }}
+                    onClick={() => handleExport(Array.from(selectedIds))}
+                    disabled={actionLoading === "export"}
+                  >
+                    {actionLoading === "export" ? <><Loader2 size={12} className="spin" /> Exporting...</> : <><Download size={12} /> Export CSV</>}
+                  </button>
+                  <button className="action-btn" style={{ color: "#94A3B8", borderColor: "#475569" }} onClick={() => setSelectedIds(new Set())}>Clear</button>
+                </div>
+              )}
+              <div className="admin-table-wrap">
+                <div className="admin-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style={{ width: 40 }}></th>
+                        <th>Clinic</th>
+                        <th>Contact</th>
+                        <th>Findings</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {auditedClinics.map((clinic) => {
+                        const findings: string[] = clinic.scraped_data?.audit_findings || [];
+                        return (
+                          <tr key={clinic.id} style={{ cursor: "pointer" }} onClick={() => setSelectedClinic(clinic)}>
+                            <td onClick={(e) => e.stopPropagation()}>
+                              <div
+                                className={`cb ${selectedIds.has(clinic.id) ? "checked" : ""}`}
+                                onClick={() => toggleId(clinic.id)}
+                              >
+                                {selectedIds.has(clinic.id) && <CheckCircle2 size={10} color="#fff" />}
+                              </div>
+                            </td>
+                            <td>
+                              <div className="clinic-name">{clinic.name}</div>
+                              <div className="clinic-website"><Globe size={11} /> {clinic.website}</div>
+                              {clinic.location && <div className="clinic-location">{clinic.location}</div>}
+                            </td>
+                            <td>
+                              {clinic.contact_name ? (
+                                <div>
+                                  <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>
+                                  <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_email || "No email"}</div>
+                                </div>
+                              ) : (
+                                <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not enriched</span>
+                              )}
+                            </td>
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 320 }}>
+                                {findings.map((f: string, i: number) => (
+                                  <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+                                    <span style={{
+                                      flexShrink: 0, width: 18, height: 18, borderRadius: "50%",
+                                      background: "#FEF3C7", color: "#D97706", fontSize: 10, fontWeight: 700,
+                                      display: "flex", alignItems: "center", justifyContent: "center",
+                                    }}>
+                                      {i + 1}
+                                    </span>
+                                    <span style={{ fontSize: 12, color: "#475569", lineHeight: "1.4" }}>{f}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </td>
+                            <td onClick={(e) => e.stopPropagation()}>
+                              <div style={{ display: "flex", gap: 4 }}>
+                                {!clinic.contact_email && (
+                                  <button
+                                    className="action-btn"
+                                    onClick={() => handleEnrich([clinic.id])}
+                                    disabled={actionLoading === "enrich"}
+                                    style={{ color: "#7C3AED", borderColor: "#C4B5FD" }}
+                                  >
+                                    <Users size={12} /> Enrich
+                                  </button>
+                                )}
+                                <button
+                                  className="action-btn"
+                                  onClick={() => handleAudit([clinic.id])}
+                                  disabled={actionLoading === "audit"}
+                                  style={{ color: "#D97706", borderColor: "#FCD34D" }}
+                                >
+                                  <Zap size={12} /> Re-Audit
+                                </button>
+                                <button
+                                  className="action-btn"
+                                  onClick={() => handleExport([clinic.id])}
+                                  disabled={actionLoading === "export"}
+                                  style={{ color: "#059669", borderColor: "#6EE7B7" }}
+                                >
+                                  <Download size={12} /> Export
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {auditedClinics.length === 0 && (
+                        <tr>
+                          <td colSpan={5} style={{ textAlign: "center", padding: 40, color: "#94A3B8" }}>
+                            <Zap size={40} style={{ color: "#CBD5E1", marginBottom: 12, display: "block", margin: "0 auto 12px" }} />
+                            <div style={{ fontWeight: 600, color: "#64748B", marginBottom: 4 }}>No audited clinics</div>
+                            <div style={{ fontSize: 13 }}>Select clinics from New Clinics or Previews and run an audit.</div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </>
           )}
 

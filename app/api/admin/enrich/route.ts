@@ -128,6 +128,71 @@ async function getContactDetails(linkedinSlug: string): Promise<{
 
 // ─── Main API Route ───
 
+// ─── Fallback: Scrape website for contact emails ───
+
+async function scrapeWebsiteEmails(website: string): Promise<string | null> {
+  const url = website.startsWith("http") ? website : `https://${website}`;
+
+  // Always fetch raw HTML — most reliable for finding emails
+  // (Firecrawl markdown often strips them out)
+  let text = "";
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+      signal: AbortSignal.timeout(10000),
+    });
+    text = await res.text();
+  } catch { /* continue with empty */ }
+
+  // Also try Firecrawl for JS-rendered content and combine
+  const firecrawlKey = process.env.FIRECRAWL_API_KEY;
+  if (firecrawlKey) {
+    try {
+      const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${firecrawlKey}`,
+        },
+        body: JSON.stringify({ url, formats: ["markdown"], waitFor: 3000 }),
+        signal: AbortSignal.timeout(20000),
+      });
+      const data = await res.json();
+      if (data.success && data.data?.markdown) {
+        text += "\n" + data.data.markdown;
+      }
+    } catch { /* continue */ }
+  }
+
+  if (!text) return null;
+
+  // Extract emails from combined text
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const matches = text.match(emailPattern) || [];
+  const filtered = [...new Set(matches)].filter(e =>
+    !e.includes("example.com") &&
+    !e.includes("wixpress") &&
+    !e.includes("sentry") &&
+    !e.includes("googleapis") &&
+    !e.includes("schema.org") &&
+    !e.endsWith(".png") &&
+    !e.endsWith(".jpg")
+  );
+
+  if (filtered.length === 0) return null;
+
+  // Prioritize: info@, contact@, hello@, admin@, office@ — then anything else
+  const priorityPrefixes = ["info", "contact", "hello", "admin", "office", "appointments", "reception", "inquiries"];
+  for (const prefix of priorityPrefixes) {
+    const match = filtered.find(e => e.toLowerCase().startsWith(prefix + "@"));
+    if (match) return match;
+  }
+
+  // Return first non-noreply email
+  const nonNoreply = filtered.filter(e => !e.toLowerCase().includes("noreply") && !e.toLowerCase().includes("no-reply"));
+  return nonNoreply[0] || filtered[0];
+}
+
 export async function POST(req: NextRequest) {
   try {
     const apiKey = FIBER_KEY();
@@ -208,7 +273,18 @@ export async function POST(req: NextRequest) {
           owner = await findOwner(clinic.website, clinic.name);
 
           if (!owner) {
-            results.push({ id, name: clinic.name, status: "no_owner_found" });
+            // No owner in Fiber — fall back to website email scraping
+            const websiteEmail = clinic.website ? await scrapeWebsiteEmails(clinic.website) : null;
+            if (websiteEmail) {
+              const update: Record<string, unknown> = {
+                contact_email: websiteEmail,
+                updated_at: new Date().toISOString(),
+              };
+              await supabase.from("clinics").update(update).eq("id", id);
+              results.push({ id, name: clinic.name, status: "enriched", workEmail: websiteEmail });
+            } else {
+              results.push({ id, name: clinic.name, status: "no_owner_found" });
+            }
             continue;
           }
 
@@ -216,6 +292,14 @@ export async function POST(req: NextRequest) {
           contact = owner.linkedinSlug
             ? await getContactDetails(owner.linkedinSlug)
             : { personalEmail: null, workEmail: null, mobilePhone: null };
+        }
+
+        // Fallback: scrape website for emails if Fiber didn't find any
+        if (!contact.personalEmail && !contact.workEmail && clinic.website) {
+          const scraped = await scrapeWebsiteEmails(clinic.website);
+          if (scraped) {
+            contact.workEmail = scraped;
+          }
         }
 
         // Save to Supabase
