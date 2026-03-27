@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
     for (const id of clinicIds) {
       const { data: clinic } = await supabase
         .from("clinics")
-        .select("id, name, website, scraped_data, contact_name, contact_title")
+        .select("id, name, website, scraped_data, contact_name, contact_title, contact_email, status")
         .eq("id", id)
         .single();
 
@@ -243,8 +243,13 @@ export async function POST(req: NextRequest) {
             updated_at: new Date().toISOString(),
           };
 
-          // Override with scraped website contact info (email + phone only)
-          if (scraped.email) update.contact_email = scraped.email;
+          // Pre-pipeline clinics: always override contact info
+          // In-pipeline clinics: only fill in if empty
+          const prePipeline = ["new", "scraped", "preview_generated", "preview_sent", "audited"].includes(clinic.status);
+
+          if (scraped.email && (prePipeline || !clinic.contact_email)) {
+            update.contact_email = scraped.email;
+          }
           if (scraped.phone) update.contact_phone = scraped.phone;
 
           const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};

@@ -75,6 +75,8 @@ const STATUS_CONFIG: Record<string, StatusConfigEntry> = {
   scraped:           { label: "Scraped",           color: "#8B5CF6", bg: "#F5F3FF", icon: Globe },
   preview_generated: { label: "Preview Ready",     color: "#2563EB", bg: "#EFF6FF", icon: Eye },
   preview_sent:      { label: "Preview Sent",      color: "#0891B2", bg: "#ECFEFF", icon: Send },
+  audited:           { label: "Audited",           color: "#D97706", bg: "#FFFBEB", icon: Zap },
+  audit_sent:        { label: "Audit Sent",        color: "#059669", bg: "#ECFDF5", icon: Send },
   cold_call_1:       { label: "Cold Call 1",       color: "#7C3AED", bg: "#F5F3FF", icon: PhoneCall },
   follow_up_1:       { label: "Follow Up Email 1", color: "#D97706", bg: "#FFFBEB", icon: Mail },
   cold_call_2:       { label: "Cold Call 2",       color: "#6D28D9", bg: "#EDE9FE", icon: PhoneCall },
@@ -96,6 +98,7 @@ const STATUS_CONFIG: Record<string, StatusConfigEntry> = {
 
 const PIPELINE_STATUSES = [
   "new", "preview_generated", "preview_sent",
+  "audited", "audit_sent",
   "cold_call_1", "follow_up_1", "cold_call_2", "follow_up_2",
   "follow_up_3", "cold_call_3", "text_message_1",
   "interested", "meeting_booked", "converted", "cold", "closed_lost",
