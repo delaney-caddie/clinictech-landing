@@ -157,28 +157,30 @@ Example: ["Logo appears blurry and pixelated at current display size", "No patie
   const content: Anthropic.ContentBlockParam[] = [];
 
   if (clinic.screenshotBase64) {
-    const ss = clinic.screenshotBase64;
-    if (ss.startsWith("http://") || ss.startsWith("https://")) {
-      // Firecrawl returns a URL
-      content.push({
-        type: "image",
-        source: {
-          type: "url",
-          url: ss,
-        },
-      });
+    let base64Data: string | null = null;
+
+    if (clinic.screenshotBase64.startsWith("http://") || clinic.screenshotBase64.startsWith("https://")) {
+      // Firecrawl returns a URL — download and convert to base64
+      try {
+        const imgRes = await fetch(clinic.screenshotBase64, { signal: AbortSignal.timeout(15000) });
+        if (imgRes.ok) {
+          const buffer = await imgRes.arrayBuffer();
+          base64Data = Buffer.from(buffer).toString("base64");
+        }
+      } catch { /* skip screenshot */ }
+    } else if (clinic.screenshotBase64.startsWith("data:")) {
+      base64Data = clinic.screenshotBase64.replace(/^data:image\/[^;]+;base64,/, "");
     } else {
-      // base64 data
-      let base64 = ss;
-      if (base64.startsWith("data:")) {
-        base64 = base64.replace(/^data:image\/[^;]+;base64,/, "");
-      }
+      base64Data = clinic.screenshotBase64;
+    }
+
+    if (base64Data) {
       content.push({
         type: "image",
         source: {
           type: "base64",
           media_type: "image/png",
-          data: base64,
+          data: base64Data,
         },
       });
     }
