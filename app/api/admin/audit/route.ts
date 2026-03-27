@@ -124,6 +124,7 @@ RULES:
 - Focus on issues that a back-office and patient management platform could help solve
 - No generic advice. "Improve your SEO" is bad. "No online booking option visible on any page" is good.
 - Read the scraped content carefully. If you see booking calendars, forms, testimonials, etc. — do NOT say they're missing.
+- The current year is ${new Date().getFullYear()}. Do NOT flag copyright years that match the current year as outdated. Only flag copyright years that are 2+ years old.
 ${clinic.screenshotBase64 ? `- LOOK AT THE SCREENSHOT CAREFULLY. Call out visual/aesthetic issues you can see:
   - Blurry, pixelated, or low-resolution logo
   - Blurry, stretched, or watermarked images (copyright symbols, stock photo marks)

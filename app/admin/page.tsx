@@ -503,6 +503,9 @@ function AuditFindingsSection({ clinic }: { clinic: Clinic }) {
   const findings: string[] | undefined = clinic.scraped_data?.audit_findings;
   const hasAudit = Array.isArray(findings) && findings.length === 3;
   const [auditing, setAuditing] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editValues, setEditValues] = useState<string[]>(findings || ["", "", ""]);
+  const [saving, setSaving] = useState(false);
 
   async function handleAuditSingle() {
     setAuditing(true);
@@ -534,18 +537,53 @@ function AuditFindingsSection({ clinic }: { clinic: Clinic }) {
     alert("Findings copied to clipboard");
   }
 
+  async function handleSaveFindings() {
+    setSaving(true);
+    try {
+      await fetch("/api/admin/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clinicId: clinic.id,
+          updateProfile: {},
+          updateScrapedData: { audit_findings: editValues },
+        }),
+      });
+      setEditing(false);
+      window.location.reload();
+    } catch {
+      alert("Failed to save findings");
+    }
+    setSaving(false);
+  }
+
   return (
     <div className="detail-section">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <div className="detail-section-title" style={{ margin: 0 }}>Audit Findings</div>
-        {hasAudit && (
-          <button className="action-btn" style={{ fontSize: 11 }} onClick={copyFindings}>
-            <Copy size={11} /> Copy
-          </button>
-        )}
+        <div style={{ display: "flex", gap: 4 }}>
+          {hasAudit && !editing && (
+            <>
+              <button className="action-btn" style={{ fontSize: 11 }} onClick={() => { setEditValues(findings!); setEditing(true); }}>
+                ✏️ Edit
+              </button>
+              <button className="action-btn" style={{ fontSize: 11 }} onClick={copyFindings}>
+                <Copy size={11} /> Copy
+              </button>
+            </>
+          )}
+          {editing && (
+            <>
+              <button className="action-btn primary" style={{ fontSize: 11 }} onClick={handleSaveFindings} disabled={saving}>
+                {saving ? "Saving..." : "Save"}
+              </button>
+              <button className="action-btn" style={{ fontSize: 11 }} onClick={() => setEditing(false)}>Cancel</button>
+            </>
+          )}
+        </div>
       </div>
 
-      {hasAudit ? (
+      {hasAudit && !editing ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {findings!.map((f: string, i: number) => (
             <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
@@ -560,13 +598,41 @@ function AuditFindingsSection({ clinic }: { clinic: Clinic }) {
             </div>
           ))}
         </div>
+      ) : hasAudit && editing ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {editValues.map((val, i) => (
+            <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+              <span style={{
+                flexShrink: 0, width: 22, height: 22, borderRadius: "50%",
+                background: "#FEF3C7", color: "#D97706", fontSize: 11, fontWeight: 700,
+                display: "flex", alignItems: "center", justifyContent: "center", marginTop: 6,
+              }}>
+                {i + 1}
+              </span>
+              <textarea
+                value={val}
+                onChange={(e) => {
+                  const next = [...editValues];
+                  next[i] = e.target.value;
+                  setEditValues(next);
+                }}
+                rows={2}
+                style={{
+                  flex: 1, padding: "6px 10px", border: "1px solid #E2E8F0", borderRadius: 6,
+                  fontSize: 13, fontFamily: "inherit", resize: "vertical", outline: "none",
+                  lineHeight: "1.4",
+                }}
+              />
+            </div>
+          ))}
+        </div>
       ) : (
         <div>
           <div style={{ fontSize: 12, color: "#94A3B8", marginBottom: 8 }}>Not audited yet</div>
           <button
             className="action-btn"
             onClick={handleAuditSingle}
-            disabled={auditing || !clinic.scraped_data || Object.keys(clinic.scraped_data).length === 0}
+            disabled={auditing}
             style={{ color: "#D97706", borderColor: "#FCD34D" }}
           >
             {auditing ? <><Loader2 size={12} className="spin" /> Auditing...</> : <><Zap size={12} /> Run Audit</>}
