@@ -101,7 +101,7 @@ async function fetchPageData(website: string): Promise<PageData> {
   }
 }
 
-function buildAuditMessages(clinic: {
+async function buildAuditMessages(clinic: {
   name: string;
   website: string;
   location: string | null;
@@ -228,7 +228,7 @@ async function auditClinic(
     };
   }
 
-  const messages = buildAuditMessages({
+  const messages = await buildAuditMessages({
     name: clinic.name,
     website: clinic.website,
     location: clinic.location,
