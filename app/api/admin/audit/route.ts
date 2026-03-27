@@ -39,32 +39,6 @@ async function fetchPageData(website: string): Promise<PageData> {
         },
         body: JSON.stringify({
           url,
-          formats: ["markdown", "screenshot@fullPage"],
-          waitFor: 3000,
-        }),
-        signal: AbortSignal.timeout(45000),
-      });
-      const data = await res.json();
-      if (data.success) {
-        return {
-          markdown: data.data?.markdown || null,
-          screenshotBase64: data.data?.screenshot || null,
-        };
-      }
-    } catch {
-      // Fall through
-    }
-
-    // Retry without screenshot if full-page screenshot failed
-    try {
-      const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${firecrawlKey}`,
-        },
-        body: JSON.stringify({
-          url,
           formats: ["markdown", "screenshot"],
           waitFor: 3000,
         }),
@@ -269,7 +243,8 @@ async function auditClinic(
         .eq("id", clinicId);
 
       return { clinicId, name: clinic.name, status: "audited", findings };
-    } catch {
+    } catch (err: any) {
+      console.error(`Audit attempt ${attempt + 1} failed for ${clinic.name}:`, err?.message || err?.status || err);
       if (attempt === 1) {
         const fallback = ["Audit could not be completed"];
         const existingScraped =
@@ -289,7 +264,7 @@ async function auditClinic(
           clinicId,
           name: clinic.name,
           status: "error",
-          reason: "Claude response could not be parsed after retry",
+          reason: err?.message?.slice(0, 200) || "Claude response could not be parsed after retry",
           findings: fallback,
         };
       }
