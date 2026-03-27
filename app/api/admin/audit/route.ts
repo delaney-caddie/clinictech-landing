@@ -108,7 +108,7 @@ async function buildAuditMessages(clinic: {
   services: string[] | null;
   pageContent: string;
   screenshotBase64: string | null;
-}): Anthropic.MessageCreateParams["messages"] {
+}): Promise<Anthropic.MessageCreateParams["messages"]> {
   const services =
     clinic.services && clinic.services.length > 0
       ? clinic.services.join(", ")
