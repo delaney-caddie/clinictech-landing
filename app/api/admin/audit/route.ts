@@ -263,7 +263,7 @@ async function auditClinic(
 
       await supabase
         .from("clinics")
-        .update({ scraped_data: updatedScrapedData })
+        .update({ scraped_data: updatedScrapedData, status: "audited" })
         .eq("id", clinicId);
 
       return { clinicId, name: clinic.name, status: "audited", findings };

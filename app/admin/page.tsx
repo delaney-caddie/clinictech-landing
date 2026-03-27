@@ -1866,7 +1866,7 @@ export default function AdminPanel() {
 
   // Counts for nav
   const auditedClinics = filtered.filter(
-    (c) => Array.isArray(c.scraped_data?.audit_findings) && c.scraped_data.audit_findings.length === 3
+    (c) => c.status === "audited" || c.status === "audit_sent" || (Array.isArray(c.scraped_data?.audit_findings) && c.scraped_data.audit_findings.length === 3)
   );
 
   const counts = {

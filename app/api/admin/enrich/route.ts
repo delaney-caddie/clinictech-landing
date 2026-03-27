@@ -243,13 +243,8 @@ export async function POST(req: NextRequest) {
             updated_at: new Date().toISOString(),
           };
 
-          // Pre-pipeline clinics: always override contact info
-          // In-pipeline clinics: only fill in if empty
-          const prePipeline = ["new", "scraped", "preview_generated", "preview_sent", "audited"].includes(clinic.status);
-
-          if (scraped.email && (prePipeline || !clinic.contact_email)) {
-            update.contact_email = scraped.email;
-          }
+          // Always override with scraped website contact info
+          if (scraped.email) update.contact_email = scraped.email;
           if (scraped.phone) update.contact_phone = scraped.phone;
 
           const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};
