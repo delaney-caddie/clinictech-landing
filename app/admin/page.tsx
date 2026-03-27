@@ -1988,15 +1988,18 @@ export default function AdminPanel() {
       // Show results
       const results = data.results || [];
       const enriched = results.filter((r: any) => r.status === "enriched");
-      const notFound = results.filter((r: any) => r.status === "no_owner_found");
+      const noContact = results.filter((r: any) => r.status === "no_contact_found" || r.status === "no_website");
+      const parts: string[] = [];
       if (enriched.length > 0) {
-        const names = enriched.map((r: any) => `${r.owner} (${r.name})`).join(", ");
-        alert(`Enriched: ${names}`);
-      } else if (notFound.length > 0) {
-        alert(`No owner found for: ${notFound.map((r: any) => r.name).join(", ")}. The clinic may not be in Fiber's database.`);
+        const emails = enriched.filter((r: any) => r.email).map((r: any) => `${r.email} (${r.name})`);
+        parts.push(`Enriched ${enriched.length}: ${emails.join(", ") || "phone only"}`);
       }
+      if (noContact.length > 0) {
+        parts.push(`${noContact.length} with no contact info found on site`);
+      }
+      alert(parts.join(". ") || "Enrichment complete.");
     } catch {
-      alert("Enrichment failed. Check that FIBER_API_KEY is set.");
+      alert("Enrichment failed.");
     }
     setActionLoading(null);
   }
