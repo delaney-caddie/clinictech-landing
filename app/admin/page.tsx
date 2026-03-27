@@ -1138,10 +1138,11 @@ function ClinicTable({
                   </div>
                 </td>
                 <td>
-                  {clinic.contact_name ? (
+                  {(clinic.contact_email || clinic.contact_name) ? (
                     <div>
-                      <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>
-                      <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_email}</div>
+                      {clinic.contact_name && <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>}
+                      {clinic.contact_email && <div style={{ fontSize: 12, color: clinic.contact_name ? "#94A3B8" : "#0F172A", fontWeight: clinic.contact_name ? 400 : 500 }}>{clinic.contact_email}</div>}
+                      {clinic.contact_phone && !clinic.contact_email && <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_phone}</div>}
                     </div>
                   ) : (
                     <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not found</span>
@@ -2614,10 +2615,11 @@ export default function AdminPanel() {
                               {clinic.location && <div className="clinic-location">{clinic.location}</div>}
                             </td>
                             <td>
-                              {clinic.contact_name ? (
+                              {(clinic.contact_email || clinic.contact_name) ? (
                                 <div>
-                                  <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>
-                                  <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_email || "No email"}</div>
+                                  {clinic.contact_name && <div style={{ fontWeight: 500 }}>{clinic.contact_name}</div>}
+                                  {clinic.contact_email && <div style={{ fontSize: 12, color: clinic.contact_name ? "#94A3B8" : "#0F172A", fontWeight: clinic.contact_name ? 400 : 500 }}>{clinic.contact_email}</div>}
+                                  {clinic.contact_phone && !clinic.contact_email && <div style={{ fontSize: 12, color: "#94A3B8" }}>{clinic.contact_phone}</div>}
                                 </div>
                               ) : (
                                 <span style={{ color: "#CBD5E1", fontSize: 12 }}>Not enriched</span>
