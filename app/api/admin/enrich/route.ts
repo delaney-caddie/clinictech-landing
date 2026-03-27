@@ -243,10 +243,9 @@ export async function POST(req: NextRequest) {
             updated_at: new Date().toISOString(),
           };
 
-          // Always override with what we find (re-enrich overwrites)
+          // Override with scraped website contact info (email + phone only)
           if (scraped.email) update.contact_email = scraped.email;
           if (scraped.phone) update.contact_phone = scraped.phone;
-          if (scraped.contactName) update.contact_name = scraped.contactName;
 
           const existing = typeof clinic.scraped_data === "object" && clinic.scraped_data ? clinic.scraped_data : {};
           update.scraped_data = {
