@@ -52,7 +52,7 @@ export async function DELETE(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, website, location, contact_name, contact_email, contact_phone } = body;
+    const { name, website, location, contact_name, contact_email, contact_phone, status } = body;
 
     if (!name) {
       return NextResponse.json({ error: "name is required" }, { status: 400 });
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
         contact_name: contact_name || null,
         contact_email: contact_email || null,
         contact_phone: contact_phone || null,
-        status: "new",
+        status: status || "new",
         source: "manual",
       })
       .select()

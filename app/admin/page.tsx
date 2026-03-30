@@ -943,6 +943,109 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLi
 
 /* ─── Tab Components ─── */
 
+function AddLeadForm({ onAdded }: { onAdded: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    website: "",
+    location: "",
+    contact_name: "",
+    contact_email: "",
+    contact_phone: "",
+    status: "new",
+  });
+
+  function handleChange(field: string, value: string) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handleSave() {
+    if (!form.name.trim()) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/clinics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        onAdded();
+        setForm({ name: "", website: "", location: "", contact_name: "", contact_email: "", contact_phone: "", status: "new" });
+        setOpen(false);
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to add");
+      }
+    } catch {
+      alert("Failed to add lead");
+    }
+    setSaving(false);
+  }
+
+  if (!open) {
+    return (
+      <div style={{ padding: "12px 28px 0" }}>
+        <button className="action-btn primary" style={{ fontSize: 13, padding: "8px 16px" }} onClick={() => setOpen(true)}>
+          <Plus size={14} /> Add Lead
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: "12px 28px", maxWidth: 600 }}>
+      <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <span style={{ fontSize: 15, fontWeight: 700 }}>Add Lead to Pipeline</span>
+          <button className="action-btn" onClick={() => setOpen(false)} style={{ fontSize: 11 }}>
+            <XCircle size={12} /> Cancel
+          </button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {[
+            { key: "name", label: "Clinic Name *", placeholder: "Acme Regenerative" },
+            { key: "website", label: "Website", placeholder: "acmeclinic.com" },
+            { key: "location", label: "Location", placeholder: "Austin, TX" },
+            { key: "contact_name", label: "Contact Name", placeholder: "Dr. Jane Smith" },
+            { key: "contact_email", label: "Contact Email", placeholder: "info@acmeclinic.com" },
+            { key: "contact_phone", label: "Phone", placeholder: "+1 (555) 123-4567" },
+          ].map(({ key, label, placeholder }) => (
+            <div key={key}>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 3 }}>{label}</label>
+              <input
+                value={(form as any)[key]}
+                onChange={(e) => handleChange(key, e.target.value)}
+                placeholder={placeholder}
+                style={{ width: "100%", padding: "8px 12px", border: "1px solid #E2E8F0", borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none" }}
+              />
+            </div>
+          ))}
+          <div>
+            <label style={{ fontSize: 11, fontWeight: 600, color: "#64748B", display: "block", marginBottom: 3 }}>Pipeline Stage</label>
+            <select
+              value={form.status}
+              onChange={(e) => handleChange("status", e.target.value)}
+              style={{ width: "100%", padding: "8px 12px", border: "1px solid #E2E8F0", borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none", background: "#fff" }}
+            >
+              {PIPELINE_STATUSES.map((s) => {
+                const cfg = STATUS_CONFIG[s];
+                return <option key={s} value={s}>{cfg?.label || s}</option>;
+              })}
+            </select>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+          <button className="action-btn primary" style={{ fontSize: 13, padding: "8px 20px" }} onClick={handleSave} disabled={saving || !form.name.trim()}>
+            {saving ? <><Loader2 size={12} className="spin" /> Saving...</> : <><Plus size={12} /> Add to Pipeline</>}
+          </button>
+          <button className="action-btn" style={{ fontSize: 13 }} onClick={() => setOpen(false)}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DiscoverTab({ onRefresh }: { onRefresh: () => void }) {
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
@@ -2743,6 +2846,8 @@ export default function AdminPanel() {
 
           {/* ─── PIPELINE TAB — Kanban ─── */}
           {activePage === "pipeline" && !loading && (
+            <>
+            <AddLeadForm onAdded={fetchClinics} />
             <div className="kanban">
               {PIPELINE_STATUSES.map((status) => {
                 const cfg = STATUS_CONFIG[status];
@@ -2819,6 +2924,7 @@ export default function AdminPanel() {
                 );
               })}
             </div>
+            </>
           )}
 
           {/* ─── ANALYTICS TAB ─── */}
