@@ -985,7 +985,7 @@ function AddLeadForm({ onAdded }: { onAdded: () => void }) {
 
   if (!open) {
     return (
-      <div style={{ padding: "12px 28px 0" }}>
+      <div style={{ padding: "12px 28px 0", display: "flex", justifyContent: "flex-end" }}>
         <button className="action-btn primary" style={{ fontSize: 13, padding: "8px 16px" }} onClick={() => setOpen(true)}>
           <Plus size={14} /> Add Lead
         </button>
