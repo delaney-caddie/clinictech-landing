@@ -114,7 +114,7 @@ function generateSlug(name: string): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { location, save } = body;
+    const { location, save, placeIds } = body;
 
     if (!location) {
       return NextResponse.json({ error: "location is required" }, { status: 400 });
@@ -134,7 +134,12 @@ export async function POST(req: NextRequest) {
       const supabase = getSupabase();
       let added = 0;
 
-      for (const clinic of unique) {
+      // Filter to selected placeIds if provided
+      const toSave = Array.isArray(placeIds) && placeIds.length > 0
+        ? unique.filter((c) => placeIds.includes(c.placeId))
+        : unique;
+
+      for (const clinic of toSave) {
         const slug = generateSlug(clinic.name);
         const website = clinic.website ? getDomain(clinic.website) : null;
 

@@ -991,10 +991,15 @@ function DiscoverTab({ onRefresh }: { onRefresh: () => void }) {
   async function handleAdd() {
     setAdding(true);
     try {
+      const payload: any = { location: location.trim(), save: true };
+      // If specific clinics selected, only add those
+      if (selected.size > 0) {
+        payload.placeIds = Array.from(selected);
+      }
       const res = await fetch("/api/admin/discover", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ location: location.trim(), save: true }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       setAddedCount(data.added || 0);
