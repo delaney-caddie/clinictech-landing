@@ -13,6 +13,8 @@ const VALID_STATUSES = [
   "scraped",
   "preview_generated",
   "preview_sent",
+  "audited",
+  "audit_sent",
   "cold_call_1",
   "follow_up_1",
   "cold_call_2",
