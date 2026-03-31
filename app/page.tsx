@@ -1519,6 +1519,47 @@ nav .nav-links a.btn-primary:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
+/* ===== ABOUT US ===== */
+.about-section {
+  padding: 100px 0;
+  background: #FAFBFD;
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+.about-inner {
+  display: flex; gap: 60px; align-items: center; max-width: 960px; margin: 0 auto;
+}
+.about-photo {
+  flex-shrink: 0; width: 340px; height: 340px; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(55, 48, 163, 0.1);
+}
+.about-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.about-text {
+  flex: 1;
+}
+.about-label {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--blue); margin-bottom: 12px;
+}
+.about-text h2 {
+  font-family: var(--font-dm-serif), 'DM Serif Display', serif;
+  font-size: 34px; font-weight: 400; color: var(--text-primary);
+  line-height: 1.2; margin-bottom: 20px;
+}
+.about-text p {
+  font-size: 15px; line-height: 1.7; color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.about-text p:last-child { margin-bottom: 0; }
+.about-text strong { color: var(--text-primary); }
+
+@media (max-width: 768px) {
+  .about-inner { flex-direction: column; gap: 32px; text-align: center; }
+  .about-photo { width: 260px; height: 260px; margin: 0 auto; }
+  .about-text h2 { font-size: 28px; }
+}
+
 /* ===== FOOTER ===== */
 footer {
   padding: 48px 0;
@@ -2831,6 +2872,24 @@ footer .container {
             <h2>See what your clinic&apos;s<br/>custom platform looks like.</h2>
             <p>15-minute walkthrough. We&apos;ll brand a live preview to your clinic.</p>
             <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book Your Walkthrough \u2192"}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* ABOUT US */}
+      <section className="about-section" id="about">
+        <div className="container">
+          <div className="about-inner">
+            <div className="about-photo">
+              <img src="/founders.png" alt="Delaney and Danika, co-founders of ClinicTech" />
+            </div>
+            <div className="about-text">
+              <div className="about-label">About Us</div>
+              <h2>Built by operators,<br/>for operators.</h2>
+              <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
+              <p><strong>Delaney</strong> leads product and engineering as a self-taught developer, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
+              <p>We&apos;re not a big team with layers of process. We move fast, talk to customers constantly, and ship things that work. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
+            </div>
           </div>
         </div>
       </section>
