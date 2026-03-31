@@ -1543,9 +1543,9 @@ nav .nav-links a.btn-primary:hover {
   color: var(--blue); margin-bottom: 12px;
 }
 .about-text h2 {
-  font-family: var(--font-dm-serif), 'DM Serif Display', serif;
-  font-size: 34px; font-weight: 400; color: var(--text-primary);
-  line-height: 1.2; margin-bottom: 20px;
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-size: 34px; font-weight: 800; font-style: italic; color: var(--text-primary);
+  line-height: 1.15; letter-spacing: 0.5px; margin-bottom: 20px;
 }
 .about-text p {
   font-size: 15px; line-height: 1.7; color: var(--text-secondary);
@@ -2141,6 +2141,7 @@ footer .container {
           <div className="nav-links">
             <a href="#product">Product</a>
             <a href="#roi">ROI</a>
+            <a href="/about">About</a>
             <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Demo</a>
           </div>
           <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary nav-mobile-cta" style={{padding: "10px 20px", fontSize: 13}}>Book a Demo</a>
