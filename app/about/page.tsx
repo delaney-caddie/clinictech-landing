@@ -76,8 +76,8 @@ export default function AboutPage() {
             </div>
             <div className="about-body">
               <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
-              <p><strong>Delaney</strong> leads product and engineering as a self-taught developer, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
-              <p>We&apos;re not a big team with layers of process. We move fast, talk to customers constantly, and ship things that work. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
+              <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
+              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
             </div>
           </div>
         </div>
