@@ -1,6 +1,7 @@
 import { getBlogPost, getAllBlogPosts } from "@/lib/blog-data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { SiteNav } from "@/components/site-nav";
 
 export async function generateStaticParams() {
   return getAllBlogPosts().map((post) => ({ slug: post.slug }));
@@ -25,11 +26,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       <style>{`
         .post-page { min-height: 100vh; background: #FAFBFD; }
-        .post-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.06); }
-        .post-nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .post-nav-brand img { height: 22px; width: auto; }
-        .post-nav-back { font-size: 13px; color: #64748B; text-decoration: none; font-weight: 500; }
-        .post-nav-back:hover { color: #3730A3; }
         .post-header { max-width: 720px; margin: 0 auto; padding: 64px 40px 32px; }
         .post-category { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #3730A3; margin-bottom: 12px; }
         .post-title { font-family: var(--font-dm-serif), 'DM Serif Display', serif; font-size: 40px; font-weight: 400; color: #0F172A; line-height: 1.2; margin-bottom: 16px; }
@@ -60,12 +56,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         }
       `}</style>
       <div className="post-page">
-        <nav className="post-nav">
-          <Link href="/" className="post-nav-brand">
-            <img src="/clinictech-logo.png" alt="ClinicTech" />
-          </Link>
-          <Link href="/blog" className="post-nav-back">&larr; All Posts</Link>
-        </nav>
+        <SiteNav />
 
         <div className="post-header">
           <div className="post-category">{post.category}</div>

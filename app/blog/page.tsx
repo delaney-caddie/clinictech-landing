@@ -1,5 +1,6 @@
 import { getAllBlogPosts } from "@/lib/blog-data";
 import Link from "next/link";
+import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
   title: "Blog — ClinicTech",
@@ -13,11 +14,6 @@ export default function BlogPage() {
     <>
       <style>{`
         .blog-page { min-height: 100vh; background: #FAFBFD; }
-        .blog-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.06); }
-        .blog-nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .blog-nav-brand img { height: 22px; width: auto; }
-        .blog-nav-back { font-size: 13px; color: #64748B; text-decoration: none; font-weight: 500; }
-        .blog-nav-back:hover { color: #3730A3; }
         .blog-hero { padding: 80px 40px 48px; text-align: center; }
         .blog-hero h1 { font-family: var(--font-dm-serif), 'DM Serif Display', serif; font-size: 42px; font-weight: 400; color: #0F172A; margin-bottom: 12px; }
         .blog-hero p { font-size: 17px; color: #64748B; max-width: 560px; margin: 0 auto; line-height: 1.6; }
@@ -41,12 +37,7 @@ export default function BlogPage() {
         }
       `}</style>
       <div className="blog-page">
-        <nav className="blog-nav">
-          <Link href="/" className="blog-nav-brand">
-            <img src="/clinictech-logo.png" alt="ClinicTech" />
-          </Link>
-          <Link href="/" className="blog-nav-back">&larr; Back to Home</Link>
-        </nav>
+        <SiteNav />
 
         <div className="blog-hero">
           <h1>The ClinicTech Blog</h1>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
   title: "About Us — ClinicTech",
@@ -10,12 +11,6 @@ export default function AboutPage() {
     <>
       <style>{`
         .about-page { min-height: 100vh; background: #FAFBFD; }
-        .about-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.06); }
-        .about-nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .about-nav-brand img { height: 22px; width: auto; }
-        .about-nav-links { display: flex; align-items: center; gap: 24px; }
-        .about-nav-links a { font-size: 13px; color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.2s; }
-        .about-nav-links a:hover { color: #3730A3; }
         .about-hero { max-width: 880px; margin: 0 auto; padding: 80px 40px 0; text-align: center; }
         .about-hero-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #5EC4E3; margin-bottom: 12px; }
         .about-hero h1 {
@@ -66,18 +61,7 @@ export default function AboutPage() {
         }
       `}</style>
       <div className="about-page">
-        <nav className="about-nav">
-          <Link href="/" className="about-nav-brand">
-            <img src="/clinictech-logo.png" alt="ClinicTech" />
-          </Link>
-          <div className="about-nav-links">
-            <Link href="/">Home</Link>
-            <Link href="/blog">Blog</Link>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" style={{ background: "#3730A3", color: "#fff", padding: "8px 18px", borderRadius: 8, fontWeight: 600 }}>
-              Book a Demo
-            </a>
-          </div>
-        </nav>
+        <SiteNav />
 
         <div className="about-hero">
           <div className="about-hero-label">About Us</div>
