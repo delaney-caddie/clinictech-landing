@@ -2842,6 +2842,7 @@ footer .container {
             <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 24, width: "auto", opacity: 0.6}} />
           </div>
           <div className="footer-links">
+            <a href="/blog">Blog</a>
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
             <a href="#">Contact</a>
