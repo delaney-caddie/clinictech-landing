@@ -77,6 +77,7 @@ export default function LandingPage() {
   const [heroEmailStatus, setHeroEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [leads, setLeads] = useState(40);
   const [procedureValue, setProcedureValue] = useState(12000);
+  const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
   const totalRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
 
@@ -112,7 +113,7 @@ export default function LandingPage() {
 
     document
       .querySelectorAll(
-        ".pain-card, .product-card, .roi-metric, .funnel-card, .step, .price-card, .int-logo"
+        ".pain-card, .product-card, .roi-metric, .funnel-card, .step, .price-card, .int-logo, .concierge-feature, .smartforms-feature"
       )
       .forEach((el) => {
         (el as HTMLElement).style.opacity = "0";
@@ -124,7 +125,7 @@ export default function LandingPage() {
     // Stagger animation for grid items
     document
       .querySelectorAll(
-        ".pain-grid, .product-grid, .funnel-grid, .steps, .pricing-grid, .int-logos"
+        ".pain-grid, .product-grid, .funnel-grid, .steps, .pricing-grid, .int-logos, .concierge-features, .smartforms-features"
       )
       .forEach((grid) => {
         Array.from(grid.children).forEach((child, i) => {
@@ -1934,6 +1935,335 @@ footer .container {
   to { opacity: 1; transform: translateX(0) scale(1); }
 }
 
+/* ===== TRAVEL CONCIERGE SECTION ===== */
+.concierge-section {
+  padding: 120px 0;
+}
+.concierge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.concierge-content {
+  position: relative; z-index: 2;
+}
+.concierge-features {
+  display: flex; flex-direction: column; gap: 20px;
+  margin-top: 32px;
+}
+.concierge-feature {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.concierge-feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(55, 48, 163, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.concierge-feature h4 {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.concierge-feature p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--text-secondary);
+}
+.concierge-visual {
+  position: relative;
+}
+.concierge-mockup {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.concierge-toggle {
+  display: flex; gap: 2px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 3px;
+  width: fit-content;
+}
+.concierge-toggle-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.concierge-toggle-btn.active {
+  background: var(--navy);
+  color: var(--white);
+}
+.tc-toolbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 12px; font-weight: 700;
+}
+.tc-toolbar-dots { display: flex; gap: 5px; }
+.tc-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
+.tc-toolbar-dots span:nth-child(1) { background: #FF5F57; }
+.tc-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
+.tc-toolbar-dots span:nth-child(3) { background: #28C840; }
+.tc-patient-body {
+  padding: 20px;
+}
+.tc-patient-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.tc-patient-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(55, 48, 163, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.tc-patient-greeting {
+  font-size: 14px; font-weight: 700;
+}
+.tc-info-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.tc-info-card {
+  background: var(--gray-100);
+  border-radius: 10px;
+  padding: 12px;
+}
+.tc-info-card-icon {
+  font-size: 16px; margin-bottom: 6px;
+}
+.tc-info-card-label {
+  font-size: 9px; text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600; letter-spacing: 0.5px;
+}
+.tc-info-card-value {
+  font-size: 12px; font-weight: 700;
+  color: var(--text-primary);
+}
+.tc-timeline {
+  margin-top: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.tc-timeline-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px;
+}
+.tc-timeline-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--navy);
+  flex-shrink: 0;
+}
+.tc-timeline-dot.completed { background: var(--green); }
+.tc-timeline-dot.upcoming { background: var(--gray-200); }
+.tc-admin-body {
+  padding: 16px;
+}
+.tc-admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tc-admin-stat {
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.tc-admin-stat-value {
+  font-size: 18px; font-weight: 800;
+  color: var(--navy);
+}
+.tc-admin-stat-label {
+  font-size: 9px; color: var(--text-muted);
+  text-transform: uppercase;
+}
+.tc-admin-table {
+  width: 100%;
+}
+.tc-admin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  font-size: 11px;
+}
+.tc-admin-row:last-child { border-bottom: none; }
+.tc-admin-name {
+  font-weight: 700; color: var(--text-primary);
+}
+.tc-admin-status {
+  font-size: 8px; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tc-admin-status.arriving { background: rgba(94, 196, 227, 0.15); color: #0E9AC0; }
+.tc-admin-status.in-treatment { background: rgba(34, 197, 94, 0.1); color: var(--green); }
+.tc-admin-status.departing { background: rgba(245, 158, 11, 0.1); color: var(--orange); }
+
+/* ===== SMART FORMS SECTION ===== */
+.smartforms-section {
+  padding: 120px 0;
+  background: var(--gray-100);
+  position: relative;
+  overflow: hidden;
+}
+.smartforms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.smartforms-content {
+  position: relative; z-index: 2;
+}
+.smartforms-features {
+  display: flex; flex-direction: column; gap: 20px;
+  margin-top: 32px;
+}
+.smartforms-feature {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.smartforms-feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(55, 48, 163, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.smartforms-feature h4 {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.smartforms-feature p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--text-secondary);
+}
+.smartforms-visual {
+  position: relative;
+}
+.smartforms-mockup {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.sf-toolbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 12px; font-weight: 700;
+}
+.sf-toolbar-dots { display: flex; gap: 5px; }
+.sf-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
+.sf-toolbar-dots span:nth-child(1) { background: #FF5F57; }
+.sf-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
+.sf-toolbar-dots span:nth-child(3) { background: #28C840; }
+.sf-body {
+  padding: 24px;
+}
+.sf-form-title {
+  font-size: 16px; font-weight: 800;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.sf-form-sub {
+  font-size: 11px; color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.sf-lead-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-weight: 700;
+  color: var(--green);
+  background: rgba(34, 197, 94, 0.1);
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+.sf-field {
+  margin-bottom: 10px;
+}
+.sf-field-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.sf-field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  background: var(--gray-100);
+  font-size: 12px;
+  color: var(--text-muted);
+  box-sizing: border-box;
+}
+.sf-field-highlight {
+  border-color: var(--navy);
+  background: rgba(55, 48, 163, 0.03);
+  color: var(--text-primary);
+}
+.sf-progress {
+  display: flex; align-items: center; gap: 6px;
+  margin: 16px 0 4px;
+}
+.sf-progress-step {
+  flex: 1; height: 4px;
+  border-radius: 2px;
+  background: var(--gray-200);
+}
+.sf-progress-step.active { background: var(--navy); }
+.sf-progress-step.completed { background: var(--green); }
+.sf-progress-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.sf-embed {
+  margin-top: 16px;
+  background: var(--gray-100);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px dashed rgba(0,0,0,0.1);
+}
+.sf-embed-label {
+  font-size: 9px; font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.sf-embed-code {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--navy);
+  background: var(--white);
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* ===== ROI INTERACTIVE ===== */
 .roi-input-wrap {
   display: flex; align-items: center; gap: 14px;
@@ -2020,7 +2350,7 @@ footer .container {
   .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
     grid-template-columns: 1fr;
   }
-  .backoffice-grid, .portal-grid, .success-stories-showcase {
+  .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid, .success-stories-showcase {
     grid-template-columns: 1fr;
     gap: 40px;
   }
@@ -2072,7 +2402,7 @@ footer .container {
 
   /* Sections */
   .problem, .product, .funnel { padding: 60px 0; }
-  .backoffice-section, .portal-section { padding: 60px 0; }
+  .backoffice-section, .portal-section, .concierge-section, .smartforms-section { padding: 60px 0; }
   .section-label { font-size: 11px; letter-spacing: 1.5px; }
   .section-title { font-size: 26px; letter-spacing: 0; line-height: 1.2; }
   .section-sub { font-size: 14px; margin-bottom: 32px; }
@@ -2083,7 +2413,7 @@ footer .container {
   .pain-card p { font-size: 13px; }
 
   /* Back office section */
-  .backoffice-grid, .portal-grid { gap: 28px; }
+  .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid { gap: 28px; }
   .backoffice-mockup { overflow-x: auto; }
   .bo-sidebar { min-width: 320px; }
   .backoffice-feature h4 { font-size: 13px; }
@@ -2093,6 +2423,16 @@ footer .container {
   .portal-mockup { overflow: hidden; }
   .portal-chat-msg { max-width: 95%; font-size: 11px; }
   .portal-kb-uploads { flex-wrap: wrap; }
+
+  /* Travel Concierge mockup */
+  .concierge-mockup { overflow-x: auto; }
+  .tc-info-cards { grid-template-columns: 1fr; }
+  .tc-admin-stats { grid-template-columns: 1fr 1fr; }
+  .tc-admin-row { flex-wrap: wrap; gap: 4px; }
+
+  /* Smart Forms mockup */
+  .smartforms-mockup { overflow: hidden; }
+  .sf-embed-code { font-size: 9px; }
 
   /* Success stories */
   .success-stories-showcase { gap: 28px; }
@@ -2631,6 +2971,246 @@ footer .container {
                   <div>
                     <h4>Convert Queries to Bookings</h4>
                     <p>AI chat seamlessly guides patients to book a consultation. Turn curiosity into appointments, automatically.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRAVEL CONCIERGE */}
+      <section className="concierge-section">
+        <div className="container">
+          <div className="concierge-grid">
+            <div className="concierge-content">
+              <div className="section-label">Travel Concierge</div>
+              <h2 className="section-title">Medical travel logistics. Handled for everyone.</h2>
+              <p className="section-sub">Patients see their full trip at a glance. Your team tracks every arrival, transport, and departure from one dashboard.</p>
+              <div className="concierge-features">
+                <div className="concierge-feature">
+                  <div className="concierge-feature-icon">{"✈️"}</div>
+                  <div>
+                    <h4>Flight &amp; Transport Tracking</h4>
+                    <p>Patients see flight details, airport pickup status, and hotel info. Admins see who is arriving when and coordinate transport in real time.</p>
+                  </div>
+                </div>
+                <div className="concierge-feature">
+                  <div className="concierge-feature-icon">{"🏨"}</div>
+                  <div>
+                    <h4>Hotel &amp; Accommodation Recs</h4>
+                    <p>Curated hotel recommendations near your clinic. Patients book with confidence knowing you{"'"}ve vetted every option.</p>
+                  </div>
+                </div>
+                <div className="concierge-feature">
+                  <div className="concierge-feature-icon">{"📋"}</div>
+                  <div>
+                    <h4>Pre &amp; Post Visit Timeline</h4>
+                    <p>Automated timeline from arrival prep through recovery milestones. Patients always know what comes next.</p>
+                  </div>
+                </div>
+                <div className="concierge-feature">
+                  <div className="concierge-feature-icon">{"📊"}</div>
+                  <div>
+                    <h4>Admin Travel Dashboard</h4>
+                    <p>One view of all traveling patients: arrival dates, transport status, treatment schedules. No more spreadsheets or missed pickups.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="concierge-visual">
+              <div className="concierge-mockup">
+                <div className="tc-toolbar">
+                  <div className="tc-toolbar-dots"><span></span><span></span><span></span></div>
+                  Travel Concierge
+                </div>
+                <div style={{padding: "12px 16px 0"}}>
+                  <div className="concierge-toggle">
+                    <button className={`concierge-toggle-btn ${travelView === 'patient' ? 'active' : ''}`} onClick={() => setTravelView('patient')}>Patient View</button>
+                    <button className={`concierge-toggle-btn ${travelView === 'admin' ? 'active' : ''}`} onClick={() => setTravelView('admin')}>Admin View</button>
+                  </div>
+                </div>
+                {travelView === 'patient' ? (
+                  <div className="tc-patient-body">
+                    <div className="tc-patient-header">
+                      <div className="tc-patient-avatar">{"👤"}</div>
+                      <div>
+                        <div className="tc-patient-greeting">Welcome, Sarah</div>
+                        <div style={{fontSize: "10px", color: "var(--text-muted)"}}>Your trip to Stem Cell Clinic MX</div>
+                      </div>
+                    </div>
+                    <div className="tc-info-cards">
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"✈️"}</div>
+                        <div className="tc-info-card-label">Flight</div>
+                        <div className="tc-info-card-value">AA 1247 &middot; Apr 15, 9:30am</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🚗"}</div>
+                        <div className="tc-info-card-label">Airport Pickup</div>
+                        <div className="tc-info-card-value">Confirmed &middot; Driver: Carlos M.</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🏨"}</div>
+                        <div className="tc-info-card-label">Hotel</div>
+                        <div className="tc-info-card-value">Grand Resort &middot; 2 nights</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🏥"}</div>
+                        <div className="tc-info-card-label">Appointment</div>
+                        <div className="tc-info-card-value">Apr 16, 10:00am &middot; Dr. Rivera</div>
+                      </div>
+                    </div>
+                    <div className="tc-timeline">
+                      <div style={{fontSize: "11px", fontWeight: 700, marginBottom: "4px"}}>Your Timeline</div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot completed"></div>
+                        <span style={{color: "var(--green)", fontWeight: 600}}>Pre-arrival forms completed</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot completed"></div>
+                        <span style={{color: "var(--green)", fontWeight: 600}}>Flight booked</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot"></div>
+                        <span>Airport pickup &middot; Apr 15</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot upcoming"></div>
+                        <span>Treatment day &middot; Apr 16</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot upcoming"></div>
+                        <span>Post-treatment check &middot; Apr 17</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="tc-admin-body">
+                    <div className="tc-admin-stats">
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">12</div>
+                        <div className="tc-admin-stat-label">Arriving this week</div>
+                      </div>
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">5</div>
+                        <div className="tc-admin-stat-label">In treatment</div>
+                      </div>
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">3</div>
+                        <div className="tc-admin-stat-label">Departing</div>
+                      </div>
+                    </div>
+                    <div style={{fontSize: "12px", fontWeight: 700, marginBottom: "8px"}}>Patient Travel Status</div>
+                    <div className="tc-admin-table">
+                      <div className="tc-admin-row" style={{fontSize: "9px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.5px"}}>
+                        <span>Patient</span><span>Flight</span><span>Transport</span><span>Status</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">Sarah M.</span>
+                        <span>AA 1247</span>
+                        <span>{"🚗"} Confirmed</span>
+                        <span className="tc-admin-status arriving">Arriving</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">James K.</span>
+                        <span>UA 892</span>
+                        <span>{"🚗"} Confirmed</span>
+                        <span className="tc-admin-status in-treatment">In Treatment</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">Maria L.</span>
+                        <span>DL 445</span>
+                        <span>{"🚗"} Scheduled</span>
+                        <span className="tc-admin-status departing">Departing</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">Robert P.</span>
+                        <span>SW 1103</span>
+                        <span>{"🚗"} Pending</span>
+                        <span className="tc-admin-status arriving">Arriving</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SMART FORMS */}
+      <section className="smartforms-section">
+        <div className="container">
+          <div className="smartforms-grid">
+            <div className="smartforms-visual">
+              <div className="smartforms-mockup">
+                <div className="sf-toolbar">
+                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
+                  Smart Intake Form
+                </div>
+                <div className="sf-body">
+                  <div className="sf-form-title">Start Your Journey</div>
+                  <div className="sf-form-sub">Tell us about yourself to get started</div>
+                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Full Name</div>
+                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
+                  </div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Email</div>
+                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
+                  </div>
+                  <div className="sf-progress">
+                    <div className="sf-progress-step completed"></div>
+                    <div className="sf-progress-step active"></div>
+                    <div className="sf-progress-step"></div>
+                    <div className="sf-progress-step"></div>
+                  </div>
+                  <div className="sf-progress-labels">
+                    <span>Contact Info</span>
+                    <span>Condition</span>
+                    <span>History</span>
+                    <span>Schedule</span>
+                  </div>
+                  <div className="sf-embed">
+                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
+                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="smartforms-content">
+              <div className="section-label">Smart Forms</div>
+              <h2 className="section-title">Capture the lead first. Ask questions second.</h2>
+              <p className="section-sub">Most intake forms lose leads before collecting contact info. Smart Forms capture name and email upfront, then guide patients through the rest. 3x more leads captured.</p>
+              <div className="smartforms-features">
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"📧"}</div>
+                  <div>
+                    <h4>Lead-First Design</h4>
+                    <p>Name and email are captured on step one. Even if a patient drops off, you have their contact info to follow up.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"📊"}</div>
+                  <div>
+                    <h4>3x Lead Conversion</h4>
+                    <p>Clinics using Smart Forms see 3x more captured leads compared to traditional long-form intake. Every visitor counts.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"🌐"}</div>
+                  <div>
+                    <h4>Embed Anywhere</h4>
+                    <p>One script tag on your existing website. No redesign needed. Smart Forms works alongside your current site seamlessly.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"⚡"}</div>
+                  <div>
+                    <h4>Auto-Sync to Your CRM</h4>
+                    <p>Every submission flows directly into your back office. Automations trigger instantly — follow-up emails, task assignments, pipeline updates.</p>
                   </div>
                 </div>
               </div>
