@@ -14,8 +14,8 @@ export default function BlogPage() {
     <>
       <style>{`
         .blog-page { min-height: 100vh; background: #FAFBFD; }
-        .blog-hero { padding: 80px 40px 48px; text-align: center; }
-        .blog-hero h1 { font-family: var(--font-dm-serif), 'DM Serif Display', serif; font-size: 42px; font-weight: 400; color: #0F172A; margin-bottom: 12px; }
+        .blog-hero { padding: 160px 40px 48px; text-align: center; }
+        .blog-hero h1 { font-family: var(--font-nunito), 'Nunito', sans-serif; font-size: 44px; font-weight: 800; font-style: italic; color: #1A1A2E; margin-bottom: 16px; }
         .blog-hero p { font-size: 17px; color: #64748B; max-width: 560px; margin: 0 auto; line-height: 1.6; }
         .blog-grid { max-width: 1000px; margin: 0 auto; padding: 0 40px 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
         .blog-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
@@ -33,7 +33,7 @@ export default function BlogPage() {
           .blog-hero h1 { font-size: 30px; }
           .blog-grid { grid-template-columns: 1fr; padding: 0 20px 60px; }
           .blog-nav { padding: 16px 20px; }
-          .blog-hero { padding: 48px 20px 32px; }
+          .blog-hero { padding: 140px 20px 32px; }
         }
       `}</style>
       <div className="blog-page">

@@ -11,7 +11,7 @@ export default function ProjectsPage() {
     <>
       <style>{`
         .projects-hero {
-          padding: 120px 0 60px;
+          padding: 180px 0 60px;
           text-align: center;
         }
         .projects-hero h1 {
@@ -152,7 +152,7 @@ export default function ProjectsPage() {
         </div>
         <div className="project-card">
           <div className="project-type">Centralized CRM + Routing</div>
-          <h2>200+ Location Intake System</h2>
+          <h2>50+ Location Intake System</h2>
           <p>Centralized intake with multi-location routing, patient CRM, and automated reengagement campaigns for a large clinic network across North America.</p>
           <div className="project-metrics">
             <div>

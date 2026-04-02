@@ -11,7 +11,7 @@ export default function AboutPage() {
     <>
       <style>{`
         .about-page { min-height: 100vh; background: #FAFBFD; }
-        .about-hero { max-width: 880px; margin: 0 auto; padding: 80px 40px 0; text-align: center; }
+        .about-hero { max-width: 880px; margin: 0 auto; padding: 160px 40px 0; text-align: center; }
         .about-hero-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #5EC4E3; margin-bottom: 12px; }
         .about-hero h1 {
           font-family: var(--font-nunito), 'Nunito', sans-serif;
@@ -49,7 +49,7 @@ export default function AboutPage() {
         .about-footer-links a { font-size: 13px; color: #94A3B8; text-decoration: none; }
         .about-footer-links a:hover { color: #3730A3; }
         @media (max-width: 768px) {
-          .about-hero { padding: 48px 20px 0; }
+          .about-hero { padding: 140px 20px 0; }
           .about-hero h1 { font-size: 30px; }
           .about-content { padding: 40px 20px; }
           .about-grid { flex-direction: column; gap: 32px; }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { SiteNav } from "@/components/site-nav";
 
 function HeroDnaAnimation({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<'active' | 'fading' | 'done'>('active');
@@ -105,7 +106,6 @@ export default function LandingPage() {
   }, []);
 
   const totalRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLElement>(null);
 
   const lostRate = 0.6;
   const recoveryRate = 0.58;
@@ -162,22 +162,6 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  // Nav scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      const nav = navRef.current;
-      if (!nav) return;
-      if (window.scrollY > 50) {
-        nav.style.padding = "12px 0";
-        nav.style.borderBottomColor = "rgba(94, 196, 227, 0.15)";
-      } else {
-        nav.style.padding = "20px 0";
-        nav.style.borderBottomColor = "rgba(94, 196, 227, 0.1)";
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
@@ -304,7 +288,7 @@ nav .nav-links a.btn-primary:hover {
 /* ===== HERO ===== */
 .hero-fullwidth {
   position: relative;
-  padding: 160px 0 80px;
+  padding: 200px 0 80px;
   overflow: hidden;
   background: var(--white);
 }
@@ -742,13 +726,13 @@ nav .nav-links a.btn-primary:hover {
   line-height: 1.15;
   letter-spacing: 0.5px;
   margin-bottom: 20px;
-  max-width: 700px;
+  max-width: 100%;
 }
 .section-sub {
   font-size: 17px;
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 100%;
   margin-bottom: 48px;
 }
 .pain-grid {
@@ -1613,60 +1597,66 @@ footer .container {
 .footer-links a:hover { color: var(--navy); }
 
 /* ===== SERVICE TABS (What We Do) ===== */
+.service-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
 .service-tabs {
   display: flex;
-  gap: 12px;
-  margin-bottom: 0;
+  flex-direction: column;
+  gap: 8px;
 }
 .service-tab {
-  flex: 1;
   background: var(--gray-100);
   border: 2px solid transparent;
-  border-radius: 16px;
-  padding: 28px 24px;
+  border-radius: 12px;
+  padding: 16px 20px;
   cursor: pointer;
   transition: all 0.3s;
-  text-align: center;
+  text-align: left;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 .service-tab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  background: var(--white);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 .service-tab.active {
   border-color: var(--navy);
   background: var(--white);
-  box-shadow: 0 8px 24px rgba(55, 48, 163, 0.1);
+  box-shadow: 0 4px 16px rgba(55, 48, 163, 0.1);
 }
 .service-tab-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
+  font-size: 22px;
+  flex-shrink: 0;
 }
 .service-tab h3 {
   font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.2px;
 }
+.service-right {
+  display: flex;
+  flex-direction: column;
+}
 .service-detail {
-  margin-top: 24px;
-  padding: 32px;
-  background: var(--gray-100);
-  border-radius: 16px;
+  padding: 16px 0 0;
   transition: all 0.3s;
 }
 .service-detail p {
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 700px;
 }
 .service-mockup-wrap {
-  margin-top: 32px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+  margin-bottom: 0;
 }
 .service-mockup-wrap .smartforms-mockup,
 .service-mockup-wrap .backoffice-mockup,
@@ -2543,8 +2533,9 @@ footer .container {
   .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
     grid-template-columns: 1fr;
   }
-  .service-tabs { flex-wrap: wrap; }
-  .service-tabs .service-tab { flex: 1 1 45%; }
+  .service-layout { grid-template-columns: 1fr; }
+  .service-tabs { flex-direction: row; flex-wrap: wrap; }
+  .service-tabs .service-tab { flex: 1 1 45%; text-align: center; flex-direction: column; gap: 8px; }
   .cases-grid { grid-template-columns: 1fr; }
   .why-stats { gap: 16px; }
   .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid, .success-stories-showcase {
@@ -2600,9 +2591,10 @@ footer .container {
   /* Sections */
   .problem, .product, .funnel { padding: 60px 0; }
   .cases-section { padding: 60px 0; }
-  .service-tabs .service-tab { flex: 1 1 100%; padding: 20px 16px; }
+  .service-layout { grid-template-columns: 1fr; }
+  .service-tabs { flex-direction: column; }
+  .service-tabs .service-tab { flex: none; padding: 14px 16px; }
   .service-tab h3 { font-size: 13px; }
-  .service-detail { padding: 20px; }
   .service-detail p { font-size: 14px; }
   .why-stat { min-width: 120px; padding: 16px 20px; }
   .why-stat-value { font-size: 20px; }
@@ -2679,21 +2671,7 @@ footer .container {
 }
       `}</style>
 
-      {/* NAV */}
-      <nav ref={navRef}>
-        <div className="container">
-          <a href="#" className="nav-logo">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 70, width: "auto"}} />
-          </a>
-          <div className="nav-links">
-            <a href="/">Home</a>
-            <a href="/projects">Projects</a>
-            <a href="/about">About</a>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Call</a>
-          </div>
-          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary nav-mobile-cta" style={{padding: "10px 20px", fontSize: 13}}>Book a Call</a>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* HERO — Full-width DNA background with centered text */}
       <section className="hero-fullwidth">
@@ -2739,7 +2717,7 @@ footer .container {
         <div className="hero-centered">
           <div className="hero-badge">
             <span className="dot"></span>
-            Based in Mexico. Focused on Regenerative Medicine.
+            Built for Regenerative Medicine
           </div>
           <h1 className="hero-main-title">The technology partner<br/>for stem cell clinics.</h1>
           <p className="hero-centered-sub">We build custom digital infrastructure for regenerative medicine clinics across North America. Websites, patient intake, CRM, automation, travel logistics. Whatever your clinic needs to capture more patients and run smoother, we build it.</p>
@@ -2927,6 +2905,7 @@ footer .container {
           <div className="section-label">What We Do</div>
           <h2 className="section-title">Custom builds for every part of your patient journey.</h2>
           <p className="section-sub">Every clinic is different. We start by understanding your patient flow, your team, and where the biggest gaps are. Then we build exactly what you need.</p>
+          <div className="service-layout">
           <div className="service-tabs">
             {features.map((f, i) => (
               <button key={i} className={`service-tab ${activeFeature === i ? 'active' : ''}`} onClick={() => handleFeatureClick(i)}>
@@ -2935,9 +2914,7 @@ footer .container {
               </button>
             ))}
           </div>
-          <div className="service-detail">
-            <p>{features[activeFeature].desc}</p>
-          </div>
+          <div className="service-right">
           <div className="service-mockup-wrap">
             {activeFeature === 0 && (
               <div className="smartforms-mockup">
@@ -3185,6 +3162,11 @@ footer .container {
               </div>
             )}
           </div>
+          <div className="service-detail">
+            <p>{features[activeFeature].desc}</p>
+          </div>
+          </div>
+          </div>
         </div>
       </section>
 
@@ -3333,7 +3315,7 @@ footer .container {
         <div className="container">
           <div className="section-label" style={{textAlign: "center"}}>Results</div>
           <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>What happens when clinics work with us.</h2>
-          <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>From single-location practices to networks with 200+ clinics.</p>
+          <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>From single-location practices to networks with 50+ clinics.</p>
           <div className="cases-grid">
             <div className="case-card">
               <div className="case-type">Single Location &middot; Mexico</div>
@@ -3368,7 +3350,7 @@ footer .container {
               </div>
             </div>
             <div className="case-card">
-              <div className="case-type">200+ Locations &middot; North America</div>
+              <div className="case-type">50+ Locations &middot; North America</div>
               <div className="case-quote">&ldquo;We needed a system that could route patients to the right clinic based on location, condition, and availability. ClinicTech built a centralized intake that serves all our locations from one flow.&rdquo;</div>
               <div className="case-problem"><strong>Problem:</strong> Each location ran its own website and forms. No centralized view of the patient pipeline. Thousands of warm leads sitting dormant.</div>
               <div className="case-built"><strong>What we built:</strong> Centralized intake with multi-location routing, patient CRM, automated reengagement campaigns.</div>
