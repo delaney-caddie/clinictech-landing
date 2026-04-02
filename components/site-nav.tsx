@@ -39,11 +39,11 @@ export function SiteNav() {
           <img src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
         <div className="site-nav-links">
-          <Link href="/#product" className={pathname === "/" ? "active" : ""}>Product</Link>
-          <Link href="/#roi">ROI</Link>
-          <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""}>Blog</Link>
+          <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
+          <Link href="/projects" className={pathname.startsWith("/projects") ? "active" : ""}>Projects</Link>
           <Link href="/about" className={pathname === "/about" ? "active" : ""}>About</Link>
-          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a Demo</a>
+          <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""}>Blog</Link>
+          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a Call</a>
         </div>
       </nav>
     </>

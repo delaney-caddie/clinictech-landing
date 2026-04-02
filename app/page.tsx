@@ -77,7 +77,32 @@ export default function LandingPage() {
   const [heroEmailStatus, setHeroEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [leads, setLeads] = useState(40);
   const [procedureValue, setProcedureValue] = useState(12000);
-  const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
+  const [activeFeature, setActiveFeature] = useState(0);
+  const featureAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const features = useMemo(() => [
+    { icon: "🌐", title: "Websites & Conversion", desc: "Modern sites built to convert international patients. Smart intake flows, self-booking, lead capture that actually works." },
+    { icon: "📧", title: "Lead Capture & Automation", desc: "Forms that qualify, route by location and condition, and auto-nurture. No more leads going cold in an inbox while patients book elsewhere." },
+    { icon: "📊", title: "Patient CRM & Back Office", desc: "One system for your team to manage patients, communications, scheduling, and follow-ups. Built around your workflow, not a generic template." },
+    { icon: "✈️", title: "Travel Concierge Platform", desc: "A portal for international patients to manage flights, hotels, and logistics. Your team tracks every arrival from one dashboard instead of doing it manually." },
+  ], []);
+
+  // Auto-rotate features, reset on manual click
+  useEffect(() => {
+    featureAutoRef.current = setInterval(() => {
+      setActiveFeature(v => (v + 1) % 4);
+    }, 5000);
+    return () => { if (featureAutoRef.current) clearInterval(featureAutoRef.current); };
+  }, []);
+
+  const handleFeatureClick = useCallback((idx: number) => {
+    setActiveFeature(idx);
+    if (featureAutoRef.current) clearInterval(featureAutoRef.current);
+    featureAutoRef.current = setInterval(() => {
+      setActiveFeature(v => (v + 1) % 4);
+    }, 5000);
+  }, []);
+
   const totalRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
 
@@ -113,7 +138,7 @@ export default function LandingPage() {
 
     document
       .querySelectorAll(
-        ".pain-card, .product-card, .roi-metric, .funnel-card, .step, .price-card, .int-logo, .concierge-feature, .smartforms-feature"
+        ".service-tab, .roi-metric, .step, .case-card, .why-stat"
       )
       .forEach((el) => {
         (el as HTMLElement).style.opacity = "0";
@@ -125,7 +150,7 @@ export default function LandingPage() {
     // Stagger animation for grid items
     document
       .querySelectorAll(
-        ".pain-grid, .product-grid, .funnel-grid, .steps, .pricing-grid, .int-logos, .concierge-features, .smartforms-features"
+        ".service-tabs, .steps, .cases-grid, .why-stats"
       )
       .forEach((grid) => {
         Array.from(grid.children).forEach((child, i) => {
@@ -1586,7 +1611,158 @@ footer .container {
 }
 .footer-links a:hover { color: var(--navy); }
 
-/* ===== BACK OFFICE SECTION ===== */
+/* ===== SERVICE TABS (What We Do) ===== */
+.service-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.service-tab {
+  flex: 1;
+  background: var(--gray-100);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  font-family: inherit;
+}
+.service-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.service-tab.active {
+  border-color: var(--navy);
+  background: var(--white);
+  box-shadow: 0 8px 24px rgba(55, 48, 163, 0.1);
+}
+.service-tab-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.service-tab h3 {
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+.service-detail {
+  margin-top: 24px;
+  padding: 32px;
+  background: var(--gray-100);
+  border-radius: 16px;
+  transition: all 0.3s;
+}
+.service-detail p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 700px;
+}
+
+/* ===== WHY US STATS ===== */
+.why-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.why-stat {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 24px 32px;
+  text-align: center;
+  min-width: 160px;
+  transition: all 0.3s;
+}
+.why-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.why-stat-value {
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.why-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ===== CASE STUDIES ===== */
+.cases-section {
+  padding: 120px 0;
+}
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.case-card {
+  background: var(--gray-100);
+  border-radius: 20px;
+  padding: 36px;
+  transition: all 0.3s;
+}
+.case-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.case-type {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #0E9AC0;
+  margin-bottom: 16px;
+}
+.case-quote {
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-left: 16px;
+  border-left: 3px solid var(--blue);
+}
+.case-problem, .case-built {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.case-problem strong, .case-built strong {
+  color: var(--text-primary);
+}
+.case-metrics-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-200);
+}
+.case-metric {
+  flex: 1;
+}
+.case-metric-value {
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--green);
+}
+.case-metric-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ===== OLD SECTIONS (kept for backwards compat) ===== */
 .backoffice-section {
   padding: 60px 0 120px;
 }
@@ -2350,6 +2526,10 @@ footer .container {
   .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
     grid-template-columns: 1fr;
   }
+  .service-tabs { flex-wrap: wrap; }
+  .service-tabs .service-tab { flex: 1 1 45%; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .why-stats { gap: 16px; }
   .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid, .success-stories-showcase {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -2402,6 +2582,16 @@ footer .container {
 
   /* Sections */
   .problem, .product, .funnel { padding: 60px 0; }
+  .cases-section { padding: 60px 0; }
+  .service-tabs .service-tab { flex: 1 1 100%; padding: 20px 16px; }
+  .service-tab h3 { font-size: 13px; }
+  .service-detail { padding: 20px; }
+  .service-detail p { font-size: 14px; }
+  .why-stat { min-width: 120px; padding: 16px 20px; }
+  .why-stat-value { font-size: 20px; }
+  .case-card { padding: 24px; }
+  .case-quote { font-size: 14px; }
+  .case-metric-value { font-size: 16px; }
   .backoffice-section, .portal-section, .concierge-section, .smartforms-section { padding: 60px 0; }
   .section-label { font-size: 11px; letter-spacing: 1.5px; }
   .section-title { font-size: 26px; letter-spacing: 0; line-height: 1.2; }
@@ -2479,12 +2669,12 @@ footer .container {
             <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 70, width: "auto"}} />
           </a>
           <div className="nav-links">
-            <a href="#product">Product</a>
-            <a href="#roi">ROI</a>
+            <a href="/">Home</a>
+            <a href="/projects">Projects</a>
             <a href="/about">About</a>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Demo</a>
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Call</a>
           </div>
-          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary nav-mobile-cta" style={{padding: "10px 20px", fontSize: 13}}>Book a Demo</a>
+          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary nav-mobile-cta" style={{padding: "10px 20px", fontSize: 13}}>Book a Call</a>
         </div>
       </nav>
 
@@ -2532,12 +2722,12 @@ footer .container {
         <div className="hero-centered">
           <div className="hero-badge">
             <span className="dot"></span>
-            Built for Regenerative Medicine Clinics
+            Based in Mexico. Focused on Regenerative Medicine.
           </div>
-          <h1 className="hero-main-title">Your Clinic. Your Brand.<br/><span style={{color: "var(--primary)"}}>Your Growth Engine.</span></h1>
-          <p className="hero-centered-sub">A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in weeks.</p>
+          <h1 className="hero-main-title">The technology partner<br/>for stem cell clinics.</h1>
+          <p className="hero-centered-sub">We build custom digital infrastructure for regenerative medicine clinics across North America. Websites, patient intake, CRM, automation, travel logistics. Whatever your clinic needs to capture more patients and run smoother, we build it.</p>
           <div className="hero-centered-ctas">
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Demo</a>
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Discovery Call</a>
             {heroEmailStatus === "sent" ? (
               <span className="btn-secondary" style={{opacity: 0.85, cursor: "default"}}>{"Check your inbox soon! ✓"}</span>
             ) : (
@@ -2714,38 +2904,50 @@ footer .container {
         </div>
       </section>
 
-      {/* STAT BANNER */}
-      <section className="stat-banner">
+      {/* WHAT WE DO */}
+      <section className="problem" id="services" style={{paddingBottom: "120px"}}>
         <div className="container">
-          <div className="stat-banner-number">78%</div>
-          <div className="stat-banner-text">of patients book with <strong>the first clinic that responds.</strong> If your follow-up takes hours, you&apos;re funding your competitor&apos;s growth.</div>
+          <div className="section-label">What We Do</div>
+          <h2 className="section-title">Custom builds for every part of your patient journey.</h2>
+          <p className="section-sub">Every clinic is different. We start by understanding your patient flow, your team, and where the biggest gaps are. Then we build exactly what you need.</p>
+          <div className="service-tabs">
+            {features.map((f, i) => (
+              <button key={i} className={`service-tab ${activeFeature === i ? 'active' : ''}`} onClick={() => handleFeatureClick(i)}>
+                <div className="service-tab-icon">{f.icon}</div>
+                <h3>{f.title}</h3>
+              </button>
+            ))}
+          </div>
+          <div className="service-detail">
+            <p>{features[activeFeature].desc}</p>
+          </div>
         </div>
       </section>
 
-      {/* PROBLEM */}
-      <section className="problem" id="problem">
-        <div className="container">
-          <div className="section-label"></div>
-          <h2 className="section-title">You didn&apos;t go into regenerative medicine to manage a tech stack.</h2>
-          <p className="section-sub">You&apos;re duct-taping together scheduling software, a CRM you barely use, and a website that doesn&apos;t convert.</p>
-          <div className="pain-grid">
-            <div className="pain-card">
-              <div className="pain-icon">{"⏱️"}</div>
-              <h3>Leads Fall Through the Cracks</h3>
-              <p>Someone fills out your contact form at 9pm. By the time you see it the next morning, they&apos;ve already booked with the clinic that replied in 10 minutes.</p>
-              <div className="pain-stat">Avg response time without automation: 47 hours</div>
+      {/* WHY US */}
+      <section className="stat-banner">
+        <div className="container" style={{flexDirection: "column", gap: "32px"}}>
+          <div style={{textAlign: "center"}}>
+            <div className="section-label" style={{textAlign: "center"}}>Why Us</div>
+            <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>We only work with stem cell and regenerative medicine clinics.</h2>
+            <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto", marginBottom: "0"}}>We&apos;re not a generic agency. We&apos;ve audited dozens of clinic websites in this space. We understand the patient journey from &ldquo;I just discovered stem cell therapy&rdquo; to &ldquo;I&apos;m booking my flight.&rdquo;</p>
+          </div>
+          <div className="why-stats">
+            <div className="why-stat">
+              <div className="why-stat-value">100%</div>
+              <div className="why-stat-label">Regen Med Focus</div>
             </div>
-            <div className="pain-card">
-              <div className="pain-icon">{"🔄"}</div>
-              <h3>No Patient Reengagement</h3>
-              <p>Past patients who loved their results never hear from you again. No follow-up, no referral prompts, no content to share. Your best marketing channel sits untapped.</p>
-              <div className="pain-stat">80% of revenue comes from 20% of patients</div>
+            <div className="why-stat">
+              <div className="why-stat-value">US/CA/MX</div>
+              <div className="why-stat-label">Clinics Served</div>
             </div>
-            <div className="pain-card">
-              <div className="pain-icon">{"🛠️"}</div>
-              <h3>Manual Everything</h3>
-              <p>Copy-pasting between tools, manually tracking who needs a callback, updating spreadsheets. You&apos;re spending admin hours on work that should run itself.</p>
-              <div className="pain-stat">15+ hrs/week spent on manual follow-up</div>
+            <div className="why-stat">
+              <div className="why-stat-value">EN/ES</div>
+              <div className="why-stat-label">Bilingual Team</div>
+            </div>
+            <div className="why-stat">
+              <div className="why-stat-value">Weeks</div>
+              <div className="why-stat-label">Not Months to Launch</div>
             </div>
           </div>
         </div>
@@ -2841,100 +3043,95 @@ footer .container {
         <div className="container">
           <div className="section-label" style={{textAlign:"center"}}>How It Works</div>
           <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in weeks. Not months.</h2>
-          <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No consultants. No developers. No six-month implementation. Three steps and your custom platform is running.</p>
+          <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No six-month implementation. No bloated SOWs. Three steps and your custom systems are running.</p>
           <div className="steps">
             <div className="step">
               <div className="step-number">1</div>
-              <h3>We brand it to you</h3>
-              <p>Your logo, your colors, your domain. The back office and patient portal look and feel like your own custom-built platform from day one.</p>
+              <h3>Discovery call</h3>
+              <p>We learn your patient flow, your team, and where leads are falling off. 15 minutes, no pitch. If there&apos;s a fit, we scope a proposal within days.</p>
             </div>
             <div className="step">
               <div className="step-number">2</div>
-              <h3>You build your workflow</h3>
-              <p>Drag and drop your lead stages, follow-up sequences, and portal content. Connect your calendar, email, and CRM. Completely tailored to your process.</p>
+              <h3>We build it</h3>
+              <p>Custom to your clinic. Your brand, your workflow, your integrations. We handle everything from design to deployment. Most projects go live in 2-4 weeks.</p>
             </div>
             <div className="step">
               <div className="step-number">3</div>
-              <h3>Watch your pipeline grow</h3>
-              <p>Leads get followed up automatically. Patients engage through your portal. Content generates itself. You see everything in one place.</p>
+              <h3>You grow</h3>
+              <p>Leads get captured and followed up automatically. Patients engage through your portal. Your team spends time on care, not admin. We optimize as you scale.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SMART FORMS */}
-      <section className="smartforms-section">
+      {/* CASE STUDIES */}
+      <section className="cases-section" id="results">
         <div className="container">
-          <div className="smartforms-grid">
-            <div className="smartforms-visual">
-              <div className="smartforms-mockup">
-                <div className="sf-toolbar">
-                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
-                  Smart Intake Form
+          <div className="section-label" style={{textAlign: "center"}}>Results</div>
+          <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>What happens when clinics work with us.</h2>
+          <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>From single-location practices to networks with 200+ clinics.</p>
+          <div className="cases-grid">
+            <div className="case-card">
+              <div className="case-type">Single Location &middot; Mexico</div>
+              <div className="case-quote">&ldquo;We were getting leads but barely converting. ClinicTech rebuilt our intake flow and added automated follow-ups. In the first month, we went from booking 11 consultations to 34.&rdquo;</div>
+              <div className="case-problem"><strong>Problem:</strong> Generic contact form going to an inbox. No qualification, no routing, no follow-up. Leads sat for 24-48 hours before anyone responded.</div>
+              <div className="case-built"><strong>What we built:</strong> Smart intake form, auto-scheduling, condition-based email sequences.</div>
+              <div className="case-metrics-row">
+                <div className="case-metric">
+                  <div className="case-metric-value">2.1% → 7.2%</div>
+                  <div className="case-metric-label">Conversion rate</div>
                 </div>
-                <div className="sf-body">
-                  <div className="sf-form-title">Start Your Journey</div>
-                  <div className="sf-form-sub">Tell us about yourself to get started</div>
-                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Full Name</div>
-                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
-                  </div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Email</div>
-                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
-                  </div>
-                  <div className="sf-progress">
-                    <div className="sf-progress-step completed"></div>
-                    <div className="sf-progress-step active"></div>
-                    <div className="sf-progress-step"></div>
-                    <div className="sf-progress-step"></div>
-                  </div>
-                  <div className="sf-progress-labels">
-                    <span>Contact Info</span>
-                    <span>Condition</span>
-                    <span>History</span>
-                    <span>Schedule</span>
-                  </div>
-                  <div className="sf-embed">
-                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
-                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
-                  </div>
+                <div className="case-metric">
+                  <div className="case-metric-value">+$138k</div>
+                  <div className="case-metric-label">Revenue/mo</div>
                 </div>
               </div>
             </div>
-            <div className="smartforms-content">
-              <div className="section-label">Smart Forms</div>
-              <h2 className="section-title">Capture the lead first. Ask questions second.</h2>
-              <p className="section-sub">Most intake forms lose leads before collecting contact info. Smart Forms capture name and email upfront, then guide patients through the rest. 3x more leads captured.</p>
-              <div className="smartforms-features">
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"📧"}</div>
-                  <div>
-                    <h4>Lead-First Design</h4>
-                    <p>Name and email are captured on step one. Even if a patient drops off, you have their contact info to follow up.</p>
-                  </div>
+            <div className="case-card">
+              <div className="case-type">3 Locations &middot; Mexico</div>
+              <div className="case-quote">&ldquo;70% of our patients fly in from the US and Canada. Our team was spending 25 hours a week on travel logistics. ClinicTech built us a concierge portal that patients actually love using.&rdquo;</div>
+              <div className="case-problem"><strong>Problem:</strong> Travel logistics handled through email chains and WhatsApp. Patients constantly asking about hotels, pickup times, and what to bring.</div>
+              <div className="case-built"><strong>What we built:</strong> Patient travel portal, admin dashboard, automated pre-arrival sequences.</div>
+              <div className="case-metrics-row">
+                <div className="case-metric">
+                  <div className="case-metric-value">22 hrs/wk</div>
+                  <div className="case-metric-label">Coordinator time saved</div>
                 </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"📊"}</div>
-                  <div>
-                    <h4>3x Lead Conversion</h4>
-                    <p>Clinics using Smart Forms see 3x more captured leads compared to traditional long-form intake. Every visitor counts.</p>
-                  </div>
+                <div className="case-metric">
+                  <div className="case-metric-value">+34%</div>
+                  <div className="case-metric-label">Patient satisfaction</div>
                 </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"🌐"}</div>
-                  <div>
-                    <h4>Embed Anywhere</h4>
-                    <p>One script tag on your existing website. No redesign needed. Smart Forms works alongside your current site seamlessly.</p>
-                  </div>
+              </div>
+            </div>
+            <div className="case-card">
+              <div className="case-type">200+ Locations &middot; North America</div>
+              <div className="case-quote">&ldquo;We needed a system that could route patients to the right clinic based on location, condition, and availability. ClinicTech built a centralized intake that serves all our locations from one flow.&rdquo;</div>
+              <div className="case-problem"><strong>Problem:</strong> Each location ran its own website and forms. No centralized view of the patient pipeline. Thousands of warm leads sitting dormant.</div>
+              <div className="case-built"><strong>What we built:</strong> Centralized intake with multi-location routing, patient CRM, automated reengagement campaigns.</div>
+              <div className="case-metrics-row">
+                <div className="case-metric">
+                  <div className="case-metric-value">94%</div>
+                  <div className="case-metric-label">Lead routing accuracy</div>
                 </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"⚡"}</div>
-                  <div>
-                    <h4>Auto-Sync to Your CRM</h4>
-                    <p>Every submission flows directly into your back office. Automations trigger instantly — follow-up emails, task assignments, pipeline updates.</p>
-                  </div>
+                <div className="case-metric">
+                  <div className="case-metric-value">+$2.1M</div>
+                  <div className="case-metric-label">Revenue across network</div>
+                </div>
+              </div>
+            </div>
+            <div className="case-card">
+              <div className="case-type">Single Location &middot; US → Mexico</div>
+              <div className="case-quote">&ldquo;Our site looked outdated and our intake was a basic form. ClinicTech redesigned everything and built a back office that replaced our spreadsheets. My team finally has one place to manage patients.&rdquo;</div>
+              <div className="case-problem"><strong>Problem:</strong> Patient records split across a spreadsheet, GoHighLevel, and email. No one had a complete view of who needed follow-up.</div>
+              <div className="case-built"><strong>What we built:</strong> Website redesign, custom patient CRM, automated follow-up workflows.</div>
+              <div className="case-metrics-row">
+                <div className="case-metric">
+                  <div className="case-metric-value">18 hrs/wk</div>
+                  <div className="case-metric-label">Admin hours saved</div>
+                </div>
+                <div className="case-metric">
+                  <div className="case-metric-value">+28%</div>
+                  <div className="case-metric-label">Returning patients</div>
                 </div>
               </div>
             </div>
@@ -2942,509 +3139,6 @@ footer .container {
         </div>
       </section>
 
-      {/* BACK OFFICE */}
-      <section className="backoffice-section" id="product">
-        <div className="container">
-          <div className="backoffice-grid">
-            <div className="backoffice-content">
-              <div className="section-label">Back Office</div>
-              <h2 className="section-title">Design your own back office. Automate everything.</h2>
-              <p className="section-sub">Build the dashboard you actually want. Every workflow, every follow-up, every notification is completely custom to your process and runs on autopilot.</p>
-              <div className="backoffice-features">
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"⚡"}</div>
-                  <div>
-                    <h4>Custom Automations</h4>
-                    <p>Auto-follow-up leads via email + SMS. Trigger reminders, assign tasks, and move deals through your pipeline automatically.</p>
-                  </div>
-                </div>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"📝"}</div>
-                  <div>
-                    <h4>AI Blog &amp; Content Generation</h4>
-                    <p>Auto-generate SEO blog posts from your knowledge base. Push to your website weekly to drive organic traffic.</p>
-                  </div>
-                </div>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"🔗"}</div>
-                  <div>
-                    <h4>Connect Your Tools</h4>
-                    <p>Calendar, CRM, GoHighLevel, Gmail, Salesforce — everything syncs in one branded dashboard.</p>
-                  </div>
-                </div>
-                <div className="backoffice-feature">
-                  <div className="backoffice-feature-icon">{"📊"}</div>
-                  <div>
-                    <h4>Your KPIs, Your Way</h4>
-                    <p>Real-time analytics tailored to the metrics that matter to your clinic. No generic dashboards.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="backoffice-visual">
-              <div className="backoffice-mockup">
-                <div className="bo-toolbar">
-                  <div className="bo-toolbar-dots"><span></span><span></span><span></span></div>
-                  Your Clinic — Back Office
-                </div>
-                <div className="bo-sidebar">
-                  <div className="bo-nav">
-                    <div className="bo-nav-item active">{"⚡"}</div>
-                    <div className="bo-nav-item">{"👥"}</div>
-                    <div className="bo-nav-item">{"📊"}</div>
-                    <div className="bo-nav-item">{"📝"}</div>
-                    <div className="bo-nav-item">{"⚙️"}</div>
-                  </div>
-                  <div className="bo-main">
-                    <div className="bo-main-header">
-                      <div className="bo-main-title">Automations</div>
-                      <div className="bo-main-tabs">
-                        <div className="bo-main-tab active">Active</div>
-                        <div className="bo-main-tab">Drafts</div>
-                        <div className="bo-main-tab">All</div>
-                      </div>
-                    </div>
-                    <div className="bo-automation-grid">
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"📧"}</span>
-                          <span className="bo-auto-status active">Active</span>
-                        </div>
-                        <div className="bo-auto-name">Lead Follow-Up</div>
-                        <div className="bo-auto-desc">Email + SMS within 5 min of form submission</div>
-                        <div className="bo-auto-stat">{"\u2191"} 47 leads contacted this week</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"📝"}</span>
-                          <span className="bo-auto-status active">Active</span>
-                        </div>
-                        <div className="bo-auto-name">Weekly Blog Post</div>
-                        <div className="bo-auto-desc">AI-generated from your knowledge base, pushed to site</div>
-                        <div className="bo-auto-stat">{"\u2191"} 12 posts published</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"⭐"}</span>
-                          <span className="bo-auto-status active">Active</span>
-                        </div>
-                        <div className="bo-auto-name">Review Requests</div>
-                        <div className="bo-auto-desc">Auto-sent 7 days post-treatment to happy patients</div>
-                        <div className="bo-auto-stat">{"\u2191"} 23 reviews collected</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"🔄"}</span>
-                          <span className="bo-auto-status draft">Draft</span>
-                        </div>
-                        <div className="bo-auto-name">Patient Reactivation</div>
-                        <div className="bo-auto-desc">Re-engage patients who haven&apos;t visited in 90 days</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PATIENT PORTAL */}
-      <section className="portal-section">
-        <div className="container">
-          <div className="portal-grid">
-            <div className="portal-visual">
-              <div className="portal-mockup">
-                <div className="portal-mockup-nav">
-                  <div className="portal-mockup-logo">
-                    <div className="logo-dot">Y</div>
-                    Your Clinic Portal
-                  </div>
-                  <div className="portal-mockup-nav-links">
-                    <span>Treatments</span>
-                    <span>FAQ</span>
-                    <span>Book</span>
-                  </div>
-                </div>
-                <div className="portal-mockup-body">
-                  <div className="portal-welcome">
-                    <h3>How can we help you?</h3>
-                    <p>Ask anything about our treatments, recovery, or booking</p>
-                  </div>
-                  <div className="portal-search">
-                    <span className="portal-search-icon">{"🔍"}</span>
-                    <span className="portal-search-text">Search treatments, FAQs, recovery info...</span>
-                  </div>
-                  <div className="portal-chat">
-                    <div className="portal-chat-msg user">
-                      What should I expect after PRP treatment for my knee? How long is recovery?
-                    </div>
-                    <div className="portal-chat-msg ai">
-                      <div className="ai-badge">{"✨"} AI-Powered Answer</div>
-                      PRP recovery for knee treatment typically involves 1-2 days of rest, with most patients returning to light activity within a week. You may experience mild swelling at the injection site for 2-3 days. Full benefits usually develop over 4-6 weeks as tissue regeneration occurs.
-                      <div className="sources">
-                        Sources: <span>PRP Recovery Guide</span> &middot; <span>Post-Treatment FAQ</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="portal-kb-uploads">
-                    <div className="portal-kb-file">
-                      <span className="file-icon">{"📄"}</span>
-                      Treatment Guide.pdf
-                      <span className="file-status"></span>
-                    </div>
-                    <div className="portal-kb-file">
-                      <span className="file-icon">{"📄"}</span>
-                      Recovery FAQ.pdf
-                      <span className="file-status"></span>
-                    </div>
-                    <div className="portal-kb-file">
-                      <span className="file-icon">{"📄"}</span>
-                      Pricing Info.pdf
-                      <span className="file-status"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="portal-toasts">
-                <div className="portal-toast">
-                  <div className="toast-icon green">{"💬"}</div>
-                  <div className="toast-text">
-                    <span className="toast-label">Patient Query</span>
-                    <span className="toast-msg">{"AI answered: \"PRP recovery time?\""}</span>
-                  </div>
-                </div>
-                <div className="portal-toast" style={{borderLeftColor:"var(--navy)"}}>
-                  <div className="toast-icon purple">{"📄"}</div>
-                  <div className="toast-text">
-                    <span className="toast-label">Knowledge Base</span>
-                    <span className="toast-msg">3 documents uploaded &amp; indexed</span>
-                  </div>
-                </div>
-                <div className="portal-toast" style={{borderLeftColor:"var(--orange)"}}>
-                  <div className="toast-icon" style={{background:"rgba(245, 158, 11, 0.1)"}}>{"📅"}</div>
-                  <div className="toast-text">
-                    <span className="toast-label">Conversion</span>
-                    <span className="toast-msg">Patient booked after AI chat</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="portal-content">
-              <div className="section-label">Patient Portal</div>
-              <h2 className="section-title">Your branded portal. AI-powered answers. 24/7.</h2>
-              <p className="section-sub">Upload your knowledge base and let leads and patients ask questions. AI generates instant, accurate answers from your own content.</p>
-              <div className="portal-features">
-                <div className="portal-feature">
-                  <div className="portal-feature-icon">{"📚"}</div>
-                  <div>
-                    <h4>Upload Your Knowledge Base</h4>
-                    <p>Drop in treatment guides, FAQs, recovery info, pricing docs. The AI learns your content and answers patients accurately.</p>
-                  </div>
-                </div>
-                <div className="portal-feature">
-                  <div className="portal-feature-icon">{"🤖"}</div>
-                  <div>
-                    <h4>AI-Generated Answers</h4>
-                    <p>Patients ask questions in natural language. AI responds instantly with answers sourced from your uploaded documents.</p>
-                  </div>
-                </div>
-                <div className="portal-feature">
-                  <div className="portal-feature-icon">{"🎨"}</div>
-                  <div>
-                    <h4>Fully Branded to You</h4>
-                    <p>Your logo, colors, domain. Patients see your clinic — not a third-party tool. Builds trust from the first interaction.</p>
-                  </div>
-                </div>
-                <div className="portal-feature">
-                  <div className="portal-feature-icon">{"📅"}</div>
-                  <div>
-                    <h4>Convert Queries to Bookings</h4>
-                    <p>AI chat seamlessly guides patients to book a consultation. Turn curiosity into appointments, automatically.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PATIENT-POWERED GROWTH */}
-      <section className="funnel" id="funnel">
-        <div className="container">
-          <div className="section-label">Patient-Powered Growth</div>
-          <h2 className="section-title">Turn your patients into your top of funnel.</h2>
-          <p className="section-sub">Your best marketing isn&apos;t ads. It&apos;s your existing patients. ClinicTech auto-generates content and campaigns from your patient data and knowledge base.</p>
-
-          <div className="funnel-mockup">
-            <div className="funnel-toolbar">
-              <div className="funnel-toolbar-dots"><span></span><span></span><span></span></div>
-              Growth Engine
-            </div>
-            <div className="funnel-body">
-              <div className="funnel-body-left">
-                <div className="funnel-body-title">Content Queue</div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon blog">{"📝"}</div>
-                    <div>
-                      <div className="funnel-content-name">5 Signs You Need Regenerative Therapy</div>
-                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 1,200 words</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status published">Published</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon story">{"✨"}</div>
-                    <div>
-                      <div className="funnel-content-name">Jennifer M. — Knee Stem Cell Recovery</div>
-                      <div className="funnel-content-meta">Success story &middot; Auto-generated &middot; HIPAA compliant</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status scheduled">Scheduled</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon social">{"📱"}</div>
-                    <div>
-                      <div className="funnel-content-name">Patient Testimonial Card — Robert K.</div>
-                      <div className="funnel-content-meta">Social graphic &middot; Branded template</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status draft">Draft</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon blog">{"📝"}</div>
-                    <div>
-                      <div className="funnel-content-name">PRP vs. Cortisone: What Patients Should Know</div>
-                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 950 words</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status published">Published</div>
-                </div>
-              </div>
-              <div className="funnel-body-right">
-                <div className="funnel-body-title">Reviews &amp; Referrals</div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">4.9</div>
-                  <div className="funnel-review-label">Average Rating &middot; 127 reviews</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "94%", background: "var(--green)"}} /></div>
-                </div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">38</div>
-                  <div className="funnel-review-label">Review prompts sent this month</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "76%", background: "var(--navy)"}} /></div>
-                </div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">12</div>
-                  <div className="funnel-review-label">Referrals generated</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "48%", background: "#8B5CF6"}} /></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="funnel-grid">
-            <div className="funnel-card">
-              <div className="funnel-card-number">01</div>
-              <h3>Auto-Generated Content Engine</h3>
-              <p>AI-written success stories, blog posts, and SEO content generated from your patient data and knowledge base. HIPAA-compliant, branded to you, and published to your website and social channels on autopilot.</p>
-              <div className="funnel-tag">Weekly Auto-Publish</div>
-            </div>
-            <div className="funnel-card">
-              <div className="funnel-card-number">02</div>
-              <h3>Reviews, Referrals &amp; Social Proof</h3>
-              <p>Automated review and referral prompts triggered after positive outcomes. Branded testimonial cards and shareable graphics your patients can post themselves. Word-of-mouth, systematized.</p>
-              <div className="funnel-tag">Automated Triggers</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TRAVEL CONCIERGE */}
-      <section className="concierge-section">
-        <div className="container">
-          <div className="concierge-grid">
-            <div className="concierge-content">
-              <div className="section-label">Travel Concierge</div>
-              <h2 className="section-title">Medical travel logistics. Handled for everyone.</h2>
-              <p className="section-sub">Patients see their full trip at a glance. Your team tracks every arrival, transport, and departure from one dashboard.</p>
-              <div className="concierge-features">
-                <div className="concierge-feature">
-                  <div className="concierge-feature-icon">{"✈️"}</div>
-                  <div>
-                    <h4>Flight &amp; Transport Tracking</h4>
-                    <p>Patients see flight details, airport pickup status, and hotel info. Admins see who is arriving when and coordinate transport in real time.</p>
-                  </div>
-                </div>
-                <div className="concierge-feature">
-                  <div className="concierge-feature-icon">{"🏨"}</div>
-                  <div>
-                    <h4>Hotel &amp; Accommodation Recs</h4>
-                    <p>Curated hotel recommendations near your clinic. Patients book with confidence knowing you{"'"}ve vetted every option.</p>
-                  </div>
-                </div>
-                <div className="concierge-feature">
-                  <div className="concierge-feature-icon">{"📋"}</div>
-                  <div>
-                    <h4>Pre &amp; Post Visit Timeline</h4>
-                    <p>Automated timeline from arrival prep through recovery milestones. Patients always know what comes next.</p>
-                  </div>
-                </div>
-                <div className="concierge-feature">
-                  <div className="concierge-feature-icon">{"📊"}</div>
-                  <div>
-                    <h4>Admin Travel Dashboard</h4>
-                    <p>One view of all traveling patients: arrival dates, transport status, treatment schedules. No more spreadsheets or missed pickups.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="concierge-visual">
-              <div className="concierge-mockup">
-                <div className="tc-toolbar">
-                  <div className="tc-toolbar-dots"><span></span><span></span><span></span></div>
-                  Travel Concierge
-                </div>
-                <div style={{padding: "12px 16px 0"}}>
-                  <div className="concierge-toggle">
-                    <button className={`concierge-toggle-btn ${travelView === 'patient' ? 'active' : ''}`} onClick={() => setTravelView('patient')}>Patient View</button>
-                    <button className={`concierge-toggle-btn ${travelView === 'admin' ? 'active' : ''}`} onClick={() => setTravelView('admin')}>Admin View</button>
-                  </div>
-                </div>
-                {travelView === 'patient' ? (
-                  <div className="tc-patient-body">
-                    <div className="tc-patient-header">
-                      <div className="tc-patient-avatar">{"👤"}</div>
-                      <div>
-                        <div className="tc-patient-greeting">Welcome, Sarah</div>
-                        <div style={{fontSize: "10px", color: "var(--text-muted)"}}>Your trip to Stem Cell Clinic MX</div>
-                      </div>
-                    </div>
-                    <div className="tc-info-cards">
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"✈️"}</div>
-                        <div className="tc-info-card-label">Flight</div>
-                        <div className="tc-info-card-value">AA 1247 &middot; Apr 15, 9:30am</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🚗"}</div>
-                        <div className="tc-info-card-label">Airport Pickup</div>
-                        <div className="tc-info-card-value">Confirmed &middot; Driver: Carlos M.</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🏨"}</div>
-                        <div className="tc-info-card-label">Hotel</div>
-                        <div className="tc-info-card-value">Grand Resort &middot; 2 nights</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🏥"}</div>
-                        <div className="tc-info-card-label">Appointment</div>
-                        <div className="tc-info-card-value">Apr 16, 10:00am &middot; Dr. Rivera</div>
-                      </div>
-                    </div>
-                    <div className="tc-timeline">
-                      <div style={{fontSize: "11px", fontWeight: 700, marginBottom: "4px"}}>Your Timeline</div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot completed"></div>
-                        <span style={{color: "var(--green)", fontWeight: 600}}>Pre-arrival forms completed</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot completed"></div>
-                        <span style={{color: "var(--green)", fontWeight: 600}}>Flight booked</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot"></div>
-                        <span>Airport pickup &middot; Apr 15</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot upcoming"></div>
-                        <span>Treatment day &middot; Apr 16</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot upcoming"></div>
-                        <span>Post-treatment check &middot; Apr 17</span>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="tc-admin-body">
-                    <div className="tc-admin-stats">
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">12</div>
-                        <div className="tc-admin-stat-label">Arriving this week</div>
-                      </div>
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">5</div>
-                        <div className="tc-admin-stat-label">In treatment</div>
-                      </div>
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">3</div>
-                        <div className="tc-admin-stat-label">Departing</div>
-                      </div>
-                    </div>
-                    <div style={{fontSize: "12px", fontWeight: 700, marginBottom: "8px"}}>Patient Travel Status</div>
-                    <div className="tc-admin-table">
-                      <div className="tc-admin-row" style={{fontSize: "9px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.5px"}}>
-                        <span>Patient</span><span>Flight</span><span>Transport</span><span>Status</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">Sarah M.</span>
-                        <span>AA 1247</span>
-                        <span>{"🚗"} Confirmed</span>
-                        <span className="tc-admin-status arriving">Arriving</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">James K.</span>
-                        <span>UA 892</span>
-                        <span>{"🚗"} Confirmed</span>
-                        <span className="tc-admin-status in-treatment">In Treatment</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">Maria L.</span>
-                        <span>DL 445</span>
-                        <span>{"🚗"} Scheduled</span>
-                        <span className="tc-admin-status departing">Departing</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">Robert P.</span>
-                        <span>SW 1103</span>
-                        <span>{"🚗"} Pending</span>
-                        <span className="tc-admin-status arriving">Arriving</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* INTEGRATIONS */}
-      <section className="integrations" id="integrations">
-        <div className="container">
-          <div className="integrations-center">
-            <div className="section-label">Integrations</div>
-            <h2 className="section-title">Connects to tools you already use.</h2>
-            <p className="section-sub">ClinicTech wraps around your existing workflow. No rip-and-replace, no learning curve.</p>
-            <div className="int-logos">
-              <div className="int-logo"><div className="int-logo-icon">{"📅"}</div>Google Cal</div>
-              <div className="int-logo"><div className="int-logo-icon">{"📧"}</div>Gmail</div>
-              <div className="int-logo"><div className="int-logo-icon">{"📊"}</div>HubSpot</div>
-              <div className="int-logo"><div className="int-logo-icon">{"⚡"}</div>Salesforce</div>
-              <div className="int-logo"><div className="int-logo-icon">{"🚀"}</div>GoHighLevel</div>
-              <div className="int-logo"><div className="int-logo-icon">{"📋"}</div>Attio</div>
-              <div className="int-logo"><div className="int-logo-icon">{"💬"}</div>Slack</div>
-              <div className="int-logo"><div className="int-logo-icon">{"📱"}</div>SMS</div>
-              <div className="int-logo"><div className="int-logo-icon">{"🌐"}</div>Your Website</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ABOUT US */}
       <section className="about-section" id="about">
@@ -3454,11 +3148,11 @@ footer .container {
               <img src="/founders.png" alt="Delaney and Danika, co-founders of ClinicTech" />
             </div>
             <div className="about-text">
-              <div className="about-label">About Us</div>
-              <h2>Built by operators,<br/>for operators.</h2>
-              <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
+              <div className="about-label">Built by Delaney and Danika</div>
+              <h2>Operators building<br/>for operators.</h2>
+              <p>We&apos;re operators who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
               <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
-              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
+              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost.</p>
             </div>
           </div>
         </div>
@@ -3468,9 +3162,9 @@ footer .container {
       <section className="cta-section" id="demo">
         <div className="container">
           <div className="cta-box">
-            <h2>See what your clinic&apos;s<br/>custom platform looks like.</h2>
-            <p>15-minute walkthrough. We&apos;ll brand a live preview to your clinic.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book Your Walkthrough \u2192"}</a>
+            <h2>Let&apos;s talk about your<br/>clinic goals.</h2>
+            <p>15-minute discovery call. We&apos;ll learn about your patient flow, where leads are falling off, and what&apos;s eating up your team&apos;s time. If there&apos;s a fit, we&apos;ll scope a proposal within days.</p>
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book a Discovery Call \u2192"}</a>
           </div>
         </div>
       </section>
@@ -3482,10 +3176,10 @@ footer .container {
             <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 24, width: "auto", opacity: 0.6}} />
           </div>
           <div className="footer-links">
+            <a href="/projects">Projects</a>
+            <a href="/about">About</a>
             <a href="/blog">Blog</a>
             <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
           </div>
         </div>
       </footer>
