@@ -2751,6 +2751,197 @@ footer .container {
         </div>
       </section>
 
+      {/* ROI */}
+      <section className="roi" id="roi">
+        <div className="container">
+          <div className="section-label">The ROI</div>
+          <h2 className="section-title">The math is simple. The impact is not.</h2>
+          <p className="section-sub">Average stem cell procedure: $5,000 to $25,000. How many lost leads can you afford per month?</p>
+          <div className="roi-grid">
+            <div className="roi-calculator">
+              <div className="roi-calc-title">Revenue Recovery Calculator <span>Interactive</span></div>
+              <div className="roi-row">
+                <div className="roi-label">Your monthly leads</div>
+                <div className="roi-input-wrap">
+                  <input
+                    type="range"
+                    min="10"
+                    max="200"
+                    value={leads}
+                    className="roi-slider"
+                    onChange={(e) => {
+                      setLeads(parseInt(e.target.value));
+                      animateTotal();
+                    }}
+                  />
+                  <div className="roi-input-value">{leads}</div>
+                </div>
+              </div>
+              <div className="roi-row">
+                <div className="roi-label">Your avg procedure value</div>
+                <div className="roi-input-wrap">
+                  <input
+                    type="range"
+                    min="2000"
+                    max="50000"
+                    value={procedureValue}
+                    step="1000"
+                    className="roi-slider"
+                    onChange={(e) => {
+                      setProcedureValue(parseInt(e.target.value));
+                      animateTotal();
+                    }}
+                  />
+                  <div className="roi-input-value">${procedureValue.toLocaleString()}</div>
+                </div>
+              </div>
+              <div className="roi-row">
+                <div className="roi-label">Leads lost to slow follow-up</div>
+                <div className="roi-value" style={{color:"var(--red)"}}>~60%</div>
+              </div>
+              <div className="roi-row">
+                <div className="roi-label">Leads recovered with ClinicTech</div>
+                <div className="roi-value" style={{color:"var(--green)"}}>+{recovered}/mo</div>
+              </div>
+              <div className="roi-result">
+                <div className="roi-result-label">Additional Annual Revenue</div>
+                <div className="roi-result-value" ref={totalRef}>${annual.toLocaleString()}+</div>
+                <div className="roi-result-sub">from leads you&apos;re already getting</div>
+              </div>
+            </div>
+            <div className="roi-metrics">
+              <div className="roi-metric">
+                <div className="roi-metric-icon">{"⚡"}</div>
+                <div>
+                  <h4>3-5x more consultations booked</h4>
+                  <p>Automated follow-up within minutes, not hours. Clinics using instant response see dramatically higher booking rates from the same lead volume.</p>
+                </div>
+              </div>
+              <div className="roi-metric">
+                <div className="roi-metric-icon">{"🔁"}</div>
+                <div>
+                  <h4>40% increase in patient reactivation</h4>
+                  <p>Automated reengagement brings past patients back for additional treatments, referrals, and follow-up procedures they didn&apos;t know you offered.</p>
+                </div>
+              </div>
+              <div className="roi-metric">
+                <div className="roi-metric-icon">{"⏰"}</div>
+                <div>
+                  <h4>15+ hours/week saved on admin</h4>
+                  <p>Stop copy-pasting between tools. Your back office runs itself so you can focus on patients, not spreadsheets.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="how" id="how">
+        <div className="container">
+          <div className="section-label" style={{textAlign:"center"}}>How It Works</div>
+          <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in weeks. Not months.</h2>
+          <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No consultants. No developers. No six-month implementation. Three steps and your custom platform is running.</p>
+          <div className="steps">
+            <div className="step">
+              <div className="step-number">1</div>
+              <h3>We brand it to you</h3>
+              <p>Your logo, your colors, your domain. The back office and patient portal look and feel like your own custom-built platform from day one.</p>
+            </div>
+            <div className="step">
+              <div className="step-number">2</div>
+              <h3>You build your workflow</h3>
+              <p>Drag and drop your lead stages, follow-up sequences, and portal content. Connect your calendar, email, and CRM. Completely tailored to your process.</p>
+            </div>
+            <div className="step">
+              <div className="step-number">3</div>
+              <h3>Watch your pipeline grow</h3>
+              <p>Leads get followed up automatically. Patients engage through your portal. Content generates itself. You see everything in one place.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SMART FORMS */}
+      <section className="smartforms-section">
+        <div className="container">
+          <div className="smartforms-grid">
+            <div className="smartforms-visual">
+              <div className="smartforms-mockup">
+                <div className="sf-toolbar">
+                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
+                  Smart Intake Form
+                </div>
+                <div className="sf-body">
+                  <div className="sf-form-title">Start Your Journey</div>
+                  <div className="sf-form-sub">Tell us about yourself to get started</div>
+                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Full Name</div>
+                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
+                  </div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Email</div>
+                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
+                  </div>
+                  <div className="sf-progress">
+                    <div className="sf-progress-step completed"></div>
+                    <div className="sf-progress-step active"></div>
+                    <div className="sf-progress-step"></div>
+                    <div className="sf-progress-step"></div>
+                  </div>
+                  <div className="sf-progress-labels">
+                    <span>Contact Info</span>
+                    <span>Condition</span>
+                    <span>History</span>
+                    <span>Schedule</span>
+                  </div>
+                  <div className="sf-embed">
+                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
+                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="smartforms-content">
+              <div className="section-label">Smart Forms</div>
+              <h2 className="section-title">Capture the lead first. Ask questions second.</h2>
+              <p className="section-sub">Most intake forms lose leads before collecting contact info. Smart Forms capture name and email upfront, then guide patients through the rest. 3x more leads captured.</p>
+              <div className="smartforms-features">
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"📧"}</div>
+                  <div>
+                    <h4>Lead-First Design</h4>
+                    <p>Name and email are captured on step one. Even if a patient drops off, you have their contact info to follow up.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"📊"}</div>
+                  <div>
+                    <h4>3x Lead Conversion</h4>
+                    <p>Clinics using Smart Forms see 3x more captured leads compared to traditional long-form intake. Every visitor counts.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"🌐"}</div>
+                  <div>
+                    <h4>Embed Anywhere</h4>
+                    <p>One script tag on your existing website. No redesign needed. Smart Forms works alongside your current site seamlessly.</p>
+                  </div>
+                </div>
+                <div className="smartforms-feature">
+                  <div className="smartforms-feature-icon">{"⚡"}</div>
+                  <div>
+                    <h4>Auto-Sync to Your CRM</h4>
+                    <p>Every submission flows directly into your back office. Automations trigger instantly — follow-up emails, task assignments, pipeline updates.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* BACK OFFICE */}
       <section className="backoffice-section" id="product">
         <div className="container">
@@ -2979,6 +3170,100 @@ footer .container {
         </div>
       </section>
 
+      {/* PATIENT-POWERED GROWTH */}
+      <section className="funnel" id="funnel">
+        <div className="container">
+          <div className="section-label">Patient-Powered Growth</div>
+          <h2 className="section-title">Turn your patients into your top of funnel.</h2>
+          <p className="section-sub">Your best marketing isn&apos;t ads. It&apos;s your existing patients. ClinicTech auto-generates content and campaigns from your patient data and knowledge base.</p>
+
+          <div className="funnel-mockup">
+            <div className="funnel-toolbar">
+              <div className="funnel-toolbar-dots"><span></span><span></span><span></span></div>
+              Growth Engine
+            </div>
+            <div className="funnel-body">
+              <div className="funnel-body-left">
+                <div className="funnel-body-title">Content Queue</div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon blog">{"📝"}</div>
+                    <div>
+                      <div className="funnel-content-name">5 Signs You Need Regenerative Therapy</div>
+                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 1,200 words</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status published">Published</div>
+                </div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon story">{"✨"}</div>
+                    <div>
+                      <div className="funnel-content-name">Jennifer M. — Knee Stem Cell Recovery</div>
+                      <div className="funnel-content-meta">Success story &middot; Auto-generated &middot; HIPAA compliant</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status scheduled">Scheduled</div>
+                </div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon social">{"📱"}</div>
+                    <div>
+                      <div className="funnel-content-name">Patient Testimonial Card — Robert K.</div>
+                      <div className="funnel-content-meta">Social graphic &middot; Branded template</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status draft">Draft</div>
+                </div>
+                <div className="funnel-content-item">
+                  <div className="funnel-content-left">
+                    <div className="funnel-content-icon blog">{"📝"}</div>
+                    <div>
+                      <div className="funnel-content-name">PRP vs. Cortisone: What Patients Should Know</div>
+                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 950 words</div>
+                    </div>
+                  </div>
+                  <div className="funnel-content-status published">Published</div>
+                </div>
+              </div>
+              <div className="funnel-body-right">
+                <div className="funnel-body-title">Reviews &amp; Referrals</div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">4.9</div>
+                  <div className="funnel-review-label">Average Rating &middot; 127 reviews</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "94%", background: "var(--green)"}} /></div>
+                </div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">38</div>
+                  <div className="funnel-review-label">Review prompts sent this month</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "76%", background: "var(--navy)"}} /></div>
+                </div>
+                <div className="funnel-review-stat">
+                  <div className="funnel-review-number">12</div>
+                  <div className="funnel-review-label">Referrals generated</div>
+                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "48%", background: "#8B5CF6"}} /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="funnel-grid">
+            <div className="funnel-card">
+              <div className="funnel-card-number">01</div>
+              <h3>Auto-Generated Content Engine</h3>
+              <p>AI-written success stories, blog posts, and SEO content generated from your patient data and knowledge base. HIPAA-compliant, branded to you, and published to your website and social channels on autopilot.</p>
+              <div className="funnel-tag">Weekly Auto-Publish</div>
+            </div>
+            <div className="funnel-card">
+              <div className="funnel-card-number">02</div>
+              <h3>Reviews, Referrals &amp; Social Proof</h3>
+              <p>Automated review and referral prompts triggered after positive outcomes. Branded testimonial cards and shareable graphics your patients can post themselves. Word-of-mouth, systematized.</p>
+              <div className="funnel-tag">Automated Triggers</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TRAVEL CONCIERGE */}
       <section className="concierge-section">
         <div className="container">
@@ -3139,291 +3424,6 @@ footer .container {
         </div>
       </section>
 
-      {/* SMART FORMS */}
-      <section className="smartforms-section">
-        <div className="container">
-          <div className="smartforms-grid">
-            <div className="smartforms-visual">
-              <div className="smartforms-mockup">
-                <div className="sf-toolbar">
-                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
-                  Smart Intake Form
-                </div>
-                <div className="sf-body">
-                  <div className="sf-form-title">Start Your Journey</div>
-                  <div className="sf-form-sub">Tell us about yourself to get started</div>
-                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Full Name</div>
-                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
-                  </div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Email</div>
-                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
-                  </div>
-                  <div className="sf-progress">
-                    <div className="sf-progress-step completed"></div>
-                    <div className="sf-progress-step active"></div>
-                    <div className="sf-progress-step"></div>
-                    <div className="sf-progress-step"></div>
-                  </div>
-                  <div className="sf-progress-labels">
-                    <span>Contact Info</span>
-                    <span>Condition</span>
-                    <span>History</span>
-                    <span>Schedule</span>
-                  </div>
-                  <div className="sf-embed">
-                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
-                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="smartforms-content">
-              <div className="section-label">Smart Forms</div>
-              <h2 className="section-title">Capture the lead first. Ask questions second.</h2>
-              <p className="section-sub">Most intake forms lose leads before collecting contact info. Smart Forms capture name and email upfront, then guide patients through the rest. 3x more leads captured.</p>
-              <div className="smartforms-features">
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"📧"}</div>
-                  <div>
-                    <h4>Lead-First Design</h4>
-                    <p>Name and email are captured on step one. Even if a patient drops off, you have their contact info to follow up.</p>
-                  </div>
-                </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"📊"}</div>
-                  <div>
-                    <h4>3x Lead Conversion</h4>
-                    <p>Clinics using Smart Forms see 3x more captured leads compared to traditional long-form intake. Every visitor counts.</p>
-                  </div>
-                </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"🌐"}</div>
-                  <div>
-                    <h4>Embed Anywhere</h4>
-                    <p>One script tag on your existing website. No redesign needed. Smart Forms works alongside your current site seamlessly.</p>
-                  </div>
-                </div>
-                <div className="smartforms-feature">
-                  <div className="smartforms-feature-icon">{"⚡"}</div>
-                  <div>
-                    <h4>Auto-Sync to Your CRM</h4>
-                    <p>Every submission flows directly into your back office. Automations trigger instantly — follow-up emails, task assignments, pipeline updates.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ROI */}
-      <section className="roi" id="roi">
-        <div className="container">
-          <div className="section-label">The ROI</div>
-          <h2 className="section-title">The math is simple. The impact is not.</h2>
-          <p className="section-sub">Average stem cell procedure: $5,000 to $25,000. How many lost leads can you afford per month?</p>
-          <div className="roi-grid">
-            <div className="roi-calculator">
-              <div className="roi-calc-title">Revenue Recovery Calculator <span>Interactive</span></div>
-              <div className="roi-row">
-                <div className="roi-label">Your monthly leads</div>
-                <div className="roi-input-wrap">
-                  <input
-                    type="range"
-                    min="10"
-                    max="200"
-                    value={leads}
-                    className="roi-slider"
-                    onChange={(e) => {
-                      setLeads(parseInt(e.target.value));
-                      animateTotal();
-                    }}
-                  />
-                  <div className="roi-input-value">{leads}</div>
-                </div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Your avg procedure value</div>
-                <div className="roi-input-wrap">
-                  <input
-                    type="range"
-                    min="2000"
-                    max="50000"
-                    value={procedureValue}
-                    step="1000"
-                    className="roi-slider"
-                    onChange={(e) => {
-                      setProcedureValue(parseInt(e.target.value));
-                      animateTotal();
-                    }}
-                  />
-                  <div className="roi-input-value">${procedureValue.toLocaleString()}</div>
-                </div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Leads lost to slow follow-up</div>
-                <div className="roi-value" style={{color:"var(--red)"}}>~60%</div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Leads recovered with ClinicTech</div>
-                <div className="roi-value" style={{color:"var(--green)"}}>+{recovered}/mo</div>
-              </div>
-              <div className="roi-result">
-                <div className="roi-result-label">Additional Annual Revenue</div>
-                <div className="roi-result-value" ref={totalRef}>${annual.toLocaleString()}+</div>
-                <div className="roi-result-sub">from leads you&apos;re already getting</div>
-              </div>
-            </div>
-            <div className="roi-metrics">
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"⚡"}</div>
-                <div>
-                  <h4>3-5x more consultations booked</h4>
-                  <p>Automated follow-up within minutes, not hours. Clinics using instant response see dramatically higher booking rates from the same lead volume.</p>
-                </div>
-              </div>
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"🔁"}</div>
-                <div>
-                  <h4>40% increase in patient reactivation</h4>
-                  <p>Automated reengagement brings past patients back for additional treatments, referrals, and follow-up procedures they didn&apos;t know you offered.</p>
-                </div>
-              </div>
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"⏰"}</div>
-                <div>
-                  <h4>15+ hours/week saved on admin</h4>
-                  <p>Stop copy-pasting between tools. Your back office runs itself so you can focus on patients, not spreadsheets.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PATIENT FUNNEL */}
-      <section className="funnel" id="funnel">
-        <div className="container">
-          <div className="section-label">Patient-Powered Growth</div>
-          <h2 className="section-title">Turn your patients into your top of funnel.</h2>
-          <p className="section-sub">Your best marketing isn&apos;t ads. It&apos;s your existing patients. ClinicTech auto-generates content and campaigns from your patient data and knowledge base.</p>
-
-          <div className="funnel-mockup">
-            <div className="funnel-toolbar">
-              <div className="funnel-toolbar-dots"><span></span><span></span><span></span></div>
-              Growth Engine
-            </div>
-            <div className="funnel-body">
-              <div className="funnel-body-left">
-                <div className="funnel-body-title">Content Queue</div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon blog">{"📝"}</div>
-                    <div>
-                      <div className="funnel-content-name">5 Signs You Need Regenerative Therapy</div>
-                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 1,200 words</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status published">Published</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon story">{"✨"}</div>
-                    <div>
-                      <div className="funnel-content-name">Jennifer M. — Knee Stem Cell Recovery</div>
-                      <div className="funnel-content-meta">Success story &middot; Auto-generated &middot; HIPAA compliant</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status scheduled">Scheduled</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon social">{"📱"}</div>
-                    <div>
-                      <div className="funnel-content-name">Patient Testimonial Card — Robert K.</div>
-                      <div className="funnel-content-meta">Social graphic &middot; Branded template</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status draft">Draft</div>
-                </div>
-                <div className="funnel-content-item">
-                  <div className="funnel-content-left">
-                    <div className="funnel-content-icon blog">{"📝"}</div>
-                    <div>
-                      <div className="funnel-content-name">PRP vs. Cortisone: What Patients Should Know</div>
-                      <div className="funnel-content-meta">Blog post &middot; SEO optimized &middot; 950 words</div>
-                    </div>
-                  </div>
-                  <div className="funnel-content-status published">Published</div>
-                </div>
-              </div>
-              <div className="funnel-body-right">
-                <div className="funnel-body-title">Reviews &amp; Referrals</div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">4.9</div>
-                  <div className="funnel-review-label">Average Rating &middot; 127 reviews</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "94%", background: "var(--green)"}} /></div>
-                </div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">38</div>
-                  <div className="funnel-review-label">Review prompts sent this month</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "76%", background: "var(--navy)"}} /></div>
-                </div>
-                <div className="funnel-review-stat">
-                  <div className="funnel-review-number">12</div>
-                  <div className="funnel-review-label">Referrals generated</div>
-                  <div className="funnel-review-bar"><div className="funnel-review-bar-fill" style={{width: "48%", background: "#8B5CF6"}} /></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="funnel-grid">
-            <div className="funnel-card">
-              <div className="funnel-card-number">01</div>
-              <h3>Auto-Generated Content Engine</h3>
-              <p>AI-written success stories, blog posts, and SEO content generated from your patient data and knowledge base. HIPAA-compliant, branded to you, and published to your website and social channels on autopilot.</p>
-              <div className="funnel-tag">Weekly Auto-Publish</div>
-            </div>
-            <div className="funnel-card">
-              <div className="funnel-card-number">02</div>
-              <h3>Reviews, Referrals &amp; Social Proof</h3>
-              <p>Automated review and referral prompts triggered after positive outcomes. Branded testimonial cards and shareable graphics your patients can post themselves. Word-of-mouth, systematized.</p>
-              <div className="funnel-tag">Automated Triggers</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="how" id="how">
-        <div className="container">
-          <div className="section-label" style={{textAlign:"center"}}>How It Works</div>
-          <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in weeks. Not months.</h2>
-          <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No consultants. No developers. No six-month implementation. Three steps and your custom platform is running.</p>
-          <div className="steps">
-            <div className="step">
-              <div className="step-number">1</div>
-              <h3>We brand it to you</h3>
-              <p>Your logo, your colors, your domain. The back office and patient portal look and feel like your own custom-built platform from day one.</p>
-            </div>
-            <div className="step">
-              <div className="step-number">2</div>
-              <h3>You build your workflow</h3>
-              <p>Drag and drop your lead stages, follow-up sequences, and portal content. Connect your calendar, email, and CRM. Completely tailored to your process.</p>
-            </div>
-            <div className="step">
-              <div className="step-number">3</div>
-              <h3>Watch your pipeline grow</h3>
-              <p>Leads get followed up automatically. Patients engage through your portal. Content generates itself. You see everything in one place.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* INTEGRATIONS */}
       <section className="integrations" id="integrations">
         <div className="container">
@@ -3446,17 +3446,6 @@ footer .container {
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="cta-section" id="demo">
-        <div className="container">
-          <div className="cta-box">
-            <h2>See what your clinic&apos;s<br/>custom platform looks like.</h2>
-            <p>15-minute walkthrough. We&apos;ll brand a live preview to your clinic.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book Your Walkthrough \u2192"}</a>
-          </div>
-        </div>
-      </section>
-
       {/* ABOUT US */}
       <section className="about-section" id="about">
         <div className="container">
@@ -3471,6 +3460,17 @@ footer .container {
               <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
               <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="cta-section" id="demo">
+        <div className="container">
+          <div className="cta-box">
+            <h2>See what your clinic&apos;s<br/>custom platform looks like.</h2>
+            <p>15-minute walkthrough. We&apos;ll brand a live preview to your clinic.</p>
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book Your Walkthrough \u2192"}</a>
           </div>
         </div>
       </section>
