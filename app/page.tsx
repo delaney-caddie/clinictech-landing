@@ -78,6 +78,7 @@ export default function LandingPage() {
   const [leads, setLeads] = useState(40);
   const [procedureValue, setProcedureValue] = useState(12000);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
   const featureAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const features = useMemo(() => [
@@ -1661,6 +1662,22 @@ footer .container {
   color: var(--text-secondary);
   max-width: 700px;
 }
+.service-mockup-wrap {
+  margin-top: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.service-mockup-wrap .smartforms-mockup,
+.service-mockup-wrap .backoffice-mockup,
+.service-mockup-wrap .portal-mockup,
+.service-mockup-wrap .concierge-mockup {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
 
 /* ===== WHY US STATS ===== */
 .why-stats {
@@ -2920,6 +2937,253 @@ footer .container {
           </div>
           <div className="service-detail">
             <p>{features[activeFeature].desc}</p>
+          </div>
+          <div className="service-mockup-wrap">
+            {activeFeature === 0 && (
+              <div className="smartforms-mockup">
+                <div className="sf-toolbar">
+                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
+                  Smart Intake Form
+                </div>
+                <div className="sf-body">
+                  <div className="sf-form-title">Start Your Journey</div>
+                  <div className="sf-form-sub">Tell us about yourself to get started</div>
+                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Full Name</div>
+                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
+                  </div>
+                  <div className="sf-field">
+                    <div className="sf-field-label">Email</div>
+                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
+                  </div>
+                  <div className="sf-progress">
+                    <div className="sf-progress-step completed"></div>
+                    <div className="sf-progress-step active"></div>
+                    <div className="sf-progress-step"></div>
+                    <div className="sf-progress-step"></div>
+                  </div>
+                  <div className="sf-progress-labels">
+                    <span>Contact Info</span>
+                    <span>Condition</span>
+                    <span>History</span>
+                    <span>Schedule</span>
+                  </div>
+                  <div className="sf-embed">
+                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
+                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeFeature === 1 && (
+              <div className="backoffice-mockup">
+                <div className="bo-toolbar">
+                  <div className="bo-toolbar-dots"><span></span><span></span><span></span></div>
+                  Your Clinic — Automations
+                </div>
+                <div className="bo-sidebar">
+                  <div className="bo-nav">
+                    <div className="bo-nav-item active">{"⚡"}</div>
+                    <div className="bo-nav-item">{"👥"}</div>
+                    <div className="bo-nav-item">{"📊"}</div>
+                    <div className="bo-nav-item">{"📝"}</div>
+                    <div className="bo-nav-item">{"⚙️"}</div>
+                  </div>
+                  <div className="bo-main">
+                    <div className="bo-main-header">
+                      <div className="bo-main-title">Automations</div>
+                      <div className="bo-main-tabs">
+                        <div className="bo-main-tab active">Active</div>
+                        <div className="bo-main-tab">Drafts</div>
+                        <div className="bo-main-tab">All</div>
+                      </div>
+                    </div>
+                    <div className="bo-automation-grid">
+                      <div className="bo-auto-card">
+                        <div className="bo-auto-header">
+                          <span className="bo-auto-icon">{"📧"}</span>
+                          <span className="bo-auto-status active">Active</span>
+                        </div>
+                        <div className="bo-auto-name">Lead Follow-Up</div>
+                        <div className="bo-auto-desc">Email + SMS within 5 min of form submission</div>
+                        <div className="bo-auto-stat">{"\u2191"} 47 leads contacted this week</div>
+                      </div>
+                      <div className="bo-auto-card">
+                        <div className="bo-auto-header">
+                          <span className="bo-auto-icon">{"📝"}</span>
+                          <span className="bo-auto-status active">Active</span>
+                        </div>
+                        <div className="bo-auto-name">Weekly Blog Post</div>
+                        <div className="bo-auto-desc">AI-generated from your knowledge base</div>
+                        <div className="bo-auto-stat">{"\u2191"} 12 posts published</div>
+                      </div>
+                      <div className="bo-auto-card">
+                        <div className="bo-auto-header">
+                          <span className="bo-auto-icon">{"⭐"}</span>
+                          <span className="bo-auto-status active">Active</span>
+                        </div>
+                        <div className="bo-auto-name">Review Requests</div>
+                        <div className="bo-auto-desc">Auto-sent 7 days post-treatment</div>
+                        <div className="bo-auto-stat">{"\u2191"} 23 reviews collected</div>
+                      </div>
+                      <div className="bo-auto-card">
+                        <div className="bo-auto-header">
+                          <span className="bo-auto-icon">{"🔄"}</span>
+                          <span className="bo-auto-status draft">Draft</span>
+                        </div>
+                        <div className="bo-auto-name">Patient Reactivation</div>
+                        <div className="bo-auto-desc">Re-engage patients inactive 90 days</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeFeature === 2 && (
+              <div className="portal-mockup">
+                <div className="portal-mockup-nav">
+                  <div className="portal-mockup-logo">
+                    <div className="logo-dot">Y</div>
+                    Your Clinic Portal
+                  </div>
+                  <div className="portal-mockup-nav-links">
+                    <span>Treatments</span>
+                    <span>FAQ</span>
+                    <span>Book</span>
+                  </div>
+                </div>
+                <div className="portal-mockup-body">
+                  <div className="portal-welcome">
+                    <h3>How can we help you?</h3>
+                    <p>Ask anything about our treatments, recovery, or booking</p>
+                  </div>
+                  <div className="portal-search">
+                    <span className="portal-search-icon">{"🔍"}</span>
+                    <span className="portal-search-text">Search treatments, FAQs, recovery info...</span>
+                  </div>
+                  <div className="portal-chat">
+                    <div className="portal-chat-msg user">
+                      What should I expect after PRP treatment for my knee?
+                    </div>
+                    <div className="portal-chat-msg ai">
+                      <div className="ai-badge">{"✨"} AI-Powered Answer</div>
+                      PRP recovery for knee treatment typically involves 1-2 days of rest, with most patients returning to light activity within a week. Full benefits develop over 4-6 weeks.
+                      <div className="sources">
+                        Sources: <span>PRP Recovery Guide</span> &middot; <span>Post-Treatment FAQ</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeFeature === 3 && (
+              <div className="concierge-mockup">
+                <div className="tc-toolbar">
+                  <div className="tc-toolbar-dots"><span></span><span></span><span></span></div>
+                  Travel Concierge
+                </div>
+                <div style={{padding: "12px 16px 0"}}>
+                  <div className="concierge-toggle">
+                    <button className={`concierge-toggle-btn ${travelView === 'patient' ? 'active' : ''}`} onClick={() => setTravelView('patient')}>Patient View</button>
+                    <button className={`concierge-toggle-btn ${travelView === 'admin' ? 'active' : ''}`} onClick={() => setTravelView('admin')}>Admin View</button>
+                  </div>
+                </div>
+                {travelView === 'patient' ? (
+                  <div className="tc-patient-body">
+                    <div className="tc-patient-header">
+                      <div className="tc-patient-avatar">{"👤"}</div>
+                      <div>
+                        <div className="tc-patient-greeting">Welcome, Sarah</div>
+                        <div style={{fontSize: "10px", color: "var(--text-muted)"}}>Your trip to Stem Cell Clinic MX</div>
+                      </div>
+                    </div>
+                    <div className="tc-info-cards">
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"✈️"}</div>
+                        <div className="tc-info-card-label">Flight</div>
+                        <div className="tc-info-card-value">AA 1247 &middot; Apr 15, 9:30am</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🚗"}</div>
+                        <div className="tc-info-card-label">Airport Pickup</div>
+                        <div className="tc-info-card-value">Confirmed &middot; Driver: Carlos M.</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🏨"}</div>
+                        <div className="tc-info-card-label">Hotel</div>
+                        <div className="tc-info-card-value">Grand Resort &middot; 2 nights</div>
+                      </div>
+                      <div className="tc-info-card">
+                        <div className="tc-info-card-icon">{"🏥"}</div>
+                        <div className="tc-info-card-label">Appointment</div>
+                        <div className="tc-info-card-value">Apr 16, 10:00am &middot; Dr. Rivera</div>
+                      </div>
+                    </div>
+                    <div className="tc-timeline">
+                      <div style={{fontSize: "11px", fontWeight: 700, marginBottom: "4px"}}>Your Timeline</div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot completed"></div>
+                        <span style={{color: "var(--green)", fontWeight: 600}}>Pre-arrival forms completed</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot completed"></div>
+                        <span style={{color: "var(--green)", fontWeight: 600}}>Flight booked</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot"></div>
+                        <span>Airport pickup &middot; Apr 15</span>
+                      </div>
+                      <div className="tc-timeline-item">
+                        <div className="tc-timeline-dot upcoming"></div>
+                        <span>Treatment day &middot; Apr 16</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="tc-admin-body">
+                    <div className="tc-admin-stats">
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">12</div>
+                        <div className="tc-admin-stat-label">Arriving this week</div>
+                      </div>
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">5</div>
+                        <div className="tc-admin-stat-label">In treatment</div>
+                      </div>
+                      <div className="tc-admin-stat">
+                        <div className="tc-admin-stat-value">3</div>
+                        <div className="tc-admin-stat-label">Departing</div>
+                      </div>
+                    </div>
+                    <div style={{fontSize: "12px", fontWeight: 700, marginBottom: "8px"}}>Patient Travel Status</div>
+                    <div className="tc-admin-table">
+                      <div className="tc-admin-row" style={{fontSize: "9px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.5px"}}>
+                        <span>Patient</span><span>Flight</span><span>Transport</span><span>Status</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">Sarah M.</span>
+                        <span>AA 1247</span>
+                        <span>{"🚗"} Confirmed</span>
+                        <span className="tc-admin-status arriving">Arriving</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">James K.</span>
+                        <span>UA 892</span>
+                        <span>{"🚗"} Confirmed</span>
+                        <span className="tc-admin-status in-treatment">In Treatment</span>
+                      </div>
+                      <div className="tc-admin-row">
+                        <span className="tc-admin-name">Maria L.</span>
+                        <span>DL 445</span>
+                        <span>{"🚗"} Scheduled</span>
+                        <span className="tc-admin-status departing">Departing</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
