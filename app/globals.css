@@ -76,8 +76,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-dm-sans), var(--font-geist), 'DM Sans', 'Geist', system-ui, sans-serif;
-  --font-serif: var(--font-dm-serif), var(--font-playfair), 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-serif: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

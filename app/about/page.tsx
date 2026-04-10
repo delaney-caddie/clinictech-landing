@@ -2,8 +2,8 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "About Us — ClinicTech",
-  description: "Meet Delaney and Danika, the co-founders building ClinicTech — a custom back-office platform for regenerative medicine clinics.",
+  title: "About Us - ClinicTech",
+  description: "Meet Delaney and Danika, the co-founders building ClinicTech - a custom back-office platform for regenerative medicine clinics.",
 };
 
 export default function AboutPage() {
@@ -14,8 +14,8 @@ export default function AboutPage() {
         .about-hero { max-width: 880px; margin: 0 auto; padding: 160px 40px 0; text-align: center; }
         .about-hero-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #5EC4E3; margin-bottom: 12px; }
         .about-hero h1 {
-          font-family: var(--font-nunito), 'Nunito', sans-serif;
-          font-size: 44px; font-weight: 800; font-style: italic;
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+          font-size: 44px; font-weight: 800; font-style: normal;
           color: #0F172A; line-height: 1.15; letter-spacing: 0.5px; margin-bottom: 20px;
         }
         .about-hero p { font-size: 17px; color: #64748B; max-width: 600px; margin: 0 auto; line-height: 1.6; }
@@ -33,8 +33,8 @@ export default function AboutPage() {
           border-radius: 20px; padding: 48px; text-align: center;
         }
         .about-cta-box h2 {
-          font-family: var(--font-nunito), 'Nunito', sans-serif;
-          font-size: 28px; font-weight: 800; font-style: italic;
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+          font-size: 28px; font-weight: 800; font-style: normal;
           color: #fff; margin-bottom: 10px;
         }
         .about-cta-box p { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 24px; }
@@ -65,7 +65,7 @@ export default function AboutPage() {
 
         <div className="about-hero">
           <div className="about-hero-label">About Us</div>
-          <h1>Built by operators,<br/>for operators.</h1>
+          <h1>Built by <span style={{color: "#5EC4E3"}}>operators,</span><br/>for operators.</h1>
           <p>We started building because we saw how much time clinic teams waste on disconnected tools and manual processes. There&apos;s a better way.</p>
         </div>
 
@@ -77,7 +77,7 @@ export default function AboutPage() {
             <div className="about-body">
               <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
               <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
-              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems — we built this for you.</p>
+              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems - we built this for you.</p>
             </div>
           </div>
         </div>

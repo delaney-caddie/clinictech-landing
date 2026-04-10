@@ -48,7 +48,7 @@ function PreviewContent() {
               <span className="text-xs text-gray-400">Powered by <span className="font-semibold text-white">ClinicTech</span></span>
             </div>
             <p className="text-[11px] text-gray-400 leading-snug max-w-2xl">
-              This is a preview of what your custom platform could look like. Your brand colors, logo, and workflows are fully customizable — every feature can be tailored to how your clinic operates.
+              This is a preview of what your custom platform could look like. Your brand colors, logo, and workflows are fully customizable - every feature can be tailored to how your clinic operates.
             </p>
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">

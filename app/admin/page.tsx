@@ -107,7 +107,7 @@ const PIPELINE_STATUSES = [
 /* ─── Styles ─── */
 const styles = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif; background: #F8FAFC; color: #0F172A; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif; background: #F8FAFC; color: #0F172A; -webkit-font-smoothing: antialiased; }
 
   .admin { display: flex; min-height: 100vh; }
 
@@ -129,7 +129,7 @@ const styles = `
   .admin-topbar-left { display: flex; align-items: center; gap: 16px; }
   .admin-topbar-right { display: flex; align-items: center; gap: 10px; }
   .search-box { display: flex; align-items: center; gap: 8px; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px 14px; width: 300px; }
-  .search-box input { border: none; background: transparent; font-size: 13px; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; outline: none; flex: 1; color: #0F172A; }
+  .search-box input { border: none; background: transparent; font-size: 13px; font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif; outline: none; flex: 1; color: #0F172A; }
   .search-box input::placeholder { color: #94A3B8; }
 
   /* Pipeline chips */
@@ -176,7 +176,7 @@ const styles = `
   .color-dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
 
   /* Action buttons */
-  .action-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #E2E8F0; background: #fff; cursor: pointer; color: #475569; transition: all 0.15s; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
+  .action-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #E2E8F0; background: #fff; cursor: pointer; color: #475569; transition: all 0.15s; font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif; }
   .action-btn:hover { background: #F1F5F9; border-color: #CBD5E1; }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .action-btn.primary { background: #0F172A; color: #F1F5F9; border-color: #0F172A; }
@@ -221,7 +221,7 @@ const styles = `
 
   /* Discover tab */
   .discover-search { display: flex; gap: 12px; padding: 28px; }
-  .discover-input { flex: 1; padding: 14px 18px; font-size: 15px; border: 2px solid #E2E8F0; border-radius: 10px; font-family: var(--font-dm-sans), 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s; }
+  .discover-input { flex: 1; padding: 14px 18px; font-size: 15px; border: 2px solid #E2E8F0; border-radius: 10px; font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.15s; }
   .discover-input:focus { border-color: #0F172A; }
   .discover-results { padding: 0 28px 28px; }
   .discover-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; }
@@ -887,7 +887,7 @@ function DetailPanel({ clinic, onClose, onStatusChange, onEnrich, onEnrichFromLi
                 <div key={i} className="timeline-item">
                   <div className={`timeline-dot ${t.done ? (i === currentIdx ? "active" : "done") : ""}`} />
                   <span className="timeline-label">{t.label}</span>
-                  {t.date !== "-" && <span className="timeline-date"> &mdash; {t.date}</span>}
+                  {t.date !== "-" && <span className="timeline-date"> - {t.date}</span>}
                 </div>
               ))}
             </div>
@@ -2204,7 +2204,7 @@ export default function AdminPanel() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      const msg = `CSV downloaded — ${totalCount} clinics (${withEmail} with email, ${withoutEmail} without).`;
+      const msg = `CSV downloaded - ${totalCount} clinics (${withEmail} with email, ${withoutEmail} without).`;
       alert(msg);
     } catch {
       alert("Export failed.");
@@ -2438,7 +2438,7 @@ export default function AdminPanel() {
             </div>
           </div>
 
-          {/* Stats bar — shown on non-discover/analytics/settings tabs */}
+          {/* Stats bar - shown on non-discover/analytics/settings tabs */}
           {activePage !== "discover" && activePage !== "analytics" && activePage !== "settings" && activePage !== "inbound" && activePage !== "feedback" && (
             <div className="stats-bar">
               <div className="stat-card">
@@ -2844,7 +2844,7 @@ export default function AdminPanel() {
             </div>
           )}
 
-          {/* ─── PIPELINE TAB — Kanban ─── */}
+          {/* ─── PIPELINE TAB - Kanban ─── */}
           {activePage === "pipeline" && !loading && (
             <>
             <AddLeadForm onAdded={fetchClinics} />

@@ -1,32 +1,13 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display, Nunito, Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const dmSerif = DM_Serif_Display({
-  variable: "--font-dm-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
-
-const nunito = Nunito({
-  variable: "--font-nunito",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  style: ["normal", "italic"],
-});
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
 });
 
 const geistMono = Geist_Mono({
@@ -34,13 +15,8 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-});
-
 export const metadata: Metadata = {
-  title: "ClinicTech — Your Clinic's Growth Engine",
+  title: "ClinicTech - Your Clinic's Growth Engine",
   description: "A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in days.",
   icons: {
     icon: [
@@ -61,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} ${nunito.variable} ${geist.variable} ${geistMono.variable} ${playfair.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${plusJakarta.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}

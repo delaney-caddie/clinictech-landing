@@ -109,7 +109,7 @@ export default function ClinicPreviewPage() {
           .hover\\:bg-sidebar-accent:hover { background-color: ${accentBg} !important; }
           .hover\\:bg-sidebar-accent\\/80:hover { background-color: ${accentBg} !important; }
 
-          /* Main content — primary color overrides */
+          /* Main content - primary color overrides */
           .bg-primary { background-color: ${brandHex} !important; }
           .text-primary { color: ${brandHex} !important; }
           .bg-primary\\/10 { background-color: ${brandHex}1a !important; }
@@ -121,7 +121,7 @@ export default function ClinicPreviewPage() {
           .bg-primary-foreground\\/20 { background-color: ${isLight ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.2)"} !important; }
           .text-primary-foreground\\/70 { color: ${isLight ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.7)"} !important; }
 
-          /* Secondary — slightly lighter/different shade */
+          /* Secondary - slightly lighter/different shade */
           .bg-secondary { background-color: ${brandHex}cc !important; }
           .text-secondary { color: ${brandHex}cc !important; }
           .bg-secondary\\/15 { background-color: ${brandHex}26 !important; }
@@ -154,7 +154,7 @@ export default function ClinicPreviewPage() {
               <span className="text-xs text-gray-400">Powered by <span className="font-semibold text-white">ClinicTech</span></span>
             </div>
             <p className="text-[11px] text-gray-400 leading-snug max-w-2xl">
-              This is a preview of what your custom platform could look like. Your brand colors, logo, and workflows are fully customizable — every feature can be tailored to how your clinic operates.
+              This is a preview of what your custom platform could look like. Your brand colors, logo, and workflows are fully customizable - every feature can be tailored to how your clinic operates.
             </p>
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">

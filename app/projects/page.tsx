@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata: Metadata = {
-  title: "Projects — ClinicTech",
+  title: "Projects - ClinicTech",
   description: "Detailed examples of what we've built for regenerative medicine clinics, with screenshots, metrics, and impact.",
 };
 
@@ -15,10 +15,10 @@ export default function ProjectsPage() {
           text-align: center;
         }
         .projects-hero h1 {
-          font-family: var(--font-nunito), 'Nunito', sans-serif;
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
           font-size: 44px;
           font-weight: 800;
-          font-style: italic;
+          font-style: normal;
           color: #1A1A2E;
           margin-bottom: 16px;
         }
@@ -56,7 +56,7 @@ export default function ProjectsPage() {
           margin-bottom: 12px;
         }
         .project-card h2 {
-          font-family: var(--font-nunito), 'Nunito', sans-serif;
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
           font-size: 22px;
           font-weight: 700;
           color: #1A1A2E;
@@ -75,7 +75,7 @@ export default function ProjectsPage() {
           border-top: 1px solid #E5E5EA;
         }
         .project-metric-value {
-          font-family: var(--font-nunito), 'Nunito', sans-serif;
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
           font-size: 18px;
           font-weight: 800;
           color: #22C55E;

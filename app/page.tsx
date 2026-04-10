@@ -80,6 +80,7 @@ export default function LandingPage() {
   const [procedureValue, setProcedureValue] = useState(12000);
   const [activeFeature, setActiveFeature] = useState(0);
   const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
+  const [heroTab, setHeroTab] = useState(0);
   const featureAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const features = useMemo(() => [
@@ -167,6 +168,13 @@ export default function LandingPage() {
     <>
       <style>{`
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+.hl { color: #5EC4E3; }
+.hl-purple { color: #4F46E5; }
+.hl-gradient {
+  background: linear-gradient(135deg, #3730A3, #5EC4E3);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 :root {
   --navy: #3730A3;
@@ -198,7 +206,7 @@ export default function LandingPage() {
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
   overflow-x: hidden;
@@ -221,8 +229,8 @@ nav .container {
 }
 .nav-logo {
   display: flex; align-items: center; gap: 12px;
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-weight: 800; font-size: 22px; font-style: italic; letter-spacing: 0.5px;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800; font-size: 22px; font-style: normal; letter-spacing: 0.5px;
   text-decoration: none; color: var(--white);
 }
 .nav-logo svg { width: 36px; height: 36px; }
@@ -254,7 +262,7 @@ nav .nav-links a.btn-primary:hover {
   padding: 14px 32px;
   background: var(--navy);
   color: var(--white);
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-weight: 700; font-size: 15px;
   border: none; border-radius: 100px;
   cursor: pointer;
@@ -272,7 +280,7 @@ nav .nav-links a.btn-primary:hover {
   padding: 13px 28px;
   background: transparent;
   color: var(--navy);
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-weight: 700; font-size: 15px;
   border: 1.5px solid rgba(55, 48, 163, 0.2);
   border-radius: 100px;
@@ -315,7 +323,8 @@ nav .nav-links a.btn-primary:hover {
 }
 .hero-dna-bg {
   position: absolute;
-  inset: 0;
+  top: 0; left: 0; right: 0;
+  height: 60%;
   z-index: 0;
   pointer-events: none;
 }
@@ -358,10 +367,10 @@ nav .nav-links a.btn-primary:hover {
   text-align: left;
 }
 .hero-main-title {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 56px;
   font-weight: 800;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.1;
   letter-spacing: -1px;
   color: var(--text-primary);
@@ -408,10 +417,10 @@ nav .nav-links a.btn-primary:hover {
   50% { opacity: 0.4; }
 }
 .hero h1 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 56px;
   font-weight: 800;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.1;
   letter-spacing: 0.5px;
   margin-bottom: 24px;
@@ -422,7 +431,7 @@ nav .nav-links a.btn-primary:hover {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-style: italic;
+  font-style: normal;
 }
 .hero-sub {
   font-size: 18px;
@@ -497,7 +506,7 @@ nav .nav-links a.btn-primary:hover {
   display: flex; align-items: center; gap: 8px;
 }
 .crm-pipeline-name-input {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 16px; font-weight: 700;
   color: var(--text-primary);
   border: none; border-bottom: 2px solid var(--navy);
@@ -696,7 +705,7 @@ nav .nav-links a.btn-primary:hover {
   flex-wrap: wrap;
 }
 .stat-banner-number {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 48px; font-weight: 900;
   color: var(--navy);
 }
@@ -719,10 +728,10 @@ nav .nav-links a.btn-primary:hover {
   margin-bottom: 16px;
 }
 .section-title {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 40px;
   font-weight: 800;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.15;
   letter-spacing: 0.5px;
   margin-bottom: 20px;
@@ -772,7 +781,7 @@ nav .nav-links a.btn-primary:hover {
   font-size: 22px;
 }
 .pain-card h3 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 18px; font-weight: 600;
   margin-bottom: 12px;
   letter-spacing: -0.3px;
@@ -832,8 +841,8 @@ nav .nav-links a.btn-primary:hover {
   margin-bottom: 20px;
 }
 .product-card h3 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 26px; font-weight: 700; font-style: italic;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 26px; font-weight: 700; font-style: normal;
   letter-spacing: 0.3px;
   margin-bottom: 16px;
 }
@@ -944,7 +953,7 @@ nav .nav-links a.btn-primary:hover {
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 .roi-calc-title {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 18px; font-weight: 600;
   margin-bottom: 24px;
   display: flex; align-items: center; gap: 10px;
@@ -965,7 +974,7 @@ nav .nav-links a.btn-primary:hover {
 .roi-row:last-child { border-bottom: none; }
 .roi-label { font-size: 14px; color: var(--text-secondary); }
 .roi-value {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 16px; font-weight: 600;
 }
 .roi-result {
@@ -981,7 +990,7 @@ nav .nav-links a.btn-primary:hover {
   font-weight: 600; margin-bottom: 4px;
 }
 .roi-result-value {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 36px; font-weight: 700;
   color: var(--green);
   transition: transform 0.15s ease;
@@ -1058,7 +1067,7 @@ nav .nav-links a.btn-primary:hover {
   margin-bottom: 12px;
 }
 .ss-card-quote {
-  font-size: 13px; font-style: italic; line-height: 1.6;
+  font-size: 13px; font-style: normal; line-height: 1.6;
   color: var(--text-secondary);
   margin-bottom: 12px;
   position: relative;
@@ -1228,7 +1237,7 @@ nav .nav-links a.btn-primary:hover {
 .funnel-review-stat:last-child { margin-bottom: 0; }
 .funnel-review-number {
   font-size: 24px; font-weight: 800; color: var(--text-primary);
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
 }
 .funnel-review-label {
   font-size: 10px; color: var(--text-muted); margin-top: 2px;
@@ -1264,14 +1273,14 @@ nav .nav-links a.btn-primary:hover {
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
 }
 .funnel-card-number {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 48px; font-weight: 700;
   color: rgba(55, 48, 163, 0.08);
   position: absolute;
   top: 16px; right: 24px;
 }
 .funnel-card h3 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 18px; font-weight: 600;
   margin-bottom: 10px;
   letter-spacing: -0.3px;
@@ -1318,13 +1327,13 @@ nav .nav-links a.btn-primary:hover {
   border-radius: 16px;
   background: linear-gradient(135deg, #0E9AC0, #5EC4E3);
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 22px; font-weight: 700;
   color: var(--white);
   margin: 0 auto 24px;
 }
 .step h3 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 20px; font-weight: 600;
   margin-bottom: 12px;
   letter-spacing: -0.3px;
@@ -1428,7 +1437,7 @@ nav .nav-links a.btn-primary:hover {
   min-height: 44px;
 }
 .price-amount {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 42px; font-weight: 700;
   margin-bottom: 4px;
 }
@@ -1456,7 +1465,7 @@ nav .nav-links a.btn-primary:hover {
   width: 100%;
   padding: 14px;
   border-radius: 100px;
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 15px; font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
@@ -1507,8 +1516,8 @@ nav .nav-links a.btn-primary:hover {
   pointer-events: none;
 }
 .cta-box h2 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 40px; font-weight: 800; font-style: italic;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 40px; font-weight: 800; font-style: normal;
   letter-spacing: 0.5px;
   margin-bottom: 16px;
   position: relative;
@@ -1554,8 +1563,8 @@ nav .nav-links a.btn-primary:hover {
   color: var(--blue); margin-bottom: 12px;
 }
 .about-text h2 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-size: 34px; font-weight: 800; font-style: italic; color: var(--text-primary);
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 34px; font-weight: 800; font-style: normal; color: var(--text-primary);
   line-height: 1.15; letter-spacing: 0.5px; margin-bottom: 20px;
 }
 .about-text p {
@@ -1581,8 +1590,8 @@ footer .container {
 }
 .footer-brand {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
-  font-weight: 800; font-size: 18px; font-style: italic;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800; font-size: 18px; font-style: normal;
   color: var(--gray-400);
 }
 .footer-brand svg { width: 28px; height: 28px; }
@@ -1635,7 +1644,7 @@ footer .container {
   flex-shrink: 0;
 }
 .service-tab h3 {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
@@ -1689,7 +1698,7 @@ footer .container {
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
 }
 .why-stat-value {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 24px;
   font-weight: 800;
   color: var(--navy);
@@ -1731,7 +1740,7 @@ footer .container {
 }
 .case-quote {
   font-size: 15px;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.6;
   color: var(--text-primary);
   margin-bottom: 20px;
@@ -1758,7 +1767,7 @@ footer .container {
   flex: 1;
 }
 .case-metric-value {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 20px;
   font-weight: 800;
   color: var(--green);
@@ -1972,7 +1981,7 @@ footer .container {
 }
 .portal-mockup-logo {
   display: flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; font-style: italic;
+  font-size: 14px; font-weight: 700; font-style: normal;
 }
 .portal-mockup-logo .logo-dot {
   width: 24px; height: 24px;
@@ -1993,7 +2002,7 @@ footer .container {
   margin-bottom: 20px;
 }
 .portal-welcome h3 {
-  font-size: 18px; font-weight: 800; font-style: italic;
+  font-size: 18px; font-weight: 800; font-style: normal;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
@@ -2452,7 +2461,7 @@ footer .container {
   display: flex; align-items: center; gap: 14px;
 }
 .roi-input-value {
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-size: 16px; font-weight: 600;
   color: var(--text-primary);
   min-width: 72px;
@@ -2521,6 +2530,225 @@ footer .container {
 .crm-revealed { animation: crmReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 @keyframes crmReveal { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .hero-dna { display: none; } .crm-hidden { opacity: 1; transform: none; } }
+/* ===== HERO TABS ===== */
+.hero-tabs-section {
+  position: relative; padding: 180px 0 80px; background: #fff; overflow: hidden;
+}
+.hero-tabs-text { text-align: center; max-width: 720px; margin: 0 auto; padding: 0 24px; }
+.hero-tabs-kicker {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: #0E9AC0; margin-bottom: 16px;
+}
+.hero-tabs-title {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px;
+  color: #0F172A; margin-bottom: 20px;
+}
+.hero-tabs-sub {
+  font-size: 17px; line-height: 1.7; color: #64748B; margin-bottom: 32px;
+}
+.hero-tabs-ctas {
+  display: flex; gap: 12px; justify-content: center;
+}
+.hero-cta-primary {
+  display: inline-flex; align-items: center; padding: 14px 32px;
+  background: #3730A3; color: #fff; font-weight: 700; font-size: 15px;
+  border-radius: 100px; text-decoration: none; transition: all 0.2s;
+}
+.hero-cta-primary:hover { background: #4338CA; box-shadow: 0 4px 16px rgba(55, 48, 163, 0.3); transform: translateY(-1px); }
+.hero-cta-secondary {
+  display: inline-flex; align-items: center; padding: 13px 28px;
+  background: transparent; color: #0F172A; font-weight: 700; font-size: 15px;
+  border: 1.5px solid #E2E8F0; border-radius: 100px; text-decoration: none; transition: all 0.2s;
+}
+.hero-cta-secondary:hover { border-color: #94A3B8; background: #F8FAFC; }
+.hero-tabs-container {
+  max-width: 1100px; margin: 48px auto 0; padding: 0 24px;
+}
+.hero-tab-nav {
+  display: flex; justify-content: center; gap: 0; border-bottom: 1px solid #E2E8F0;
+  margin-bottom: 0;
+}
+.hero-tab-btn {
+  padding: 14px 28px; font-size: 14px; font-weight: 600;
+  color: #94A3B8; background: none; border: none; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  white-space: nowrap;
+}
+.hero-tab-btn:hover { color: #475569; }
+.hero-tab-btn.active { color: #3730A3; border-bottom-color: #3730A3; }
+.hero-tab-panel {
+  background: #F8FAFC; border-radius: 0 0 16px 16px; border: 1px solid #E2E8F0;
+  border-top: none; padding: 32px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;
+  animation: heroTabFade 0.3s ease;
+}
+@keyframes heroTabFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Hero tab mockups */
+.ht-form-mockup {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
+  overflow: hidden;
+}
+.ht-form-header {
+  padding: 12px 16px; background: #0F172A; color: #fff;
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 10px;
+}
+.ht-form-dots { display: flex; gap: 5px; }
+.ht-form-dots span { width: 8px; height: 8px; border-radius: 50%; }
+.ht-form-dots span:nth-child(1) { background: #FF5F57; }
+.ht-form-dots span:nth-child(2) { background: #FEBC2E; }
+.ht-form-dots span:nth-child(3) { background: #28C840; }
+.ht-form-body { padding: 20px; }
+.ht-form-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
+.ht-form-sub { font-size: 11px; color: #94A3B8; margin-bottom: 14px; }
+.ht-form-badge {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 10px;
+  font-weight: 700; color: #22C55E; background: rgba(34, 197, 94, 0.1);
+  padding: 4px 10px; border-radius: 100px; margin-bottom: 14px;
+}
+.ht-field { margin-bottom: 10px; }
+.ht-field-label { font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.ht-field-input {
+  width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #E2E8F0;
+  background: #F8FAFC; font-size: 12px; color: #0F172A; box-sizing: border-box;
+}
+.ht-field-input.filled { border-color: #3730A3; background: rgba(55, 48, 163, 0.03); }
+.ht-steps { display: flex; gap: 6px; margin-top: 14px; }
+.ht-step { flex: 1; height: 3px; border-radius: 2px; background: #E2E8F0; }
+.ht-step.active { background: #3730A3; }
+.ht-step.done { background: #22C55E; }
+.ht-step-labels { display: flex; justify-content: space-between; font-size: 9px; color: #94A3B8; margin-top: 4px; margin-bottom: 14px; }
+.ht-continue-btn {
+  width: 100%; padding: 10px; background: #3730A3; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+  cursor: default; margin-bottom: 14px;
+}
+.ht-embed { background: #F8FAFC; border: 1px dashed #E2E8F0; border-radius: 8px; padding: 10px; }
+.ht-embed-label { font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.ht-embed-code {
+  font-family: monospace; font-size: 10px; color: #3730A3; background: #fff;
+  padding: 6px 10px; border-radius: 6px; border: 1px solid #E2E8F0;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+
+/* Lead pipeline cards */
+.ht-lead-cards { display: flex; flex-direction: column; gap: 12px; }
+.ht-lead-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px;
+}
+.ht-lead-badge {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px;
+  border-radius: 100px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.ht-lead-badge.hot { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
+.ht-lead-badge.warm { background: rgba(245,158,11,0.1); color: #D97706; }
+.ht-lead-badge.cold { background: rgba(148,163,184,0.15); color: #64748B; }
+.ht-lead-name { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
+.ht-lead-desc { font-size: 11px; color: #94A3B8; line-height: 1.4; }
+
+/* Portal mockup for tab 2 */
+.ht-portal {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
+}
+.ht-portal-nav {
+  padding: 12px 16px; background: #0F172A; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; font-weight: 700;
+}
+.ht-portal-links { display: flex; gap: 14px; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; }
+.ht-portal-body { padding: 18px; }
+.ht-portal-welcome { font-size: 16px; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+.ht-portal-sub { font-size: 11px; color: #94A3B8; margin-bottom: 14px; }
+.ht-portal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ht-portal-card {
+  background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px;
+}
+.ht-portal-card-label { font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.ht-portal-card-value { font-size: 12px; font-weight: 600; color: #0F172A; }
+.ht-portal-card-sub { font-size: 10px; color: #94A3B8; margin-top: 2px; }
+.ht-portal-progress {
+  margin-top: 12px; background: #F8FAFC; border: 1px solid #E2E8F0;
+  border-radius: 8px; padding: 12px;
+}
+.ht-portal-progress-label { font-size: 10px; font-weight: 700; color: #0F172A; margin-bottom: 8px; }
+.ht-portal-progress-bar { height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; }
+.ht-portal-progress-fill { height: 100%; width: 65%; background: #3730A3; border-radius: 3px; }
+.ht-portal-progress-text { font-size: 10px; color: #3730A3; font-weight: 600; margin-top: 4px; }
+
+/* Timeline for tab 2 right side */
+.ht-timeline { display: flex; flex-direction: column; gap: 0; }
+.ht-timeline-title { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 16px; }
+.ht-timeline-item { display: flex; gap: 12px; padding-bottom: 18px; }
+.ht-timeline-item:last-child { padding-bottom: 0; }
+.ht-timeline-dot-col { display: flex; flex-direction: column; align-items: center; width: 14px; }
+.ht-timeline-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid #3730A3; background: #fff; }
+.ht-timeline-dot.filled { background: #3730A3; }
+.ht-timeline-line { width: 1px; flex: 1; background: #E2E8F0; margin-top: 4px; }
+.ht-timeline-content { flex: 1; }
+.ht-timeline-time { font-size: 10px; font-weight: 700; color: #0E9AC0; text-transform: uppercase; letter-spacing: 0.5px; }
+.ht-timeline-label { font-size: 12px; font-weight: 600; color: #0F172A; }
+.ht-timeline-desc { font-size: 11px; color: #94A3B8; }
+
+/* Travel tab mockups */
+.ht-travel-portal {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
+}
+.ht-travel-header {
+  padding: 12px 16px; background: #0F172A; color: #fff;
+  font-size: 12px; font-weight: 700;
+}
+.ht-travel-body { padding: 18px; }
+.ht-travel-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
+.ht-travel-countdown {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
+  font-weight: 700; color: #5EC4E3; background: rgba(55, 48, 163,0.08);
+  padding: 4px 12px; border-radius: 100px; margin-bottom: 14px;
+}
+.ht-travel-checklist { display: flex; flex-direction: column; gap: 10px; }
+.ht-travel-check {
+  display: flex; align-items: center; gap: 10px; font-size: 12px; color: #0F172A;
+}
+.ht-travel-check-dot {
+  width: 18px; height: 18px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;
+}
+.ht-travel-check-dot.done { background: rgba(55, 48, 163,0.1); color: #22C55E; }
+.ht-travel-check-dot.pending { background: #F1F5F9; color: #94A3B8; }
+.ht-travel-check-text { font-weight: 600; }
+.ht-travel-check-sub { font-size: 10px; color: #94A3B8; margin-left: 28px; margin-top: -4px; }
+
+/* Admin dashboard mockup */
+.ht-admin {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
+}
+.ht-admin-header {
+  padding: 12px 16px; background: #0F172A; color: #fff;
+  font-size: 12px; font-weight: 700;
+}
+.ht-admin-body { padding: 18px; }
+.ht-admin-title { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
+.ht-admin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid #F1F5F9; font-size: 12px;
+}
+.ht-admin-row:last-child { border-bottom: none; }
+.ht-admin-name { font-weight: 700; color: #0F172A; }
+.ht-admin-date { color: #94A3B8; font-size: 11px; }
+.ht-admin-status {
+  font-size: 9px; font-weight: 700; padding: 3px 8px;
+  border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.ht-admin-status.confirmed { background: rgba(55, 48, 163,0.1); color: #22C55E; }
+.ht-admin-status.pending { background: rgba(245,158,11,0.1); color: #D97706; }
+.ht-admin-status.transit { background: rgba(99,102,241,0.1); color: #6366F1; }
+.ht-admin-coord {
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid #F1F5F9;
+  font-size: 11px; color: #94A3B8; display: flex; align-items: center; gap: 6px;
+}
+.ht-admin-coord-dot { width: 8px; height: 8px; border-radius: 50%; background: #22C55E; }
+
 /* ===== RESPONSIVE ===== */
 /* ===== TABLET ===== */
 @media (max-width: 900px) {
@@ -2550,6 +2778,10 @@ footer .container {
   .hero-ctas { flex-direction: column; }
   .nav-links { display: none; }
   .nav-mobile-cta { display: inline-flex !important; }
+  .hero-tabs-title { font-size: 36px; }
+  .hero-tab-nav { overflow-x: auto; justify-content: flex-start; padding: 0 16px; }
+  .hero-tab-btn { padding: 12px 20px; font-size: 13px; }
+  .hero-tab-panel { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
   .stat-banner .container { flex-direction: column; gap: 8px; }
   .section-title { font-size: 32px; }
 }
@@ -2565,6 +2797,11 @@ footer .container {
 
   /* Hero */
   .hero-fullwidth { min-height: 80vh; }
+  .hero-tabs-section { padding: 140px 0 60px; }
+  .hero-tabs-title { font-size: 28px; }
+  .hero-tabs-sub { font-size: 15px; }
+  .hero-tabs-ctas { flex-direction: column; align-items: center; gap: 10px; }
+  .hero-tabs-ctas a { width: 100%; justify-content: center; }
   .hero-main-title { font-size: 32px; letter-spacing: 0; }
   .hero-centered-sub { font-size: 15px; }
   .hero-centered-ctas { flex-direction: column; gap: 10px; }
@@ -2673,8 +2910,8 @@ footer .container {
 
       <SiteNav />
 
-      {/* HERO — Full-width DNA background with centered text */}
-      <section className="hero-fullwidth">
+      {/* HERO - Tabbed product preview */}
+      <section className="hero-tabs-section">
         {/* Flowing DNA background */}
         <div className="hero-dna-bg">
           <svg viewBox="0 0 1200 800" className="hero-dna-wave" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -2690,16 +2927,12 @@ footer .container {
                 <stop offset="100%" stopColor="#3730A3" stopOpacity="0.08"/>
               </linearGradient>
             </defs>
-            {/* Helix strand 1 */}
             <path className="dna-wave-path" d="M-100,400 C100,200 300,600 500,350 C700,100 900,500 1100,300 C1300,100 1500,400 1500,400" fill="none" stroke="url(#waveGrad1)" strokeWidth="60" strokeLinecap="round"/>
-            {/* Helix strand 2 */}
             <path className="dna-wave-path dna-wave-2" d="M-100,350 C100,550 300,150 500,400 C700,650 900,250 1100,450 C1300,650 1500,350 1500,350" fill="none" stroke="url(#waveGrad2)" strokeWidth="60" strokeLinecap="round"/>
-            {/* Connecting rungs */}
             {Array.from({length: 15}, (_, i) => {
               const x = 50 + i * 80;
               return <line key={i} x1={x} y1="300" x2={x} y2="450" stroke="rgba(94, 196, 227, 0.06)" strokeWidth="2" className="dna-rung-line" style={{animationDelay: `${i * 0.2}s`}}/>;
             })}
-            {/* Nodes */}
             {Array.from({length: 12}, (_, i) => {
               const x = 80 + i * 100;
               return (
@@ -2712,190 +2945,218 @@ footer .container {
           </svg>
         </div>
 
-        <div className="hero-split">
-        <div className="hero-split-left">
-        <div className="hero-centered">
-          <div className="hero-badge">
-            <span className="dot"></span>
-            Built for Regenerative Medicine
-          </div>
-          <h1 className="hero-main-title">The technology partner<br/>for stem cell clinics.</h1>
-          <p className="hero-centered-sub">We build custom digital infrastructure for regenerative medicine clinics across North America. Websites, patient intake, CRM, automation, travel logistics. Whatever your clinic needs to capture more patients and run smoother, we build it.</p>
-          <div className="hero-centered-ctas">
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">Book a Discovery Call</a>
-            {heroEmailStatus === "sent" ? (
-              <span className="btn-secondary" style={{opacity: 0.85, cursor: "default"}}>{"Check your inbox soon! ✓"}</span>
-            ) : (
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (!heroEmail || heroEmailStatus === "sending") return;
-                  setHeroEmailStatus("sending");
-                  try {
-                    const res = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: heroEmail }) });
-                    if (res.ok) { setHeroEmailStatus("sent"); } else { setHeroEmailStatus("error"); }
-                  } catch { setHeroEmailStatus("error"); }
-                }}
-                style={{display: "inline-flex"}}
-              >
-                <input
-                  type="email"
-                  required
-                  placeholder="See How It Works →"
-                  value={heroEmail}
-                  onChange={(e) => { setHeroEmail(e.target.value); if (heroEmailStatus === "error") setHeroEmailStatus("idle"); }}
-                  onFocus={(e) => { e.target.placeholder = "Enter your email"; }}
-                  onBlur={(e) => { if (!e.target.value) e.target.placeholder = "See How It Works →"; }}
-                  className="btn-secondary"
-                  style={{cursor: "pointer", textAlign: "center", minWidth: 200, border: heroEmailStatus === "error" ? "1.5px solid #ef4444" : undefined}}
-                />
-                {heroEmail && (
-                  <button type="submit" className="btn-primary" style={{cursor: "pointer", marginLeft: 8}} disabled={heroEmailStatus === "sending"}>
-                    {heroEmailStatus === "sending" ? "…" : "→"}
-                  </button>
-                )}
-              </form>
-            )}
+        <div className="hero-tabs-text">
+          <div className="hero-tabs-kicker">Built for regenerative medicine</div>
+          <h1 className="hero-tabs-title">Everything your clinic needs to <span className="hl">capture</span><span className="hl">,</span> <span className="hl">keep</span><span className="hl">,</span> and <span className="hl">grow</span> patients.</h1>
+          <p className="hero-tabs-sub">Custom digital infrastructure for stem cell and regenerative medicine clinics. Intake forms, patient portals, travel coordination, and automated follow-up. Live in weeks, not months.</p>
+          <div className="hero-tabs-ctas">
+            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="hero-cta-primary">Book a discovery call</a>
+            <a href="/features" className="hero-cta-secondary">Explore features</a>
           </div>
         </div>
-        </div>
 
-        <div className="hero-split-right">
-        {/* Pipeline Builder visual */}
-        <div className="hero-pipeline-wrap">
-          <div className="crm-builder">
-              <div className="crm-builder-toolbar">
-                <div className="crm-toolbar-left">
-                  <div className="crm-toolbar-dots"><span></span><span></span><span></span></div>
-                  <div className="crm-toolbar-title">Pipeline Builder</div>
-                </div>
-                <div className="crm-toolbar-right">
-                  <div className="crm-toolbar-btn">{"\u21A9"} Undo</div>
-                  <div className="crm-toolbar-btn save">{"\u2713"} Save Pipeline</div>
-                </div>
-              </div>
-              <div className="crm-builder-body">
-                <div className="crm-pipeline-header">
-                  <div className="crm-pipeline-name">
-                    <input className="crm-pipeline-name-input" defaultValue="Patient Pipeline" readOnly />
-                    <span className="edit-icon">{"\u270E"}</span>
-                  </div>
-                  <div className="crm-add-stage-btn">+ Add Stage</div>
-                </div>
-                <div className="crm-kanban">
-                  <div className="crm-column">
-                    <div className="crm-column-header">
-                      <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-                        <span className="crm-column-drag">{"\u2807"}</span>
-                        <span className="crm-column-title">New Lead</span>
-                      </div>
-                      <span className="crm-column-count">4</span>
-                    </div>
-                    <div className="crm-card">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">Jennifer M.</div>
-                      <div className="crm-card-detail">Knee Stem Cell Therapy</div>
-                      <div className="crm-card-value">$12,000</div>
-                    </div>
-                    <div className="crm-card">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">Michael T.</div>
-                      <div className="crm-card-detail">PRP Consultation</div>
-                      <div className="crm-card-value">$5,000</div>
-                    </div>
-                    <div className="crm-add-card">+ Add</div>
-                  </div>
-                  <div className="crm-column">
-                    <div className="crm-column-header">
-                      <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-                        <span className="crm-column-drag">{"\u2807"}</span>
-                        <span className="crm-column-title">Consult Booked</span>
-                      </div>
-                      <span className="crm-column-count">3</span>
-                    </div>
-                    <div className="crm-card dragging">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">Robert K.</div>
-                      <div className="crm-card-detail">Hip Regeneration</div>
-                      <div className="crm-card-value">$18,000</div>
-                    </div>
-                    <div className="crm-card">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">Sarah L.</div>
-                      <div className="crm-card-detail">Shoulder PRP</div>
-                      <div className="crm-card-value">$6,500</div>
-                    </div>
-                  </div>
-                  <div className="crm-column">
-                    <div className="crm-column-header">
-                      <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-                        <span className="crm-column-drag">{"\u2807"}</span>
-                        <span className="crm-column-title">Treatment</span>
-                      </div>
-                      <span className="crm-column-count">2</span>
-                    </div>
-                    <div className="crm-card">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">Lisa W.</div>
-                      <div className="crm-card-detail">{"Stem Cell \u2014 Knee"}</div>
-                      <div className="crm-card-value">$15,000</div>
-                    </div>
-                  </div>
-                  <div className="crm-column">
-                    <div className="crm-column-header">
-                      <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-                        <span className="crm-column-drag">{"\u2807"}</span>
-                        <span className="crm-column-title">Follow-Up</span>
-                      </div>
-                      <span className="crm-column-count">5</span>
-                    </div>
-                    <div className="crm-card">
-                      <span className="crm-card-drag">{"\u2807"}</span>
-                      <div className="crm-card-name">David R.</div>
-                      <div className="crm-card-detail">Post-PRP Check-in</div>
-                      <div className="crm-card-value">$8,000</div>
-                    </div>
-                    <div className="crm-add-card">+ Add</div>
-                  </div>
-                </div>
-              </div>
-              <div className="crm-builder-footer">
-                <div className="crm-footer-left">
-                  <div className="crm-footer-chip">{"🎨"} Your Brand</div>
-                  <div className="crm-footer-chip">{"⚡"} Auto-Follow-Up On</div>
-                  <div className="crm-footer-chip">{"📊"} 14 Active Leads</div>
-                </div>
-                <span>Drag stages to reorder</span>
-              </div>
-            </div>
-            <div className="brand-tag">Branded as <span>Your Clinic</span></div>
+        <div className="hero-tabs-container">
+          <div className="hero-tab-nav">
+            <button className={`hero-tab-btn ${heroTab === 0 ? "active" : ""}`} onClick={() => setHeroTab(0)}>Lead capture &amp; conversion</button>
+            <button className={`hero-tab-btn ${heroTab === 1 ? "active" : ""}`} onClick={() => setHeroTab(1)}>Patient experience</button>
+            <button className={`hero-tab-btn ${heroTab === 2 ? "active" : ""}`} onClick={() => setHeroTab(2)}>Travel concierge</button>
+          </div>
 
-            <div className="activity-toast" style={{bottom:"90px",left:"-30px"}}>
-              <div className="toast-icon green">{"⚡"}</div>
-              <div className="toast-text">
-                <span className="toast-label">Automation</span>
-                <span className="toast-msg">Auto-followed up with 3 leads today</span>
+          {/* Tab 1: Lead Capture */}
+          {heroTab === 0 && (
+            <div className="hero-tab-panel" key="tab0">
+              <div className="ht-form-mockup">
+                <div className="ht-form-header">
+                  <div className="ht-form-dots"><span></span><span></span><span></span></div>
+                  Smart Intake Form
+                </div>
+                <div className="ht-form-body">
+                  <div className="ht-form-title">Start your journey</div>
+                  <div className="ht-form-sub">Tell us about yourself to get started</div>
+                  <div className="ht-form-badge">&#10003; Lead captured at step 1</div>
+                  <div className="ht-field">
+                    <div className="ht-field-label">Full Name</div>
+                    <div className="ht-field-input filled">Sarah Mitchell</div>
+                  </div>
+                  <div className="ht-field">
+                    <div className="ht-field-label">Email</div>
+                    <div className="ht-field-input filled">sarah@email.com</div>
+                  </div>
+                  <div className="ht-field">
+                    <div className="ht-field-label">Condition of interest</div>
+                    <div className="ht-field-input">Select a condition...</div>
+                  </div>
+                  <div className="ht-steps">
+                    <div className="ht-step done"></div>
+                    <div className="ht-step active"></div>
+                    <div className="ht-step"></div>
+                    <div className="ht-step"></div>
+                  </div>
+                  <div className="ht-step-labels">
+                    <span>Contact Info</span><span>Condition</span><span>History</span><span>Schedule</span>
+                  </div>
+                  <div className="ht-continue-btn">Continue</div>
+                  <div className="ht-embed">
+                    <div className="ht-embed-label">Embed on your website</div>
+                    <div className="ht-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
+                  </div>
+                </div>
               </div>
-              <span className="toast-time">2m ago</span>
-            </div>
-            <div className="activity-toast" style={{top:"60px",left:"-20px",borderLeftColor:"var(--navy)"}}>
-              <div className="toast-icon purple">{"⭐"}</div>
-              <div className="toast-text">
-                <span className="toast-label">Patient Engagement</span>
-                <span className="toast-msg">Sent testimonial request to Sarah L.</span>
+              <div className="ht-lead-cards">
+                <div className="ht-lead-card">
+                  <div className="ht-lead-badge hot">Hot lead</div>
+                  <div className="ht-lead-name">Sarah M. - Knee stem cell</div>
+                  <div className="ht-lead-desc">Completed form 2 min ago. Auto follow-up sent.</div>
+                </div>
+                <div className="ht-lead-card">
+                  <div className="ht-lead-badge warm">Warm lead</div>
+                  <div className="ht-lead-name">Michael T. - PRP inquiry</div>
+                  <div className="ht-lead-desc">Abandoned at step 2. Entered 30-day nurture sequence.</div>
+                </div>
+                <div className="ht-lead-card">
+                  <div className="ht-lead-badge cold">Cold lead</div>
+                  <div className="ht-lead-name">Jennifer K. - General inquiry</div>
+                  <div className="ht-lead-desc">Email captured. Entered 90-day drip.</div>
+                </div>
               </div>
-              <span className="toast-time">12m ago</span>
             </div>
-            <div className="activity-toast" style={{bottom:"160px",right:"-20px",left:"auto",borderLeftColor:"var(--blue)"}}>
-              <div className="toast-icon blue">{"📅"}</div>
-              <div className="toast-text">
-                <span className="toast-label">Booking</span>
-                <span className="toast-msg">Jennifer M. booked consultation</span>
+          )}
+
+          {/* Tab 2: Patient Experience */}
+          {heroTab === 1 && (
+            <div className="hero-tab-panel" key="tab1">
+              <div className="ht-portal">
+                <div className="ht-portal-nav">
+                  <span>Your Clinic Portal</span>
+                  <div className="ht-portal-links"><span>Treatment</span><span>Documents</span><span>Messages</span></div>
+                </div>
+                <div className="ht-portal-body">
+                  <div className="ht-portal-welcome">Welcome back, Sarah</div>
+                  <div className="ht-portal-sub">Stem Cell Therapy - Knee - Day 14 of recovery</div>
+                  <div className="ht-portal-cards">
+                    <div className="ht-portal-card">
+                      <div className="ht-portal-card-label">Treatment</div>
+                      <div className="ht-portal-card-value">Stem Cell - Knee</div>
+                      <div className="ht-portal-card-sub">Apr 1, 2026 - Dr. Rivera</div>
+                    </div>
+                    <div className="ht-portal-card">
+                      <div className="ht-portal-card-label">Recovery Protocol</div>
+                      <div className="ht-portal-card-value">Week 2: Light walking</div>
+                      <div className="ht-portal-card-sub">Ice 2x daily, no heavy lifting</div>
+                    </div>
+                    <div className="ht-portal-card">
+                      <div className="ht-portal-card-label">Next Appointment</div>
+                      <div className="ht-portal-card-value">Apr 22 - Follow-up</div>
+                      <div className="ht-portal-card-sub">Dr. Rivera - 10:00 AM</div>
+                    </div>
+                    <div className="ht-portal-card">
+                      <div className="ht-portal-card-label">Messages</div>
+                      <div className="ht-portal-card-value" style={{color:"#5EC4E3"}}>1 new message</div>
+                      <div className="ht-portal-card-sub">From your care team</div>
+                    </div>
+                  </div>
+                  <div className="ht-portal-progress">
+                    <div className="ht-portal-progress-label">Track your progress - Pain level</div>
+                    <div className="ht-portal-progress-bar"><div className="ht-portal-progress-fill"></div></div>
+                    <div className="ht-portal-progress-text">Pain: 7/10 → 3/10 (improving)</div>
+                  </div>
+                </div>
               </div>
-              <span className="toast-time">Just now</span>
+              <div>
+                <div className="ht-timeline-title">12-month patient lifecycle</div>
+                <div className="ht-timeline">
+                  <div className="ht-timeline-item">
+                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot filled"></div><div className="ht-timeline-line"></div></div>
+                    <div className="ht-timeline-content"><div className="ht-timeline-time">Week 1</div><div className="ht-timeline-label">Post-treatment check-in</div><div className="ht-timeline-desc">How are you feeling? Any questions?</div></div>
+                  </div>
+                  <div className="ht-timeline-item">
+                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot filled"></div><div className="ht-timeline-line"></div></div>
+                    <div className="ht-timeline-content"><div className="ht-timeline-time">Week 4</div><div className="ht-timeline-label">Progress check + education</div><div className="ht-timeline-desc">Recovery milestone content</div></div>
+                  </div>
+                  <div className="ht-timeline-item">
+                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div><div className="ht-timeline-line"></div></div>
+                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 3</div><div className="ht-timeline-label">Testimonial request</div><div className="ht-timeline-desc">Capture their story at peak satisfaction</div></div>
+                  </div>
+                  <div className="ht-timeline-item">
+                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div><div className="ht-timeline-line"></div></div>
+                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 6</div><div className="ht-timeline-label">Referral program invite</div><div className="ht-timeline-desc">Turn happy patients into referral sources</div></div>
+                  </div>
+                  <div className="ht-timeline-item">
+                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div></div>
+                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 12</div><div className="ht-timeline-label">Annual check-in + reengagement</div><div className="ht-timeline-desc">New treatments, wellness check, follow-up</div></div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        </div>
+          )}
+
+          {/* Tab 3: Travel Concierge */}
+          {heroTab === 2 && (
+            <div className="hero-tab-panel" key="tab2">
+              <div className="ht-travel-portal">
+                <div className="ht-travel-header">Patient Travel Portal</div>
+                <div className="ht-travel-body">
+                  <div className="ht-travel-title">Your trip to Puerto Vallarta</div>
+                  <div className="ht-travel-countdown">&#9200; 5 days until treatment</div>
+                  <div className="ht-travel-checklist">
+                    <div>
+                      <div className="ht-travel-check">
+                        <div className="ht-travel-check-dot done">&#10003;</div>
+                        <span className="ht-travel-check-text">Flight confirmed</span>
+                      </div>
+                      <div className="ht-travel-check-sub">AA 1247 - Apr 15, 9:30am</div>
+                    </div>
+                    <div>
+                      <div className="ht-travel-check">
+                        <div className="ht-travel-check-dot done">&#10003;</div>
+                        <span className="ht-travel-check-text">Hotel booked</span>
+                      </div>
+                      <div className="ht-travel-check-sub">Grand Resort - 2 nights</div>
+                    </div>
+                    <div>
+                      <div className="ht-travel-check">
+                        <div className="ht-travel-check-dot done">&#10003;</div>
+                        <span className="ht-travel-check-text">Airport pickup scheduled</span>
+                      </div>
+                      <div className="ht-travel-check-sub">Driver: Carlos M. - Confirmed</div>
+                    </div>
+                    <div>
+                      <div className="ht-travel-check">
+                        <div className="ht-travel-check-dot pending">&#8226;</div>
+                        <span className="ht-travel-check-text">Pre-arrival form</span>
+                      </div>
+                      <div className="ht-travel-check-sub">Complete before Apr 12</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="ht-admin">
+                <div className="ht-admin-header">Admin Dashboard - Upcoming Arrivals</div>
+                <div className="ht-admin-body">
+                  <div className="ht-admin-title">This week</div>
+                  <div className="ht-admin-row">
+                    <span className="ht-admin-name">Sarah M.</span>
+                    <span className="ht-admin-date">Apr 15</span>
+                    <span className="ht-admin-status confirmed">Confirmed</span>
+                  </div>
+                  <div className="ht-admin-row">
+                    <span className="ht-admin-name">James K.</span>
+                    <span className="ht-admin-date">Apr 16</span>
+                    <span className="ht-admin-status pending">Pending docs</span>
+                  </div>
+                  <div className="ht-admin-row">
+                    <span className="ht-admin-name">Maria L.</span>
+                    <span className="ht-admin-date">Apr 17</span>
+                    <span className="ht-admin-status transit">In transit</span>
+                  </div>
+                  <div className="ht-admin-coord">
+                    <div className="ht-admin-coord-dot"></div>
+                    Coordinator: Ana R. - 3 patients assigned this week
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -2903,7 +3164,7 @@ footer .container {
       <section className="problem" id="services" style={{paddingBottom: "120px"}}>
         <div className="container">
           <div className="section-label">What We Do</div>
-          <h2 className="section-title">Custom builds for every part of your patient journey.</h2>
+          <h2 className="section-title">Custom builds for every part of your <span className="hl">patient journey.</span></h2>
           <p className="section-sub">Every clinic is different. We start by understanding your patient flow, your team, and where the biggest gaps are. Then we build exactly what you need.</p>
           <div className="service-layout">
           <div className="service-tabs">
@@ -2957,7 +3218,7 @@ footer .container {
               <div className="backoffice-mockup">
                 <div className="bo-toolbar">
                   <div className="bo-toolbar-dots"><span></span><span></span><span></span></div>
-                  Your Clinic — Automations
+                  Your Clinic - Automations
                 </div>
                 <div className="bo-sidebar">
                   <div className="bo-nav">
@@ -3175,7 +3436,7 @@ footer .container {
         <div className="container" style={{flexDirection: "column", gap: "32px"}}>
           <div style={{textAlign: "center"}}>
             <div className="section-label" style={{textAlign: "center"}}>Why Us</div>
-            <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>We only work with stem cell and regenerative medicine clinics.</h2>
+            <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>We only work with <span className="hl">stem cell and regenerative medicine</span> clinics.</h2>
             <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto", marginBottom: "0"}}>We&apos;re not a generic agency. We&apos;ve audited dozens of clinic websites in this space. We understand the patient journey from &ldquo;I just discovered stem cell therapy&rdquo; to &ldquo;I&apos;m booking my flight.&rdquo;</p>
           </div>
           <div className="why-stats">
@@ -3203,7 +3464,7 @@ footer .container {
       <section className="roi" id="roi">
         <div className="container">
           <div className="section-label">The ROI</div>
-          <h2 className="section-title">The math is simple. The impact is not.</h2>
+          <h2 className="section-title">The math is simple. The <span className="hl">impact</span> is not.</h2>
           <p className="section-sub">Average stem cell procedure: $5,000 to $25,000. How many lost leads can you afford per month?</p>
           <div className="roi-grid">
             <div className="roi-calculator">
@@ -3288,7 +3549,7 @@ footer .container {
       <section className="how" id="how">
         <div className="container">
           <div className="section-label" style={{textAlign:"center"}}>How It Works</div>
-          <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in weeks. Not months.</h2>
+          <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in <span className="hl">weeks.</span> Not months.</h2>
           <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No six-month implementation. No bloated SOWs. Three steps and your custom systems are running.</p>
           <div className="steps">
             <div className="step">
@@ -3314,7 +3575,7 @@ footer .container {
       <section className="cases-section" id="results">
         <div className="container">
           <div className="section-label" style={{textAlign: "center"}}>Results</div>
-          <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>What happens when clinics work with us.</h2>
+          <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>What happens when clinics <span className="hl">work with us.</span></h2>
           <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>From single-location practices to networks with 50+ clinics.</p>
           <div className="cases-grid">
             <div className="case-card">
@@ -3395,7 +3656,7 @@ footer .container {
             </div>
             <div className="about-text">
               <div className="about-label">Built by Delaney and Danika</div>
-              <h2>Operators building<br/>for operators.</h2>
+              <h2><span className="hl-gradient">Operators</span> building<br/>for operators.</h2>
               <p>We&apos;re operators who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
               <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
               <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost.</p>
@@ -3422,7 +3683,7 @@ footer .container {
             <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 24, width: "auto", opacity: 0.6}} />
           </div>
           <div className="footer-links">
-            <a href="/projects">Projects</a>
+            <a href="/features">Features</a>
             <a href="/about">About</a>
             <a href="/blog">Blog</a>
             <a href="#">Privacy</a>
