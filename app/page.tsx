@@ -81,6 +81,7 @@ export default function LandingPage() {
   const [activeFeature, setActiveFeature] = useState(0);
   const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
   const [heroTab, setHeroTab] = useState(0);
+  const [bannerVisible, setBannerVisible] = useState(true);
   const featureAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const features = useMemo(() => [
@@ -2530,6 +2531,40 @@ footer .container {
 .crm-revealed { animation: crmReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 @keyframes crmReveal { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .hero-dna { display: none; } .crm-hidden { opacity: 1; transform: none; } }
+/* ===== ANNOUNCEMENT BANNER ===== */
+.announce-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+  background: #1E293B; color: #fff; padding: 10px 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 13px; font-weight: 500;
+}
+.announce-banner a {
+  color: #5EC4E3; font-weight: 700; text-decoration: none;
+  transition: color 0.2s;
+}
+.announce-banner a:hover { color: #7DD4ED; }
+.announce-banner-close {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 18px; cursor: pointer; padding: 4px 8px; line-height: 1;
+}
+.announce-banner-close:hover { color: #fff; }
+.announce-banner + .site-nav,
+.has-banner .site-nav { top: 38px; }
+.has-banner .hero-tabs-section { padding-top: 218px; }
+.has-banner .site-nav-mobile-menu { padding-top: 158px; }
+
+/* Financial badges */
+.fin-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 700; padding: 2px 8px;
+  border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
+  border-width: 1.5px; border-style: solid;
+}
+.fin-badge.qualified { border-color: #22C55E; color: #22C55E; background: transparent; }
+.fin-badge.review { border-color: #D97706; color: #D97706; background: transparent; }
+.fin-badge.not-qualified { border-color: #94A3B8; color: #94A3B8; background: transparent; }
+
 /* ===== HERO TABS ===== */
 .hero-tabs-section {
   position: relative; padding: 180px 0 80px; background: #fff; overflow: hidden;
@@ -2996,27 +3031,23 @@ footer .container {
                     <span>Contact Info</span><span>Condition</span><span>History</span><span>Schedule</span>
                   </div>
                   <div className="ht-continue-btn">Continue</div>
-                  <div className="ht-embed">
-                    <div className="ht-embed-label">Embed on your website</div>
-                    <div className="ht-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
-                  </div>
                 </div>
               </div>
               <div className="ht-lead-cards">
                 <div className="ht-lead-card">
-                  <div className="ht-lead-badge hot">Hot lead</div>
+                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge hot">Hot</span><span className="fin-badge qualified">Qualified</span></div>
                   <div className="ht-lead-name">Sarah M. - Knee stem cell</div>
-                  <div className="ht-lead-desc">Completed form 2 min ago. Auto follow-up sent.</div>
+                  <div className="ht-lead-desc">Completed form 2 min ago. Consultation auto-booked.</div>
                 </div>
                 <div className="ht-lead-card">
-                  <div className="ht-lead-badge warm">Warm lead</div>
+                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge warm">Warm</span><span className="fin-badge review">Review</span></div>
                   <div className="ht-lead-name">Michael T. - PRP inquiry</div>
-                  <div className="ht-lead-desc">Abandoned at step 2. Entered 30-day nurture sequence.</div>
+                  <div className="ht-lead-desc">Abandoned at step 2. Routed to financial coordinator.</div>
                 </div>
                 <div className="ht-lead-card">
-                  <div className="ht-lead-badge cold">Cold lead</div>
+                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge cold">Cold</span><span className="fin-badge not-qualified">Not Qualified</span></div>
                   <div className="ht-lead-name">Jennifer K. - General inquiry</div>
-                  <div className="ht-lead-desc">Email captured. Entered 90-day drip.</div>
+                  <div className="ht-lead-desc">Email captured. Sent financing resources.</div>
                 </div>
               </div>
             </div>

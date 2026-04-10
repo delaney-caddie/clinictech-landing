@@ -230,13 +230,83 @@ export default function LeadCapturePage() {
           font-size: 9px; font-weight: 600; color: #64748B;
         }
 
-        /* Lead Scoring */
+        /* Financial Pre-Qualification */
+        .lc-finprequal {
+          padding: 100px 0; background: #F8FAFC;
+        }
+        .lc-finprequal-inner {
+          max-width: 1100px; margin: 0 auto; padding: 0 24px;
+        }
+        .lc-finprequal-top {
+          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
+          margin-bottom: 48px;
+        }
+        .lc-finprequal-label {
+          font-size: 11px; font-weight: 700; text-transform: uppercase;
+          letter-spacing: 1.5px; color: #0E9AC0; margin-bottom: 12px;
+        }
+        .lc-finprequal h2 {
+          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+          font-size: 36px; font-weight: 800; font-style: normal;
+          color: #0F172A; margin-bottom: 16px; line-height: 1.15;
+        }
+        .lc-finprequal p.desc {
+          font-size: 16px; line-height: 1.7; color: #64748B; margin-bottom: 16px;
+        }
+        .lc-us-badge {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-size: 12px; font-weight: 600; color: #64748B;
+          background: #EFF6FF; border: 1px solid #BFDBFE;
+          padding: 6px 14px; border-radius: 100px;
+        }
+        /* Financial lead cards */
+        .lc-fin-cards { display: flex; flex-direction: column; gap: 12px; }
+        .lc-fin-card {
+          background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px;
+        }
+        .lc-fin-card-badges { display: flex; gap: 6px; margin-bottom: 8px; }
+        .lc-fin-card-intent {
+          display: inline-block; font-size: 9px; font-weight: 700; padding: 3px 10px;
+          border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .lc-fin-card-intent.hot { background: rgba(34,197,94,0.1); color: #22C55E; }
+        .lc-fin-card-intent.warm { background: rgba(245,158,11,0.1); color: #D97706; }
+        .lc-fin-card-intent.cold { background: rgba(148,163,184,0.15); color: #64748B; }
+        .lc-fin-card-fin {
+          display: inline-flex; align-items: center; gap: 3px;
+          font-size: 9px; font-weight: 700; padding: 3px 10px;
+          border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
+          border-width: 1.5px; border-style: solid;
+        }
+        .lc-fin-card-fin.qualified { border-color: #22C55E; color: #22C55E; }
+        .lc-fin-card-fin.review { border-color: #D97706; color: #D97706; }
+        .lc-fin-card-fin.not-qual { border-color: #94A3B8; color: #94A3B8; }
+        .lc-fin-card-name { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
+        .lc-fin-card-detail { font-size: 11px; color: #94A3B8; }
+        .lc-fin-card-action { font-size: 11px; color: #64748B; margin-top: 6px; font-weight: 500; }
+        /* Feature detail cards */
+        .lc-finprequal-grid {
+          display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        }
+        .lc-finprequal-card {
+          background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 24px;
+        }
+        .lc-finprequal-card h4 {
+          font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 8px;
+        }
+        .lc-finprequal-card p {
+          font-size: 13px; line-height: 1.6; color: #64748B;
+        }
+
+        /* Smart Lead Scoring (2D Matrix) */
         .lc-scoring-section {
           padding: 100px 0; background: #fff;
         }
         .lc-scoring-inner {
           max-width: 1100px; margin: 0 auto; padding: 0 24px;
-          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .lc-scoring-text {
+          max-width: 700px; margin-bottom: 48px;
         }
         .lc-scoring-text h2 {
           font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
@@ -246,6 +316,42 @@ export default function LeadCapturePage() {
         .lc-scoring-text p {
           font-size: 16px; line-height: 1.7; color: #64748B;
         }
+        .lc-matrix {
+          background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
+          overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .lc-matrix-header {
+          display: grid; grid-template-columns: 100px repeat(3, 1fr);
+          background: #F8FAFC; border-bottom: 1px solid #E2E8F0;
+        }
+        .lc-matrix-header-cell {
+          padding: 12px 16px; font-size: 11px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.5px; color: #64748B;
+          text-align: center;
+        }
+        .lc-matrix-header-cell:first-child { text-align: left; }
+        .lc-matrix-row {
+          display: grid; grid-template-columns: 100px repeat(3, 1fr);
+          border-bottom: 1px solid #F1F5F9;
+        }
+        .lc-matrix-row:last-child { border-bottom: none; }
+        .lc-matrix-label {
+          padding: 16px; font-size: 12px; font-weight: 700;
+          display: flex; align-items: center; gap: 6px;
+        }
+        .lc-matrix-label-dot {
+          width: 8px; height: 8px; border-radius: 50%;
+        }
+        .lc-matrix-label-dot.hot { background: #22C55E; }
+        .lc-matrix-label-dot.warm { background: #F59E0B; }
+        .lc-matrix-label-dot.cold { background: #94A3B8; }
+        .lc-matrix-cell {
+          padding: 14px 12px; text-align: center; font-size: 11px;
+          font-weight: 600; color: #0F172A; border-left: 1px solid #F1F5F9;
+        }
+        .lc-matrix-cell.high { background: rgba(34,197,94,0.06); color: #15803D; }
+        .lc-matrix-cell.mid { background: rgba(245,158,11,0.04); color: #B45309; }
+        .lc-matrix-cell.low { background: rgba(148,163,184,0.06); color: #64748B; }
         .lc-pipeline-mockup {
           background: #fff; border-radius: 12px; overflow: hidden;
           box-shadow: 0 20px 60px rgba(0,0,0,0.08); border: 1px solid #E2E8F0;
@@ -400,21 +506,25 @@ export default function LeadCapturePage() {
 
         /* Responsive */
         @media (max-width: 900px) {
-          .lc-hero-inner, .lc-tab-content, .lc-scoring-inner, .lc-roi-inner {
+          .lc-hero-inner, .lc-tab-content, .lc-roi-inner {
             grid-template-columns: 1fr; gap: 40px;
           }
+          .lc-finprequal-top { grid-template-columns: 1fr; gap: 32px; }
+          .lc-finprequal-grid { grid-template-columns: 1fr; }
+          .lc-matrix-header, .lc-matrix-row { grid-template-columns: 80px repeat(3, 1fr); }
           .lc-hero h1 { font-size: 34px; }
           .lc-tabs-title { font-size: 30px; }
           .lc-tab-nav { flex-direction: column; align-items: center; }
-          .lc-pipeline-body { flex-direction: column; }
         }
         @media (max-width: 640px) {
           .lc-hero { padding: 140px 0 60px; }
           .lc-hero h1 { font-size: 28px; }
           .lc-hero p { font-size: 15px; }
-          .lc-tabs-section, .lc-scoring-section, .lc-roi-section { padding: 60px 0; }
+          .lc-tabs-section, .lc-scoring-section, .lc-roi-section, .lc-finprequal { padding: 60px 0; }
           .lc-tabs-title { font-size: 26px; }
-          .lc-scoring-text h2, .lc-roi-text h2 { font-size: 28px; }
+          .lc-scoring-text h2, .lc-roi-text h2, .lc-finprequal h2 { font-size: 28px; }
+          .lc-matrix-cell { font-size: 9px; padding: 10px 6px; }
+          .lc-matrix-label { font-size: 10px; padding: 10px 8px; }
           .lc-roi-calc { padding: 24px; }
           .lc-roi-result-value { font-size: 28px; }
           .lc-roi-slider { width: 100px; }
@@ -615,70 +725,89 @@ export default function LeadCapturePage() {
           </div>
         </section>
 
-        {/* Lead Scoring */}
+        {/* Financial Pre-Qualification */}
+        <section className="lc-finprequal" id="financial-prequalification">
+          <div className="lc-finprequal-inner">
+            <div className="lc-finprequal-top">
+              <div>
+                <div className="lc-finprequal-label">Financial pre-qualification</div>
+                <h2>Know if they can afford treatment before the call.</h2>
+                <p className="desc">Stem cell procedures run $5,000 to $25,000+ with no insurance coverage. Your team shouldn&apos;t spend 30 minutes on a consultation only to hear &ldquo;I need to think about it&rdquo; because the patient can&apos;t afford it. ClinicTech runs a soft-pull financial pre-qualification silently during intake, so your team sees affordability signals alongside every lead. No impact on the patient&apos;s credit score. No friction in the booking flow.</p>
+                <div className="lc-us-badge">&#127482;&#127480; Available for U.S.-based leads</div>
+              </div>
+              <div className="lc-fin-cards">
+                <div className="lc-fin-card">
+                  <div className="lc-fin-card-badges"><span className="lc-fin-card-intent hot">Hot</span><span className="lc-fin-card-fin qualified">Qualified</span></div>
+                  <div className="lc-fin-card-name">Sarah M.</div>
+                  <div className="lc-fin-card-detail">Knee Stem Cell Therapy | $15,000</div>
+                  <div className="lc-fin-card-action">Completed intake 3 min ago. Auto follow-up sent. Consultation auto-booked.</div>
+                </div>
+                <div className="lc-fin-card">
+                  <div className="lc-fin-card-badges"><span className="lc-fin-card-intent warm">Warm</span><span className="lc-fin-card-fin review">Review</span></div>
+                  <div className="lc-fin-card-name">Michael T.</div>
+                  <div className="lc-fin-card-detail">PRP + Stem Cell Combo | $22,000</div>
+                  <div className="lc-fin-card-action">Abandoned at step 3. Routed to financial coordinator. Payment plan info sent.</div>
+                </div>
+                <div className="lc-fin-card">
+                  <div className="lc-fin-card-badges"><span className="lc-fin-card-intent cold">Cold</span><span className="lc-fin-card-fin not-qual">Not Qualified</span></div>
+                  <div className="lc-fin-card-name">Jennifer K.</div>
+                  <div className="lc-fin-card-detail">General Inquiry | $8,000</div>
+                  <div className="lc-fin-card-action">Email captured. Entered 90-day drip with financing resources.</div>
+                </div>
+              </div>
+            </div>
+            <div className="lc-finprequal-grid">
+              <div className="lc-finprequal-card">
+                <h4>Runs during intake</h4>
+                <p>The soft-pull check runs silently while the patient fills out your intake form. No extra steps, no separate application, no SSN field. The patient experience is unchanged.</p>
+              </div>
+              <div className="lc-finprequal-card">
+                <h4>Affordability signals, not credit scores</h4>
+                <p>Your team sees a simple badge: Qualified, Review, or Not Qualified. No interpreting credit scores or debt ratios. The system handles the logic based on your procedure pricing.</p>
+              </div>
+              <div className="lc-finprequal-card">
+                <h4>Route and prioritize automatically</h4>
+                <p>Qualified leads go straight to your consultation calendar. Review leads get routed to a financial coordinator with payment plan info. Unqualified leads enter a different sequence with financing resources.</p>
+              </div>
+              <div className="lc-finprequal-card">
+                <h4>No impact on patient credit</h4>
+                <p>Soft pulls don&apos;t affect the patient&apos;s credit score and aren&apos;t visible to other lenders. Same type of check banks use for pre-approval offers. FCRA compliant.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Smart Lead Scoring - 2D Matrix */}
         <section className="lc-scoring-section">
           <div className="lc-scoring-inner">
             <div className="lc-scoring-text">
-              <h2>Know exactly who to call first.</h2>
-              <p>Every lead is automatically scored as Hot, Warm, or Cold based on how they engaged, what condition they&apos;re inquiring about, and how far they got in the intake. Your team sees a prioritized pipeline, not a messy inbox.</p>
+              <h2>Intent and affordability. See both before the call.</h2>
+              <p>Every lead is automatically scored on two dimensions. Intent scoring (Hot, Warm, Cold) is based on how they engaged, what condition they&apos;re inquiring about, and how far they got in the intake. Financial qualification (Qualified, Review, Not Qualified) runs a soft-pull affordability check on U.S.-based leads in the background. Your team sees a prioritized pipeline with both signals, so the highest-value leads always get attention first.</p>
             </div>
-            <div>
-              <div className="lc-pipeline-mockup">
-                <div className="lc-pipeline-header">
-                  <div className="lc-toolbar-dots"><span></span><span></span><span></span></div>
-                  Lead Pipeline
-                </div>
-                <div className="lc-pipeline-body">
-                  <div className="lc-pipe-col">
-                    <div className="lc-pipe-col-header hot">
-                      Hot <span className="lc-pipe-count">4</span>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">Jennifer M.</div>
-                      <div className="lc-pipe-card-detail">Knee Stem Cell</div>
-                      <div className="lc-pipe-card-value">$12,000</div>
-                      <div className="lc-pipe-card-score hot">Score: 92</div>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">Robert K.</div>
-                      <div className="lc-pipe-card-detail">Hip Regeneration</div>
-                      <div className="lc-pipe-card-value">$18,000</div>
-                      <div className="lc-pipe-card-score hot">Score: 87</div>
-                    </div>
-                  </div>
-                  <div className="lc-pipe-col">
-                    <div className="lc-pipe-col-header warm">
-                      Warm <span className="lc-pipe-count">6</span>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">Sarah L.</div>
-                      <div className="lc-pipe-card-detail">Shoulder PRP</div>
-                      <div className="lc-pipe-card-value">$6,500</div>
-                      <div className="lc-pipe-card-score warm">Score: 64</div>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">Michael T.</div>
-                      <div className="lc-pipe-card-detail">Consultation</div>
-                      <div className="lc-pipe-card-value">$5,000</div>
-                      <div className="lc-pipe-card-score warm">Score: 51</div>
-                    </div>
-                  </div>
-                  <div className="lc-pipe-col">
-                    <div className="lc-pipe-col-header cold">
-                      Cold <span className="lc-pipe-count">12</span>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">Lisa W.</div>
-                      <div className="lc-pipe-card-detail">General Inquiry</div>
-                      <div className="lc-pipe-card-score cold">Score: 23</div>
-                    </div>
-                    <div className="lc-pipe-card">
-                      <div className="lc-pipe-card-name">David R.</div>
-                      <div className="lc-pipe-card-detail">Info Request</div>
-                      <div className="lc-pipe-card-score cold">Score: 18</div>
-                    </div>
-                  </div>
-                </div>
+            <div className="lc-matrix">
+              <div className="lc-matrix-header">
+                <div className="lc-matrix-header-cell">Intent</div>
+                <div className="lc-matrix-header-cell">Qualified</div>
+                <div className="lc-matrix-header-cell">Review</div>
+                <div className="lc-matrix-header-cell">Not Qualified</div>
+              </div>
+              <div className="lc-matrix-row">
+                <div className="lc-matrix-label"><span className="lc-matrix-label-dot hot"></span> Hot</div>
+                <div className="lc-matrix-cell high">Auto-book consultation</div>
+                <div className="lc-matrix-cell mid">Route to financial coordinator</div>
+                <div className="lc-matrix-cell low">Send financing resources</div>
+              </div>
+              <div className="lc-matrix-row">
+                <div className="lc-matrix-label"><span className="lc-matrix-label-dot warm"></span> Warm</div>
+                <div className="lc-matrix-cell mid">Priority nurture sequence</div>
+                <div className="lc-matrix-cell mid">Nurture + payment plan info</div>
+                <div className="lc-matrix-cell low">Standard nurture</div>
+              </div>
+              <div className="lc-matrix-row">
+                <div className="lc-matrix-label"><span className="lc-matrix-label-dot cold"></span> Cold</div>
+                <div className="lc-matrix-cell low">Add to re-engagement</div>
+                <div className="lc-matrix-cell low">90-day drip</div>
+                <div className="lc-matrix-cell low">Low priority drip</div>
               </div>
             </div>
           </div>
