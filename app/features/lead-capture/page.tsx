@@ -373,19 +373,40 @@ export default function LeadCapturePage() {
         .lc-fin-toggle-text { font-size: 13px; font-weight: 600; color: #0F172A; }
         .lc-fin-toggle-sub { font-size: 11px; color: #94A3B8; }
         /* Lead result card */
-        .lc-fin-result-dot {
-          display: inline-block; width: 10px; height: 10px; border-radius: 50%;
-          background: #22C55E; margin-right: 6px; vertical-align: middle;
+        /* Credit score gauge */
+        .lc-fin-gauge-card { text-align: center; position: relative; }
+        .lc-fin-instant-badge {
+          display: inline-block; font-size: 10px; font-weight: 700;
+          color: #15803D; background: #F0FDF4; border: 1px solid #BBF7D0;
+          padding: 4px 14px; border-radius: 6px; margin-bottom: 14px;
         }
-        .lc-fin-result-label {
-          font-size: 10px; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 1.2px; color: #94A3B8; margin-bottom: 10px;
+        .lc-fin-gauge-ring {
+          width: 140px; height: 80px; margin: 0 auto 8px; position: relative; overflow: hidden;
         }
-        .lc-fin-result-value {
+        .lc-fin-gauge-svg { width: 140px; height: 80px; margin: 0 auto; display: block; }
+        .lc-fin-gauge-score {
           font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-          font-size: 32px; font-weight: 800; color: #22C55E; margin-bottom: 4px;
+          font-size: 36px; font-weight: 800; color: #0F172A;
         }
-        .lc-fin-result-sub { font-size: 14px; color: #64748B; }
+        .lc-fin-gauge-label {
+          font-size: 15px; font-weight: 700; color: #22C55E;
+        }
+        .lc-fin-silent-note {
+          font-size: 11px; color: #94A3B8; margin-top: 10px;
+          font-style: normal;
+        }
+        /* Qualify/Disqualify branch */
+        .lc-fin-branch {
+          display: flex; flex-direction: column; gap: 8px;
+          margin-top: 14px;
+        }
+        .lc-fin-branch-item {
+          display: flex; align-items: center; gap: 8px;
+          font-size: 12px; font-weight: 600; color: #0F172A;
+        }
+        .lc-fin-branch-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .lc-fin-branch-dot.green { background: #22C55E; }
+        .lc-fin-branch-dot.red { background: #EF4444; }
         /* Form card */
         .lc-fin-form-header {
           display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
@@ -660,7 +681,7 @@ export default function LeadCapturePage() {
         <section className="lc-hero">
           <div className="lc-hero-inner">
             <div className="lc-kicker">Lead capture &amp; conversion</div>
-            <h1>Stop losing patients to your contact form.</h1>
+            <h1>One form, instant increase in patient bookings.</h1>
             <p className="lc-hero-sub">67% of leads abandon your form before finishing. Your competitors respond in minutes while your team checks an inbox hours later. ClinicTech captures every inquiry, scores them instantly, and follows up automatically.</p>
             <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="lc-hero-cta">Book a discovery call</a>
           </div>
@@ -669,7 +690,7 @@ export default function LeadCapturePage() {
         {/* Before / After */}
         <section className="lc-ba">
           <div className="lc-ba-inner">
-            <h2 className="lc-ba-title">What changes when you stop losing leads</h2>
+            <h2 className="lc-ba-title">Turn a simple form into your clinic&apos;s growth engine</h2>
             <div className="lc-ba-cols">
               {/* OLD WAY */}
               <div className="lc-ba-col">
@@ -964,22 +985,22 @@ export default function LeadCapturePage() {
         {/* Feature cards with sharp headlines */}
         <section className="lc-features">
           <div className="lc-features-inner">
-            <h2 className="lc-features-title">Built for clinics that are tired of losing leads</h2>
+            <h2 className="lc-features-title">Built for clinics that want to fill up their calendars</h2>
             <div className="lc-features-grid">
               <div className="lc-feature-card">
-                <h4>Stop wasting consult time on tire-kickers</h4>
+                <h4>Fill your calendar with qualified patients</h4>
                 <p>Every lead is scored automatically. Your team only spends time on patients who are qualified and ready to book. Everyone else gets nurtured until they are.</p>
               </div>
               <div className="lc-feature-card">
-                <h4>Turn abandoned forms into booked consultations</h4>
+                <h4>3-5x more consultations from the same traffic</h4>
                 <p>Partial capture grabs name and email at step one. Even if they leave, they enter a re-engagement sequence. Traditional forms give you nothing.</p>
               </div>
               <div className="lc-feature-card">
-                <h4>Know exactly who&apos;s ready to book, right now</h4>
+                <h4>Your hottest leads, flagged instantly</h4>
                 <p>Hot lead alerts hit your team the moment a high-intent patient completes intake. No more digging through an inbox to find the ones who are ready.</p>
               </div>
               <div className="lc-feature-card">
-                <h4>Automated follow-up that runs while you sleep</h4>
+                <h4>Every lead nurtured to consultation, automatically</h4>
                 <p>5-day sequences for hot leads. 30-day nurture for warm. 90-day drip for cold. Every lead gets the right message at the right time, automatically.</p>
               </div>
             </div>
@@ -990,9 +1011,9 @@ export default function LeadCapturePage() {
         <section className="lc-finprequal" id="financial-prequalification">
           <div className="lc-finprequal-inner">
             <div>
-              <div className="lc-kicker">Financial pre-qualification is live</div>
-              <h2>Financial pre-qualification, built directly into your intake</h2>
-              <p className="desc">ClinicTech connects qualification, routing, and scheduling into one system so only patients who can afford treatment reach your consultation calendar. Soft-pull affordability screening runs silently during intake. No impact on patient credit. No friction in the booking flow.</p>
+              <div className="lc-kicker">Credit score enrichment is live</div>
+              <h2>Qualify their financial readiness, before they get on a call</h2>
+              <p className="desc">ClinicTech runs a silent credit soft-pull in the background while your patient fills out the intake form. No extra steps, no SSN field, no friction. By the time they hit submit, your team already knows if they can afford a $15,000 procedure. Only qualified patients reach your calendar.</p>
               <div className="lc-us-badge">&#127482;&#127480; Available for U.S.-based leads</div>
             </div>
 
@@ -1032,11 +1053,24 @@ export default function LeadCapturePage() {
                 <div className="lc-fin-form-captured">Lead captured at this step</div>
               </div>
 
-              {/* Bottom left: Lead result */}
-              <div className="lc-fin-card">
-                <div className="lc-fin-result-label"><span className="lc-fin-result-dot"></span> Lead Result</div>
-                <div className="lc-fin-result-value">Qualified</div>
-                <div className="lc-fin-result-sub">Can afford treatment</div>
+              {/* Bottom left: Credit score gauge */}
+              <div className="lc-fin-card lc-fin-gauge-card">
+                <div className="lc-fin-instant-badge">Instant Check</div>
+                <svg className="lc-fin-gauge-svg" viewBox="0 0 140 80">
+                  {/* Gray track */}
+                  <path d="M 15 70 A 55 55 0 0 1 125 70" fill="none" stroke="#E2E8F0" strokeWidth="10" strokeLinecap="round"/>
+                  {/* Green fill up to needle - 823/850 is ~92% of the arc */}
+                  <path d="M 15 70 A 55 55 0 0 1 120 52" fill="none" stroke="#22C55E" strokeWidth="10" strokeLinecap="round"/>
+                  {/* Needle dot */}
+                  <circle cx="120" cy="52" r="6" fill="#fff" stroke="#64748B" strokeWidth="2"/>
+                </svg>
+                <div className="lc-fin-gauge-score">823</div>
+                <div className="lc-fin-gauge-label">Excellent</div>
+                <div className="lc-fin-branch">
+                  <div className="lc-fin-branch-item"><div className="lc-fin-branch-dot green"></div> Qualify</div>
+                  <div className="lc-fin-branch-item"><div className="lc-fin-branch-dot red"></div> Disqualify</div>
+                </div>
+                <div className="lc-fin-silent-note">Runs silently in the background. No impact on patient credit.</div>
               </div>
 
               {/* Bottom right: Lead scoring */}
