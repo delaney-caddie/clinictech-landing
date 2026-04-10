@@ -1714,6 +1714,7 @@ footer .container {
 /* ===== CASE STUDIES ===== */
 .cases-section {
   padding: 120px 0;
+  background: #F8FAFC;
 }
 .cases-grid {
   display: grid;
@@ -1722,14 +1723,16 @@ footer .container {
   margin-top: 48px;
 }
 .case-card {
-  background: var(--gray-100);
+  background: #fff;
+  border: 1px solid #E2E8F0;
   border-radius: 20px;
   padding: 36px;
   transition: all 0.3s;
 }
 .case-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+  border-color: #CBD5E1;
 }
 .case-type {
   font-size: 11px;
@@ -1740,7 +1743,7 @@ footer .container {
   margin-bottom: 16px;
 }
 .case-quote {
-  font-size: 15px;
+  font-size: 16px;
   font-style: normal;
   line-height: 1.6;
   color: var(--text-primary);
@@ -1748,14 +1751,29 @@ footer .container {
   padding-left: 16px;
   border-left: 3px solid var(--blue);
 }
-.case-problem, .case-built {
+.case-problem {
   font-size: 13px;
   line-height: 1.6;
   color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.case-problem strong {
+  color: var(--text-primary);
+}
+.case-built {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #3730A3;
+  background: rgba(55, 48, 163, 0.06);
+  border: 1px solid rgba(55, 48, 163, 0.12);
+  border-radius: 8px;
+  padding: 10px 16px;
   margin-bottom: 8px;
 }
-.case-problem strong, .case-built strong {
-  color: var(--text-primary);
+.case-built strong {
+  color: #3730A3;
+  font-weight: 800;
 }
 .case-metrics-row {
   display: flex;
@@ -1766,10 +1784,13 @@ footer .container {
 }
 .case-metric {
   flex: 1;
+  background: #F8FAFC;
+  border-radius: 10px;
+  padding: 14px 16px;
 }
 .case-metric-value {
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--green);
 }
@@ -1777,6 +1798,7 @@ footer .container {
   font-size: 11px;
   color: var(--text-muted);
   font-weight: 600;
+  margin-top: 2px;
 }
 
 /* ===== OLD SECTIONS (kept for backwards compat) ===== */
