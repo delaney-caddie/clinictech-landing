@@ -43,6 +43,8 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <Analytics />
+        <div id="clinictech-widget" data-widget-id="17af3dba-6740-4133-a6cd-804de4a6a281" data-host="https://app.clinictech.io"></div>
+        <script src="https://app.clinictech.io/embed-widget.js" async></script>
       </body>
     </html>
   );
