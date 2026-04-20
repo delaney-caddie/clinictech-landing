@@ -3,6 +3,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Force all fixed/absolute positioned embed elements below nav */
+body > div:not(#__next):not([data-nextjs-router]) {
+  z-index: 9000 !important;
+}
+body > iframe {
+  z-index: 9000 !important;
+}
+.site-nav {
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}
+.site-nav * {
+  pointer-events: auto !important;
+}
+
 :root {
   /* ClinicTech - Blue, Navy & Light Blue Theme */
   --background: oklch(0.98 0.005 240);

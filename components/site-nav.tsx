@@ -14,25 +14,28 @@ export function SiteNav() {
         .site-nav {
           display: flex; align-items: center; justify-content: space-between;
           padding: 20px 40px; background: #3730A3;
-          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
           transition: all 0.3s;
         }
         .site-nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .site-nav-brand img { height: 70px; width: auto; }
         .site-nav-links { display: flex; align-items: center; gap: 32px; }
         .site-nav-links a {
-          font-size: 14px; color: rgba(255,255,255,0.75); text-decoration: none; font-weight: 600;
-          transition: color 0.2s;
+          font-size: 14px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 600;
+          transition: all 0.2s; cursor: pointer; padding: 6px 12px; border-radius: 8px;
         }
-        .site-nav-links a:hover { color: #fff; }
+        .site-nav-links a:hover { color: #fff !important; background: rgba(255,255,255,0.1); }
         .site-nav-links a.active { color: #fff; }
+        .site-nav-links a { position: relative; z-index: 2; }
         .site-nav-links .site-nav-cta {
-          background: #5EC4E3; color: #1A1A2E !important; padding: 14px 32px;
+          background: #5EC4E3 !important; color: #1A1A2E !important; padding: 14px 32px;
           border-radius: 100px; font-weight: 800; font-size: 15px;
+          cursor: pointer; transition: all 0.2s; display: inline-flex;
         }
         .site-nav-links .site-nav-cta:hover {
-          background: #4AB8D9; color: #1A1A2E !important;
+          background: #4AB8D9 !important; color: #1A1A2E !important;
           box-shadow: 0 4px 16px rgba(94, 196, 227, 0.4);
+          transform: translateY(-1px);
         }
         .site-nav-hamburger {
           display: none; background: none; border: none; cursor: pointer;
@@ -48,7 +51,7 @@ export function SiteNav() {
         .site-nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(2.5px, -2.5px); }
         .site-nav-mobile-menu {
           display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-          background: #3730A3; z-index: 99; padding: 120px 32px 40px;
+          background: #3730A3; z-index: 9998; padding: 120px 32px 40px;
           flex-direction: column; gap: 0;
         }
         .site-nav-mobile-menu.open { display: flex; }
@@ -84,6 +87,7 @@ export function SiteNav() {
           <Link href="/features/travel-concierge" className={pathname === "/features/travel-concierge" ? "active" : ""}>Grow</Link>
           <Link href="/about" className={pathname === "/about" ? "active" : ""}>About</Link>
           <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""}>Blog</Link>
+          <Link href="/contact">Demo</Link>
           <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a Call</a>
         </div>
         <button className={`site-nav-hamburger ${mobileOpen ? "open" : ""}`} onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
@@ -97,6 +101,7 @@ export function SiteNav() {
         <Link href="/features/travel-concierge" className={pathname === "/features/travel-concierge" ? "active" : ""} onClick={() => setMobileOpen(false)}>Grow</Link>
         <Link href="/about" className={pathname === "/about" ? "active" : ""} onClick={() => setMobileOpen(false)}>About</Link>
         <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""} onClick={() => setMobileOpen(false)}>Blog</Link>
+        <Link href="/contact" onClick={() => setMobileOpen(false)}>Demo</Link>
         <div className="mobile-cta-wrap">
           <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>Book a Call</a>
         </div>
