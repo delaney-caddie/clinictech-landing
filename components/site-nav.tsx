@@ -7,35 +7,57 @@ import { useState } from "react";
 export function SiteNav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
 
   return (
     <>
       <style>{`
         .site-nav {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 20px 40px; background: #3730A3;
+          padding: 16px 40px; background: #fff;
           position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-          transition: all 0.3s;
+          border-bottom: 1px solid #E2E8F0;
         }
         .site-nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .site-nav-brand img { height: 70px; width: auto; }
-        .site-nav-links { display: flex; align-items: center; gap: 32px; }
-        .site-nav-links a {
-          font-size: 14px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 600;
-          transition: all 0.2s; cursor: pointer; padding: 6px 12px; border-radius: 8px;
+        .site-nav-brand img { height: 56px; width: auto; filter: brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg); }
+        .site-nav-center { display: flex; align-items: center; gap: 28px; }
+        .site-nav-center a, .site-nav-center .nav-dropdown-trigger {
+          font-size: 14px; color: #475569; text-decoration: none; font-weight: 500;
+          transition: color 0.2s; cursor: pointer; background: none; border: none;
+          font-family: inherit; padding: 6px 0; display: flex; align-items: center; gap: 4px;
         }
-        .site-nav-links a:hover { color: #fff !important; background: rgba(255,255,255,0.1); }
-        .site-nav-links a.active { color: #fff; }
-        .site-nav-links a { position: relative; z-index: 2; }
-        .site-nav-links .site-nav-cta {
-          background: #5EC4E3 !important; color: #1A1A2E !important; padding: 14px 32px;
-          border-radius: 100px; font-weight: 800; font-size: 15px;
-          cursor: pointer; transition: all 0.2s; display: inline-flex;
+        .site-nav-center a:hover, .site-nav-center .nav-dropdown-trigger:hover { color: #0F172A; }
+        .site-nav-center a.active { color: #0F172A; font-weight: 600; }
+        .nav-chevron { font-size: 8px; color: #94A3B8; transition: transform 0.2s; }
+        .nav-chevron.open { transform: rotate(180deg); }
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-menu {
+          position: absolute; top: calc(100% + 12px); left: 0;
+          background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
+          padding: 8px; min-width: 220px;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+          opacity: 0; visibility: hidden; transition: all 0.15s; pointer-events: none;
         }
-        .site-nav-links .site-nav-cta:hover {
-          background: #4AB8D9 !important; color: #1A1A2E !important;
-          box-shadow: 0 4px 16px rgba(94, 196, 227, 0.4);
-          transform: translateY(-1px);
+        .nav-dropdown-menu.open { opacity: 1; visibility: visible; pointer-events: auto; }
+        .nav-dropdown-menu a {
+          display: block; padding: 10px 14px; border-radius: 8px;
+          font-size: 13px; font-weight: 500; color: #475569 !important;
+          transition: background 0.15s;
+        }
+        .nav-dropdown-menu a:hover { background: #F8FAFC; color: #0F172A !important; }
+        .site-nav-right { display: flex; align-items: center; gap: 20px; }
+        .site-nav-login {
+          font-size: 14px; color: #475569; text-decoration: none; font-weight: 500;
+          transition: color 0.2s;
+        }
+        .site-nav-login:hover { color: #0F172A; }
+        .site-nav-cta {
+          background: #3730A3 !important; color: #fff !important; padding: 10px 24px;
+          border-radius: 8px; font-weight: 600; font-size: 14px;
+          text-decoration: none; transition: all 0.2s; display: inline-flex;
+        }
+        .site-nav-cta:hover {
+          background: #4338CA !important; box-shadow: 0 4px 12px rgba(55,48,163,0.25);
         }
         .site-nav-hamburger {
           display: none; background: none; border: none; cursor: pointer;
@@ -43,7 +65,7 @@ export function SiteNav() {
           justify-content: center; gap: 5px; padding: 0;
         }
         .site-nav-hamburger span {
-          display: block; width: 22px; height: 2px; background: #fff;
+          display: block; width: 22px; height: 2px; background: #0F172A;
           border-radius: 2px; transition: all 0.3s;
         }
         .site-nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(2.5px, 2.5px); }
@@ -51,44 +73,56 @@ export function SiteNav() {
         .site-nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(2.5px, -2.5px); }
         .site-nav-mobile-menu {
           display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-          background: #3730A3; z-index: 9998; padding: 120px 32px 40px;
-          flex-direction: column; gap: 0;
+          background: #fff; z-index: 9998; padding: 100px 32px 40px;
+          flex-direction: column; gap: 0; overflow-y: auto;
         }
         .site-nav-mobile-menu.open { display: flex; }
         .site-nav-mobile-menu a {
-          display: block; padding: 16px 0; font-size: 18px; font-weight: 700;
-          color: rgba(255,255,255,0.75); text-decoration: none;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
+          display: block; padding: 14px 0; font-size: 16px; font-weight: 600;
+          color: #475569; text-decoration: none;
+          border-bottom: 1px solid #F1F5F9;
         }
-        .site-nav-mobile-menu a:hover, .site-nav-mobile-menu a.active { color: #fff; }
-        .site-nav-mobile-menu .mobile-cta-wrap { margin-top: auto; padding-top: 24px; }
+        .site-nav-mobile-menu a:hover, .site-nav-mobile-menu a.active { color: #0F172A; }
+        .site-nav-mobile-menu .mobile-sub { padding-left: 16px; }
+        .site-nav-mobile-menu .mobile-sub a { font-size: 14px; font-weight: 500; padding: 10px 0; }
+        .site-nav-mobile-menu .mobile-cta-wrap { margin-top: auto; padding-top: 20px; display: flex; flex-direction: column; gap: 12px; }
         .site-nav-mobile-menu .mobile-cta-wrap a {
           display: flex; align-items: center; justify-content: center;
-          background: #5EC4E3; color: #1A1A2E !important; padding: 14px 32px;
-          border-radius: 100px; font-weight: 800; font-size: 15px; border: none;
+          padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; border: none;
+        }
+        .site-nav-mobile-menu .mobile-cta-wrap .mobile-cta-primary {
+          background: #3730A3; color: #fff !important;
         }
         @media (max-width: 900px) {
-          .site-nav-links { display: none; }
+          .site-nav-center, .site-nav-right { display: none; }
           .site-nav-hamburger { display: flex; }
         }
         @media (max-width: 640px) {
-          .site-nav { padding: 14px 16px; }
-          .site-nav-brand img { height: 50px; }
+          .site-nav { padding: 12px 16px; }
+          .site-nav-brand img { height: 32px; filter: brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg); }
         }
       `}</style>
       <nav className="site-nav">
         <Link href="/" className="site-nav-brand">
           <img src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
-        <div className="site-nav-links">
-          <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
-          <Link href="/features/lead-capture" className={pathname === "/features/lead-capture" ? "active" : ""}>Capture</Link>
-          <Link href="/features/patient-experience" className={pathname === "/features/patient-experience" ? "active" : ""}>Keep</Link>
-          <Link href="/features/travel-concierge" className={pathname === "/features/travel-concierge" ? "active" : ""}>Grow</Link>
-          <Link href="/about" className={pathname === "/about" ? "active" : ""}>About</Link>
-          <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""}>Blog</Link>
-          <Link href="/contact">Demo</Link>
-          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a Call</a>
+        <div className="site-nav-center">
+          <a href="/#products">Features</a>
+          <a href="/#how-it-works">How it works</a>
+          <a href="/#results">Results</a>
+          <div className="nav-dropdown" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
+            <button className="nav-dropdown-trigger">Resources <span className={`nav-chevron ${resourcesOpen ? "open" : ""}`}>&#9660;</span></button>
+            <div className={`nav-dropdown-menu ${resourcesOpen ? "open" : ""}`}>
+              <Link href="/blog" onClick={() => setResourcesOpen(false)}>Blog</Link>
+              <Link href="/regen-news" onClick={() => setResourcesOpen(false)}>Regen News</Link>
+              <Link href="/about" onClick={() => setResourcesOpen(false)}>About</Link>
+            </div>
+          </div>
+          <Link href="/contact">Smart Form</Link>
+        </div>
+        <div className="site-nav-right">
+          <a href="https://app.clinictech.io" className="site-nav-login">Log in</a>
+          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a demo</a>
         </div>
         <button className={`site-nav-hamburger ${mobileOpen ? "open" : ""}`} onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
           <span></span><span></span><span></span>
@@ -96,14 +130,13 @@ export function SiteNav() {
       </nav>
       <div className={`site-nav-mobile-menu ${mobileOpen ? "open" : ""}`}>
         <Link href="/" className={pathname === "/" ? "active" : ""} onClick={() => setMobileOpen(false)}>Home</Link>
-        <Link href="/features/lead-capture" className={pathname === "/features/lead-capture" ? "active" : ""} onClick={() => setMobileOpen(false)}>Capture</Link>
-        <Link href="/features/patient-experience" className={pathname === "/features/patient-experience" ? "active" : ""} onClick={() => setMobileOpen(false)}>Keep</Link>
-        <Link href="/features/travel-concierge" className={pathname === "/features/travel-concierge" ? "active" : ""} onClick={() => setMobileOpen(false)}>Grow</Link>
-        <Link href="/about" className={pathname === "/about" ? "active" : ""} onClick={() => setMobileOpen(false)}>About</Link>
-        <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""} onClick={() => setMobileOpen(false)}>Blog</Link>
-        <Link href="/contact" onClick={() => setMobileOpen(false)}>Demo</Link>
+        <a href="/#products" onClick={() => setMobileOpen(false)}>Features</a>
+        <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
+        <Link href="/regen-news" onClick={() => setMobileOpen(false)}>Regen News</Link>
+        <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
+        <Link href="/contact" onClick={() => setMobileOpen(false)}>Try it</Link>
         <div className="mobile-cta-wrap">
-          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>Book a Call</a>
+          <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="mobile-cta-primary" onClick={() => setMobileOpen(false)}>Book a demo</a>
         </div>
       </div>
     </>

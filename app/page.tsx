@@ -1,131 +1,35 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { SiteNav } from "@/components/site-nav";
 
-function HeroDnaAnimation({ onComplete }: { onComplete: () => void }) {
-  const [phase, setPhase] = useState<'active' | 'fading' | 'done'>('active');
+const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 768)) {
-      setPhase('done');
-      onComplete();
-      return;
-    }
-    const t1 = setTimeout(() => setPhase('fading'), 2500);
-    const t2 = setTimeout(() => { setPhase('done'); onComplete(); }, 3500);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [onComplete]);
+const productTabs = [
+  { label: "Unified Inbox", title: "Unified Inbox", desc: "Streamline all your communication in one place. Connect Facebook, Instagram, WhatsApp, SMS, email, and website chat into a single inbox. Every patient message, every channel, one view. No more switching between five apps to respond to one inquiry." },
+  { label: "RegenCRM", title: "RegenCRM", desc: "Visualize your entire patient pipeline. See every lead move through stages from inquiry to consultation to treatment to follow-up. Drag-and-drop Kanban board built for the regenerative medicine patient journey." },
+  { label: "AI Patient Concierge", title: "AI Patient Concierge", desc: "Trained on your protocols, pricing, and conditions treated. Answers questions about stem cell therapy, PRP, exosomes, and travel logistics in English and Spanish, 24/7. Books consultations before the patient closes the tab." },
+  { label: "Automated Follow-Ups", title: "Automated Follow-Ups", desc: "Multi-channel sequences tuned for regenerative medicine. Instant reply on inquiry, education emails mid-funnel, reactivation for quiet leads. Your coordinator stops chasing and starts closing." },
+  { label: "Review Generation", title: "Review Generation", desc: "Automated review requests sent at the perfect moment post-treatment. Patients leave 5-star reviews on Google while the experience is still fresh. Negative feedback gets routed privately before it goes public." },
+  { label: "Online Scheduling", title: "Online Scheduling", desc: "Patients self-book consultations directly into your calendar. Smart intake qualifies by condition, budget, and travel readiness. Your front desk wakes up to a full schedule." },
+  { label: "Protocol Builder", title: "Protocol Builder", desc: "Document treatment protocols, dosing, and recovery timelines in a structured format. Share with patients pre-treatment and use as a reference across your clinical team." },
+  { label: "Boost Your Online Presence", title: "Boost Your Online Presence", desc: "AI-powered blog content, optimized Google Business Profile, and local SEO tools. Dominate search results for your treatments and your city. Get found before your competitors." },
+  { label: "Travel Concierge", title: "Travel Concierge", desc: "A portal for international patients to manage flights, hotels, airport pickups, and local logistics. Your team tracks every arrival from one dashboard instead of coordinating over WhatsApp." },
+];
 
-  if (phase === 'done') return null;
-
-  const particles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    left: `${(i * 37 + 13) % 100}%`,
-    top: `${(i * 53 + 7) % 100}%`,
-    size: 2 + (i % 4) * 2,
-    delay: (i * 0.2) % 2.5,
-    duration: 2.5 + (i % 3),
-  })), []);
-
-  return (
-    <div className={`hero-dna ${phase === 'fading' ? 'hero-dna-fade' : ''}`}>
-      <svg viewBox="0 0 400 500" className="hero-dna-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3730A3" />
-            <stop offset="50%" stopColor="#5EC4E3" />
-            <stop offset="100%" stopColor="#7DD4ED" />
-          </linearGradient>
-          <linearGradient id="hg2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#7DD4ED" />
-            <stop offset="50%" stopColor="#5EC4E3" />
-            <stop offset="100%" stopColor="#3730A3" />
-          </linearGradient>
-          <filter id="dnaGlow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        {/* Left strand */}
-        <path d="M80,0 C80,50 320,80 320,130 C320,180 80,210 80,260 C80,310 320,340 320,390 C320,440 80,470 80,500" fill="none" stroke="url(#hg1)" strokeWidth="3" opacity="0.6" className="dna-strand-anim"/>
-        {/* Right strand */}
-        <path d="M320,0 C320,50 80,80 80,130 C80,180 320,210 320,260 C320,310 80,340 80,390 C80,440 320,470 320,500" fill="none" stroke="url(#hg2)" strokeWidth="3" opacity="0.6" className="dna-strand-anim" style={{animationDelay: "0.3s"}}/>
-        {/* Rungs + nodes */}
-        {Array.from({length: 12}, (_, i) => {
-          const y = 20 + i * 40;
-          const phase2 = (i / 11) * Math.PI * 2;
-          const x1 = 200 + Math.sin(phase2) * 120;
-          const x2 = 200 - Math.sin(phase2) * 120;
-          return (
-            <g key={i} style={{animation: `rungAppear 0.5s ease ${i * 0.1}s both`}}>
-              <line x1={x1} y1={y} x2={x2} y2={y} stroke="url(#hg1)" strokeWidth="1" opacity="0.2"/>
-              <circle cx={x1} cy={y} r="5" fill="url(#hg1)" filter="url(#dnaGlow)" opacity="0.8" className="dna-node-pulse" style={{animationDelay: `${i * 0.15}s`}}/>
-              <circle cx={x2} cy={y} r="5" fill="url(#hg2)" filter="url(#dnaGlow)" opacity="0.8" className="dna-node-pulse" style={{animationDelay: `${i * 0.15 + 0.5}s`}}/>
-            </g>
-          );
-        })}
-      </svg>
-      {/* Particles */}
-      {particles.map(p => (
-        <div key={p.id} className="dna-particle" style={{left: p.left, top: p.top, width: p.size, height: p.size, animationDelay: `${p.delay}s`, animationDuration: `${p.duration}s`}}/>
-      ))}
-    </div>
-  );
-}
+const testimonials = [
+  { name: "Dr. Carlos Mendez", role: "Medical Director, Advanced Cellular Clinic", location: "Tijuana", stat: "+280% consultations booked", quote: "Our conversion rate from inquiry to consultation tripled in the first six weeks. The bilingual AI concierge alone paid for the platform." },
+  { name: "Dr. James Mitchell", role: "Pacific Stem Cell Center", location: "", stat: "+$340K/mo revenue", quote: "ClinicTech rebuilt our intake from the ground up. We went from losing half our leads to converting over 30% of them. The travel concierge is the reason international patients pick us over competitors." },
+  { name: "Dr. Anna Kovacs", role: "Regenera Wellness", location: "", stat: "22 hrs/wk saved", quote: "My team used to live in WhatsApp coordinating flights and hotel pickups. Now it all runs through the patient portal. We got our evenings back." },
+  { name: "Sofia Ramirez", role: "Patient Coordinator, CellRestore Medical", location: "", stat: "+45 bookings/month", quote: "The automated follow-ups do what three coordinators used to do. We used to lose leads to our slower response time. Now we\u2019re the fastest in the market." },
+  { name: "Dr. Miguel Santos", role: "Vitality Medical Group", location: "", stat: "+190% review growth", quote: "We went from 40 Google reviews to over 300 in six months. Our organic traffic doubled. Patients find us now before they find our competitors." },
+  { name: "Laura Garcia", role: "Operations, Regenera Wellness", location: "", stat: "15 min response time", quote: "Our average response time went from 26 hours to 15 minutes. That\u2019s the difference between booking a patient and losing them to a Mexico City clinic." },
+];
 
 export default function LandingPage() {
-  const [introComplete, setIntroComplete] = useState(false);
-  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
-  const [heroEmail, setHeroEmail] = useState("");
-  const [heroEmailStatus, setHeroEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [leads, setLeads] = useState(40);
-  const [procedureValue, setProcedureValue] = useState(12000);
-  const [activeFeature, setActiveFeature] = useState(0);
-  const [travelView, setTravelView] = useState<'patient' | 'admin'>('patient');
-  const [heroTab, setHeroTab] = useState(0);
-  const [bannerVisible, setBannerVisible] = useState(true);
-  const featureAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
 
-  const features = useMemo(() => [
-    { icon: "🌐", title: "Websites & Conversion", desc: "Modern sites built to convert international patients. Smart intake flows, self-booking, lead capture that actually works." },
-    { icon: "📧", title: "Lead Capture & Automation", desc: "Forms that qualify, route by location and condition, and auto-nurture. No more leads going cold in an inbox while patients book elsewhere." },
-    { icon: "📊", title: "Patient CRM & Back Office", desc: "One system for your team to manage patients, communications, scheduling, and follow-ups. Built around your workflow, not a generic template." },
-    { icon: "✈️", title: "Travel Concierge Platform", desc: "A portal for international patients to manage flights, hotels, and logistics. Your team tracks every arrival from one dashboard instead of doing it manually." },
-  ], []);
-
-  // Auto-rotate features, reset on manual click
-  useEffect(() => {
-    featureAutoRef.current = setInterval(() => {
-      setActiveFeature(v => (v + 1) % 4);
-    }, 5000);
-    return () => { if (featureAutoRef.current) clearInterval(featureAutoRef.current); };
-  }, []);
-
-  const handleFeatureClick = useCallback((idx: number) => {
-    setActiveFeature(idx);
-    if (featureAutoRef.current) clearInterval(featureAutoRef.current);
-    featureAutoRef.current = setInterval(() => {
-      setActiveFeature(v => (v + 1) % 4);
-    }, 5000);
-  }, []);
-
-  const totalRef = useRef<HTMLDivElement>(null);
-
-  const lostRate = 0.6;
-  const recoveryRate = 0.58;
-  const recovered = Math.round(leads * lostRate * recoveryRate);
-  const annual = recovered * procedureValue * 12;
-
-  const animateTotal = useCallback(() => {
-    if (totalRef.current) {
-      totalRef.current.style.transform = "scale(1.05)";
-      setTimeout(() => {
-        if (totalRef.current) {
-          totalRef.current.style.transform = "scale(1)";
-        }
-      }, 150);
-    }
-  }, []);
-
-  // Scroll reveal observer
+  // Scroll reveal
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -138,2838 +42,585 @@ export default function LandingPage() {
       },
       { threshold: 0.1 }
     );
-
-    document
-      .querySelectorAll(
-        ".service-tab, .roi-metric, .step, .case-card, .why-stat"
-      )
-      .forEach((el) => {
-        (el as HTMLElement).style.opacity = "0";
-        (el as HTMLElement).style.transform = "translateY(20px)";
-        (el as HTMLElement).style.transition = "all 0.6s ease";
-        observer.observe(el);
-      });
-
-    // Stagger animation for grid items
-    document
-      .querySelectorAll(
-        ".service-tabs, .steps, .cases-grid, .why-stats"
-      )
-      .forEach((grid) => {
-        Array.from(grid.children).forEach((child, i) => {
-          (child as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
-        });
-      });
-
+    document.querySelectorAll(".reveal").forEach((el) => {
+      (el as HTMLElement).style.opacity = "0";
+      (el as HTMLElement).style.transform = "translateY(20px)";
+      (el as HTMLElement).style.transition = "all 0.6s ease";
+      observer.observe(el);
+    });
     return () => observer.disconnect();
   }, []);
-
 
   return (
     <>
       <style>{`
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-.hl { color: #5EC4E3; }
-.hl-purple { color: #4F46E5; }
-.hl-gradient {
-  background: linear-gradient(135deg, #3730A3, #5EC4E3);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-:root {
-  --navy: #3730A3;
-  --navy-mid: #4338CA;
-  --navy-light: #4F46E5;
-  --blue: #5EC4E3;
-  --blue-bright: #7DD4ED;
-  --blue-glow: rgba(55, 48, 163, 0.08);
-  --blue-glow-strong: rgba(55, 48, 163, 0.15);
-  --white: #FFFFFF;
-  --gray-100: #F5F5F7;
-  --gray-200: #E5E5EA;
-  --gray-300: #6B6B80;
-  --gray-400: #8888A0;
-  --gray-500: #A0A0B8;
-  --green: #22C55E;
-  --green-glow: rgba(34, 197, 94, 0.1);
-  --orange: #F59E0B;
-  --red: #EF4444;
-  --bg: #FFFFFF;
-  --card-bg: #FFFFFF;
-  --card-border: rgba(0, 0, 0, 0.06);
-  --text-primary: #1A1A2E;
-  --text-secondary: #4A4A65;
-  --text-muted: #8888A0;
-  --purple-glow: rgba(55, 48, 163, 0.06);
-}
-
 html { scroll-behavior: smooth; }
-
 body {
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text-primary);
+  background: #fff;
+  color: #0F172A;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-
-/* ===== UTILITY ===== */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-/* ===== NAV ===== */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 20px 0;
-  background: var(--navy);
-  border-bottom: none;
-  transition: all 0.3s;
-}
-nav .container {
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-logo {
-  display: flex; align-items: center; gap: 12px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800; font-size: 22px; font-style: normal; letter-spacing: 0.5px;
-  text-decoration: none; color: var(--white);
-}
-.nav-logo svg { width: 36px; height: 36px; }
-.nav-logo svg rect { fill: rgba(255,255,255,0.85); }
-.nav-logo svg rect:nth-child(odd) { fill: var(--white); }
-.nav-logo svg line { stroke: rgba(255,255,255,0.7); }
-nav .nav-links .btn-primary,
-nav .nav-links a.btn-primary {
-  background: #5EC4E3;
-  color: #1A1A2E !important;
-  font-weight: 800;
-}
-nav .nav-links .btn-primary:hover,
-nav .nav-links a.btn-primary:hover {
-  background: #4AB8D9;
-  color: #1A1A2E !important;
-  box-shadow: 0 4px 16px rgba(94, 196, 227, 0.4);
-}
-.nav-links { display: flex; align-items: center; gap: 32px; }
-.nav-links a {
-  text-decoration: none; color: rgba(255,255,255,0.75);
-  font-size: 14px; font-weight: 600;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--white); }
-.nav-mobile-cta { display: none !important; }
+/* Buttons */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 32px;
-  background: var(--navy);
-  color: var(--white);
+  background: #3730A3; color: #fff;
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-weight: 700; font-size: 15px;
-  border: none; border-radius: 100px;
-  cursor: pointer;
-  text-decoration: none;
+  border: none; border-radius: 100px; cursor: pointer; text-decoration: none;
   transition: all 0.2s;
 }
 .btn-primary:hover {
-  background: var(--navy-mid);
-  color: var(--white);
-  box-shadow: 0 4px 16px rgba(55, 48, 163, 0.3);
-  transform: translateY(-1px);
+  background: #4338CA; box-shadow: 0 4px 16px rgba(55,48,163,0.3); transform: translateY(-1px);
 }
 .btn-secondary {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 13px 28px;
-  background: transparent;
-  color: var(--navy);
+  background: transparent; color: #3730A3;
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   font-weight: 700; font-size: 15px;
-  border: 1.5px solid rgba(55, 48, 163, 0.2);
-  border-radius: 100px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
+  border: 1.5px solid rgba(55,48,163,0.2); border-radius: 100px;
+  cursor: pointer; text-decoration: none; transition: all 0.2s;
 }
-.btn-secondary:hover {
-  border-color: var(--navy);
-  background: rgba(55, 48, 163, 0.04);
+.btn-secondary:hover { border-color: #3730A3; background: rgba(55,48,163,0.04); }
+.btn-outline-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px;
+  background: #fff; color: #3730A3;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: 15px;
+  border: 1.5px solid #E2E8F0; border-radius: 100px;
+  cursor: pointer; text-decoration: none; transition: all 0.2s;
 }
+.btn-outline-white:hover { border-color: #3730A3; background: rgba(55,48,163,0.04); }
+
+/* Section helpers */
+.section-label {
+  display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #3730A3; margin-bottom: 12px;
+}
+.section-title {
+  font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -0.5px;
+  color: #0F172A; margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 18px; line-height: 1.7; color: #475569; max-width: 640px;
+}
+.hl { color: #5EC4E3; }
 
 /* ===== HERO ===== */
-.hero-fullwidth {
-  position: relative;
-  padding: 200px 0 80px;
-  overflow: hidden;
-  background: var(--white);
+.hero-section {
+  position: relative; padding: 160px 0 80px; overflow: hidden; background: #fff;
 }
-.hero-split {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 40px;
-  align-items: center;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 40px;
+.hero-grid {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
+  max-width: 1280px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1;
 }
-.hero-split-left {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.hero-split-right {
-  position: relative;
-  transform: scale(0.85);
-  transform-origin: center center;
-}
-.hero-dna-bg {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 60%;
-  z-index: 0;
-  pointer-events: none;
-}
-.hero-dna-wave {
-  width: 100%;
-  height: 100%;
-  animation: waveFloat 8s ease-in-out infinite alternate;
-}
-@keyframes waveFloat {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(-20px) scale(1.02); }
-}
-.dna-wave-path {
-  animation: waveDash 6s linear infinite;
-  stroke-dasharray: 200 100;
-}
-.dna-wave-2 {
-  animation-delay: -3s;
-  animation-duration: 7s;
-}
-@keyframes waveDash {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -600; }
-}
-.dna-rung-line {
-  animation: rungPulse 2s ease-in-out infinite alternate;
-}
-@keyframes rungPulse {
-  0% { opacity: 0.03; }
-  100% { opacity: 0.08; }
-}
-.dna-bg-node {
-  animation: bgNodePulse 3s ease-in-out infinite alternate;
-}
-@keyframes bgNodePulse {
-  0% { opacity: 0.08; r: 3; }
-  100% { opacity: 0.2; r: 5; }
-}
-.hero-centered {
-  text-align: left;
-}
-.hero-main-title {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 56px;
-  font-weight: 800;
-  font-style: normal;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: var(--text-primary);
-  margin-bottom: 24px;
-  animation: fadeUp 0.8s ease 0.2s both;
-}
-.hero-centered-sub {
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  max-width: 580px;
-  margin: 0 0 36px;
-  animation: fadeUp 0.8s ease 0.4s both;
-}
-.hero-centered-ctas {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-start;
-  animation: fadeUp 0.8s ease 0.6s both;
-}
-.hero-pipeline-wrap {
-  position: relative;
-  animation: fadeUp 0.8s ease 0.8s both;
-}
+.hero-left { display: flex; flex-direction: column; align-items: flex-start; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 16px 6px 8px;
-  background: rgba(94, 196, 227, 0.1);
-  border: 1px solid rgba(94, 196, 227, 0.25);
-  border-radius: 100px;
-  font-size: 13px; font-weight: 600;
-  color: #0E9AC0;
+  padding: 6px 16px 6px 10px;
+  background: rgba(94,196,227,0.1); border: 1px solid rgba(94,196,227,0.25);
+  border-radius: 100px; font-size: 13px; font-weight: 600; color: #0E9AC0;
   margin-bottom: 24px;
-  animation: fadeUp 0.6s ease both;
 }
 .hero-badge .dot {
-  width: 8px; height: 8px;
-  background: var(--green);
-  border-radius: 50%;
+  width: 8px; height: 8px; background: #22C55E; border-radius: 50%;
   animation: pulse 2s ease infinite;
 }
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.hero h1 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 56px;
-  font-weight: 800;
-  font-style: normal;
-  line-height: 1.1;
-  letter-spacing: 0.5px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.6s ease 0.1s both;
-}
-.hero h1 .highlight {
-  background: linear-gradient(135deg, var(--navy), var(--navy-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-style: normal;
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.hero-title {
+  font-size: 48px; font-weight: 800; line-height: 1.12; letter-spacing: -1px;
+  color: #0F172A; margin-bottom: 24px;
 }
 .hero-sub {
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  margin-bottom: 40px;
-  max-width: 520px;
-  animation: fadeUp 0.6s ease 0.2s both;
+  font-size: 17px; line-height: 1.7; color: #475569; max-width: 560px; margin-bottom: 32px;
 }
-.hero-ctas {
-  display: flex; gap: 16px;
-  animation: fadeUp 0.6s ease 0.3s both;
+.hero-ctas { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+.hero-see-link {
+  color: #3730A3; font-weight: 600; font-size: 15px; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.hero-see-link:hover { text-decoration: underline; }
+.hero-source {
+  font-size: 12px; color: #94A3B8; max-width: 480px; line-height: 1.5; margin-top: 8px;
+}
+.hero-right { position: relative; }
+
+/* Audit mockup */
+.audit-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px;
+  overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+}
+.audit-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; background: #3730A3; color: #fff;
+}
+.audit-bar-left { display: flex; align-items: center; gap: 10px; }
+.audit-bar-dots { display: flex; gap: 5px; }
+.audit-bar-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.audit-bar-dots span:nth-child(1) { background: #FF5F57; }
+.audit-bar-dots span:nth-child(2) { background: #FEBC2E; }
+.audit-bar-dots span:nth-child(3) { background: #28C840; }
+.audit-bar-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); }
+.audit-body { padding: 24px; }
+.audit-score-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+}
+.audit-score-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 4px solid #EF4444; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.audit-score-num { font-size: 24px; font-weight: 800; color: #EF4444; line-height: 1; }
+.audit-score-of { font-size: 11px; color: #94A3B8; }
+.audit-score-text { font-size: 14px; font-weight: 700; color: #0F172A; }
+.audit-rows { margin-bottom: 20px; }
+.audit-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid #F1F5F9; font-size: 13px;
+}
+.audit-row-name { color: #475569; flex: 1; }
+.audit-row-status {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin: 0 12px;
+}
+.audit-row-status.poor { background: rgba(239,68,68,0.1); color: #EF4444; }
+.audit-row-status.fair { background: rgba(245,158,11,0.1); color: #F59E0B; }
+.audit-row-score { font-size: 12px; font-weight: 600; color: #94A3B8; }
+.audit-lb { margin-bottom: 16px; }
+.audit-lb-title { font-size: 12px; font-weight: 700; color: #0F172A; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.audit-lb-row {
+  display: flex; align-items: center; gap: 8px; padding: 5px 0;
+  font-size: 12px; color: #475569;
+}
+.audit-lb-row.you { color: #EF4444; font-weight: 700; }
+.audit-lb-rank { width: 28px; font-weight: 700; }
+.audit-lb-name { flex: 1; }
+.audit-lb-stars { color: #F59E0B; }
+.audit-lb-score { font-weight: 600; color: #94A3B8; }
+.audit-loss {
+  background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 700;
+  color: #EF4444; text-align: center; margin-bottom: 16px;
+}
+.audit-fixes { margin-bottom: 16px; }
+.audit-fix {
+  display: flex; gap: 8px; font-size: 12px; color: #475569; margin-bottom: 6px; line-height: 1.5;
+}
+.audit-fix-x { color: #EF4444; font-weight: 700; flex-shrink: 0; }
+
+/* DNA background */
+.hero-dna-bg {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 50%; z-index: 0; pointer-events: none;
+}
+.hero-dna-wave { width: 100%; height: 100%; animation: waveFloat 8s ease-in-out infinite alternate; }
+@keyframes waveFloat { 0%{transform:translateY(0) scale(1);} 100%{transform:translateY(-20px) scale(1.02);} }
+.dna-wave-path { animation: waveDash 6s linear infinite; stroke-dasharray: 200 100; }
+.dna-wave-2 { animation-delay: -3s; animation-duration: 7s; }
+@keyframes waveDash { 0%{stroke-dashoffset:0;} 100%{stroke-dashoffset:-600;} }
+.dna-rung-line { animation: rungPulse 2s ease-in-out infinite alternate; }
+@keyframes rungPulse { 0%{opacity:0.03;} 100%{opacity:0.08;} }
+.dna-bg-node { animation: bgNodePulse 3s ease-in-out infinite alternate; }
+@keyframes bgNodePulse { 0%{opacity:0.08;} 100%{opacity:0.2;} }
+
+/* ===== PROBLEM ===== */
+.problem-section { padding: 100px 0; background: #F8FAFC; }
+.problem-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; margin-top: 48px;
+}
+.problem-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px 24px;
+  transition: box-shadow 0.3s;
+}
+.problem-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+.problem-card h3 {
+  font-size: 17px; font-weight: 700; color: #0F172A; margin-bottom: 12px; line-height: 1.35;
+}
+.problem-card p { font-size: 14px; line-height: 1.65; color: #64748B; }
+.problem-card-icon {
+  width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; margin-bottom: 16px;
 }
 
-/* Hero Visual - CRM Builder Mockup */
-.hero-visual {
-  position: relative;
-  animation: fadeUp 0.8s ease 0.4s both;
+/* ===== OUTCOME ===== */
+.outcome-section { padding: 80px 0; text-align: center; }
+.outcome-pills {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px;
 }
-.crm-builder {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  position: relative;
+.outcome-pill {
+  padding: 12px 24px; background: rgba(55,48,163,0.06); border: 1px solid rgba(55,48,163,0.12);
+  border-radius: 100px; font-size: 14px; font-weight: 700; color: #3730A3;
 }
-.crm-builder-toolbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px;
-  background: var(--navy);
-  color: var(--white);
+
+/* ===== FEATURE BLOCKS ===== */
+.feature-block { padding: 80px 0; }
+.feature-block:nth-child(even) { background: #F8FAFC; }
+.feature-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
 }
-.crm-toolbar-left {
-  display: flex; align-items: center; gap: 12px;
+.feature-grid.reversed { direction: rtl; }
+.feature-grid.reversed > * { direction: ltr; }
+.feature-text .feature-label {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  color: #5EC4E3; margin-bottom: 12px;
 }
-.crm-toolbar-dots {
-  display: flex; gap: 5px;
+.feature-text h2 {
+  font-size: 36px; font-weight: 800; line-height: 1.15; letter-spacing: -0.5px;
+  color: #0F172A; margin-bottom: 16px;
 }
-.crm-toolbar-dots span {
-  width: 10px; height: 10px; border-radius: 50%;
+.feature-text p { font-size: 16px; line-height: 1.7; color: #475569; }
+.feature-visual {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px;
+  padding: 24px; min-height: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.04);
 }
-.crm-toolbar-dots span:nth-child(1) { background: #FF5F57; }
-.crm-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
-.crm-toolbar-dots span:nth-child(3) { background: #28C840; }
-.crm-toolbar-title {
-  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9);
-  letter-spacing: 0.3px;
+
+/* Chat mockup */
+.chat-mockup-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;
 }
-.crm-toolbar-right {
-  display: flex; align-items: center; gap: 8px;
+.chat-mockup-dot {
+  width: 36px; height: 36px; border-radius: 50%; background: #3730A3;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  font-size: 14px; font-weight: 700;
 }
-.crm-toolbar-btn {
-  padding: 5px 14px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 6px;
-  font-size: 11px; font-weight: 700; color: var(--white);
-  display: flex; align-items: center; gap: 5px;
+.chat-mockup-info { font-size: 13px; font-weight: 700; color: #0F172A; }
+.chat-mockup-info span { display: block; font-size: 11px; color: #22C55E; font-weight: 600; }
+.chat-msg {
+  padding: 10px 14px; border-radius: 12px; margin-bottom: 10px;
+  font-size: 13px; line-height: 1.55; max-width: 85%;
 }
-.crm-toolbar-btn.save {
-  background: var(--white);
-  color: var(--navy);
+.chat-msg.user { background: #3730A3; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+.chat-msg.bot { background: #F1F5F9; color: #0F172A; border-bottom-left-radius: 4px; }
+.chat-msg .lang-tag {
+  font-size: 10px; font-weight: 700; color: #94A3B8; margin-bottom: 4px; display: block;
 }
-.crm-builder-body {
-  padding: 20px;
+
+/* Timeline mockup */
+.timeline-mockup { display: flex; flex-direction: column; gap: 0; }
+.timeline-step {
+  display: flex; align-items: flex-start; gap: 14px; position: relative; padding-bottom: 20px;
 }
-.crm-pipeline-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
+.timeline-step:last-child { padding-bottom: 0; }
+.timeline-node {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 14px; flex-shrink: 0; position: relative; z-index: 1;
 }
-.crm-pipeline-name {
-  display: flex; align-items: center; gap: 8px;
+.timeline-node.green { background: rgba(34,197,94,0.12); }
+.timeline-node.blue { background: rgba(94,196,227,0.15); }
+.timeline-node.amber { background: rgba(245,158,11,0.12); }
+.timeline-node.navy { background: rgba(55,48,163,0.1); }
+.timeline-step::before {
+  content: ""; position: absolute; left: 15px; top: 32px; bottom: 0;
+  width: 2px; background: #E2E8F0;
 }
-.crm-pipeline-name-input {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 16px; font-weight: 700;
-  color: var(--text-primary);
-  border: none; border-bottom: 2px solid var(--navy);
-  padding: 2px 0;
-  background: transparent;
-  outline: none;
-  width: 200px;
+.timeline-step:last-child::before { display: none; }
+.timeline-content h4 { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
+.timeline-content p { font-size: 12px; color: #64748B; }
+.timeline-content .timeline-time { font-size: 11px; color: #94A3B8; margin-top: 2px; }
+
+/* Booking mockup */
+.booking-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.booking-phone {
+  background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 20px; padding: 16px;
 }
-.crm-pipeline-name .edit-icon {
-  color: var(--navy); font-size: 12px;
+.booking-phone-header {
+  font-size: 14px; font-weight: 700; color: #0F172A; margin-bottom: 12px; text-align: center;
 }
-.crm-add-stage-btn {
-  padding: 6px 14px;
-  background: rgba(55, 48, 163, 0.08);
-  border: 1px dashed rgba(55, 48, 163, 0.25);
-  border-radius: 8px;
-  font-size: 12px; font-weight: 700; color: var(--navy);
-  cursor: pointer;
-  display: flex; align-items: center; gap: 5px;
+.booking-field {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 8px;
+  padding: 8px 12px; margin-bottom: 8px; font-size: 12px; color: #475569;
 }
-.crm-kanban {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 4px;
+.booking-field-label { font-size: 10px; font-weight: 700; color: #94A3B8; margin-bottom: 2px; }
+.booking-btn {
+  width: 100%; padding: 10px; background: #3730A3; color: #fff; border: none;
+  border-radius: 8px; font-size: 13px; font-weight: 700; margin-top: 8px; cursor: pointer;
 }
-.crm-column {
-  min-width: 155px;
-  flex: 1;
-  background: var(--gray-100);
-  border-radius: 12px;
-  padding: 12px;
+.booking-admin { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; }
+.booking-admin-title { font-size: 12px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
+.booking-admin-row {
+  display: flex; align-items: center; gap: 8px; padding: 8px 0;
+  border-bottom: 1px solid #F1F5F9; font-size: 12px;
 }
-.crm-column-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
+.booking-admin-dot { width: 8px; height: 8px; border-radius: 50%; }
+.booking-admin-name { flex: 1; font-weight: 600; color: #0F172A; }
+.booking-admin-tag {
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
+}
+
+/* Patient record mockup */
+.record-card { display: flex; flex-direction: column; gap: 16px; }
+.record-header {
+  display: flex; align-items: center; gap: 12px; padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+.record-avatar {
+  width: 40px; height: 40px; border-radius: 50%; background: #3730A3;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px; font-weight: 700;
+}
+.record-info h4 { font-size: 14px; font-weight: 700; color: #0F172A; }
+.record-info span { font-size: 12px; color: #64748B; }
+.record-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid #E2E8F0;
+}
+.record-tab {
+  padding: 8px 16px; font-size: 12px; font-weight: 600; color: #94A3B8; cursor: pointer;
   border-bottom: 2px solid transparent;
 }
-.crm-column:nth-child(1) .crm-column-header { border-bottom-color: var(--navy); }
-.crm-column:nth-child(2) .crm-column-header { border-bottom-color: var(--orange); }
-.crm-column:nth-child(3) .crm-column-header { border-bottom-color: var(--green); }
-.crm-column:nth-child(4) .crm-column-header { border-bottom-color: #8B5CF6; }
-.crm-column-title {
-  font-size: 12px; font-weight: 700; color: var(--text-primary);
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.crm-column-count {
-  font-size: 10px; font-weight: 700;
-  padding: 2px 7px;
-  background: rgba(0,0,0,0.06);
-  border-radius: 100px;
-  color: var(--text-muted);
-}
-.crm-column-drag {
-  color: var(--text-muted); font-size: 10px; cursor: grab;
-  margin-right: 4px;
-}
-.crm-card {
-  background: var(--white);
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  cursor: grab;
-  transition: box-shadow 0.2s, transform 0.2s;
-  position: relative;
-}
-.crm-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-1px);
-}
-.crm-card.dragging {
-  box-shadow: 0 8px 24px rgba(55, 48, 163, 0.2);
-  transform: rotate(-2deg) translateY(-4px);
-  opacity: 0.9;
-  z-index: 10;
-}
-.crm-card-name {
-  font-size: 12px; font-weight: 700; color: var(--text-primary);
-  margin-bottom: 3px;
-}
-.crm-card-detail {
-  font-size: 10px; color: var(--text-muted);
-}
-.crm-card-value {
-  font-size: 10px; font-weight: 700; color: var(--green);
-  margin-top: 5px;
-}
-.crm-card-drag {
-  position: absolute; top: 10px; right: 8px;
-  color: var(--gray-200);
-  font-size: 10px;
-}
-.crm-add-card {
-  text-align: center;
-  padding: 8px;
-  border: 1px dashed rgba(0,0,0,0.1);
-  border-radius: 8px;
-  font-size: 11px; color: var(--text-muted);
-  cursor: pointer;
-}
-.crm-builder-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-  font-size: 11px; color: var(--text-muted);
-}
-.crm-footer-left {
-  display: flex; align-items: center; gap: 12px;
-}
-.crm-footer-chip {
-  display: flex; align-items: center; gap: 4px;
-  padding: 3px 10px;
-  background: var(--gray-100);
-  border-radius: 100px;
-  font-size: 10px; font-weight: 600;
-}
-.brand-tag {
-  position: absolute;
-  bottom: -12px; right: 24px;
-  padding: 6px 14px;
-  background: var(--white);
-  border: 1px solid rgba(55, 48, 163, 0.15);
-  border-radius: 8px;
-  font-size: 11px; font-weight: 600; color: var(--text-muted);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.brand-tag span { color: var(--navy); }
+.record-tab.active { color: #3730A3; border-bottom-color: #3730A3; }
+.record-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.record-field-label { font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; }
+.record-field-value { font-size: 13px; font-weight: 600; color: #0F172A; margin-top: 2px; }
 
-/* Activity Toasts */
-.activity-toast {
-  position: absolute;
-  background: var(--white);
-  border-radius: 12px;
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 8px 30px rgba(55, 48, 163, 0.15), 0 2px 8px rgba(0,0,0,0.06);
-  font-size: 12px; font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
-  z-index: 5;
-  animation: toastIn 0.6s ease both;
-  border-left: 3px solid var(--green);
+/* ===== TESTIMONIALS ===== */
+.testimonials-section { padding: 100px 0; background: #F8FAFC; }
+.testimonials-pills {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0 48px;
 }
-.activity-toast:nth-child(2) {
-  animation-delay: 0.8s;
+.testimonials-pill {
+  padding: 8px 18px; background: #fff; border: 1px solid #E2E8F0;
+  border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;
 }
-.activity-toast:nth-child(3) {
-  animation-delay: 1.6s;
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
 }
-.activity-toast .toast-icon {
-  width: 28px; height: 28px;
-  border-radius: 8px;
+.testimonial-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px;
+  display: flex; flex-direction: column; transition: box-shadow 0.3s;
+}
+.testimonial-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+.testimonial-stat {
+  font-size: 22px; font-weight: 800; color: #3730A3; margin-bottom: 12px;
+}
+.testimonial-quote {
+  font-size: 14px; line-height: 1.65; color: #475569; flex: 1; margin-bottom: 16px;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: 10px; padding-top: 16px;
+  border-top: 1px solid #F1F5F9;
+}
+.testimonial-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#3730A3,#5EC4E3);
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
+  color: #fff; font-size: 14px; font-weight: 700;
 }
-.toast-icon.green { background: rgba(34, 197, 94, 0.1); }
-.toast-icon.purple { background: rgba(55, 48, 163, 0.08); }
-.toast-icon.blue { background: rgba(94, 196, 227, 0.12); }
-.activity-toast .toast-text {
-  display: flex; flex-direction: column; gap: 1px;
+.testimonial-name { font-size: 13px; font-weight: 700; color: #0F172A; }
+.testimonial-role { font-size: 12px; color: #94A3B8; }
+
+/* ===== CALLOUT CARDS ===== */
+.callout-section { padding: 100px 0; }
+.callout-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 48px;
 }
-.activity-toast .toast-label {
-  font-size: 10px; color: var(--text-muted); font-weight: 500;
+.callout-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px;
+  transition: box-shadow 0.3s;
 }
-.activity-toast .toast-msg {
-  font-size: 12px; font-weight: 700; color: var(--text-primary);
+.callout-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+.callout-card-icon {
+  width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; font-size: 22px; margin-bottom: 16px;
 }
-.toast-time {
-  font-size: 9px; color: var(--text-muted); font-weight: 500;
-  margin-left: auto;
+.callout-card h3 { font-size: 20px; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
+.callout-card .callout-tagline { font-size: 14px; font-weight: 600; color: #5EC4E3; margin-bottom: 12px; }
+.callout-card p { font-size: 14px; line-height: 1.65; color: #64748B; }
+
+/* ===== PRODUCT TABS ===== */
+.product-tabs-section { padding: 120px 0; background: #F8FAFC; }
+.tabs-row {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 40px 0 32px;
 }
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(20px) scale(0.95); }
-  to { opacity: 1; transform: translateX(0) scale(1); }
+.tab-btn {
+  padding: 10px 20px; background: #fff; border: 1px solid #E2E8F0; border-radius: 100px;
+  font-size: 13px; font-weight: 600; color: #475569; cursor: pointer;
+  transition: all 0.2s; font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+}
+.tab-btn:hover { border-color: #3730A3; color: #3730A3; }
+.tab-btn.active {
+  background: #3730A3; color: #fff; border-color: #3730A3;
+}
+.tab-content {
+  max-width: 1060px; margin: 0 auto; text-align: left;
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 20px; padding: 48px;
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center;
+  animation: fadeUp 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+}
+.tab-content h3 { font-size: 26px; font-weight: 800; color: #0F172A; margin-bottom: 14px; }
+.tab-content p { font-size: 15px; line-height: 1.7; color: #475569; }
+.tab-mockup {
+  background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px;
+  overflow: hidden;
+}
+.tab-mockup-bar {
+  padding: 8px 14px; background: #0F172A; color: #fff;
+  font-size: 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+}
+.tab-mockup-dots { display: flex; gap: 3px; }
+.tab-mockup-dots span { width: 6px; height: 6px; border-radius: 50%; }
+.tab-mockup-dots span:nth-child(1) { background: #FF5F57; }
+.tab-mockup-dots span:nth-child(2) { background: #FEBC2E; }
+.tab-mockup-dots span:nth-child(3) { background: #28C840; }
+.tab-mockup-body { padding: 16px; }
+.tab-mockup-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; background: #fff; border: 1px solid #E2E8F0;
+  border-radius: 8px; margin-bottom: 6px; font-size: 11px;
+}
+.tab-mockup-row:last-child { margin-bottom: 0; }
+.tab-mockup-name { font-weight: 700; color: #0F172A; }
+.tab-mockup-detail { color: #94A3B8; font-size: 10px; }
+.tab-mockup-badge {
+  font-size: 8px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
+  text-transform: uppercase;
+}
+.tab-mockup-badge.green { background: rgba(34,197,94,0.1); color: #22C55E; }
+.tab-mockup-badge.amber { background: rgba(245,158,11,0.1); color: #D97706; }
+.tab-mockup-badge.blue { background: rgba(55,48,163,0.08); color: #3730A3; }
+.tab-mockup-badge.gray { background: #F1F5F9; color: #64748B; }
+.tab-mockup-stat {
+  text-align: center; padding: 12px; background: #fff;
+  border: 1px solid #E2E8F0; border-radius: 8px; margin-bottom: 6px;
+}
+.tab-mockup-stat-num {
+  font-size: 24px; font-weight: 800; color: #3730A3;
+}
+.tab-mockup-stat-label { font-size: 10px; color: #94A3B8; }
+.tab-mockup-msg {
+  padding: 10px 14px; border-radius: 10px; font-size: 11px;
+  line-height: 1.4; margin-bottom: 6px; max-width: 85%;
+}
+.tab-mockup-msg.user {
+  background: #3730A3; color: #fff; align-self: flex-end;
+  margin-left: auto; border-bottom-right-radius: 4px;
+}
+.tab-mockup-msg.bot {
+  background: #fff; border: 1px solid #E2E8F0; color: #0F172A;
+  border-bottom-left-radius: 4px;
+}
+.tab-mockup-stars { color: #F59E0B; font-size: 12px; letter-spacing: 2px; }
+.tab-mockup-checklist { display: flex; flex-direction: column; gap: 6px; }
+.tab-mockup-check {
+  display: flex; align-items: center; gap: 8px; font-size: 11px; color: #0F172A;
+  padding: 8px 12px; background: #fff; border: 1px solid #E2E8F0; border-radius: 8px;
+}
+.tab-mockup-check-icon { color: #22C55E; font-weight: 700; }
+
+/* ===== HOW IT WORKS ===== */
+.how-section { padding: 100px 0; }
+.how-steps {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin: 48px 0 40px;
+}
+.how-step {
+  text-align: center; padding: 32px 24px;
+  background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 16px;
+}
+.how-step-num {
+  width: 48px; height: 48px; border-radius: 50%; background: #3730A3;
+  color: #fff; font-size: 20px; font-weight: 800; display: flex; align-items: center;
+  justify-content: center; margin: 0 auto 16px;
+}
+.how-step h3 { font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 10px; }
+.how-step p { font-size: 14px; line-height: 1.65; color: #64748B; }
+.how-cta { text-align: center; }
+
+/* ===== FINAL CTA ===== */
+.final-cta-section { padding: 100px 0; background: #F8FAFC; }
+.final-cta-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+}
+.final-cta-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 48px 40px;
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.final-cta-card h3 { font-size: 28px; font-weight: 800; color: #0F172A; margin-bottom: 12px; }
+.final-cta-card p { font-size: 15px; line-height: 1.65; color: #475569; margin-bottom: 24px; }
+
+/* ===== FOOTER ===== */
+.site-footer { padding: 60px 0 32px; border-top: 1px solid #E2E8F0; }
+.footer-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
+}
+.footer-brand { display: flex; flex-direction: column; gap: 12px; }
+.footer-brand-name {
+  font-size: 20px; font-weight: 800; color: #0F172A; display: flex; align-items: center; gap: 8px;
+}
+.footer-brand p { font-size: 13px; color: #94A3B8; line-height: 1.6; }
+.footer-col h4 {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: #94A3B8; margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 14px; color: #475569; text-decoration: none;
+  margin-bottom: 10px; transition: color 0.2s;
+}
+.footer-col a:hover { color: #3730A3; }
+.footer-bottom {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid #F1F5F9;
+  font-size: 13px; color: #94A3B8; text-align: center;
 }
 
+/* ===== ANIMATIONS ===== */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== STAT BANNER ===== */
-.stat-banner {
-  padding: 60px 0;
-  background: var(--gray-100);
-}
-.stat-banner .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  text-align: center;
-  flex-wrap: wrap;
-}
-.stat-banner-number {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 48px; font-weight: 900;
-  color: var(--navy);
-}
-.stat-banner-text {
-  font-size: 20px; color: var(--text-secondary);
-  max-width: 600px;
-}
-.stat-banner-text strong { color: var(--text-primary); font-weight: 600; }
-
-/* ===== PROBLEM SECTION ===== */
-.problem {
-  padding: 120px 0 60px;
-}
-.section-label {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #0E9AC0;
-  margin-bottom: 16px;
-}
-.section-title {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 40px;
-  font-weight: 800;
-  font-style: normal;
-  line-height: 1.15;
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-  max-width: 100%;
-}
-.section-sub {
-  font-size: 17px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  max-width: 100%;
-  margin-bottom: 48px;
-}
-.pain-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.pain-card {
-  background: var(--gray-100);
-  border: none;
-  border-radius: 16px;
-  padding: 32px;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-.pain-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--red), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.pain-card:hover::before { opacity: 1; }
-.pain-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-.pain-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  background: rgba(248, 113, 113, 0.1);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px;
-  font-size: 22px;
-}
-.pain-card h3 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 18px; font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: -0.3px;
-}
-.pain-card p {
-  font-size: 14px; line-height: 1.7;
-  color: var(--text-secondary);
-}
-.pain-stat {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--gray-200);
-  font-size: 13px; font-weight: 600;
-  color: var(--red);
-}
-
-/* ===== PRODUCT / WHAT YOU GET ===== */
-.product {
-  padding: 120px 0;
-}
-.product-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 8px;
-}
-.product-card {
-  background: var(--gray-100);
-  border: none;
-  border-radius: 20px;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-}
-.product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-}
-.product-card::after {
-  content: '';
-  position: absolute;
-  top: -50%; right: -50%;
-  width: 200%; height: 200%;
-  background: radial-gradient(circle at center, rgba(55, 48, 163, 0.02) 0%, transparent 50%);
-  pointer-events: none;
-}
-.product-card-badge {
-  display: inline-block;
-  padding: 5px 12px;
-  background: rgba(55, 48, 163, 0.08);
-  border-radius: 6px;
-  font-size: 11px; font-weight: 700;
-  color: var(--navy);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-.product-card h3 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 26px; font-weight: 700; font-style: normal;
-  letter-spacing: 0.3px;
-  margin-bottom: 16px;
-}
-.product-card > p {
-  font-size: 15px; line-height: 1.7;
-  color: var(--text-secondary);
-  margin-bottom: 28px;
-  position: relative; z-index: 1;
-}
-.feature-list {
-  list-style: none;
-  display: flex; flex-direction: column; gap: 14px;
-  position: relative; z-index: 1;
-}
-.feature-list li {
-  display: flex; gap: 12px; align-items: flex-start;
-  font-size: 14px; color: var(--text-secondary);
-  line-height: 1.5;
-}
-.feature-list li .check {
-  width: 20px; height: 20px; flex-shrink: 0;
-  background: var(--green-glow);
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--green);
-  font-size: 12px;
-  margin-top: 1px;
-}
-.product-card-visual {
-  margin-top: 32px;
-  background: var(--white);
-  border: none;
-  border-radius: 12px;
-  padding: 20px;
-  position: relative; z-index: 1;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.mini-portal-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--gray-200);
-}
-.mini-portal-logo {
-  width: 28px; height: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--blue), var(--blue-bright));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800;
-}
-.mini-portal-name {
-  font-size: 13px; font-weight: 600;
-}
-.mini-search {
-  width: 100%;
-  padding: 10px 14px;
-  background: var(--card-bg);
-  border: 1px solid var(--gray-200);
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-.mini-kb-items { display: flex; flex-direction: column; gap: 8px; }
-.mini-kb-item {
-  padding: 10px 14px;
-  background: var(--card-bg);
-  border: 1px solid var(--gray-200);
-  border-radius: 8px;
-  font-size: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.mini-kb-icon {
-  width: 24px; height: 24px;
-  border-radius: 6px;
-  background: var(--blue-glow);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  flex-shrink: 0;
-}
-.mini-kb-text { color: var(--text-secondary); }
-.mini-kb-tag {
-  margin-left: auto;
-  font-size: 10px; font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--green-glow);
-  color: var(--green);
-}
-
-/* ===== ROI ===== */
-.roi {
-  padding: 120px 0;
-  background: var(--gray-100);
-}
-.roi-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-  margin-top: 48px;
-}
-.roi-calculator {
-  background: var(--white);
-  border: none;
-  border-radius: 20px;
-  padding: 36px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.roi-calc-title {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 18px; font-weight: 600;
-  margin-bottom: 24px;
-  display: flex; align-items: center; gap: 10px;
-}
-.roi-calc-title span {
-  font-size: 14px;
-  padding: 3px 10px;
-  background: var(--green-glow);
-  border-radius: 6px;
-  color: var(--green);
-  font-weight: 600;
-}
-.roi-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--gray-200);
-}
-.roi-row:last-child { border-bottom: none; }
-.roi-label { font-size: 14px; color: var(--text-secondary); }
-.roi-value {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 16px; font-weight: 600;
-}
-.roi-result {
-  margin-top: 20px;
-  padding: 20px;
-  background: var(--green-glow);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-  border-radius: 12px;
-  text-align: center;
-}
-.roi-result-label {
-  font-size: 13px; color: var(--green);
-  font-weight: 600; margin-bottom: 4px;
-}
-.roi-result-value {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 36px; font-weight: 700;
-  color: var(--green);
-  transition: transform 0.15s ease;
-}
-.roi-result-sub {
-  font-size: 12px; color: var(--text-muted);
-  margin-top: 4px;
-}
-.roi-metrics {
-  display: flex; flex-direction: column; gap: 20px;
-}
-.roi-metric {
-  background: var(--white);
-  border: none;
-  border-radius: 14px;
-  padding: 24px;
-  display: flex; gap: 16px; align-items: flex-start;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.roi-metric-icon {
-  width: 44px; height: 44px;
-  border-radius: 10px;
-  background: var(--blue-glow);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-.roi-metric h4 {
-  font-size: 15px; font-weight: 700;
-  margin-bottom: 6px;
-}
-.roi-metric p {
-  font-size: 13px; line-height: 1.6;
-  color: var(--text-secondary);
-}
-
-/* ===== SUCCESS STORIES VISUAL ===== */
-.success-stories-showcase {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.success-stories-visual {
-  position: relative;
-}
-.ss-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.ss-header {
-  padding: 12px 18px;
-  background: var(--navy);
-  color: var(--white);
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: 12px; font-weight: 700;
-}
-.ss-header-dots { display: flex; gap: 4px; }
-.ss-header-dots span { width: 7px; height: 7px; border-radius: 50%; }
-.ss-header-dots span:nth-child(1) { background: #FF5F57; }
-.ss-header-dots span:nth-child(2) { background: #FEBC2E; }
-.ss-header-dots span:nth-child(3) { background: #28C840; }
-.ss-body {
-  padding: 20px;
-}
-.ss-card-preview {
-  background: var(--gray-100);
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 12px;
-}
-.ss-card-quote {
-  font-size: 13px; font-style: normal; line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-  position: relative;
-  padding-left: 16px;
-  border-left: 3px solid #5EC4E3;
-}
-.ss-card-patient {
-  display: flex; align-items: center; gap: 10px;
-}
-.ss-card-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5EC4E3, #7DD4ED);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: var(--white);
-}
-.ss-card-info {
-  flex: 1;
-}
-.ss-card-name {
-  font-size: 12px; font-weight: 700; color: var(--text-primary);
-}
-.ss-card-treatment {
-  font-size: 10px; color: var(--text-muted);
-}
-.ss-card-stars {
-  color: #F59E0B; font-size: 12px; letter-spacing: 1px;
-}
-.ss-actions {
-  display: flex; gap: 8px;
-}
-.ss-action-btn {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  font-size: 10px; font-weight: 700;
-  text-align: center;
-}
-.ss-action-btn.publish {
-  background: #0A7AFF;
-  color: var(--white);
-}
-.ss-action-btn.edit {
-  background: var(--gray-100);
-  color: var(--text-secondary);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.ss-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 10px;
-  background: rgba(94, 196, 227, 0.1);
-  border-radius: 100px;
-  font-size: 9px; font-weight: 700; color: #0E9AC0;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  margin-bottom: 10px;
-}
-.ss-queue {
-  display: flex; gap: 8px;
-  margin-top: 12px;
-}
-.ss-queue-item {
-  flex: 1;
-  padding: 10px;
-  background: var(--gray-100);
-  border-radius: 8px;
-  font-size: 10px;
-}
-.ss-queue-name {
-  font-weight: 700; color: var(--text-primary);
-  margin-bottom: 2px;
-}
-.ss-queue-status {
-  color: var(--text-muted); font-size: 9px;
-}
-.ss-queue-dot {
-  display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-  margin-right: 3px;
-}
-.ss-queue-dot.ready { background: var(--green); }
-.ss-queue-dot.draft { background: var(--orange); }
-
-/* ===== PATIENT FUNNEL ===== */
-.funnel {
-  padding: 100px 0;
-}
-.funnel-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-  margin-top: 48px;
-  margin-bottom: 40px;
-}
-.funnel-toolbar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px;
-  background: var(--navy);
-  color: var(--white);
-  font-size: 12px; font-weight: 700;
-}
-.funnel-toolbar-dots { display: flex; gap: 5px; }
-.funnel-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.funnel-toolbar-dots span:nth-child(1) { background: #FF5F57; }
-.funnel-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
-.funnel-toolbar-dots span:nth-child(3) { background: #28C840; }
-.funnel-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-.funnel-body-left {
-  padding: 20px;
-  border-right: 1px solid rgba(0,0,0,0.06);
-}
-.funnel-body-right {
-  padding: 20px;
-}
-.funnel-body-title {
-  font-size: 11px; font-weight: 800; color: var(--text-primary);
-  text-transform: uppercase; letter-spacing: 0.5px;
-  margin-bottom: 14px;
-}
-.funnel-content-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 12px;
-  background: var(--gray-100);
-  border-radius: 10px;
-  margin-bottom: 8px;
-}
-.funnel-content-item:last-child { margin-bottom: 0; }
-.funnel-content-left {
-  display: flex; align-items: center; gap: 10px;
-}
-.funnel-content-icon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.funnel-content-icon.blog { background: rgba(59,130,246,0.1); }
-.funnel-content-icon.story { background: rgba(168,85,247,0.1); }
-.funnel-content-icon.social { background: rgba(34,197,94,0.1); }
-.funnel-content-name {
-  font-size: 12px; font-weight: 700; color: var(--text-primary);
-}
-.funnel-content-meta {
-  font-size: 9px; color: var(--text-muted); margin-top: 1px;
-}
-.funnel-content-status {
-  font-size: 8px; font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 100px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.funnel-content-status.published { background: rgba(34,197,94,0.1); color: var(--green); }
-.funnel-content-status.scheduled { background: rgba(245,158,11,0.1); color: #F59E0B; }
-.funnel-content-status.draft { background: rgba(0,0,0,0.05); color: var(--text-muted); }
-.funnel-review-stat {
-  background: var(--gray-100);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 8px;
-  text-align: center;
-}
-.funnel-review-stat:last-child { margin-bottom: 0; }
-.funnel-review-number {
-  font-size: 24px; font-weight: 800; color: var(--text-primary);
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-}
-.funnel-review-label {
-  font-size: 10px; color: var(--text-muted); margin-top: 2px;
-}
-.funnel-review-bar {
-  height: 4px; border-radius: 2px; background: rgba(0,0,0,0.06);
-  margin-top: 8px; overflow: hidden;
-}
-.funnel-review-bar-fill {
-  height: 100%; border-radius: 2px;
-}
-@media (max-width: 768px) {
-  .funnel-body { grid-template-columns: 1fr; }
-  .funnel-body-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.06); }
-}
-.funnel-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-top: 48px;
-}
-.funnel-card {
-  background: var(--gray-100);
-  border: none;
-  border-radius: 16px;
-  padding: 32px;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-.funnel-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-.funnel-card-number {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 48px; font-weight: 700;
-  color: rgba(55, 48, 163, 0.08);
-  position: absolute;
-  top: 16px; right: 24px;
-}
-.funnel-card h3 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 18px; font-weight: 600;
-  margin-bottom: 10px;
-  letter-spacing: -0.3px;
-}
-.funnel-card p {
-  font-size: 14px; line-height: 1.7;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-}
-.funnel-tag {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(55, 48, 163, 0.08);
-  border-radius: 6px;
-  font-size: 11px; font-weight: 600;
-  color: var(--navy);
-}
-
-/* ===== HOW IT WORKS ===== */
-.how {
-  padding: 120px 0;
-}
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 48px;
-}
-.step {
-  text-align: center;
-  padding: 40px 32px;
-  background: var(--gray-100);
-  border: none;
-  border-radius: 16px;
-  position: relative;
-  transition: all 0.3s;
-}
-.step:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-.step-number {
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #0E9AC0, #5EC4E3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 22px; font-weight: 700;
-  color: var(--white);
-  margin: 0 auto 24px;
-}
-.step h3 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 20px; font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: -0.3px;
-}
-.step p {
-  font-size: 14px; line-height: 1.7;
-  color: var(--text-secondary);
-}
-.step-connector {
-  display: none;
-}
-
-/* ===== INTEGRATIONS ===== */
-.integrations {
-  padding: 100px 0;
-}
-.integrations-center {
-  text-align: center;
-}
-.integrations-center .section-title,
-.integrations-center .section-sub {
-  margin-left: auto; margin-right: auto;
-}
-.int-logos {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 48px;
-}
-.int-logo {
-  width: 100px; height: 80px;
-  background: var(--gray-100);
-  border: none;
-  border-radius: 12px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 8px;
-  transition: all 0.3s;
-  font-size: 10px; color: var(--text-muted); font-weight: 600;
-}
-.int-logo:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-.int-logo-icon {
-  font-size: 24px;
-}
-
-/* ===== PRICING ===== */
-.pricing {
-  padding: 120px 0;
-  background: var(--gray-100);
-}
-.pricing-center { text-align: center; }
-.pricing-center .section-title,
-.pricing-center .section-sub {
-  margin-left: auto; margin-right: auto;
-}
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 48px;
-}
-.price-card {
-  background: var(--white);
-  border: none;
-  border-radius: 20px;
-  padding: 36px;
-  text-align: left;
-  transition: all 0.3s;
-  position: relative;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.price-card.featured {
-  box-shadow: 0 4px 20px rgba(55, 48, 163, 0.12);
-}
-.price-card.featured::before {
-  content: 'Most Popular';
-  position: absolute;
-  top: -12px; left: 50%; transform: translateX(-50%);
-  padding: 4px 16px;
-  background: linear-gradient(135deg, var(--navy), var(--navy-light));
-  color: var(--white);
-  font-size: 11px; font-weight: 700;
-  border-radius: 100px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.price-tier {
-  font-size: 13px; font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #0E9AC0;
-  margin-bottom: 8px;
-}
-.price-tagline {
-  font-size: 15px; color: var(--text-secondary);
-  margin-bottom: 20px;
-  min-height: 44px;
-}
-.price-amount {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 42px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.price-amount span {
-  font-size: 16px; font-weight: 500;
-  color: var(--text-muted);
-}
-.price-features {
-  list-style: none;
-  margin: 28px 0;
-  display: flex; flex-direction: column; gap: 12px;
-}
-.price-features li {
-  font-size: 13px;
-  color: var(--text-secondary);
-  display: flex; align-items: center; gap: 10px;
-}
-.price-features li::before {
-  content: '\\2713';
-  color: var(--green);
-  font-weight: 700;
-  font-size: 12px;
-}
-.price-cta {
-  width: 100%;
-  padding: 14px;
-  border-radius: 100px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 15px; font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-}
-.price-cta-primary {
-  background: #0A7AFF;
-  color: var(--white);
-  border: none;
-  box-shadow: 0 4px 16px rgba(10, 122, 255, 0.25);
-}
-.price-cta-primary:hover {
-  background: #0968D9;
-  box-shadow: 0 6px 24px rgba(10, 122, 255, 0.35);
-}
-.price-cta-secondary {
-  background: transparent;
-  color: var(--navy);
-  border: 1px solid rgba(55, 48, 163, 0.2);
-}
-.price-cta-secondary:hover {
-  border-color: var(--navy);
-  background: rgba(55, 48, 163, 0.06);
-}
-
-/* ===== CTA SECTION ===== */
-.cta-section {
-  padding: 100px 0;
-  text-align: center;
-}
-.cta-box {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
-  border: none;
-  border-radius: 24px;
-  padding: 72px 48px;
-  position: relative;
-  overflow: hidden;
-  color: var(--white);
-}
-.cta-box::before {
-  content: '';
-  position: absolute;
-  top: -100px; left: 50%; transform: translateX(-50%);
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-.cta-box h2 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 40px; font-weight: 800; font-style: normal;
-  letter-spacing: 0.5px;
-  margin-bottom: 16px;
-  position: relative;
-}
-.cta-box p {
-  font-size: 17px; color: rgba(255,255,255,0.7);
-  margin-bottom: 36px;
-  position: relative;
-}
-.cta-box .btn-primary {
-  font-size: 16px;
-  padding: 16px 40px;
-  position: relative;
-  background: var(--white);
-  color: var(--navy);
-}
-.cta-box .btn-primary:hover {
-  background: var(--gray-100);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-}
-
-/* ===== ABOUT US ===== */
-.about-section {
-  padding: 100px 0;
-  background: #FAFBFD;
-  border-top: 1px solid rgba(0,0,0,0.04);
-}
-.about-inner {
-  display: flex; gap: 60px; align-items: center; max-width: 960px; margin: 0 auto;
-}
-.about-photo {
-  flex-shrink: 0; width: 340px; height: 340px; border-radius: 20px; overflow: hidden;
-  box-shadow: 0 12px 40px rgba(55, 48, 163, 0.1);
-}
-.about-photo img {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.about-text {
-  flex: 1;
-}
-.about-label {
-  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--blue); margin-bottom: 12px;
-}
-.about-text h2 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 34px; font-weight: 800; font-style: normal; color: var(--text-primary);
-  line-height: 1.15; letter-spacing: 0.5px; margin-bottom: 20px;
-}
-.about-text p {
-  font-size: 15px; line-height: 1.7; color: var(--text-secondary);
-  margin-bottom: 14px;
-}
-.about-text p:last-child { margin-bottom: 0; }
-.about-text strong { color: var(--text-primary); }
-
-@media (max-width: 768px) {
-  .about-inner { flex-direction: column; gap: 32px; text-align: center; }
-  .about-photo { width: 260px; height: 260px; margin: 0 auto; }
-  .about-text h2 { font-size: 28px; }
-}
-
-/* ===== FOOTER ===== */
-footer {
-  padding: 48px 0;
-  border-top: 1px solid rgba(0,0,0,0.06);
-}
-footer .container {
-  display: flex; justify-content: space-between; align-items: center;
-}
-.footer-brand {
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800; font-size: 18px; font-style: normal;
-  color: var(--gray-400);
-}
-.footer-brand svg { width: 28px; height: 28px; }
-.footer-links {
-  display: flex; gap: 24px;
-}
-.footer-links a {
-  font-size: 13px; color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--navy); }
-
-/* ===== SERVICE TABS (What We Do) ===== */
-.service-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
-  align-items: start;
-}
-.service-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.service-tab {
-  background: var(--gray-100);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 16px 20px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-align: left;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.service-tab:hover {
-  background: var(--white);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-}
-.service-tab.active {
-  border-color: var(--navy);
-  background: var(--white);
-  box-shadow: 0 4px 16px rgba(55, 48, 163, 0.1);
-}
-.service-tab-icon {
-  font-size: 22px;
-  flex-shrink: 0;
-}
-.service-tab h3 {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.2px;
-}
-.service-right {
-  display: flex;
-  flex-direction: column;
-}
-.service-detail {
-  padding: 16px 0 0;
-  transition: all 0.3s;
-}
-.service-detail p {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
-.service-mockup-wrap {
-  max-width: 100%;
-  margin-bottom: 0;
-}
-.service-mockup-wrap .smartforms-mockup,
-.service-mockup-wrap .backoffice-mockup,
-.service-mockup-wrap .portal-mockup,
-.service-mockup-wrap .concierge-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-
-/* ===== WHY US STATS ===== */
-.why-stats {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.why-stat {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 24px 32px;
-  text-align: center;
-  min-width: 160px;
-  transition: all 0.3s;
-}
-.why-stat:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-.why-stat-value {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--navy);
-  margin-bottom: 4px;
-}
-.why-stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-/* ===== CASE STUDIES ===== */
-.cases-section {
-  padding: 120px 0;
-  background: #F8FAFC;
-}
-.cases-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 48px;
-}
-.case-card {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 20px;
-  padding: 36px;
-  transition: all 0.3s;
-}
-.case-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
-  border-color: #CBD5E1;
-}
-.case-type {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #0E9AC0;
-  margin-bottom: 16px;
-}
-.case-quote {
-  font-size: 16px;
-  font-style: normal;
-  line-height: 1.6;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-  padding-left: 16px;
-  border-left: 3px solid var(--blue);
-}
-.case-problem {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-}
-.case-problem strong {
-  color: var(--text-primary);
-}
-.case-built {
-  display: inline-block;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #3730A3;
-  background: rgba(55, 48, 163, 0.06);
-  border: 1px solid rgba(55, 48, 163, 0.12);
-  border-radius: 8px;
-  padding: 10px 16px;
-  margin-bottom: 8px;
-}
-.case-built strong {
-  color: #3730A3;
-  font-weight: 800;
-}
-.case-metrics-row {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--gray-200);
-}
-.case-metric {
-  flex: 1;
-  background: #F8FAFC;
-  border-radius: 10px;
-  padding: 14px 16px;
-}
-.case-metric-value {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--green);
-}
-.case-metric-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-top: 2px;
-}
-
-/* ===== OLD SECTIONS (kept for backwards compat) ===== */
-.backoffice-section {
-  padding: 60px 0 120px;
-}
-.backoffice-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-.backoffice-content {
-  position: relative; z-index: 2;
-}
-.backoffice-features {
-  display: flex; flex-direction: column; gap: 16px;
-  margin-top: 28px;
-}
-.backoffice-feature {
-  display: flex; gap: 12px; align-items: flex-start;
-}
-.backoffice-feature-icon {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  background: rgba(55, 48, 163, 0.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.backoffice-feature h4 {
-  font-size: 14px; font-weight: 700;
-  margin-bottom: 2px;
-}
-.backoffice-feature p {
-  font-size: 12px; line-height: 1.5;
-  color: var(--text-secondary);
-}
-.backoffice-visual {
-  position: relative;
-}
-.backoffice-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.bo-toolbar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px;
-  background: var(--navy);
-  color: var(--white);
-  font-size: 12px; font-weight: 700;
-}
-.bo-toolbar-dots { display: flex; gap: 5px; }
-.bo-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.bo-toolbar-dots span:nth-child(1) { background: #FF5F57; }
-.bo-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
-.bo-toolbar-dots span:nth-child(3) { background: #28C840; }
-.bo-sidebar {
-  display: flex;
-}
-.bo-nav {
-  width: 52px;
-  background: var(--gray-100);
-  border-right: 1px solid rgba(0,0,0,0.06);
-  display: flex; flex-direction: column; align-items: center;
-  padding: 16px 0;
-  gap: 16px;
-}
-.bo-nav-item {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  color: var(--text-muted);
-  transition: all 0.2s;
-}
-.bo-nav-item.active {
-  background: var(--navy);
-  color: var(--white);
-}
-.bo-main {
-  flex: 1;
-  padding: 16px;
-}
-.bo-main-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 14px;
-}
-.bo-main-title {
-  font-size: 14px; font-weight: 800; color: var(--text-primary);
-}
-.bo-main-tabs {
-  display: flex; gap: 2px;
-}
-.bo-main-tab {
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 10px; font-weight: 700;
-  color: var(--text-muted);
-}
-.bo-main-tab.active {
-  background: var(--navy);
-  color: var(--white);
-}
-.bo-automation-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.bo-auto-card {
-  background: var(--gray-100);
-  border-radius: 10px;
-  padding: 12px;
-  transition: all 0.2s;
-}
-.bo-auto-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-.bo-auto-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 8px;
-}
-.bo-auto-icon {
-  font-size: 16px;
-}
-.bo-auto-status {
-  font-size: 8px; font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 100px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.bo-auto-status.active { background: rgba(34, 197, 94, 0.1); color: var(--green); }
-.bo-auto-status.draft { background: rgba(0,0,0,0.05); color: var(--text-muted); }
-.bo-auto-name {
-  font-size: 11px; font-weight: 700; color: var(--text-primary);
-  margin-bottom: 3px;
-}
-.bo-auto-desc {
-  font-size: 9px; color: var(--text-muted); line-height: 1.4;
-}
-.bo-auto-stat {
-  margin-top: 8px;
-  font-size: 9px; font-weight: 700; color: var(--green);
-}
-
-/* ===== PATIENT PORTAL SECTION ===== */
-.portal-section {
-  padding: 120px 0;
-  background: var(--gray-100);
-  position: relative;
-  overflow: hidden;
-}
-.portal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-.portal-content {
-  position: relative; z-index: 2;
-}
-.portal-features {
-  display: flex; flex-direction: column; gap: 20px;
-  margin-top: 32px;
-}
-.portal-feature {
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.portal-feature-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: rgba(55, 48, 163, 0.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-.portal-feature h4 {
-  font-size: 15px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.portal-feature p {
-  font-size: 13px; line-height: 1.6;
-  color: var(--text-secondary);
-}
-.portal-visual {
-  position: relative;
-}
-.portal-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.portal-mockup-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px;
-  background: var(--navy);
-  color: var(--white);
-}
-.portal-mockup-logo {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; font-style: normal;
-}
-.portal-mockup-logo .logo-dot {
-  width: 24px; height: 24px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 800;
-}
-.portal-mockup-nav-links {
-  display: flex; gap: 16px;
-  font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600;
-}
-.portal-mockup-body {
-  padding: 24px;
-}
-.portal-welcome {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.portal-welcome h3 {
-  font-size: 18px; font-weight: 800; font-style: normal;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-.portal-welcome p {
-  font-size: 12px; color: var(--text-muted);
-}
-.portal-search {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px;
-  background: var(--gray-100);
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-.portal-search-icon {
-  font-size: 14px; color: var(--text-muted);
-}
-.portal-search-text {
-  font-size: 13px; color: var(--text-muted);
-}
-.portal-chat {
-  display: flex; flex-direction: column; gap: 12px;
-}
-.portal-chat-msg {
-  max-width: 85%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 12px; line-height: 1.5;
-}
-.portal-chat-msg.user {
-  align-self: flex-end;
-  background: var(--navy);
-  color: var(--white);
-  border-bottom-right-radius: 4px;
-}
-.portal-chat-msg.ai {
-  align-self: flex-start;
-  background: var(--gray-100);
-  color: var(--text-primary);
-  border-bottom-left-radius: 4px;
-}
-.portal-chat-msg .ai-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 9px; font-weight: 700; color: var(--navy);
-  background: rgba(55, 48, 163, 0.08);
-  padding: 2px 8px;
-  border-radius: 100px;
-  margin-bottom: 6px;
-}
-.portal-chat-msg .sources {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-  font-size: 10px; color: var(--text-muted);
-}
-.portal-chat-msg .sources span {
-  color: var(--navy); font-weight: 600;
-}
-.portal-kb-uploads {
-  display: flex; gap: 8px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-}
-.portal-kb-file {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 10px;
-  background: var(--gray-100);
-  border-radius: 8px;
-  font-size: 10px; font-weight: 600; color: var(--text-secondary);
-}
-.portal-kb-file .file-icon {
-  font-size: 12px;
-}
-.portal-kb-file .file-status {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-/* Portal Notification Toasts */
-.portal-toasts {
-  position: absolute;
-  bottom: 20px;
-  right: -30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10;
-}
-.portal-toast {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 8px 30px rgba(55, 48, 163, 0.15), 0 2px 8px rgba(0,0,0,0.06);
-  font-size: 12px;
-  white-space: nowrap;
-  border-left: 3px solid var(--green);
-  animation: portalToastIn 0.5s ease both;
-}
-.portal-toast:nth-child(2) { animation-delay: 0.6s; }
-.portal-toast:nth-child(3) { animation-delay: 1.2s; }
-.portal-toast .toast-icon {
-  width: 28px; height: 28px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.portal-toast .toast-text {
-  display: flex; flex-direction: column; gap: 1px;
-}
-.portal-toast .toast-label {
-  font-size: 9px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px;
-}
-.portal-toast .toast-msg {
-  font-size: 11px; font-weight: 700; color: var(--text-primary);
-}
-@keyframes portalToastIn {
-  from { opacity: 0; transform: translateX(30px) scale(0.95); }
-  to { opacity: 1; transform: translateX(0) scale(1); }
-}
-
-/* ===== TRAVEL CONCIERGE SECTION ===== */
-.concierge-section {
-  padding: 120px 0;
-}
-.concierge-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-.concierge-content {
-  position: relative; z-index: 2;
-}
-.concierge-features {
-  display: flex; flex-direction: column; gap: 20px;
-  margin-top: 32px;
-}
-.concierge-feature {
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.concierge-feature-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: rgba(55, 48, 163, 0.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-.concierge-feature h4 {
-  font-size: 15px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.concierge-feature p {
-  font-size: 13px; line-height: 1.6;
-  color: var(--text-secondary);
-}
-.concierge-visual {
-  position: relative;
-}
-.concierge-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.concierge-toggle {
-  display: flex; gap: 2px;
-  background: var(--gray-100);
-  border-radius: 8px;
-  padding: 3px;
-  width: fit-content;
-}
-.concierge-toggle-btn {
-  padding: 6px 16px;
-  border-radius: 6px;
-  font-size: 11px; font-weight: 700;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.concierge-toggle-btn.active {
-  background: var(--navy);
-  color: var(--white);
-}
-.tc-toolbar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px;
-  background: var(--navy);
-  color: var(--white);
-  font-size: 12px; font-weight: 700;
-}
-.tc-toolbar-dots { display: flex; gap: 5px; }
-.tc-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.tc-toolbar-dots span:nth-child(1) { background: #FF5F57; }
-.tc-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
-.tc-toolbar-dots span:nth-child(3) { background: #28C840; }
-.tc-patient-body {
-  padding: 20px;
-}
-.tc-patient-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px;
-}
-.tc-patient-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(55, 48, 163, 0.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.tc-patient-greeting {
-  font-size: 14px; font-weight: 700;
-}
-.tc-info-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.tc-info-card {
-  background: var(--gray-100);
-  border-radius: 10px;
-  padding: 12px;
-}
-.tc-info-card-icon {
-  font-size: 16px; margin-bottom: 6px;
-}
-.tc-info-card-label {
-  font-size: 9px; text-transform: uppercase;
-  color: var(--text-muted);
-  font-weight: 600; letter-spacing: 0.5px;
-}
-.tc-info-card-value {
-  font-size: 12px; font-weight: 700;
-  color: var(--text-primary);
-}
-.tc-timeline {
-  margin-top: 12px;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.tc-timeline-item {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11px;
-}
-.tc-timeline-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--navy);
-  flex-shrink: 0;
-}
-.tc-timeline-dot.completed { background: var(--green); }
-.tc-timeline-dot.upcoming { background: var(--gray-200); }
-.tc-admin-body {
-  padding: 16px;
-}
-.tc-admin-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.tc-admin-stat {
-  background: var(--gray-100);
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-}
-.tc-admin-stat-value {
-  font-size: 18px; font-weight: 800;
-  color: var(--navy);
-}
-.tc-admin-stat-label {
-  font-size: 9px; color: var(--text-muted);
-  text-transform: uppercase;
-}
-.tc-admin-table {
-  width: 100%;
-}
-.tc-admin-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-  font-size: 11px;
-}
-.tc-admin-row:last-child { border-bottom: none; }
-.tc-admin-name {
-  font-weight: 700; color: var(--text-primary);
-}
-.tc-admin-status {
-  font-size: 8px; font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 100px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.tc-admin-status.arriving { background: rgba(94, 196, 227, 0.15); color: #0E9AC0; }
-.tc-admin-status.in-treatment { background: rgba(34, 197, 94, 0.1); color: var(--green); }
-.tc-admin-status.departing { background: rgba(245, 158, 11, 0.1); color: var(--orange); }
-
-/* ===== SMART FORMS SECTION ===== */
-.smartforms-section {
-  padding: 120px 0;
-  background: var(--gray-100);
-  position: relative;
-  overflow: hidden;
-}
-.smartforms-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-.smartforms-content {
-  position: relative; z-index: 2;
-}
-.smartforms-features {
-  display: flex; flex-direction: column; gap: 20px;
-  margin-top: 32px;
-}
-.smartforms-feature {
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.smartforms-feature-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: rgba(55, 48, 163, 0.08);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-.smartforms-feature h4 {
-  font-size: 15px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.smartforms-feature p {
-  font-size: 13px; line-height: 1.6;
-  color: var(--text-secondary);
-}
-.smartforms-visual {
-  position: relative;
-}
-.smartforms-mockup {
-  background: var(--white);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.sf-toolbar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px;
-  background: var(--navy);
-  color: var(--white);
-  font-size: 12px; font-weight: 700;
-}
-.sf-toolbar-dots { display: flex; gap: 5px; }
-.sf-toolbar-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.sf-toolbar-dots span:nth-child(1) { background: #FF5F57; }
-.sf-toolbar-dots span:nth-child(2) { background: #FEBC2E; }
-.sf-toolbar-dots span:nth-child(3) { background: #28C840; }
-.sf-body {
-  padding: 24px;
-}
-.sf-form-title {
-  font-size: 16px; font-weight: 800;
-  text-align: center;
-  margin-bottom: 4px;
-}
-.sf-form-sub {
-  font-size: 11px; color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 16px;
-}
-.sf-lead-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 9px; font-weight: 700;
-  color: var(--green);
-  background: rgba(34, 197, 94, 0.1);
-  padding: 3px 10px;
-  border-radius: 100px;
-  margin-bottom: 12px;
-}
-.sf-field {
-  margin-bottom: 10px;
-}
-.sf-field-label {
-  font-size: 10px; font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.sf-field-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--gray-200);
-  background: var(--gray-100);
-  font-size: 12px;
-  color: var(--text-muted);
-  box-sizing: border-box;
-}
-.sf-field-highlight {
-  border-color: var(--navy);
-  background: rgba(55, 48, 163, 0.03);
-  color: var(--text-primary);
-}
-.sf-progress {
-  display: flex; align-items: center; gap: 6px;
-  margin: 16px 0 4px;
-}
-.sf-progress-step {
-  flex: 1; height: 4px;
-  border-radius: 2px;
-  background: var(--gray-200);
-}
-.sf-progress-step.active { background: var(--navy); }
-.sf-progress-step.completed { background: var(--green); }
-.sf-progress-labels {
-  display: flex; justify-content: space-between;
-  font-size: 9px; color: var(--text-muted);
-  margin-bottom: 16px;
-}
-.sf-embed {
-  margin-top: 16px;
-  background: var(--gray-100);
-  border-radius: 10px;
-  padding: 12px;
-  border: 1px dashed rgba(0,0,0,0.1);
-}
-.sf-embed-label {
-  font-size: 9px; font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.5px;
-  margin-bottom: 6px;
-}
-.sf-embed-code {
-  font-family: monospace;
-  font-size: 10px;
-  color: var(--navy);
-  background: var(--white);
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(0,0,0,0.06);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* ===== ROI INTERACTIVE ===== */
-.roi-input-wrap {
-  display: flex; align-items: center; gap: 14px;
-}
-.roi-input-value {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 16px; font-weight: 600;
-  color: var(--text-primary);
-  min-width: 72px;
-  text-align: right;
-}
-.roi-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 140px;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--gray-200);
-  outline: none;
-  cursor: pointer;
-}
-.roi-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--navy);
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(55, 48, 163, 0.4);
-  transition: box-shadow 0.2s;
-}
-.roi-slider::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 18px rgba(55, 48, 163, 0.6);
-}
-.roi-slider::-moz-range-thumb {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--blue);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 0 10px rgba(94, 196, 227, 0.4);
-}
-
-/* ===== HERO DNA ANIMATION ===== */
-.hero-dna {
-  position: absolute; inset: 0; z-index: 2;
-  display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(ellipse at center, rgba(55, 48, 163, 0.06) 0%, transparent 70%);
-  animation: dnaIn 0.8s ease forwards;
-  overflow: hidden; border-radius: 16px;
-}
-.hero-dna-fade { animation: dnaOut 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-@keyframes dnaIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes dnaOut { 0% { opacity: 1; } 100% { opacity: 0; filter: blur(6px); transform: scale(0.96); } }
-.hero-dna-svg { width: 80%; height: 80%; animation: dnaRotate 4s linear infinite; }
-@keyframes dnaRotate { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
-.dna-strand-anim { stroke-dasharray: 30 15; animation: strandDash 2s linear infinite; }
-@keyframes strandDash { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -90; } }
-.dna-node-pulse { animation: dnaPulse 1.5s ease-in-out infinite alternate; }
-@keyframes dnaPulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
-@keyframes rungAppear { 0% { opacity: 0; } 100% { opacity: 1; } }
-.dna-particle {
-  position: absolute; border-radius: 50%;
-  background: radial-gradient(circle, rgba(94, 196, 227, 0.6), rgba(55, 48, 163, 0.2));
-  box-shadow: 0 0 6px rgba(94, 196, 227, 0.3);
-  animation: dnaFloat 3s ease-in-out infinite alternate, dnaFade 3s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes dnaFloat { 0% { transform: translate(0, 0); } 100% { transform: translate(8px, -12px); } }
-@keyframes dnaFade { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.5; } }
-.crm-hidden { opacity: 0; transform: translateY(8px); }
-.crm-revealed { animation: crmReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-@keyframes crmReveal { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
-@media (prefers-reduced-motion: reduce) { .hero-dna { display: none; } .crm-hidden { opacity: 1; transform: none; } }
-/* ===== ANNOUNCEMENT BANNER ===== */
-.announce-banner {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 101;
-  background: #1E293B; color: #fff; padding: 10px 24px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  font-size: 13px; font-weight: 500;
-}
-.announce-banner a {
-  color: #5EC4E3; font-weight: 700; text-decoration: none;
-  transition: color 0.2s;
-}
-.announce-banner a:hover { color: #7DD4ED; }
-.announce-banner-close {
-  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; color: rgba(255,255,255,0.5);
-  font-size: 18px; cursor: pointer; padding: 4px 8px; line-height: 1;
-}
-.announce-banner-close:hover { color: #fff; }
-.announce-banner + .site-nav,
-.has-banner .site-nav { top: 38px; }
-.has-banner .hero-tabs-section { padding-top: 218px; }
-.has-banner .site-nav-mobile-menu { padding-top: 158px; }
-
-/* Financial badges */
-.fin-badge {
-  display: inline-flex; align-items: center; gap: 3px;
-  font-size: 9px; font-weight: 700; padding: 2px 8px;
-  border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
-  border-width: 1.5px; border-style: solid;
-}
-.fin-badge.qualified { border-color: #22C55E; color: #22C55E; background: transparent; }
-.fin-badge.review { border-color: #D97706; color: #D97706; background: transparent; }
-.fin-badge.not-qualified { border-color: #94A3B8; color: #94A3B8; background: transparent; }
-
-/* ===== HERO TABS ===== */
-.hero-tabs-section {
-  position: relative; padding: 180px 0 80px; background: #fff; overflow: hidden;
-}
-.hero-tabs-text { text-align: center; max-width: 720px; margin: 0 auto; padding: 0 24px; }
-.hero-tabs-kicker {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 2px; color: #0E9AC0; margin-bottom: 16px;
-}
-.hero-tabs-title {
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px;
-  color: #0F172A; margin-bottom: 20px;
-}
-.hero-tabs-sub {
-  font-size: 17px; line-height: 1.7; color: #64748B; margin-bottom: 32px;
-}
-.hero-tabs-ctas {
-  display: flex; gap: 12px; justify-content: center;
-}
-.hero-cta-primary {
-  display: inline-flex; align-items: center; padding: 14px 32px;
-  background: #3730A3; color: #fff; font-weight: 700; font-size: 15px;
-  border-radius: 100px; text-decoration: none; transition: all 0.2s;
-}
-.hero-cta-primary:hover { background: #4338CA; box-shadow: 0 4px 16px rgba(55, 48, 163, 0.3); transform: translateY(-1px); }
-.hero-cta-secondary {
-  display: inline-flex; align-items: center; padding: 13px 28px;
-  background: transparent; color: #0F172A; font-weight: 700; font-size: 15px;
-  border: 1.5px solid #E2E8F0; border-radius: 100px; text-decoration: none; transition: all 0.2s;
-}
-.hero-cta-secondary:hover { border-color: #94A3B8; background: #F8FAFC; }
-.hero-tabs-container {
-  max-width: 1100px; margin: 48px auto 0; padding: 0 24px;
-}
-.hero-tab-nav {
-  display: flex; justify-content: center; gap: 0; border-bottom: 1px solid #E2E8F0;
-  margin-bottom: 0;
-}
-.hero-tab-btn {
-  padding: 14px 28px; font-size: 14px; font-weight: 600;
-  color: #94A3B8; background: none; border: none; cursor: pointer;
-  border-bottom: 2px solid transparent; transition: all 0.2s;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  white-space: nowrap;
-}
-.hero-tab-btn:hover { color: #475569; }
-.hero-tab-btn.active { color: #3730A3; border-bottom-color: #3730A3; }
-.hero-tab-panel {
-  background: #F8FAFC; border-radius: 0 0 16px 16px; border: 1px solid #E2E8F0;
-  border-top: none; padding: 32px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;
-  animation: heroTabFade 0.3s ease;
-}
-@keyframes heroTabFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Hero tab mockups */
-.ht-form-mockup {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
-  overflow: hidden;
-}
-.ht-form-header {
-  padding: 12px 16px; background: #0F172A; color: #fff;
-  font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 10px;
-}
-.ht-form-dots { display: flex; gap: 5px; }
-.ht-form-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.ht-form-dots span:nth-child(1) { background: #FF5F57; }
-.ht-form-dots span:nth-child(2) { background: #FEBC2E; }
-.ht-form-dots span:nth-child(3) { background: #28C840; }
-.ht-form-body { padding: 20px; }
-.ht-form-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
-.ht-form-sub { font-size: 11px; color: #94A3B8; margin-bottom: 14px; }
-.ht-form-badge {
-  display: inline-flex; align-items: center; gap: 4px; font-size: 10px;
-  font-weight: 700; color: #22C55E; background: rgba(34, 197, 94, 0.1);
-  padding: 4px 10px; border-radius: 100px; margin-bottom: 14px;
-}
-.ht-field { margin-bottom: 10px; }
-.ht-field-label { font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.ht-field-input {
-  width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #E2E8F0;
-  background: #F8FAFC; font-size: 12px; color: #0F172A; box-sizing: border-box;
-}
-.ht-field-input.filled { border-color: #3730A3; background: rgba(55, 48, 163, 0.03); }
-.ht-steps { display: flex; gap: 6px; margin-top: 14px; }
-.ht-step { flex: 1; height: 3px; border-radius: 2px; background: #E2E8F0; }
-.ht-step.active { background: #3730A3; }
-.ht-step.done { background: #22C55E; }
-.ht-step-labels { display: flex; justify-content: space-between; font-size: 9px; color: #94A3B8; margin-top: 4px; margin-bottom: 14px; }
-.ht-continue-btn {
-  width: 100%; padding: 10px; background: #3730A3; color: #fff;
-  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
-  cursor: default; margin-bottom: 14px;
-}
-.ht-embed { background: #F8FAFC; border: 1px dashed #E2E8F0; border-radius: 8px; padding: 10px; }
-.ht-embed-label { font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.ht-embed-code {
-  font-family: monospace; font-size: 10px; color: #3730A3; background: #fff;
-  padding: 6px 10px; border-radius: 6px; border: 1px solid #E2E8F0;
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-}
-
-/* Lead pipeline cards */
-.ht-lead-cards { display: flex; flex-direction: column; gap: 12px; }
-.ht-lead-card {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px;
-}
-.ht-lead-badge {
-  display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px;
-  border-radius: 100px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px;
-}
-.ht-lead-badge.hot { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
-.ht-lead-badge.warm { background: rgba(245,158,11,0.1); color: #D97706; }
-.ht-lead-badge.cold { background: rgba(148,163,184,0.15); color: #64748B; }
-.ht-lead-name { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
-.ht-lead-desc { font-size: 11px; color: #94A3B8; line-height: 1.4; }
-
-/* Portal mockup for tab 2 */
-.ht-portal {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
-}
-.ht-portal-nav {
-  padding: 12px 16px; background: #0F172A; color: #fff;
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: 12px; font-weight: 700;
-}
-.ht-portal-links { display: flex; gap: 14px; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; }
-.ht-portal-body { padding: 18px; }
-.ht-portal-welcome { font-size: 16px; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
-.ht-portal-sub { font-size: 11px; color: #94A3B8; margin-bottom: 14px; }
-.ht-portal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.ht-portal-card {
-  background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px;
-}
-.ht-portal-card-label { font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.ht-portal-card-value { font-size: 12px; font-weight: 600; color: #0F172A; }
-.ht-portal-card-sub { font-size: 10px; color: #94A3B8; margin-top: 2px; }
-.ht-portal-progress {
-  margin-top: 12px; background: #F8FAFC; border: 1px solid #E2E8F0;
-  border-radius: 8px; padding: 12px;
-}
-.ht-portal-progress-label { font-size: 10px; font-weight: 700; color: #0F172A; margin-bottom: 8px; }
-.ht-portal-progress-bar { height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; }
-.ht-portal-progress-fill { height: 100%; width: 65%; background: #3730A3; border-radius: 3px; }
-.ht-portal-progress-text { font-size: 10px; color: #3730A3; font-weight: 600; margin-top: 4px; }
-
-/* Timeline for tab 2 right side */
-.ht-timeline { display: flex; flex-direction: column; gap: 0; }
-.ht-timeline-title { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 16px; }
-.ht-timeline-item { display: flex; gap: 12px; padding-bottom: 18px; }
-.ht-timeline-item:last-child { padding-bottom: 0; }
-.ht-timeline-dot-col { display: flex; flex-direction: column; align-items: center; width: 14px; }
-.ht-timeline-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid #3730A3; background: #fff; }
-.ht-timeline-dot.filled { background: #3730A3; }
-.ht-timeline-line { width: 1px; flex: 1; background: #E2E8F0; margin-top: 4px; }
-.ht-timeline-content { flex: 1; }
-.ht-timeline-time { font-size: 10px; font-weight: 700; color: #0E9AC0; text-transform: uppercase; letter-spacing: 0.5px; }
-.ht-timeline-label { font-size: 12px; font-weight: 600; color: #0F172A; }
-.ht-timeline-desc { font-size: 11px; color: #94A3B8; }
-
-/* Travel tab mockups */
-.ht-travel-portal {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
-}
-.ht-travel-header {
-  padding: 12px 16px; background: #0F172A; color: #fff;
-  font-size: 12px; font-weight: 700;
-}
-.ht-travel-body { padding: 18px; }
-.ht-travel-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
-.ht-travel-countdown {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
-  font-weight: 700; color: #5EC4E3; background: rgba(55, 48, 163,0.08);
-  padding: 4px 12px; border-radius: 100px; margin-bottom: 14px;
-}
-.ht-travel-checklist { display: flex; flex-direction: column; gap: 10px; }
-.ht-travel-check {
-  display: flex; align-items: center; gap: 10px; font-size: 12px; color: #0F172A;
-}
-.ht-travel-check-dot {
-  width: 18px; height: 18px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;
-}
-.ht-travel-check-dot.done { background: rgba(55, 48, 163,0.1); color: #22C55E; }
-.ht-travel-check-dot.pending { background: #F1F5F9; color: #94A3B8; }
-.ht-travel-check-text { font-weight: 600; }
-.ht-travel-check-sub { font-size: 10px; color: #94A3B8; margin-left: 28px; margin-top: -4px; }
-
-/* Admin dashboard mockup */
-.ht-admin {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;
-}
-.ht-admin-header {
-  padding: 12px 16px; background: #0F172A; color: #fff;
-  font-size: 12px; font-weight: 700;
-}
-.ht-admin-body { padding: 18px; }
-.ht-admin-title { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
-.ht-admin-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 0; border-bottom: 1px solid #F1F5F9; font-size: 12px;
-}
-.ht-admin-row:last-child { border-bottom: none; }
-.ht-admin-name { font-weight: 700; color: #0F172A; }
-.ht-admin-date { color: #94A3B8; font-size: 11px; }
-.ht-admin-status {
-  font-size: 9px; font-weight: 700; padding: 3px 8px;
-  border-radius: 100px; text-transform: uppercase; letter-spacing: 0.3px;
-}
-.ht-admin-status.confirmed { background: rgba(55, 48, 163,0.1); color: #22C55E; }
-.ht-admin-status.pending { background: rgba(245,158,11,0.1); color: #D97706; }
-.ht-admin-status.transit { background: rgba(99,102,241,0.1); color: #6366F1; }
-.ht-admin-coord {
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid #F1F5F9;
-  font-size: 11px; color: #94A3B8; display: flex; align-items: center; gap: 6px;
-}
-.ht-admin-coord-dot { width: 8px; height: 8px; border-radius: 50%; background: #22C55E; }
-
-/* ===== RESPONSIVE ===== */
-/* ===== TABLET ===== */
+/* ===== RESPONSIVE 900px ===== */
 @media (max-width: 900px) {
-  .hero-split { grid-template-columns: 1fr; gap: 40px; }
-  .hero-split-left { align-items: center; text-align: center; }
-  .hero-centered { text-align: center; }
-  .hero-centered-sub { margin: 0 auto 36px; }
-  .hero-main-title { font-size: 44px; }
-  .hero-centered-ctas { flex-direction: column; align-items: center; }
-  .pain-grid, .product-grid, .steps, .pricing-grid, .funnel-grid {
-    grid-template-columns: 1fr;
-  }
-  .service-layout { grid-template-columns: 1fr; }
-  .service-tabs { flex-direction: row; flex-wrap: wrap; }
-  .service-tabs .service-tab { flex: 1 1 45%; text-align: center; flex-direction: column; gap: 8px; }
-  .cases-grid { grid-template-columns: 1fr; }
-  .why-stats { gap: 16px; }
-  .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid, .success-stories-showcase {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .portal-toasts { display: none; }
-  .roi-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .hero-ctas { flex-direction: column; }
-  .nav-links { display: none; }
-  .nav-mobile-cta { display: inline-flex !important; }
-  .hero-tabs-title { font-size: 36px; }
-  .hero-tab-nav { overflow-x: auto; justify-content: flex-start; padding: 0 16px; }
-  .hero-tab-btn { padding: 12px 20px; font-size: 13px; }
-  .hero-tab-panel { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
-  .stat-banner .container { flex-direction: column; gap: 8px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-right { max-width: 480px; margin: 0 auto; }
+  .hero-title { font-size: 36px; }
+  .hero-section { padding: 130px 0 60px; }
+  .problem-grid { grid-template-columns: repeat(2,1fr); }
   .section-title { font-size: 32px; }
+  .feature-grid, .feature-grid.reversed { grid-template-columns: 1fr; direction: ltr; }
+  .feature-grid.reversed > * { direction: ltr; }
+  .feature-text h2 { font-size: 28px; }
+  .testimonials-grid { grid-template-columns: repeat(2,1fr); }
+  .callout-grid { grid-template-columns: 1fr; }
+  .tab-content { grid-template-columns: 1fr; }
+  .tabs-row { gap: 6px; }
+  .how-steps { grid-template-columns: 1fr; }
+  .final-cta-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: repeat(2,1fr); }
+  .tabs-row { gap: 6px; }
+  .tab-btn { font-size: 12px; padding: 8px 14px; }
+  .booking-split { grid-template-columns: 1fr; }
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
+/* ===== RESPONSIVE 640px ===== */
+@media (max-width: 640px) {
+  .hero-grid { padding: 0 20px; }
+  .hero-title { font-size: 28px; }
+  .hero-sub { font-size: 15px; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .hero-section { padding: 110px 0 48px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .section-title { font-size: 26px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .outcome-pills { flex-direction: column; align-items: center; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .container { padding: 0 16px; }
-
-  /* Nav */
-  nav { padding: 14px 0; }
-  .nav-logo { font-size: 18px; gap: 8px; }
-  .nav-logo svg { width: 28px; height: 28px; }
-
-  /* Hero */
-  .hero-fullwidth { min-height: 80vh; }
-  .hero-tabs-section { padding: 140px 0 60px; }
-  .hero-tabs-title { font-size: 28px; }
-  .hero-tabs-sub { font-size: 15px; }
-  .hero-tabs-ctas { flex-direction: column; align-items: center; gap: 10px; }
-  .hero-tabs-ctas a { width: 100%; justify-content: center; }
-  .hero-main-title { font-size: 32px; letter-spacing: 0; }
-  .hero-centered-sub { font-size: 15px; }
-  .hero-centered-ctas { flex-direction: column; gap: 10px; }
-  .hero-centered-ctas .btn-primary,
-  .hero-centered-ctas .btn-secondary { width: 100%; justify-content: center; }
-  .hero-dna-bg { opacity: 0.5; }
-  .hero-badge { font-size: 11px; padding: 4px 12px 4px 6px; }
-  .hero-sub { font-size: 15px; line-height: 1.6; }
-  .hero-ctas { gap: 10px; }
-  .hero-ctas .btn-primary,
-  .hero-ctas .btn-secondary { width: 100%; justify-content: center; padding: 14px 20px; font-size: 14px; }
-
-  /* CRM Builder mockup */
-  .hero-split-right { display: none; }
-  .crm-builder { display: none; }
-  .activity-toast { display: none; }
-  .brand-tag { display: none; }
-
-  /* Stat banner */
-  .stat-banner { padding: 40px 0; }
-  .stat-banner-number { font-size: 36px; }
-  .stat-banner-text { font-size: 16px; }
-
-  /* Sections */
-  .problem, .product, .funnel { padding: 60px 0; }
-  .cases-section { padding: 60px 0; }
-  .service-layout { grid-template-columns: 1fr; }
-  .service-tabs { flex-direction: column; }
-  .service-tabs .service-tab { flex: none; padding: 14px 16px; }
-  .service-tab h3 { font-size: 13px; }
-  .service-detail p { font-size: 14px; }
-  .why-stat { min-width: 120px; padding: 16px 20px; }
-  .why-stat-value { font-size: 20px; }
-  .case-card { padding: 24px; }
-  .case-quote { font-size: 14px; }
-  .case-metric-value { font-size: 16px; }
-  .backoffice-section, .portal-section, .concierge-section, .smartforms-section { padding: 60px 0; }
-  .section-label { font-size: 11px; letter-spacing: 1.5px; }
-  .section-title { font-size: 26px; letter-spacing: 0; line-height: 1.2; }
-  .section-sub { font-size: 14px; margin-bottom: 32px; }
-
-  /* Pain cards */
-  .pain-card { padding: 24px; }
-  .pain-card h3 { font-size: 16px; }
-  .pain-card p { font-size: 13px; }
-
-  /* Back office section */
-  .backoffice-grid, .portal-grid, .concierge-grid, .smartforms-grid { gap: 28px; }
-  .backoffice-mockup { overflow-x: auto; }
-  .bo-sidebar { min-width: 320px; }
-  .backoffice-feature h4 { font-size: 13px; }
-  .backoffice-feature p { font-size: 11px; }
-
-  /* Portal mockup */
-  .portal-mockup { overflow: hidden; }
-  .portal-chat-msg { max-width: 95%; font-size: 11px; }
-  .portal-kb-uploads { flex-wrap: wrap; }
-
-  /* Travel Concierge mockup */
-  .concierge-mockup { overflow-x: auto; }
-  .tc-info-cards { grid-template-columns: 1fr; }
-  .tc-admin-stats { grid-template-columns: 1fr 1fr; }
-  .tc-admin-row { flex-wrap: wrap; gap: 4px; }
-
-  /* Smart Forms mockup */
-  .smartforms-mockup { overflow: hidden; }
-  .sf-embed-code { font-size: 9px; }
-
-  /* Success stories */
-  .success-stories-showcase { gap: 28px; }
-  .ss-actions { flex-direction: column; gap: 6px; }
-  .ss-queue { flex-direction: column; gap: 6px; }
-
-  /* ROI */
-  .roi { padding: 60px 0; }
-  .roi-calculator { padding: 24px; }
-  .roi-result-value { font-size: 28px; }
-  .roi-metric { padding: 16px; }
-  .roi-slider { width: 100px; }
-
-  /* Funnel cards */
-  .funnel-card { padding: 24px; }
-  .funnel-card h3 { font-size: 16px; }
-
-  /* Steps */
-  .how { padding: 60px 0; }
-  .step { padding: 28px 20px; }
-  .step h3 { font-size: 17px; }
-
-  /* Integrations */
-  .int-logos { gap: 10px; }
-  .int-logo { width: 80px; height: 64px; font-size: 9px; }
-
-  /* CTA */
-  .cta-section { padding: 60px 0; }
-  .cta-box { padding: 40px 20px; border-radius: 16px; }
-  .cta-box h2 { font-size: 26px; letter-spacing: 0; }
-  .cta-box p { font-size: 14px; }
-  .cta-box .btn-primary { font-size: 14px; padding: 14px 28px; }
-
-  /* Footer */
-  footer .container { flex-direction: column; gap: 16px; text-align: center; }
-  .footer-links { justify-content: center; }
+  .feature-grid { gap: 32px; padding: 0 16px; }
+  .feature-visual { padding: 16px; min-height: 240px; }
+  .final-cta-card { padding: 32px 24px; }
+  .tab-content { padding: 24px; }
+  .record-fields { grid-template-columns: 1fr; }
 }
       `}</style>
 
       <SiteNav />
 
-      {/* HERO - Tabbed product preview */}
-      <section className="hero-tabs-section">
-        {/* Flowing DNA background */}
+      {/* ===== 1. HERO ===== */}
+      <section className="hero-section">
         <div className="hero-dna-bg">
           <svg viewBox="0 0 1200 800" className="hero-dna-wave" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
@@ -2988,758 +639,340 @@ footer .container {
             <path className="dna-wave-path dna-wave-2" d="M-100,350 C100,550 300,150 500,400 C700,650 900,250 1100,450 C1300,650 1500,350 1500,350" fill="none" stroke="url(#waveGrad2)" strokeWidth="60" strokeLinecap="round"/>
             {Array.from({length: 15}, (_, i) => {
               const x = 50 + i * 80;
-              return <line key={i} x1={x} y1="300" x2={x} y2="450" stroke="rgba(94, 196, 227, 0.06)" strokeWidth="2" className="dna-rung-line" style={{animationDelay: `${i * 0.2}s`}}/>;
+              return <line key={i} x1={x} y1="300" x2={x} y2="450" stroke="rgba(94,196,227,0.06)" strokeWidth="2" className="dna-rung-line" style={{animationDelay: `${i * 0.2}s`}}/>;
             })}
             {Array.from({length: 12}, (_, i) => {
               const x = 80 + i * 100;
               return (
                 <g key={i}>
-                  <circle cx={x} cy={350 + Math.sin(i * 0.8) * 60} r="4" fill="rgba(55, 48, 163, 0.15)" className="dna-bg-node" style={{animationDelay: `${i * 0.15}s`}}/>
-                  <circle cx={x + 30} cy={400 - Math.sin(i * 0.8) * 60} r="3" fill="rgba(94, 196, 227, 0.12)" className="dna-bg-node" style={{animationDelay: `${i * 0.15 + 0.5}s`}}/>
+                  <circle cx={x} cy={350 + Math.sin(i * 0.8) * 60} r="4" fill="rgba(55,48,163,0.15)" className="dna-bg-node" style={{animationDelay: `${i * 0.15}s`}}/>
+                  <circle cx={x + 30} cy={400 - Math.sin(i * 0.8) * 60} r="3" fill="rgba(94,196,227,0.12)" className="dna-bg-node" style={{animationDelay: `${i * 0.15 + 0.5}s`}}/>
                 </g>
               );
             })}
           </svg>
         </div>
 
-        <div className="hero-tabs-text">
-          <div className="hero-tabs-kicker">Built for regenerative medicine</div>
-          <h1 className="hero-tabs-title">Everything your clinic needs to <span className="hl">capture</span><span className="hl">,</span> <span className="hl">keep</span><span className="hl">,</span> and <span className="hl">grow</span> patients.</h1>
-          <p className="hero-tabs-sub">Custom digital infrastructure for stem cell and regenerative medicine clinics. Intake forms, patient portals, travel coordination, and automated follow-up. Live in weeks, not months.</p>
-          <div className="hero-tabs-ctas">
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="hero-cta-primary">Book a discovery call</a>
-            <a href="/features" className="hero-cta-secondary">Explore features</a>
+        <div className="hero-grid">
+          <div className="hero-left" style={{animation: "fadeUp 0.8s ease both"}}>
+            <div className="hero-badge">
+              <span className="dot"></span>
+              Built for regenerative medicine. Trusted by the top clinics worldwide.
+            </div>
+            <h1 className="hero-title">
+              78% of patients book with the clinic that earns their trust first. <span className="hl">Be that clinic.</span>
+            </h1>
+            <p className="hero-sub">
+              Auto-replies don&apos;t close patients. We build the AI concierge, smart intake, and follow-up sequences that answer clinical questions, guide the travel decision, and turn inquiries into consultations. In English and Spanish, 24/7.
+            </p>
+            <div className="hero-ctas">
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
+              <a href="#how-it-works" className="hero-see-link">See how it works &darr;</a>
+            </div>
           </div>
-        </div>
 
-        <div className="hero-tabs-container">
-          <div className="hero-tab-nav">
-            <button className={`hero-tab-btn ${heroTab === 0 ? "active" : ""}`} onClick={() => setHeroTab(0)}>Lead capture &amp; conversion</button>
-            <button className={`hero-tab-btn ${heroTab === 1 ? "active" : ""}`} onClick={() => setHeroTab(1)}>Patient experience</button>
-            <button className={`hero-tab-btn ${heroTab === 2 ? "active" : ""}`} onClick={() => setHeroTab(2)}>Travel concierge</button>
+          <div className="hero-right" style={{animation: "fadeUp 0.8s ease 0.3s both"}}>
+            {/* AI Concierge chat mockup */}
+            <div className="audit-card">
+              <div className="audit-bar">
+                <div className="audit-bar-left">
+                  <div className="audit-bar-dots"><span></span><span></span><span></span></div>
+                  <span className="audit-bar-title">AI Patient Concierge</span>
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
+                  <span style={{width:6,height:6,borderRadius:"50%",background:"#22C55E",display:"inline-block"}}></span>
+                  <span style={{fontSize:10,opacity:0.7}}>Online 24/7</span>
+                </div>
+              </div>
+              <div className="audit-body" style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                <div style={{alignSelf:"flex-end",background:"#3730A3",color:"#fff",padding:"10px 14px",borderRadius:"12px 12px 4px 12px",fontSize:12,maxWidth:"80%",lineHeight:1.5}}>
+                  I&apos;m interested in stem cell therapy for my knee. How much does it cost and do you help with travel from the US?
+                </div>
+                <div style={{alignSelf:"flex-start",background:"#F8FAFC",border:"1px solid #E2E8F0",padding:"10px 14px",borderRadius:"12px 12px 12px 4px",fontSize:12,maxWidth:"85%",lineHeight:1.5,color:"#0F172A"}}>
+                  <div style={{display:"inline-flex",alignItems:"center",gap:"4px",fontSize:9,fontWeight:700,color:"#3730A3",background:"rgba(55,48,163,0.06)",padding:"2px 8px",borderRadius:100,marginBottom:6}}>&#10024; AI-Powered</div><br/>
+                  Our stem cell therapy for knees ranges from $8,000-$15,000. We handle everything for US patients: airport pickup, hotel near the clinic, and a bilingual coordinator. Recovery is typically 1-2 days of rest.<br/><br/>
+                  <strong>Would you like to book a free consultation with Dr. Rivera?</strong>
+                </div>
+                <div style={{alignSelf:"flex-end",background:"#3730A3",color:"#fff",padding:"10px 14px",borderRadius:"12px 12px 4px 12px",fontSize:12}}>
+                  Yes, I&apos;d love to book a consultation.
+                </div>
+                <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:10,padding:"10px 14px",display:"flex",alignItems:"center",gap:8,fontSize:11,color:"#15803D",fontWeight:600}}>
+                  <span>&#10003;</span> Consultation booked for Apr 22 at 10:00 AM with Dr. Rivera
+                </div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap" as const}}>
+                  <span style={{fontSize:9,fontWeight:700,padding:"3px 10px",borderRadius:100,background:"rgba(34,197,94,0.1)",color:"#22C55E",textTransform:"uppercase" as const}}>Hot Lead</span>
+                  <span style={{fontSize:9,fontWeight:700,padding:"3px 10px",borderRadius:100,border:"1.5px solid #22C55E",color:"#22C55E",textTransform:"uppercase" as const}}>Qualified</span>
+                  <span style={{fontSize:9,fontWeight:700,padding:"3px 10px",borderRadius:100,background:"rgba(55,48,163,0.06)",color:"#3730A3",textTransform:"uppercase" as const}}>Auto-booked</span>
+                </div>
+                <div style={{fontSize:10,color:"#94A3B8",textAlign:"center" as const,paddingTop:4,borderTop:"1px solid #E2E8F0"}}>
+                  Responded in 3 seconds - EN/ES - Trained on your clinic&apos;s content
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* Tab 1: Lead Capture */}
-          {heroTab === 0 && (
-            <div className="hero-tab-panel" key="tab0">
-              <div className="ht-form-mockup">
-                <div className="ht-form-header">
-                  <div className="ht-form-dots"><span></span><span></span><span></span></div>
-                  Smart Intake Form
-                </div>
-                <div className="ht-form-body">
-                  <div className="ht-form-title">Start your journey</div>
-                  <div className="ht-form-sub">Tell us about yourself to get started</div>
-                  <div className="ht-form-badge">&#10003; Lead captured at step 1</div>
-                  <div className="ht-field">
-                    <div className="ht-field-label">Full Name</div>
-                    <div className="ht-field-input filled">Sarah Mitchell</div>
-                  </div>
-                  <div className="ht-field">
-                    <div className="ht-field-label">Email</div>
-                    <div className="ht-field-input filled">sarah@email.com</div>
-                  </div>
-                  <div className="ht-field">
-                    <div className="ht-field-label">Condition of interest</div>
-                    <div className="ht-field-input">Select a condition...</div>
-                  </div>
-                  <div className="ht-steps">
-                    <div className="ht-step done"></div>
-                    <div className="ht-step active"></div>
-                    <div className="ht-step"></div>
-                    <div className="ht-step"></div>
-                  </div>
-                  <div className="ht-step-labels">
-                    <span>Contact Info</span><span>Condition</span><span>History</span><span>Schedule</span>
-                  </div>
-                  <div className="ht-continue-btn">Continue</div>
-                </div>
-              </div>
-              <div className="ht-lead-cards">
-                <div className="ht-lead-card">
-                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge hot">Hot</span><span className="fin-badge qualified">Qualified</span></div>
-                  <div className="ht-lead-name">Sarah M. - Knee stem cell</div>
-                  <div className="ht-lead-desc">Completed form 2 min ago. Consultation auto-booked.</div>
-                </div>
-                <div className="ht-lead-card">
-                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge warm">Warm</span><span className="fin-badge review">Review</span></div>
-                  <div className="ht-lead-name">Michael T. - PRP inquiry</div>
-                  <div className="ht-lead-desc">Abandoned at step 2. Routed to financial coordinator.</div>
-                </div>
-                <div className="ht-lead-card">
-                  <div style={{display:"flex",gap:"6px",marginBottom:"8px"}}><span className="ht-lead-badge cold">Cold</span><span className="fin-badge not-qualified">Not Qualified</span></div>
-                  <div className="ht-lead-name">Jennifer K. - General inquiry</div>
-                  <div className="ht-lead-desc">Email captured. Sent financing resources.</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Tab 2: Patient Experience */}
-          {heroTab === 1 && (
-            <div className="hero-tab-panel" key="tab1">
-              <div className="ht-portal">
-                <div className="ht-portal-nav">
-                  <span>Your Clinic Portal</span>
-                  <div className="ht-portal-links"><span>Treatment</span><span>Documents</span><span>Messages</span></div>
-                </div>
-                <div className="ht-portal-body">
-                  <div className="ht-portal-welcome">Welcome back, Sarah</div>
-                  <div className="ht-portal-sub">Stem Cell Therapy - Knee - Day 14 of recovery</div>
-                  <div className="ht-portal-cards">
-                    <div className="ht-portal-card">
-                      <div className="ht-portal-card-label">Treatment</div>
-                      <div className="ht-portal-card-value">Stem Cell - Knee</div>
-                      <div className="ht-portal-card-sub">Apr 1, 2026 - Dr. Rivera</div>
-                    </div>
-                    <div className="ht-portal-card">
-                      <div className="ht-portal-card-label">Recovery Protocol</div>
-                      <div className="ht-portal-card-value">Week 2: Light walking</div>
-                      <div className="ht-portal-card-sub">Ice 2x daily, no heavy lifting</div>
-                    </div>
-                    <div className="ht-portal-card">
-                      <div className="ht-portal-card-label">Next Appointment</div>
-                      <div className="ht-portal-card-value">Apr 22 - Follow-up</div>
-                      <div className="ht-portal-card-sub">Dr. Rivera - 10:00 AM</div>
-                    </div>
-                    <div className="ht-portal-card">
-                      <div className="ht-portal-card-label">Messages</div>
-                      <div className="ht-portal-card-value" style={{color:"#5EC4E3"}}>1 new message</div>
-                      <div className="ht-portal-card-sub">From your care team</div>
-                    </div>
-                  </div>
-                  <div className="ht-portal-progress">
-                    <div className="ht-portal-progress-label">Track your progress - Pain level</div>
-                    <div className="ht-portal-progress-bar"><div className="ht-portal-progress-fill"></div></div>
-                    <div className="ht-portal-progress-text">Pain: 7/10 → 3/10 (improving)</div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="ht-timeline-title">12-month patient lifecycle</div>
-                <div className="ht-timeline">
-                  <div className="ht-timeline-item">
-                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot filled"></div><div className="ht-timeline-line"></div></div>
-                    <div className="ht-timeline-content"><div className="ht-timeline-time">Week 1</div><div className="ht-timeline-label">Post-treatment check-in</div><div className="ht-timeline-desc">How are you feeling? Any questions?</div></div>
-                  </div>
-                  <div className="ht-timeline-item">
-                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot filled"></div><div className="ht-timeline-line"></div></div>
-                    <div className="ht-timeline-content"><div className="ht-timeline-time">Week 4</div><div className="ht-timeline-label">Progress check + education</div><div className="ht-timeline-desc">Recovery milestone content</div></div>
-                  </div>
-                  <div className="ht-timeline-item">
-                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div><div className="ht-timeline-line"></div></div>
-                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 3</div><div className="ht-timeline-label">Testimonial request</div><div className="ht-timeline-desc">Capture their story at peak satisfaction</div></div>
-                  </div>
-                  <div className="ht-timeline-item">
-                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div><div className="ht-timeline-line"></div></div>
-                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 6</div><div className="ht-timeline-label">Referral program invite</div><div className="ht-timeline-desc">Turn happy patients into referral sources</div></div>
-                  </div>
-                  <div className="ht-timeline-item">
-                    <div className="ht-timeline-dot-col"><div className="ht-timeline-dot"></div></div>
-                    <div className="ht-timeline-content"><div className="ht-timeline-time">Month 12</div><div className="ht-timeline-label">Annual check-in + reengagement</div><div className="ht-timeline-desc">New treatments, wellness check, follow-up</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Tab 3: Travel Concierge */}
-          {heroTab === 2 && (
-            <div className="hero-tab-panel" key="tab2">
-              <div className="ht-travel-portal">
-                <div className="ht-travel-header">Patient Travel Portal</div>
-                <div className="ht-travel-body">
-                  <div className="ht-travel-title">Your trip to Puerto Vallarta</div>
-                  <div className="ht-travel-countdown">&#9200; 5 days until treatment</div>
-                  <div className="ht-travel-checklist">
-                    <div>
-                      <div className="ht-travel-check">
-                        <div className="ht-travel-check-dot done">&#10003;</div>
-                        <span className="ht-travel-check-text">Flight confirmed</span>
-                      </div>
-                      <div className="ht-travel-check-sub">AA 1247 - Apr 15, 9:30am</div>
-                    </div>
-                    <div>
-                      <div className="ht-travel-check">
-                        <div className="ht-travel-check-dot done">&#10003;</div>
-                        <span className="ht-travel-check-text">Hotel booked</span>
-                      </div>
-                      <div className="ht-travel-check-sub">Grand Resort - 2 nights</div>
-                    </div>
-                    <div>
-                      <div className="ht-travel-check">
-                        <div className="ht-travel-check-dot done">&#10003;</div>
-                        <span className="ht-travel-check-text">Airport pickup scheduled</span>
-                      </div>
-                      <div className="ht-travel-check-sub">Driver: Carlos M. - Confirmed</div>
-                    </div>
-                    <div>
-                      <div className="ht-travel-check">
-                        <div className="ht-travel-check-dot pending">&#8226;</div>
-                        <span className="ht-travel-check-text">Pre-arrival form</span>
-                      </div>
-                      <div className="ht-travel-check-sub">Complete before Apr 12</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="ht-admin">
-                <div className="ht-admin-header">Admin Dashboard - Upcoming Arrivals</div>
-                <div className="ht-admin-body">
-                  <div className="ht-admin-title">This week</div>
-                  <div className="ht-admin-row">
-                    <span className="ht-admin-name">Sarah M.</span>
-                    <span className="ht-admin-date">Apr 15</span>
-                    <span className="ht-admin-status confirmed">Confirmed</span>
-                  </div>
-                  <div className="ht-admin-row">
-                    <span className="ht-admin-name">James K.</span>
-                    <span className="ht-admin-date">Apr 16</span>
-                    <span className="ht-admin-status pending">Pending docs</span>
-                  </div>
-                  <div className="ht-admin-row">
-                    <span className="ht-admin-name">Maria L.</span>
-                    <span className="ht-admin-date">Apr 17</span>
-                    <span className="ht-admin-status transit">In transit</span>
-                  </div>
-                  <div className="ht-admin-coord">
-                    <div className="ht-admin-coord-dot"></div>
-                    Coordinator: Ana R. - 3 patients assigned this week
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* WHAT WE DO */}
-      <section className="problem" id="services" style={{paddingBottom: "120px"}}>
-        <div className="container">
-          <div className="section-label">What We Do</div>
-          <h2 className="section-title">Custom builds for every part of your <span className="hl">patient journey.</span></h2>
-          <p className="section-sub">Every clinic is different. We start by understanding your patient flow, your team, and where the biggest gaps are. Then we build exactly what you need.</p>
-          <div className="service-layout">
-          <div className="service-tabs">
-            {features.map((f, i) => (
-              <button key={i} className={`service-tab ${activeFeature === i ? 'active' : ''}`} onClick={() => handleFeatureClick(i)}>
-                <div className="service-tab-icon">{f.icon}</div>
-                <h3>{f.title}</h3>
+      {/* ===== 2. PROBLEM STATEMENT ===== */}
+      <section className="problem-section">
+        <div className="container" style={{textAlign: "center"}}>
+          <h2 className="section-title">If any of this sounds familiar, you&apos;re not alone.</h2>
+          <div className="problem-grid">
+            <div className="problem-card reveal">
+              <div className="problem-card-icon" style={{background: "rgba(239,68,68,0.08)"}}>&#9200;</div>
+              <h3>Leads go cold before you respond</h3>
+              <p>The average regen med inquiry waits 24+ hours for a reply. Most patients have already booked with a competitor by the time you call back.</p>
+            </div>
+            <div className="problem-card reveal">
+              <div className="problem-card-icon" style={{background: "rgba(245,158,11,0.08)"}}>&#128233;</div>
+              <h3>Your intake form is a black hole</h3>
+              <p>Generic contact forms land in an inbox. No qualification, no routing, no follow-up sequence. Warm leads die in someone&apos;s unread folder.</p>
+            </div>
+            <div className="problem-card reveal">
+              <div className="problem-card-icon" style={{background: "rgba(94,196,227,0.12)"}}>&#9992;&#65039;</div>
+              <h3>International patients need hand-holding</h3>
+              <p>70% of stem cell patients travel for treatment. Every flight, hotel, and pickup question routes back to your coordinator&apos;s WhatsApp.</p>
+            </div>
+            <div className="problem-card reveal">
+              <div className="problem-card-icon" style={{background: "rgba(55,48,163,0.08)"}}>&#128268;</div>
+              <h3>Your tools don&apos;t talk to each other</h3>
+              <p>Website, CRM, email, scheduler, spreadsheets. Your team copy-pastes between five tabs just to book one consultation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="product-tabs-section" id="products">
+        <div className="container" style={{textAlign: "center"}}>
+          <h2 className="section-title">Everything you need to grow your clinic. One platform.</h2>
+          <div className="tabs-row">
+            {productTabs.map((tab, i) => (
+              <button key={i} className={`tab-btn ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>
+                {tab.label}
               </button>
             ))}
           </div>
-          <div className="service-right">
-          <div className="service-mockup-wrap">
-            {activeFeature === 0 && (
-              <div className="smartforms-mockup">
-                <div className="sf-toolbar">
-                  <div className="sf-toolbar-dots"><span></span><span></span><span></span></div>
-                  Smart Intake Form
-                </div>
-                <div className="sf-body">
-                  <div className="sf-form-title">Start Your Journey</div>
-                  <div className="sf-form-sub">Tell us about yourself to get started</div>
-                  <div className="sf-lead-badge">{"✅"} Lead captured after this step</div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Full Name</div>
-                    <div className="sf-field-input sf-field-highlight">Sarah Mitchell</div>
-                  </div>
-                  <div className="sf-field">
-                    <div className="sf-field-label">Email</div>
-                    <div className="sf-field-input sf-field-highlight">sarah@email.com</div>
-                  </div>
-                  <div className="sf-progress">
-                    <div className="sf-progress-step completed"></div>
-                    <div className="sf-progress-step active"></div>
-                    <div className="sf-progress-step"></div>
-                    <div className="sf-progress-step"></div>
-                  </div>
-                  <div className="sf-progress-labels">
-                    <span>Contact Info</span>
-                    <span>Condition</span>
-                    <span>History</span>
-                    <span>Schedule</span>
-                  </div>
-                  <div className="sf-embed">
-                    <div className="sf-embed-label">{"</>"} Embed on your website</div>
-                    <div className="sf-embed-code">&lt;script src=&quot;clinictech.io/forms/your-clinic&quot;&gt;&lt;/script&gt;</div>
-                  </div>
-                </div>
+          <div className="tab-content" key={activeTab}>
+            <div>
+              <h3>{productTabs[activeTab].title}</h3>
+              <p>{productTabs[activeTab].desc}</p>
+            </div>
+            <div className="tab-mockup">
+              <div className="tab-mockup-bar">
+                <div className="tab-mockup-dots"><span></span><span></span><span></span></div>
+                {productTabs[activeTab].title}
               </div>
-            )}
-            {activeFeature === 1 && (
-              <div className="backoffice-mockup">
-                <div className="bo-toolbar">
-                  <div className="bo-toolbar-dots"><span></span><span></span><span></span></div>
-                  Your Clinic - Automations
-                </div>
-                <div className="bo-sidebar">
-                  <div className="bo-nav">
-                    <div className="bo-nav-item active">{"⚡"}</div>
-                    <div className="bo-nav-item">{"👥"}</div>
-                    <div className="bo-nav-item">{"📊"}</div>
-                    <div className="bo-nav-item">{"📝"}</div>
-                    <div className="bo-nav-item">{"⚙️"}</div>
+              <div className="tab-mockup-body">
+                {/* Unified Inbox */}
+                {activeTab === 0 && (<>
+                  <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap" as const}}>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#1877F2",color:"#fff"}}>Facebook</span>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",color:"#fff"}}>Instagram</span>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#25D366",color:"#fff"}}>WhatsApp</span>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#3730A3",color:"#fff"}}>SMS</span>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#64748B",color:"#fff"}}>Email</span>
+                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#0F172A",color:"#fff"}}>Web Chat</span>
                   </div>
-                  <div className="bo-main">
-                    <div className="bo-main-header">
-                      <div className="bo-main-title">Automations</div>
-                      <div className="bo-main-tabs">
-                        <div className="bo-main-tab active">Active</div>
-                        <div className="bo-main-tab">Drafts</div>
-                        <div className="bo-main-tab">All</div>
-                      </div>
-                    </div>
-                    <div className="bo-automation-grid">
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"📧"}</span>
-                          <span className="bo-auto-status active">Active</span>
+                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#25D366",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>WA</span><span className="tab-mockup-name">Sarah M.</span><span className="tab-mockup-detail">How much is knee treatment?</span><span style={{fontSize:9,color:"#94A3B8"}}>2m ago</span></div>
+                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#1877F2",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>FB</span><span className="tab-mockup-name">James K.</span><span className="tab-mockup-detail">Sent a message</span><span style={{fontSize:9,color:"#94A3B8"}}>14m ago</span></div>
+                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#3730A3",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>SMS</span><span className="tab-mockup-name">Maria L.</span><span className="tab-mockup-detail">Yes I want to book</span><span style={{fontSize:9,color:"#94A3B8"}}>1h ago</span></div>
+                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#64748B",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>Email</span><span className="tab-mockup-name">Robert T.</span><span className="tab-mockup-detail">Re: Travel logistics</span><span style={{fontSize:9,color:"#94A3B8"}}>3h ago</span></div>
+                </>)}
+                {/* RegenCRM - Kanban */}
+                {activeTab === 1 && (<div style={{display:"flex",gap:8,overflow:"hidden"}}>
+                  {[{title:"New Lead",color:"#3730A3",patients:["Sarah M.","James K."]},{title:"Consulted",color:"#D97706",patients:["Maria L."]},{title:"Booked",color:"#22C55E",patients:["Robert T.","Lisa W."]},{title:"Treated",color:"#6366F1",patients:["David R."]}].map((col,i) => (
+                    <div key={i} style={{flex:1,minWidth:0}}>
+                      <div style={{fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:"0.5px",color:col.color,borderBottom:`2px solid ${col.color}`,paddingBottom:6,marginBottom:8}}>{col.title} <span style={{color:"#94A3B8"}}>{col.patients.length}</span></div>
+                      {col.patients.map((p,j) => (
+                        <div key={j} style={{background:"#fff",border:"1px solid #E2E8F0",borderRadius:6,padding:"8px 10px",marginBottom:6,fontSize:10}}>
+                          <div style={{fontWeight:700,color:"#0F172A"}}>{p}</div>
+                          <div style={{color:"#94A3B8",fontSize:9,marginTop:2}}>Knee Stem Cell</div>
                         </div>
-                        <div className="bo-auto-name">Lead Follow-Up</div>
-                        <div className="bo-auto-desc">Email + SMS within 5 min of form submission</div>
-                        <div className="bo-auto-stat">{"\u2191"} 47 leads contacted this week</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"📝"}</span>
-                          <span className="bo-auto-status active">Active</span>
-                        </div>
-                        <div className="bo-auto-name">Weekly Blog Post</div>
-                        <div className="bo-auto-desc">AI-generated from your knowledge base</div>
-                        <div className="bo-auto-stat">{"\u2191"} 12 posts published</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"⭐"}</span>
-                          <span className="bo-auto-status active">Active</span>
-                        </div>
-                        <div className="bo-auto-name">Review Requests</div>
-                        <div className="bo-auto-desc">Auto-sent 7 days post-treatment</div>
-                        <div className="bo-auto-stat">{"\u2191"} 23 reviews collected</div>
-                      </div>
-                      <div className="bo-auto-card">
-                        <div className="bo-auto-header">
-                          <span className="bo-auto-icon">{"🔄"}</span>
-                          <span className="bo-auto-status draft">Draft</span>
-                        </div>
-                        <div className="bo-auto-name">Patient Reactivation</div>
-                        <div className="bo-auto-desc">Re-engage patients inactive 90 days</div>
-                      </div>
+                      ))}
                     </div>
+                  ))}
+                </div>)}
+                {/* AI Patient Concierge */}
+                {activeTab === 2 && (<div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  <div className="tab-mockup-msg user">What does stem cell therapy for my knee involve? How much does it cost?</div>
+                  <div className="tab-mockup-msg bot"><span style={{fontSize:9,fontWeight:700,color:"#3730A3",background:"rgba(55,48,163,0.06)",padding:"2px 6px",borderRadius:100,marginBottom:4,display:"inline-block"}}>AI</span><br/>Our knee stem cell therapy uses MSCs harvested from your bone marrow. The procedure takes 2-3 hours and costs $8,000-$15,000. We coordinate travel from the US including airport pickup and hotel.</div>
+                  <div className="tab-mockup-msg user">Can I book a consultation?</div>
+                  <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:8,padding:"8px 12px",fontSize:10,color:"#15803D",fontWeight:600}}>&#10003; Consultation booked: Apr 22, 10 AM</div>
+                </div>)}
+                {/* Automated Follow-Ups */}
+                {activeTab === 3 && (<>
+                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Hot Lead Sequence</span><span className="tab-mockup-badge green">Active</span></div>
+                  <div style={{display:"flex",gap:4,margin:"4px 0 8px",paddingLeft:12,flexWrap:"wrap" as const}}>
+                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Instant SMS</span>
+                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Day 1 Email</span>
+                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Day 3 Call</span>
                   </div>
-                </div>
+                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Warm Nurture (30-day)</span><span className="tab-mockup-badge amber">Active</span></div>
+                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Cold Drip (90-day)</span><span className="tab-mockup-badge gray">Active</span></div>
+                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Patient Reactivation (12-mo)</span><span className="tab-mockup-badge blue">Active</span></div>
+                </>)}
+                {/* Review Generation */}
+                {activeTab === 4 && (<>
+                  <div className="tab-mockup-stat"><div className="tab-mockup-stat-num">4.9</div><div className="tab-mockup-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div className="tab-mockup-stat-label">Average across 312 reviews</div></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">Sarah M.</span><span className="tab-mockup-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span className="tab-mockup-badge green">Posted</span></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">James K.</span><span className="tab-mockup-detail">Request sent</span><span className="tab-mockup-badge amber">Pending</span></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">Maria L.</span><span className="tab-mockup-detail">Negative</span><span className="tab-mockup-badge blue">Routed</span></div>
+                </>)}
+                {/* Online Scheduling - Calendar */}
+                {activeTab === 5 && (<>
+                  <div style={{display:"grid",gridTemplateColumns:"40px repeat(5,1fr)",gap:3,fontSize:9}}>
+                    <div></div>
+                    {["Mon","Tue","Wed","Thu","Fri"].map(d => <div key={d} style={{textAlign:"center",fontWeight:700,color:"#94A3B8",paddingBottom:4}}>{d}</div>)}
+                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>9am</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Sarah M.</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>James K.</div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Maria L.</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Robert T.</div>
+                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>11am</div>
+                    <div style={{background:"#FFFBEB",border:"1px solid #FDE68A",borderRadius:4,padding:4,textAlign:"center",color:"#92400E",fontWeight:600}}>Lisa W.</div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>David R.</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Anna P.</div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>2pm</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Tom B.</div>
+                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Karen R.</div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
+                  </div>
+                  <div style={{fontSize:10,color:"#22C55E",fontWeight:600,marginTop:8,textAlign:"center" as const}}>+12 self-booked this week</div>
+                </>)}
+                {/* Protocol Builder */}
+                {activeTab === 6 && (<>
+                  <div className="tab-mockup-checklist">
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Pre-treatment instructions sent</div>
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Consent form signed digitally</div>
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Stem cell knee protocol assigned</div>
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Post-care recovery plan shared</div>
+                    <div className="tab-mockup-check"><span style={{color:"#94A3B8"}}>&#9711;</span> Week 4 follow-up scheduled</div>
+                  </div>
+                </>)}
+                {/* Boost Online Presence */}
+                {activeTab === 7 && (<>
+                  <div className="tab-mockup-stat"><div className="tab-mockup-stat-num">+190%</div><div className="tab-mockup-stat-label">Organic traffic growth</div></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">Google Business</span><span className="tab-mockup-badge green">Optimized</span></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">SEO Blog Posts</span><span className="tab-mockup-detail">12 published</span><span className="tab-mockup-badge green">Live</span></div>
+                  <div className="tab-mockup-row"><span className="tab-mockup-name">Local Citations</span><span className="tab-mockup-detail">34 directories</span><span className="tab-mockup-badge green">Synced</span></div>
+                </>)}
+                {/* Travel Concierge */}
+                {activeTab === 8 && (<>
+                  <div className="tab-mockup-checklist">
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Flight: AA 1247, Apr 15 9:30am</div>
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Hotel: Grand Resort, 2 nights</div>
+                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Pickup: Carlos M. confirmed</div>
+                    <div className="tab-mockup-check"><span style={{color:"#D97706"}}>&#9711;</span> Pre-arrival form: pending</div>
+                  </div>
+                  <div style={{marginTop:8,fontSize:10,color:"#94A3B8",textAlign:"center" as const}}>3 patients arriving this week</div>
+                </>)}
               </div>
-            )}
-            {activeFeature === 2 && (
-              <div className="portal-mockup">
-                <div className="portal-mockup-nav">
-                  <div className="portal-mockup-logo">
-                    <div className="logo-dot">Y</div>
-                    Your Clinic Portal
-                  </div>
-                  <div className="portal-mockup-nav-links">
-                    <span>Treatments</span>
-                    <span>FAQ</span>
-                    <span>Book</span>
-                  </div>
-                </div>
-                <div className="portal-mockup-body">
-                  <div className="portal-welcome">
-                    <h3>How can we help you?</h3>
-                    <p>Ask anything about our treatments, recovery, or booking</p>
-                  </div>
-                  <div className="portal-search">
-                    <span className="portal-search-icon">{"🔍"}</span>
-                    <span className="portal-search-text">Search treatments, FAQs, recovery info...</span>
-                  </div>
-                  <div className="portal-chat">
-                    <div className="portal-chat-msg user">
-                      What should I expect after PRP treatment for my knee?
-                    </div>
-                    <div className="portal-chat-msg ai">
-                      <div className="ai-badge">{"✨"} AI-Powered Answer</div>
-                      PRP recovery for knee treatment typically involves 1-2 days of rest, with most patients returning to light activity within a week. Full benefits develop over 4-6 weeks.
-                      <div className="sources">
-                        Sources: <span>PRP Recovery Guide</span> &middot; <span>Post-Treatment FAQ</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {activeFeature === 3 && (
-              <div className="concierge-mockup">
-                <div className="tc-toolbar">
-                  <div className="tc-toolbar-dots"><span></span><span></span><span></span></div>
-                  Travel Concierge
-                </div>
-                <div style={{padding: "12px 16px 0"}}>
-                  <div className="concierge-toggle">
-                    <button className={`concierge-toggle-btn ${travelView === 'patient' ? 'active' : ''}`} onClick={() => setTravelView('patient')}>Patient View</button>
-                    <button className={`concierge-toggle-btn ${travelView === 'admin' ? 'active' : ''}`} onClick={() => setTravelView('admin')}>Admin View</button>
-                  </div>
-                </div>
-                {travelView === 'patient' ? (
-                  <div className="tc-patient-body">
-                    <div className="tc-patient-header">
-                      <div className="tc-patient-avatar">{"👤"}</div>
-                      <div>
-                        <div className="tc-patient-greeting">Welcome, Sarah</div>
-                        <div style={{fontSize: "10px", color: "var(--text-muted)"}}>Your trip to Stem Cell Clinic MX</div>
-                      </div>
-                    </div>
-                    <div className="tc-info-cards">
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"✈️"}</div>
-                        <div className="tc-info-card-label">Flight</div>
-                        <div className="tc-info-card-value">AA 1247 &middot; Apr 15, 9:30am</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🚗"}</div>
-                        <div className="tc-info-card-label">Airport Pickup</div>
-                        <div className="tc-info-card-value">Confirmed &middot; Driver: Carlos M.</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🏨"}</div>
-                        <div className="tc-info-card-label">Hotel</div>
-                        <div className="tc-info-card-value">Grand Resort &middot; 2 nights</div>
-                      </div>
-                      <div className="tc-info-card">
-                        <div className="tc-info-card-icon">{"🏥"}</div>
-                        <div className="tc-info-card-label">Appointment</div>
-                        <div className="tc-info-card-value">Apr 16, 10:00am &middot; Dr. Rivera</div>
-                      </div>
-                    </div>
-                    <div className="tc-timeline">
-                      <div style={{fontSize: "11px", fontWeight: 700, marginBottom: "4px"}}>Your Timeline</div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot completed"></div>
-                        <span style={{color: "var(--green)", fontWeight: 600}}>Pre-arrival forms completed</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot completed"></div>
-                        <span style={{color: "var(--green)", fontWeight: 600}}>Flight booked</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot"></div>
-                        <span>Airport pickup &middot; Apr 15</span>
-                      </div>
-                      <div className="tc-timeline-item">
-                        <div className="tc-timeline-dot upcoming"></div>
-                        <span>Treatment day &middot; Apr 16</span>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="tc-admin-body">
-                    <div className="tc-admin-stats">
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">12</div>
-                        <div className="tc-admin-stat-label">Arriving this week</div>
-                      </div>
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">5</div>
-                        <div className="tc-admin-stat-label">In treatment</div>
-                      </div>
-                      <div className="tc-admin-stat">
-                        <div className="tc-admin-stat-value">3</div>
-                        <div className="tc-admin-stat-label">Departing</div>
-                      </div>
-                    </div>
-                    <div style={{fontSize: "12px", fontWeight: 700, marginBottom: "8px"}}>Patient Travel Status</div>
-                    <div className="tc-admin-table">
-                      <div className="tc-admin-row" style={{fontSize: "9px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.5px"}}>
-                        <span>Patient</span><span>Flight</span><span>Transport</span><span>Status</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">Sarah M.</span>
-                        <span>AA 1247</span>
-                        <span>{"🚗"} Confirmed</span>
-                        <span className="tc-admin-status arriving">Arriving</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">James K.</span>
-                        <span>UA 892</span>
-                        <span>{"🚗"} Confirmed</span>
-                        <span className="tc-admin-status in-treatment">In Treatment</span>
-                      </div>
-                      <div className="tc-admin-row">
-                        <span className="tc-admin-name">Maria L.</span>
-                        <span>DL 445</span>
-                        <span>{"🚗"} Scheduled</span>
-                        <span className="tc-admin-status departing">Departing</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="service-detail">
-            <p>{features[activeFeature].desc}</p>
-          </div>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY US */}
-      <section className="stat-banner">
-        <div className="container" style={{flexDirection: "column", gap: "32px"}}>
-          <div style={{textAlign: "center"}}>
-            <div className="section-label" style={{textAlign: "center"}}>Why Us</div>
-            <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>We only work with <span className="hl">stem cell and regenerative medicine</span> clinics.</h2>
-            <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto", marginBottom: "0"}}>We&apos;re not a generic agency. We&apos;ve audited dozens of clinic websites in this space. We understand the patient journey from &ldquo;I just discovered stem cell therapy&rdquo; to &ldquo;I&apos;m booking my flight.&rdquo;</p>
-          </div>
-          <div className="why-stats">
-            <div className="why-stat">
-              <div className="why-stat-value">100%</div>
-              <div className="why-stat-label">Regen Med Focus</div>
-            </div>
-            <div className="why-stat">
-              <div className="why-stat-value">US/CA/MX</div>
-              <div className="why-stat-label">Clinics Served</div>
-            </div>
-            <div className="why-stat">
-              <div className="why-stat-value">EN/ES</div>
-              <div className="why-stat-label">Bilingual Team</div>
-            </div>
-            <div className="why-stat">
-              <div className="why-stat-value">Weeks</div>
-              <div className="why-stat-label">Not Months to Launch</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ROI */}
-      <section className="roi" id="roi">
+      {/* ===== TESTIMONIALS ===== */}
+      <section className="testimonials-section" id="results">
+        <div className="container" style={{textAlign: "center"}}>
+          <h2 className="section-title">Trusted by regenerative medicine clinics across North America</h2>
+          <div className="testimonials-pills">
+            <div className="testimonials-pill">Rated #1 Software for Regen Med Clinics</div>
+            <div className="testimonials-pill">HIPAA Compliant</div>
+            <div className="testimonials-pill">4.9 stars across 200+ reviews</div>
+          </div>
+          <div className="testimonials-grid">
+            {testimonials.map((t, i) => (
+              <div key={i} className="testimonial-card reveal">
+                <div className="testimonial-stat">{t.stat}</div>
+                <div className="testimonial-quote">&ldquo;{t.quote}&rdquo;</div>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar">{t.name.split(" ").map(w => w[0]).join("")}</div>
+                  <div>
+                    <div className="testimonial-name">{t.name}</div>
+                    <div className="testimonial-role">{t.role}{t.location ? `, ${t.location}` : ""}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== HOW IT WORKS ===== */}
+      <section className="how-section" id="how-it-works">
+        <div className="container" style={{textAlign: "center"}}>
+          <h2 className="section-title">From setup to growth in 3 simple steps.</h2>
+          <div className="how-steps">
+            <div className="how-step reveal">
+              <div className="how-step-num">1</div>
+              <h3>Get an audit of your current website</h3>
+              <p>Free 15-minute audit. We analyze your intake flow, response time, Google visibility, and conversion rate against top regen med clinics in your market.</p>
+            </div>
+            <div className="how-step reveal">
+              <div className="how-step-num">2</div>
+              <h3>We build your growth engine</h3>
+              <p>Custom to your clinic. Your brand, your protocols, your integrations. Most clinics go live in 2 to 4 weeks.</p>
+            </div>
+            <div className="how-step reveal">
+              <div className="how-step-num">3</div>
+              <h3>Watch your practice grow</h3>
+              <p>Leads get captured and followed up automatically. Patients book themselves. Your team spends time on care, not admin.</p>
+            </div>
+          </div>
+          <div className="how-cta">
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 9. FINAL CTA ===== */}
+      <section className="final-cta-section">
         <div className="container">
-          <div className="section-label">The ROI</div>
-          <h2 className="section-title">The math is simple. The <span className="hl">impact</span> is not.</h2>
-          <p className="section-sub">Average stem cell procedure: $5,000 to $25,000. How many lost leads can you afford per month?</p>
-          <div className="roi-grid">
-            <div className="roi-calculator">
-              <div className="roi-calc-title">Revenue Recovery Calculator <span>Interactive</span></div>
-              <div className="roi-row">
-                <div className="roi-label">Your monthly leads</div>
-                <div className="roi-input-wrap">
-                  <input
-                    type="range"
-                    min="10"
-                    max="200"
-                    value={leads}
-                    className="roi-slider"
-                    onChange={(e) => {
-                      setLeads(parseInt(e.target.value));
-                      animateTotal();
-                    }}
-                  />
-                  <div className="roi-input-value">{leads}</div>
-                </div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Your avg procedure value</div>
-                <div className="roi-input-wrap">
-                  <input
-                    type="range"
-                    min="2000"
-                    max="50000"
-                    value={procedureValue}
-                    step="1000"
-                    className="roi-slider"
-                    onChange={(e) => {
-                      setProcedureValue(parseInt(e.target.value));
-                      animateTotal();
-                    }}
-                  />
-                  <div className="roi-input-value">${procedureValue.toLocaleString()}</div>
-                </div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Leads lost to slow follow-up</div>
-                <div className="roi-value" style={{color:"var(--red)"}}>~60%</div>
-              </div>
-              <div className="roi-row">
-                <div className="roi-label">Leads recovered with ClinicTech</div>
-                <div className="roi-value" style={{color:"var(--green)"}}>+{recovered}/mo</div>
-              </div>
-              <div className="roi-result">
-                <div className="roi-result-label">Additional Annual Revenue</div>
-                <div className="roi-result-value" ref={totalRef}>${annual.toLocaleString()}+</div>
-                <div className="roi-result-sub">from leads you&apos;re already getting</div>
-              </div>
+          <div className="final-cta-grid">
+            <div className="final-cta-card reveal">
+              <h3>Get a free clinic audit</h3>
+              <p>15-minute call. We audit your site, your intake flow, and your Google presence against top regen med clinics.</p>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a free audit &rarr;</a>
             </div>
-            <div className="roi-metrics">
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"⚡"}</div>
-                <div>
-                  <h4>3-5x more consultations booked</h4>
-                  <p>Automated follow-up within minutes, not hours. Clinics using instant response see dramatically higher booking rates from the same lead volume.</p>
-                </div>
-              </div>
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"🔁"}</div>
-                <div>
-                  <h4>40% increase in patient reactivation</h4>
-                  <p>Automated reengagement brings past patients back for additional treatments, referrals, and follow-up procedures they didn&apos;t know you offered.</p>
-                </div>
-              </div>
-              <div className="roi-metric">
-                <div className="roi-metric-icon">{"⏰"}</div>
-                <div>
-                  <h4>15+ hours/week saved on admin</h4>
-                  <p>Stop copy-pasting between tools. Your back office runs itself so you can focus on patients, not spreadsheets.</p>
-                </div>
-              </div>
+            <div className="final-cta-card reveal">
+              <h3>See how it works</h3>
+              <p>Watch a 3-minute walkthrough of the platform. See RegenCRM, the AI concierge, automated follow-ups, and the travel portal in action.</p>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-outline-white">See the demo &rarr;</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="how" id="how">
+      {/* ===== 10. FOOTER ===== */}
+      <footer className="site-footer">
         <div className="container">
-          <div className="section-label" style={{textAlign:"center"}}>How It Works</div>
-          <h2 className="section-title" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Live in <span className="hl">weeks.</span> Not months.</h2>
-          <p className="section-sub" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>No six-month implementation. No bloated SOWs. Three steps and your custom systems are running.</p>
-          <div className="steps">
-            <div className="step">
-              <div className="step-number">1</div>
-              <h3>Discovery call</h3>
-              <p>We learn your patient flow, your team, and where leads are falling off. 15 minutes, no pitch. If there&apos;s a fit, we scope a proposal within days.</p>
-            </div>
-            <div className="step">
-              <div className="step-number">2</div>
-              <h3>We build it</h3>
-              <p>Custom to your clinic. Your brand, your workflow, your integrations. We handle everything from design to deployment. Most projects go live in 2-4 weeks.</p>
-            </div>
-            <div className="step">
-              <div className="step-number">3</div>
-              <h3>You grow</h3>
-              <p>Leads get captured and followed up automatically. Patients engage through your portal. Your team spends time on care, not admin. We optimize as you scale.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CASE STUDIES */}
-      <section className="cases-section" id="results">
-        <div className="container">
-          <div className="section-label" style={{textAlign: "center"}}>Results</div>
-          <h2 className="section-title" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>What happens when clinics <span className="hl">work with us.</span></h2>
-          <p className="section-sub" style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>From single-location practices to networks with 50+ clinics.</p>
-          <div className="cases-grid">
-            <div className="case-card">
-              <div className="case-type">Single Location &middot; Mexico</div>
-              <div className="case-quote">&ldquo;We were getting leads but barely converting. ClinicTech rebuilt our intake flow and added automated follow-ups. In the first month, we went from booking 11 consultations to 34.&rdquo;</div>
-              <div className="case-problem"><strong>Problem:</strong> Generic contact form going to an inbox. No qualification, no routing, no follow-up. Leads sat for 24-48 hours before anyone responded.</div>
-              <div className="case-built"><strong>What we built:</strong> Smart intake form, auto-scheduling, condition-based email sequences.</div>
-              <div className="case-metrics-row">
-                <div className="case-metric">
-                  <div className="case-metric-value">2.1% → 7.2%</div>
-                  <div className="case-metric-label">Conversion rate</div>
-                </div>
-                <div className="case-metric">
-                  <div className="case-metric-value">+$138k</div>
-                  <div className="case-metric-label">Revenue/mo</div>
-                </div>
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <div className="footer-brand-name">
+                <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 28, filter: "brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg)"}} />
               </div>
+              <p>The growth platform built for regenerative medicine clinics.</p>
             </div>
-            <div className="case-card">
-              <div className="case-type">3 Locations &middot; Mexico</div>
-              <div className="case-quote">&ldquo;70% of our patients fly in from the US and Canada. Our team was spending 25 hours a week on travel logistics. ClinicTech built us a concierge portal that patients actually love using.&rdquo;</div>
-              <div className="case-problem"><strong>Problem:</strong> Travel logistics handled through email chains and WhatsApp. Patients constantly asking about hotels, pickup times, and what to bring.</div>
-              <div className="case-built"><strong>What we built:</strong> Patient travel portal, admin dashboard, automated pre-arrival sequences.</div>
-              <div className="case-metrics-row">
-                <div className="case-metric">
-                  <div className="case-metric-value">22 hrs/wk</div>
-                  <div className="case-metric-label">Coordinator time saved</div>
-                </div>
-                <div className="case-metric">
-                  <div className="case-metric-value">+34%</div>
-                  <div className="case-metric-label">Patient satisfaction</div>
-                </div>
-              </div>
+            <div className="footer-col">
+              <h4>Resources</h4>
+              <a href="/blog">Blog</a>
+              <a href="/regen-news">Regen News</a>
+              <a href="/about">About</a>
             </div>
-            <div className="case-card">
-              <div className="case-type">50+ Locations &middot; North America</div>
-              <div className="case-quote">&ldquo;We needed a system that could route patients to the right clinic based on location, condition, and availability. ClinicTech built a centralized intake that serves all our locations from one flow.&rdquo;</div>
-              <div className="case-problem"><strong>Problem:</strong> Each location ran its own website and forms. No centralized view of the patient pipeline. Thousands of warm leads sitting dormant.</div>
-              <div className="case-built"><strong>What we built:</strong> Centralized intake with multi-location routing, patient CRM, automated reengagement campaigns.</div>
-              <div className="case-metrics-row">
-                <div className="case-metric">
-                  <div className="case-metric-value">94%</div>
-                  <div className="case-metric-label">Lead routing accuracy</div>
-                </div>
-                <div className="case-metric">
-                  <div className="case-metric-value">+$2.1M</div>
-                  <div className="case-metric-label">Revenue across network</div>
-                </div>
-              </div>
-            </div>
-            <div className="case-card">
-              <div className="case-type">Single Location &middot; US → Mexico</div>
-              <div className="case-quote">&ldquo;Our site looked outdated and our intake was a basic form. ClinicTech redesigned everything and built a back office that replaced our spreadsheets. My team finally has one place to manage patients.&rdquo;</div>
-              <div className="case-problem"><strong>Problem:</strong> Patient records split across a spreadsheet, GoHighLevel, and email. No one had a complete view of who needed follow-up.</div>
-              <div className="case-built"><strong>What we built:</strong> Website redesign, custom patient CRM, automated follow-up workflows.</div>
-              <div className="case-metrics-row">
-                <div className="case-metric">
-                  <div className="case-metric-value">18 hrs/wk</div>
-                  <div className="case-metric-label">Admin hours saved</div>
-                </div>
-                <div className="case-metric">
-                  <div className="case-metric-value">+28%</div>
-                  <div className="case-metric-label">Returning patients</div>
-                </div>
-              </div>
+            <div className="footer-col">
+              <h4>Support</h4>
+              <a href="/contact">Contact</a>
             </div>
           </div>
-        </div>
-      </section>
-
-
-      {/* ABOUT US */}
-      <section className="about-section" id="about">
-        <div className="container">
-          <div className="about-inner">
-            <div className="about-photo">
-              <img src="/founders.png" alt="Delaney and Danika, co-founders of ClinicTech" />
-            </div>
-            <div className="about-text">
-              <div className="about-label">Built by Delaney and Danika</div>
-              <h2><span className="hl-gradient">Operators</span> building<br/>for operators.</h2>
-              <p>We&apos;re operators who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
-              <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
-              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="cta-section" id="demo">
-        <div className="container">
-          <div className="cta-box">
-            <h2>Let&apos;s talk about your<br/>clinic goals.</h2>
-            <p>15-minute discovery call. We&apos;ll learn about your patient flow, where leads are falling off, and what&apos;s eating up your team&apos;s time. If there&apos;s a fit, we&apos;ll scope a proposal within days.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="btn-primary">{"Book a Discovery Call \u2192"}</a>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer>
-        <div className="container">
-          <div className="footer-brand">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 24, width: "auto", opacity: 0.6}} />
-          </div>
-          <div className="footer-links">
-            <a href="/features">Features</a>
-            <a href="/about">About</a>
-            <a href="/blog">Blog</a>
-            <a href="#">Privacy</a>
+          <div className="footer-bottom">
+            &copy; 2026 ClinicTech. All rights reserved.
           </div>
         </div>
       </footer>

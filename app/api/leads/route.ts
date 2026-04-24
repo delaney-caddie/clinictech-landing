@@ -34,14 +34,16 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const body = await req.json();
+    const email = body.email;
+    const source = body.source || "landing_hero";
     if (!email || typeof email !== "string" || !email.includes("@")) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
     }
 
     const { error } = await getSupabase()
       .from("leads")
-      .upsert({ email: email.toLowerCase().trim(), source: "landing_hero" }, { onConflict: "email" });
+      .upsert({ email: email.toLowerCase().trim(), source }, { onConflict: "email" });
 
     if (error) {
       console.error("Lead insert error:", error);

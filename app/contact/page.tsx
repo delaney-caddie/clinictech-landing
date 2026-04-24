@@ -53,9 +53,9 @@ export default function ContactPage() {
       <div className="contact-page">
         <SiteNav />
         <div className="contact-hero">
-          <div className="contact-hero-label">Book a Demo</div>
-          <h1>See it live with your clinic&apos;s branding.</h1>
-          <p>15 minutes. We&apos;ll walk you through the platform and show you exactly what it looks like for your clinic.</p>
+          <div className="contact-hero-label">Smart Form Demo</div>
+          <h1>This is the form your patients would see.</h1>
+          <p>Try it yourself. This smart intake form captures leads at step one, qualifies by condition and budget, and embeds on any website with a single line of code. Every submission goes straight to your ClinicTech dashboard.</p>
         </div>
         <div className="contact-form-wrap">
           <div
