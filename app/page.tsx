@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { SiteNav } from "@/components/site-nav";
 
 const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
@@ -18,16 +18,31 @@ const productTabs = [
 ];
 
 const testimonials = [
-  { name: "Dr. Carlos Mendez", role: "Medical Director, Advanced Cellular Clinic", location: "Tijuana", stat: "+280% consultations booked", quote: "Our conversion rate from inquiry to consultation tripled in the first six weeks. The bilingual AI concierge alone paid for the platform." },
-  { name: "Dr. James Mitchell", role: "Pacific Stem Cell Center", location: "", stat: "+$340K/mo revenue", quote: "ClinicTech rebuilt our intake from the ground up. We went from losing half our leads to converting over 30% of them. The travel concierge is the reason international patients pick us over competitors." },
-  { name: "Dr. Anna Kovacs", role: "Regenera Wellness", location: "", stat: "22 hrs/wk saved", quote: "My team used to live in WhatsApp coordinating flights and hotel pickups. Now it all runs through the patient portal. We got our evenings back." },
-  { name: "Sofia Ramirez", role: "Patient Coordinator, CellRestore Medical", location: "", stat: "+45 bookings/month", quote: "The automated follow-ups do what three coordinators used to do. We used to lose leads to our slower response time. Now we\u2019re the fastest in the market." },
-  { name: "Dr. Miguel Santos", role: "Vitality Medical Group", location: "", stat: "+190% review growth", quote: "We went from 40 Google reviews to over 300 in six months. Our organic traffic doubled. Patients find us now before they find our competitors." },
-  { name: "Laura Garcia", role: "Operations, Regenera Wellness", location: "", stat: "15 min response time", quote: "Our average response time went from 26 hours to 15 minutes. That\u2019s the difference between booking a patient and losing them to a Mexico City clinic." },
+  { name: "Dr. Carlos M.", role: "Medical Director", location: "Regenerative clinic, Tijuana", stat: "22 hrs/wk saved", quote: "I used to spend half my day on WhatsApp coordinating travel for international patients. Flights, hotels, pickups. Now patients handle it themselves through the portal. I actually get to focus on patient care instead of logistics." },
+  { name: "Sofia R.", role: "Patient Coordinator", location: "Multi-location stem cell network", stat: "3 second response time", quote: "Our response time dropped from over a day to under 3 seconds. That alone changed everything. Patients were booking with competitors because we were too slow. Now we are always the first clinic to reply." },
+  { name: "Dr. James L.", role: "Clinic Owner", location: "Regenerative medicine, US", stat: "+5 bookings/month", quote: "We were getting inquiries but barely booking any. After switching our intake to ClinicTech, we picked up an extra 5 consultations a month just from leads that would have gone cold. The follow-up sequences run themselves." },
 ];
 
 export default function LandingPage() {
   const [activeTab, setActiveTab] = useState(0);
+  const tabAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startAutoRotate = useCallback(() => {
+    if (tabAutoRef.current) clearInterval(tabAutoRef.current);
+    tabAutoRef.current = setInterval(() => {
+      setActiveTab(prev => (prev + 1) % productTabs.length);
+    }, 4000);
+  }, []);
+
+  useEffect(() => {
+    startAutoRotate();
+    return () => { if (tabAutoRef.current) clearInterval(tabAutoRef.current); };
+  }, [startAutoRotate]);
+
+  const handleTabClick = useCallback((idx: number) => {
+    setActiveTab(idx);
+    startAutoRotate();
+  }, [startAutoRotate]);
 
   // Scroll reveal
   useEffect(() => {
@@ -389,11 +404,16 @@ body {
   border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;
 }
 .testimonials-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+  display: flex; gap: 24px; margin-top: 40px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 8px 0 20px; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.testimonials-grid::-webkit-scrollbar { display: none; }
 .testimonial-card {
-  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px;
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px;
   display: flex; flex-direction: column; transition: box-shadow 0.3s;
+  min-width: 380px; flex-shrink: 0; scroll-snap-align: start;
 }
 .testimonial-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
 .testimonial-stat {
@@ -584,7 +604,7 @@ body {
   .feature-grid, .feature-grid.reversed { grid-template-columns: 1fr; direction: ltr; }
   .feature-grid.reversed > * { direction: ltr; }
   .feature-text h2 { font-size: 28px; }
-  .testimonials-grid { grid-template-columns: repeat(2,1fr); }
+  .testimonial-card { min-width: 320px; }
   .callout-grid { grid-template-columns: 1fr; }
   .tab-content { grid-template-columns: 1fr; }
   .tabs-row { gap: 6px; }
@@ -605,7 +625,7 @@ body {
   .hero-section { padding: 110px 0 48px; }
   .problem-grid { grid-template-columns: 1fr; }
   .section-title { font-size: 26px; }
-  .testimonials-grid { grid-template-columns: 1fr; }
+  .testimonial-card { min-width: 280px; }
   .outcome-pills { flex-direction: column; align-items: center; }
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .container { padding: 0 16px; }
@@ -748,7 +768,7 @@ body {
           <h2 className="section-title">Everything you need to grow your clinic. One platform.</h2>
           <div className="tabs-row">
             {productTabs.map((tab, i) => (
-              <button key={i} className={`tab-btn ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>
+              <button key={i} className={`tab-btn ${activeTab === i ? "active" : ""}`} onClick={() => handleTabClick(i)}>
                 {tab.label}
               </button>
             ))}
@@ -882,11 +902,6 @@ body {
       <section className="testimonials-section" id="results">
         <div className="container" style={{textAlign: "center"}}>
           <h2 className="section-title">Trusted by regenerative medicine clinics across North America</h2>
-          <div className="testimonials-pills">
-            <div className="testimonials-pill">Rated #1 Software for Regen Med Clinics</div>
-            <div className="testimonials-pill">HIPAA Compliant</div>
-            <div className="testimonials-pill">4.9 stars across 200+ reviews</div>
-          </div>
           <div className="testimonials-grid">
             {testimonials.map((t, i) => (
               <div key={i} className="testimonial-card reveal">
