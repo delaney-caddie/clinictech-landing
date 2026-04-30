@@ -977,7 +977,9 @@ body {
               <a href="/about">About</a>
             </div>
             <div className="footer-col">
-              <h4>Support</h4>
+              <h4>Legal</h4>
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/terms">Terms of Service</a>
               <a href="/contact">Contact</a>
             </div>
           </div>
