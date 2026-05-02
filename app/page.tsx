@@ -243,6 +243,25 @@ body {
 .dna-bg-node { animation: bgNodePulse 3s ease-in-out infinite alternate; }
 @keyframes bgNodePulse { 0%{opacity:0.08;} 100%{opacity:0.2;} }
 
+/* ===== LOGO BAR ===== */
+.logo-bar { padding: 40px 0; background: #fff; border-bottom: 1px solid #F1F5F9; overflow: hidden; }
+.logo-bar-label {
+  text-align: center; font-size: 12px; font-weight: 600; color: #94A3B8;
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px;
+}
+.logo-bar-track {
+  display: flex; align-items: center; gap: 64px;
+  animation: logoScroll 25s linear infinite;
+  width: max-content;
+}
+.logo-bar-track img {
+  height: 36px; max-width: 140px; width: auto; object-fit: contain; flex-shrink: 0;
+}
+@keyframes logoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* ===== PROBLEM ===== */
 .problem-section { padding: 100px 0; background: #F8FAFC; }
 .problem-grid {
@@ -725,6 +744,27 @@ body {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ===== LOGO BAR ===== */}
+      <section className="logo-bar">
+        <div className="logo-bar-label">Backed by investors from</div>
+        <div className="logo-bar-track">
+          <img src="/logos/shopify.png" alt="Shopify" />
+          <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
+          <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
+          <img src="/logos/fellow.png" alt="Fellow" />
+          <img src="/logos/y-combinator.png" alt="Y Combinator" />
+          <img src="/logos/noibu.webp" alt="Noibu" />
+          <img src="/logos/mistral.avif" alt="Mistral" />
+          <img src="/logos/shopify.png" alt="Shopify" />
+          <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
+          <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
+          <img src="/logos/fellow.png" alt="Fellow" />
+          <img src="/logos/y-combinator.png" alt="Y Combinator" />
+          <img src="/logos/noibu.webp" alt="Noibu" />
+          <img src="/logos/mistral.avif" alt="Mistral" />
         </div>
       </section>
 

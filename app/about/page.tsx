@@ -48,6 +48,21 @@ export default function AboutPage() {
         .about-footer-links { display: flex; gap: 24px; }
         .about-footer-links a { font-size: 13px; color: #94A3B8; text-decoration: none; }
         .about-footer-links a:hover { color: #3730A3; }
+        .about-logo-bar { padding: 40px 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.04); border-bottom: 1px solid rgba(0,0,0,0.04); overflow: hidden; }
+        .about-logo-bar-label {
+          text-align: center; font-size: 12px; font-weight: 600; color: #94A3B8;
+          text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px;
+        }
+        .about-logo-bar-track {
+          display: flex; align-items: center; gap: 64px;
+          animation: aboutLogoScroll 25s linear infinite;
+          width: max-content;
+        }
+        .about-logo-bar-track img { height: 36px; max-width: 140px; width: auto; object-fit: contain; flex-shrink: 0; }
+        @keyframes aboutLogoScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
         @media (max-width: 768px) {
           .about-hero { padding: 140px 20px 0; }
           .about-hero h1 { font-size: 30px; }
@@ -79,6 +94,26 @@ export default function AboutPage() {
               <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
               <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems - we built this for you.</p>
             </div>
+          </div>
+        </div>
+
+        <div className="about-logo-bar">
+          <div className="about-logo-bar-label">Backed by investors from</div>
+          <div className="about-logo-bar-track">
+            <img src="/logos/shopify.png" alt="Shopify" />
+            <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
+            <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
+            <img src="/logos/fellow.png" alt="Fellow" />
+            <img src="/logos/y-combinator.png" alt="Y Combinator" />
+            <img src="/logos/noibu.webp" alt="Noibu" />
+            <img src="/logos/mistral.avif" alt="Mistral" />
+            <img src="/logos/shopify.png" alt="Shopify" />
+            <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
+            <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
+            <img src="/logos/fellow.png" alt="Fellow" />
+            <img src="/logos/y-combinator.png" alt="Y Combinator" />
+            <img src="/logos/noibu.webp" alt="Noibu" />
+            <img src="/logos/mistral.avif" alt="Mistral" />
           </div>
         </div>
 
