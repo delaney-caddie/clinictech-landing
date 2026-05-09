@@ -413,6 +413,91 @@ body {
 .record-field-label { font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; }
 .record-field-value { font-size: 13px; font-weight: 600; color: #0F172A; margin-top: 2px; }
 
+/* ===== DAY IN LIFE ===== */
+.daylife-section { padding: 100px 0; }
+.daylife-layout {
+  display: grid; grid-template-columns: 1fr 320px 1fr; gap: 32px;
+  align-items: start; margin-top: 48px;
+}
+.daylife-col { display: flex; flex-direction: column; gap: 20px; padding-top: 40px; }
+.daylife-col.right { padding-top: 120px; }
+.daylife-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #94A3B8; margin-bottom: 4px;
+}
+.daylife-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px 24px;
+  transition: box-shadow 0.3s;
+}
+.daylife-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
+.daylife-card-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.daylife-card-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.daylife-card-title { font-size: 13px; font-weight: 700; color: #0F172A; }
+.daylife-card-sub { font-size: 10px; color: #94A3B8; }
+.daylife-card p { font-size: 13px; line-height: 1.55; color: #64748B; }
+/* Phone mockup */
+.daylife-phone {
+  width: 280px; margin: 0 auto;
+  background: #0F172A; border-radius: 36px; padding: 12px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+}
+.daylife-phone-notch {
+  width: 100px; height: 24px; background: #0F172A; border-radius: 0 0 14px 14px;
+  margin: 0 auto; position: relative; top: -1px;
+}
+.daylife-phone-screen {
+  background: #fff; border-radius: 24px; overflow: hidden; min-height: 460px;
+}
+.daylife-phone-status {
+  padding: 10px 16px 6px; font-size: 10px; font-weight: 600;
+  display: flex; justify-content: space-between; color: #94A3B8;
+}
+.daylife-phone-wa-header {
+  padding: 8px 14px; background: #075E54; color: #fff;
+  display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700;
+}
+.daylife-phone-wa-avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff;
+}
+.daylife-phone-wa-online { font-size: 10px; font-weight: 400; opacity: 0.7; }
+.daylife-phone-chat {
+  padding: 12px; background: #ECE5DD; min-height: 340px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.daylife-phone-msg {
+  max-width: 85%; padding: 8px 12px; border-radius: 8px;
+  font-size: 11px; line-height: 1.45; position: relative;
+}
+.daylife-phone-msg .msg-time {
+  font-size: 9px; color: #94A3B8; float: right; margin-left: 8px; margin-top: 4px;
+}
+.daylife-phone-msg.bot {
+  background: #fff; color: #0F172A; align-self: flex-start;
+  border-top-left-radius: 2px;
+}
+.daylife-phone-msg.user {
+  background: #DCF8C6; color: #0F172A; align-self: flex-end;
+  border-top-right-radius: 2px;
+}
+.daylife-phone-msg.system {
+  background: rgba(0,0,0,0.04); color: #64748B; align-self: center;
+  font-size: 10px; border-radius: 6px; text-align: center;
+  max-width: 90%; padding: 6px 12px;
+}
+.daylife-phone-divider {
+  text-align: center; font-size: 10px; color: #94A3B8;
+  background: rgba(0,0,0,0.04); padding: 3px 12px; border-radius: 6px;
+  align-self: center; font-weight: 600;
+}
+
 /* ===== TESTIMONIALS ===== */
 .testimonials-section { padding: 100px 0; background: #F8FAFC; }
 .testimonials-pills {
@@ -622,6 +707,9 @@ body {
   .callout-grid { grid-template-columns: 1fr; }
   .tab-content { grid-template-columns: 1fr; }
   .tabs-row { gap: 6px; }
+  .daylife-layout { grid-template-columns: 1fr; }
+  .daylife-col { padding-top: 0 !important; }
+  .daylife-phone { margin-bottom: 24px; }
   .how-steps { grid-template-columns: 1fr; }
   .final-cta-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: repeat(2,1fr); }
@@ -697,7 +785,7 @@ body {
               78% of patients book with the clinic that earns their trust first. <span className="hl">Be that clinic.</span>
             </h1>
             <p className="hero-sub">
-              Auto-replies don&apos;t close patients. We build the AI concierge, smart intake, and follow-up sequences that answer clinical questions, guide the travel decision, and turn inquiries into consultations. In English and Spanish, 24/7.
+              Auto-replies don&apos;t close patients. ClinicTech is the growth platform that works while you sleep: answering clinical questions, following up on cold leads, coordinating travel, and running your intake. In English and Spanish, 24/7.
             </p>
             <div className="hero-ctas">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
@@ -800,7 +888,7 @@ body {
 
       <section className="product-tabs-section" id="products">
         <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">Everything you need to grow your clinic. One platform.</h2>
+          <h2 className="section-title">Your clinic runs on five tools that don&apos;t talk to each other. ClinicTech replaces all of them.</h2>
           <div className="tabs-row">
             {productTabs.map((tab, i) => (
               <button key={i} className={`tab-btn ${activeTab === i ? "active" : ""}`} onClick={() => handleTabClick(i)}>
@@ -927,6 +1015,81 @@ body {
                   </div>
                   <div style={{marginTop:8,fontSize:10,color:"#94A3B8",textAlign:"center" as const}}>3 patients arriving this week</div>
                 </>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== DAY IN LIFE ===== */}
+      <section className="daylife-section">
+        <div className="container" style={{textAlign: "center"}}>
+          <h2 className="section-title">What your clinic looks like on ClinicTech</h2>
+          <div className="daylife-layout">
+            {/* Left column - what the agent did */}
+            <div className="daylife-col">
+              <div className="daylife-label">What ClinicTech handled overnight</div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(34,197,94,0.1)"}}>&#9889;</div>
+                  <div><div className="daylife-card-title">3 leads followed up</div><div className="daylife-card-sub">Instant SMS + email sent within 30 seconds</div></div>
+                </div>
+              </div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(55,48,163,0.08)"}}>&#128172;</div>
+                  <div><div className="daylife-card-title">AI answered 7 patient questions</div><div className="daylife-card-sub">Stem cell pricing, recovery times, travel logistics</div></div>
+                </div>
+              </div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(245,158,11,0.08)"}}>&#9992;</div>
+                  <div><div className="daylife-card-title">Travel confirmed for Sarah M.</div><div className="daylife-card-sub">Flight, hotel, pickup all coordinated</div></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Center - Phone mockup */}
+            <div>
+              <div className="daylife-phone">
+                <div className="daylife-phone-screen">
+                  <div className="daylife-phone-status"><span>7:02 AM</span><span>&#128267; 100%</span></div>
+                  <div className="daylife-phone-wa-header">
+                    <div className="daylife-phone-wa-avatar">CT</div>
+                    <div>ClinicTech <div className="daylife-phone-wa-online">online</div></div>
+                  </div>
+                  <div className="daylife-phone-chat">
+                    <div className="daylife-phone-divider">Today</div>
+                    <div className="daylife-phone-msg bot">Good morning. Here&apos;s your overnight brief:<br/><br/>&#10003; 3 new leads captured and followed up<br/>&#10003; 7 patient questions answered by AI<br/>&#10003; Sarah M.&apos;s travel confirmed<br/>&#10003; 2 review requests sent<br/><br/>1 item needs you: Michael T. wants to reschedule his consultation.<span className="msg-time">7:02</span></div>
+                    <div className="daylife-phone-msg user">Reschedule Michael to Thursday 2pm<span className="msg-time">7:03</span></div>
+                    <div className="daylife-phone-msg bot">Done. Michael has been notified and his calendar invite updated. Anything else?<span className="msg-time">7:03</span></div>
+                    <div className="daylife-phone-msg user">No, looks good. Thanks<span className="msg-time">7:04</span></div>
+                    <div className="daylife-phone-msg system">Your clinic is running. Have a great day.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column - end of day */}
+            <div className="daylife-col right">
+              <div className="daylife-label">End of day recap</div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(34,197,94,0.1)"}}>&#128197;</div>
+                  <div><div className="daylife-card-title">4 consultations booked</div><div className="daylife-card-sub">All self-booked through smart intake</div></div>
+                </div>
+              </div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(245,158,11,0.08)"}}>&#11088;</div>
+                  <div><div className="daylife-card-title">2 five-star reviews collected</div><div className="daylife-card-sub">Auto-requested at the right moment</div></div>
+                </div>
+              </div>
+              <div className="daylife-card reveal">
+                <div className="daylife-card-header">
+                  <div className="daylife-card-icon" style={{background:"rgba(94,196,227,0.12)"}}>&#128337;</div>
+                  <div><div className="daylife-card-title">22 hours of admin saved this week</div><div className="daylife-card-sub">Your coordinator focused on patient care</div></div>
+                </div>
               </div>
             </div>
           </div>
