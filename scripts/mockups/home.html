@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Home — Sunrise Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item active"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Good morning, delaney</h1>
+          </div>
+          <div class="main-header-desc">Friday, May 16 · Your team has been busy.</div>
+        </div>
+        <button class="btn-pause">⌘K · Ask Sunrise</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">Today</div>
+        <div class="tab">This week</div>
+        <div class="tab">Needs you <span class="badge-red">3</span></div>
+        <div class="tab">All activity</div>
+      </div>
+    </header>
+
+    <div class="content single">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num">7</div><div class="label">New leads</div><div class="trend">↑ vs avg</div></div>
+        <div class="stat-card"><div class="num">11</div><div class="label">Drafts sent by Mia</div><div class="trend">9 auto · 2 reviewed</div></div>
+        <div class="stat-card"><div class="num">4</div><div class="label">Replies received</div><div class="trend" style="color:#2563EB;">2 hot</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="label">Consults booked</div><div class="trend">Both via Mia</div></div>
+      </div>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;">Agent activity</div>
+        <a href="#" class="link-blue">View all →</a>
+      </div>
+
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#D97706;">A</div>
+        <div class="activity-text">
+          <strong>Atlas</strong> drafted a 3-phase protocol for <strong>Robert Hayes</strong> (bilateral knee OA). Waiting on Dr. James L. to review.
+        </div>
+        <div class="activity-time">12m ago</div>
+      </div>
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#2563EB;">M</div>
+        <div class="activity-text">
+          <strong>Mia</strong> sent a first-touch reply to <strong>John Johnson</strong> (nerve damage inquiry, score 30). Asked about his preferred call window.
+        </div>
+        <div class="activity-time">28m ago</div>
+      </div>
+      <div class="activity-row" style="border-color:#FECACA;background:#FEF2F2;">
+        <div class="activity-icon" style="background:#2563EB;">M</div>
+        <div class="activity-text">
+          <strong>Mia</strong> drafted a follow-up to <strong>John Johnson</strong> but paused the cadence because he said he is "desperate" and asked to be called after 4pm. <strong>Needs your eyes.</strong>
+        </div>
+        <div class="activity-time">34m ago</div>
+      </div>
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#16A34A;">S</div>
+        <div class="activity-text">
+          <strong>Sage</strong> flagged 3 leads stuck in Coordinator Call for over 4 days and suggested a weekend nudge rule for Mia.
+        </div>
+        <div class="activity-time">1h ago</div>
+      </div>
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#DB2777;">R</div>
+        <div class="activity-text">
+          <strong>Rio</strong> sent Day 30 check-ins to 5 patients. Carla Mendez reported a strong outcome and accepted a story request.
+        </div>
+        <div class="activity-time">2h ago</div>
+      </div>
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#DB2777;">R</div>
+        <div class="activity-text">
+          <strong>Rio</strong> escalated <strong>Priya Shah</strong> (Day 7, hip exosomes) to Dr. James L. after she reported increased swelling.
+        </div>
+        <div class="activity-time">3h ago</div>
+      </div>
+      <div class="activity-row">
+        <div class="activity-icon" style="background:#2563EB;">M</div>
+        <div class="activity-text">
+          <strong>Mia</strong> booked a consult for <strong>Lisa Smith</strong> for next Tuesday at 10am. Cited Diana Reeves' video testimonial in the confirmation.
+        </div>
+        <div class="activity-time">4h ago</div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

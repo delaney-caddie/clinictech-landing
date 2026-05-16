@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Atlas — Protocol Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent active" style="background:#D97706;"><div class="nav-agent-avatar" style="background:rgba(255,255,255,0.25);">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="agent-big-avatar" style="background:#D97706;">A</div>
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Atlas</h1>
+            <span class="role-text">Protocol Architect</span>
+            <span class="pill" style="border-color:#FDE68A;color:#92400E;background:#FFFBEB;">Manual (locked)</span>
+          </div>
+          <div class="main-header-desc">Drafts multi-phase treatment protocols from intake notes, consult notes, and similar cases. Every draft waits for doctor sign-off.</div>
+        </div>
+        <button class="btn-pause">⏻ Pause</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">Drafts <span class="badge-red">3</span></div>
+        <div class="tab">Approved</div>
+        <div class="tab">Templates</div>
+        <div class="tab">Sources</div>
+        <div class="tab">Rules &amp; behavior</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div>
+        <input class="search" placeholder="Search by patient or condition" />
+        <div class="filters">
+          <div class="filter-pill active">Pending review</div>
+          <div class="filter-pill">In progress</div>
+          <div class="filter-pill">Approved</div>
+        </div>
+
+        <div class="list-card selected">
+          <div class="list-card-top">
+            <div class="list-card-avatar">RH</div>
+            <div class="list-card-name">Robert Hayes</div>
+            <span class="badge-needs-you">Needs doctor</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-amber">Knee OA</span>
+            <span class="via">bilateral · 62yo</span>
+          </div>
+          <div class="list-card-preview">3-phase protocol drafted from 4 similar cases.</div>
+        </div>
+
+        <div class="list-card">
+          <div class="list-card-top">
+            <div class="list-card-avatar">DM</div>
+            <div class="list-card-name">Diana Mercado</div>
+            <span class="badge-needs-you">Needs doctor</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-amber">Rotator cuff</span>
+            <span class="via">post-surgical · 54yo</span>
+          </div>
+          <div class="list-card-preview">PRP + exosome plan, 2 phases over 6 weeks.</div>
+        </div>
+
+        <div class="list-card">
+          <div class="list-card-top">
+            <div class="list-card-avatar">TN</div>
+            <div class="list-card-name">Tomas Nakamura</div>
+            <span class="badge-needs-you">Needs doctor</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-amber">Peripheral neuropathy</span>
+            <span class="via">diabetic · 67yo</span>
+          </div>
+          <div class="list-card-preview">Drafted from intake; flagged for Dr. James L. review.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-head">
+          <div class="avatar" style="background:#FEF3C7;color:#92400E;">RH</div>
+          <div>
+            <div class="name">Robert Hayes</div>
+            <div class="meta">Bilateral knee OA · 62yo · Intake 3d ago · Consult notes 1d ago</div>
+          </div>
+          <div class="right">
+            <a class="link-blue" href="#">Open patient record →</a>
+          </div>
+        </div>
+
+        <div class="callout brief">
+          <span class="callout-label">Brief</span>
+          <span>Robert is a 62-year-old presenting with Grade 3 bilateral knee OA, 14-month progression. Intake says he travels from Phoenix and wants to avoid TKR if possible. Dr. James L. flagged him in the consult as a strong candidate for staged stem cell + PRP. Atlas drafted the protocol from 4 similar cases and the clinic's "Knee OA standard" template.</span>
+        </div>
+
+        <div class="callout alert">
+          <span class="callout-label">Doctor approval required</span>
+          <span>This draft will not reach Robert until Dr. James L. signs off. Two flags inside need attention.</span>
+        </div>
+
+        <div class="panel">
+          <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;margin-bottom:14px;">Drafted protocol · 3 phases · 14 weeks</div>
+
+          <div class="protocol-phase">
+            <div class="protocol-phase-head">
+              <div class="protocol-phase-num">1</div>
+              <div class="protocol-phase-name">Diagnostic + baseline imaging</div>
+              <div class="protocol-phase-dur">Week 0 · 1 visit</div>
+            </div>
+            <div class="protocol-phase-items">
+              Bilateral MRI, gait assessment, baseline pain &amp; ROM. Confirm Grade 3 staging. Optional: PRP eligibility labs.
+            </div>
+          </div>
+
+          <div class="protocol-phase">
+            <div class="protocol-phase-head">
+              <div class="protocol-phase-num">2</div>
+              <div class="protocol-phase-name">Bilateral stem cell injection (BM-MSC)</div>
+              <div class="protocol-phase-dur">Week 2 · 1 visit · est. $14,500</div>
+            </div>
+            <div class="protocol-phase-items">
+              Harvest from iliac crest. Same-day bilateral intra-articular injection under ultrasound guidance. 48-hour recovery on-site. Atlas pulled dosing from Hayes-similar cases (n=4) and the clinic's standard.
+            </div>
+          </div>
+
+          <div class="protocol-phase">
+            <div class="protocol-phase-head">
+              <div class="protocol-phase-num">3</div>
+              <div class="protocol-phase-name">PRP booster + monitoring</div>
+              <div class="protocol-phase-dur">Weeks 6, 10, 14 · 3 visits · est. $4,200</div>
+            </div>
+            <div class="protocol-phase-items">
+              PRP at week 6 and 10. Imaging + functional reassessment at week 14. Hand-off to Rio at week 14 for long-term tracking.
+            </div>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:12px;">
+          <span class="callout-label">Reasoning</span>
+          <span>Bilateral approach matched on 3 of 4 similar cases in the past 18 months (mean pain reduction 58% at 6mo). The single unilateral comparison showed slower contralateral progression. Hayes' BMI and labs are within range for the clinic's standard dosing. Total est. cost: $18,700.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

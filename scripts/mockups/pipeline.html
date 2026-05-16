@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pipeline — Sunrise Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+<style>
+.content.pipeline { grid-template-columns: 1fr 380px; }
+.kanban-card.selected { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.drawer { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 0; overflow: hidden; }
+.drawer-head { padding: 16px 18px; border-bottom: 1px solid #F1F5F9; display: flex; align-items: center; gap: 12px; }
+.drawer-section { padding: 14px 18px; border-bottom: 1px solid #F1F5F9; }
+.drawer-section:last-child { border-bottom: none; }
+.drawer-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94A3B8; margin-bottom: 8px; }
+.chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.signal-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.msg-bubble { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 12px; font-size: 12.5px; line-height: 1.5; color: #334155; margin-bottom: 6px; }
+.msg-bubble .who { font-weight: 700; color: #0F172A; font-size: 11px; display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item active"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Pipeline</h1>
+          </div>
+          <div class="main-header-desc">23 active leads · Mia handling first-touch · Sage watching</div>
+        </div>
+        <button class="btn-pause">+ New lead</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">All stages</div>
+        <div class="tab">Hot <span class="badge-red">5</span></div>
+        <div class="tab">Stuck</div>
+        <div class="tab">Closed won</div>
+      </div>
+    </header>
+
+    <div class="content pipeline">
+      <div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div class="kanban-col-name" style="color:#3730A3;">Lead</div>
+              <div class="kanban-col-count">8</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">John Johnson</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-red" style="font-size:10px;padding:1px 6px;">Hot</span>
+                <span>Nerve damage · score 30</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Karim Hassan</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-red" style="font-size:10px;padding:1px 6px;">Hot</span>
+                <span>Knee OA · score 28</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Sofia Reyes</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-amber" style="font-size:10px;padding:1px 6px;">Warm</span>
+                <span>Shoulder PRP · score 19</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Mark Davies</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-gray" style="font-size:10px;padding:1px 6px;">Cold</span>
+                <span>Hip OA · score 12</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div class="kanban-col-name" style="color:#D97706;">Coordinator Call</div>
+              <div class="kanban-col-count">6</div>
+            </div>
+            <div class="kanban-card selected">
+              <div class="kanban-card-name">Lisa Smith</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-red" style="font-size:10px;padding:1px 6px;">Hot</span>
+                <span>Knee · score 27</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Priya Shah</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-amber" style="font-size:10px;padding:1px 6px;">Stuck 5d</span>
+                <span>Hip · score 22</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Tomas Nakamura</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-amber" style="font-size:10px;padding:1px 6px;">Stuck 4d</span>
+                <span>Neuropathy · score 24</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div class="kanban-col-name" style="color:#16A34A;">Dr. Consult</div>
+              <div class="kanban-col-count">5</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Robert Hayes</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-green" style="font-size:10px;padding:1px 6px;">Protocol drafted</span>
+                <span>Knee OA</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Diana Mercado</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-green" style="font-size:10px;padding:1px 6px;">Protocol drafted</span>
+                <span>Rotator cuff</span>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-name">Aisha Patel</div>
+              <div class="kanban-card-meta">
+                <span class="tag tag-amber" style="font-size:10px;padding:1px 6px;">Quote sent</span>
+                <span>Bilateral knee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer">
+        <div class="drawer-head">
+          <div class="avatar" style="width:36px;height:36px;border-radius:50%;background:#EEF2FF;color:#3730A3;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">LS</div>
+          <div>
+            <div style="font-weight:700;font-size:15px;color:#0F172A;">Lisa Smith</div>
+            <div style="font-size:11px;color:#94A3B8;">Score 27 · Knee · Hot</div>
+          </div>
+        </div>
+        <div class="drawer-section">
+          <div class="drawer-label">Sage's coaching</div>
+          <div style="font-size:12.5px;color:#334155;line-height:1.55;background:#F0FDF4;border:1px solid #BBF7D0;padding:10px 12px;border-radius:8px;">
+            <strong style="color:#15803D;">↑ Move now.</strong> Lisa matches your top-converting profile (knee + within 200mi + age 50-65). Mia has booked. Suggest expediting Dr. Consult.
+          </div>
+        </div>
+        <div class="drawer-section">
+          <div class="drawer-label">Signals</div>
+          <div class="signal-row">
+            <span class="chip" style="background:#FEE2E2;color:#B91C1C;">Replied within 4m</span>
+            <span class="chip" style="background:#DCFCE7;color:#15803D;">Pre-qualified budget</span>
+            <span class="chip" style="background:#EEF2FF;color:#3730A3;">Local (Austin)</span>
+            <span class="chip" style="background:#FEF3C7;color:#92400E;">Mentioned competitor</span>
+          </div>
+        </div>
+        <div class="drawer-section">
+          <div class="drawer-label">Mia's last 2 messages</div>
+          <div class="msg-bubble">
+            <span class="who">Mia · Wed 10:02am</span>
+            Hi Lisa, thanks for reaching out. Quick question to make sure I send you the right info: have you had imaging done on the knee yet, and how long has the pain been an issue?
+          </div>
+          <div class="msg-bubble">
+            <span class="who">Mia · Thu 9:14am</span>
+            Got it, three years and an MRI a few months back. Dr. James L. is the right person to walk you through options. He has Tuesday at 10am open. Should I hold it?
+          </div>
+        </div>
+        <div class="drawer-section">
+          <div class="drawer-label">Next action</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-primary">↗ Move to Dr. Consult</button>
+            <button class="btn-sm">Open patient</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

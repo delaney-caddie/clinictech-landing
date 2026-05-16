@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Rio — Care Advocate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent active" style="background:#DB2777;"><div class="nav-agent-avatar" style="background:rgba(255,255,255,0.25);">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="agent-big-avatar" style="background:#DB2777;">R</div>
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Rio</h1>
+            <span class="role-text">Care Advocate</span>
+            <span class="pill">Auto + notify</span>
+          </div>
+          <div class="main-header-desc">Walks with patients after treatment. Phased check-ins on Day 7, 14, 30, 60, and 90. Captures stories. Escalates concerns.</div>
+        </div>
+        <button class="btn-pause">⏻ Pause</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">Active care</div>
+        <div class="tab">Needs you <span class="badge-red">1</span></div>
+        <div class="tab">Stories captured</div>
+        <div class="tab">Performance</div>
+        <div class="tab">Rules &amp; behavior</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div>
+        <input class="search" placeholder="Search by patient name" />
+        <div class="filters">
+          <div class="filter-pill active">Active</div>
+          <div class="filter-pill">Day 7</div>
+          <div class="filter-pill">Day 30</div>
+          <div class="filter-pill">Discharged</div>
+        </div>
+
+        <div class="list-card selected">
+          <div class="list-card-top">
+            <div class="list-card-avatar">CM</div>
+            <div class="list-card-name">Carla Mendez</div>
+            <span class="list-card-time">Day 30</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-green">Strong outcome</span>
+            <span class="via">Knee, stem cell</span>
+          </div>
+          <div class="list-card-preview">"Pain down to a 1. Hiking again." Story capture suggested.</div>
+        </div>
+
+        <div class="list-card">
+          <div class="list-card-top">
+            <div class="list-card-avatar">GT</div>
+            <div class="list-card-name">Greg Tanaka</div>
+            <span class="list-card-time">Day 14</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-gray">On track</span>
+            <span class="via">Shoulder, PRP</span>
+          </div>
+          <div class="list-card-preview">ROM improving. Replied to Day 14 check-in this morning.</div>
+        </div>
+
+        <div class="list-card">
+          <div class="list-card-top">
+            <div class="list-card-avatar">PS</div>
+            <div class="list-card-name">Priya Shah</div>
+            <span class="list-card-time">Day 7</span>
+            <span class="badge-needs-you">Needs you</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-red">Concern</span>
+            <span class="via">Hip, exosomes</span>
+          </div>
+          <div class="list-card-preview">Reported increased swelling. Rio escalated to Dr. James L.</div>
+        </div>
+
+        <div class="list-card">
+          <div class="list-card-top">
+            <div class="list-card-avatar">JN</div>
+            <div class="list-card-name">James Nakamura</div>
+            <span class="list-card-time">Day 60</span>
+          </div>
+          <div class="list-card-meta">
+            <span class="tag tag-green">Strong outcome</span>
+            <span class="via">Rotator cuff, PRP</span>
+          </div>
+          <div class="list-card-preview">Story collected (written) yesterday. Mia cited it twice today.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-head">
+          <div class="avatar" style="background:#FCE7F3;color:#9D174D;">CM</div>
+          <div>
+            <div class="name">Carla Mendez</div>
+            <div class="meta">Day 30 · Knee stem cell · Treated Apr 16 · Houston, TX</div>
+          </div>
+          <div class="right">
+            <a class="link-blue" href="#">Open patient record →</a>
+          </div>
+        </div>
+
+        <div class="callout brief">
+          <span class="callout-label">Brief</span>
+          <span>Carla replied to her Day 30 check-in with a 1/10 pain score and a note that she is "hiking again with my daughter for the first time in two years." Rio flagged this as a high-impact story opportunity. Atlas's protocol predicted 65% pain reduction by Day 30; Carla is at 89%.</span>
+        </div>
+
+        <div class="callout success">
+          <span class="callout-label">Story opportunity</span>
+          <span>Outcome is in the top decile for knee stem cell patients this quarter. Rio is ready to ask for a tiered story (Google review now, written next week, video at Day 60).</span>
+        </div>
+
+        <div class="pending">
+          <div class="pending-head">
+            <div class="avatar" style="background:#DB2777;">R</div>
+            <div class="title">Rio drafted a Day 30 reply + story ask, needs your eyes</div>
+            <div class="time">22m</div>
+          </div>
+          <div class="pending-body">
+            Hi Carla,<br/><br/>
+            Reading your message made my whole day. Going back to hiking with your daughter is exactly the kind of milestone we hope for at Day 30, and your pain numbers are well ahead of where we expected. Congratulations.<br/><br/>
+            One small ask, only if it feels right. Stories like yours genuinely help other patients who are scared to take this step. Would you be open to leaving a quick Google review? I can send the direct link. Down the road, we would love to share a longer written piece, and eventually a short video with you and your daughter on a hike, but only if you are interested. No pressure.<br/><br/>
+            Either way, your Day 60 check-in is set for June 15. Looking forward to it.<br/><br/>
+            — Rio, on behalf of the Sunrise Clinic team
+          </div>
+          <div class="pending-actions">
+            <button class="btn-primary">↗ Send as-is</button>
+            <button class="btn-ghost">✎ Edit</button>
+            <button class="btn-ghost">✕ Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

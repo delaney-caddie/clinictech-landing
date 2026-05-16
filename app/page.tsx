@@ -1,21 +1,83 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { SiteNav } from "@/components/site-nav";
 
 const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
 
-const productTabs = [
-  { label: "Unified Inbox", title: "Unified Inbox", desc: "Streamline all your communication in one place. Connect Facebook, Instagram, WhatsApp, SMS, email, and website chat into a single inbox. Every patient message, every channel, one view. No more switching between five apps to respond to one inquiry." },
-  { label: "RegenCRM", title: "RegenCRM", desc: "Visualize your entire patient pipeline. See every lead move through stages from inquiry to consultation to treatment to follow-up. Drag-and-drop Kanban board built for the regenerative medicine patient journey." },
-  { label: "AI Patient Concierge", title: "AI Patient Concierge", desc: "Trained on your protocols, pricing, and conditions treated. Answers questions about stem cell therapy, PRP, exosomes, and travel logistics in English and Spanish, 24/7. Books consultations before the patient closes the tab." },
-  { label: "Automated Follow-Ups", title: "Automated Follow-Ups", desc: "Multi-channel sequences tuned for regenerative medicine. Instant reply on inquiry, education emails mid-funnel, reactivation for quiet leads. Your coordinator stops chasing and starts closing." },
-  { label: "Review Generation", title: "Review Generation", desc: "Automated review requests sent at the perfect moment post-treatment. Patients leave 5-star reviews on Google while the experience is still fresh. Negative feedback gets routed privately before it goes public." },
-  { label: "Online Scheduling", title: "Online Scheduling", desc: "Patients self-book consultations directly into your calendar. Smart intake qualifies by condition, budget, and travel readiness. Your front desk wakes up to a full schedule." },
-  { label: "Protocol Builder", title: "Protocol Builder", desc: "Document treatment protocols, dosing, and recovery timelines in a structured format. Share with patients pre-treatment and use as a reference across your clinical team." },
-  { label: "Boost Your Online Presence", title: "Boost Your Online Presence", desc: "AI-powered blog content, optimized Google Business Profile, and local SEO tools. Dominate search results for your treatments and your city. Get found before your competitors." },
-  { label: "Travel Concierge", title: "Travel Concierge", desc: "A portal for international patients to manage flights, hotels, airport pickups, and local logistics. Your team tracks every arrival from one dashboard instead of coordinating over WhatsApp." },
+const agents = [
+  {
+    name: "Mia",
+    slug: "mia",
+    role: "Patient Coordinator",
+    color: "#2563EB",
+    tint: "rgba(37,99,235,0.08)",
+    border: "rgba(37,99,235,0.22)",
+    headline: "She gets them in the door.",
+    body: "Answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, loops your team in the moment a conversation needs a human.",
+    badge: null as string | null,
+  },
+  {
+    name: "Atlas",
+    slug: "atlas",
+    role: "Protocol Architect",
+    color: "#D97706",
+    tint: "rgba(217,119,6,0.08)",
+    border: "rgba(217,119,6,0.22)",
+    headline: "He designs the care.",
+    body: "Drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
+    badge: "Doctor approval required",
+  },
+  {
+    name: "Rio",
+    slug: "rio",
+    role: "Care Advocate",
+    color: "#DB2777",
+    tint: "rgba(219,39,119,0.08)",
+    border: "rgba(219,39,119,0.22)",
+    headline: "He walks with patients after.",
+    body: "Phased post-treatment check-ins on Day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
+    badge: null,
+  },
+  {
+    name: "Sage",
+    slug: "sage",
+    role: "Sales Coach",
+    color: "#16A34A",
+    tint: "rgba(22,163,74,0.08)",
+    border: "rgba(22,163,74,0.22)",
+    headline: "He makes the team sharper.",
+    body: "Daily pipeline brief. Watches what Mia does and proposes new rules you can accept in one click. Internal only.",
+    badge: "Internal only",
+  },
 ];
+
+const platformBits = [
+  "CRM and pipeline",
+  "Smart intake forms",
+  "Protocol builder",
+  "AI chat widget",
+  "Patient portal",
+  "Review capturing",
+  "Follow-up sequences",
+];
+
+const platformMockups = [
+  { slug: "home", label: "Home", caption: "Daily activity feed across all four agents" },
+  { slug: "pipeline", label: "Pipeline", caption: "Lead pipeline with agent-aware drawer" },
+  { slug: "patient-stories", label: "Patient stories", caption: "Reviews, testimonials, and case studies in one library" },
+];
+
+const mockupCaptions: Record<string, string> = {
+  mia: "Mia, Patient Coordinator",
+  atlas: "Atlas, Protocol Architect",
+  rio: "Rio, Care Advocate",
+  sage: "Sage, Sales Coach",
+  home: "Home, daily activity across your agents",
+  pipeline: "Pipeline with agent-aware drawer",
+  "patient-stories": "Patient stories library",
+};
 
 const testimonials = [
   { name: "Dr. Carlos M.", role: "Medical Director", location: "Regenerative clinic, Tijuana", stat: "22 hrs/wk saved", quote: "I used to spend half my day on WhatsApp coordinating travel for international patients. Flights, hotels, pickups. Now patients handle it themselves through the portal. I actually get to focus on patient care instead of logistics." },
@@ -24,25 +86,26 @@ const testimonials = [
 ];
 
 export default function LandingPage() {
-  const [activeTab, setActiveTab] = useState(0);
-  const tabAutoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const openLightbox = useCallback((slug: string) => setLightbox(slug), []);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
 
-  const startAutoRotate = useCallback(() => {
-    if (tabAutoRef.current) clearInterval(tabAutoRef.current);
-    tabAutoRef.current = setInterval(() => {
-      setActiveTab(prev => (prev + 1) % productTabs.length);
-    }, 4000);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    startAutoRotate();
-    return () => { if (tabAutoRef.current) clearInterval(tabAutoRef.current); };
-  }, [startAutoRotate]);
-
-  const handleTabClick = useCallback((idx: number) => {
-    setActiveTab(idx);
-    startAutoRotate();
-  }, [startAutoRotate]);
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox]);
 
   // Scroll reveal
   useEffect(() => {
@@ -782,10 +845,10 @@ body {
               Built for regenerative medicine. Trusted by the top clinics worldwide.
             </div>
             <h1 className="hero-title">
-              78% of patients book with the clinic that earns their trust first. <span className="hl">Be that clinic.</span>
+              Fill your pipeline, design better care, <span className="hl">keep patients coming back.</span>
             </h1>
             <p className="hero-sub">
-              Auto-replies don&apos;t close patients. ClinicTech is the growth platform that works while you sleep: answering clinical questions, following up on cold leads, coordinating travel, and running your intake. In English and Spanish, 24/7.
+              A team of AI staff for your regenerative medicine clinic, built on the platform that runs everything around them. Your team focuses on patients. ClinicTech handles the rest.
             </p>
             <div className="hero-ctas">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
@@ -886,140 +949,227 @@ body {
       </section>
 
 
-      <section className="product-tabs-section" id="products">
-        <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">Your clinic runs on five tools that don&apos;t talk to each other. ClinicTech replaces all of them.</h2>
-          <div className="tabs-row">
-            {productTabs.map((tab, i) => (
-              <button key={i} className={`tab-btn ${activeTab === i ? "active" : ""}`} onClick={() => handleTabClick(i)}>
-                {tab.label}
-              </button>
+      <section className="agents-section" id="products">
+        <style>{`
+          .agents-section { padding: 100px 0; background: #fff; }
+          .agents-section .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+          .agents-eyebrow { display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #3730A3; margin-bottom: 12px; }
+          .agents-head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+          .agents-head h2 { font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -0.5px; color: #0F172A; margin-bottom: 16px; }
+          .agents-head p { font-size: 17px; line-height: 1.7; color: #475569; }
+          .agents-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+          .agent-card {
+            background: #fff; border: 1px solid #E2E8F0; border-radius: 20px;
+            padding: 36px; position: relative; transition: all 0.25s;
+            border-top: 4px solid var(--agent-color);
+          }
+          .agent-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.06); transform: translateY(-2px); }
+          .agent-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+          .agent-portrait {
+            width: 64px; height: 64px; border-radius: 50%;
+            object-fit: cover; flex-shrink: 0;
+            border: 2px solid var(--agent-color);
+            background: var(--agent-tint);
+          }
+          .agent-mockup-trigger {
+            display: block; width: 100%; margin-top: 20px;
+            background: #F8FAFC; border: 1px solid #E2E8F0;
+            border-radius: 12px; padding: 0; overflow: hidden;
+            cursor: pointer; position: relative; transition: all 0.2s;
+            font: inherit;
+          }
+          .agent-mockup-trigger:hover {
+            border-color: var(--agent-color);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+          }
+          .agent-mockup-trigger img {
+            display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left;
+          }
+          .agent-mockup-caption {
+            position: absolute; left: 12px; bottom: 12px;
+            background: rgba(15,23,42,0.85); color: #fff;
+            font-size: 12px; font-weight: 700;
+            padding: 6px 12px; border-radius: 100px;
+            backdrop-filter: blur(4px);
+          }
+          .agent-name { font-size: 20px; font-weight: 800; color: #0F172A; line-height: 1.1; }
+          .agent-role { font-size: 13px; color: #64748B; margin-top: 2px; }
+          .agent-headline { font-size: 17px; font-weight: 700; color: var(--agent-color); margin-bottom: 12px; }
+          .agent-body { font-size: 15px; line-height: 1.65; color: #475569; }
+          .agent-badge {
+            display: inline-block; margin-top: 16px;
+            padding: 4px 12px; border-radius: 100px;
+            background: var(--agent-tint); color: var(--agent-color);
+            font-size: 12px; font-weight: 700; border: 1px solid var(--agent-border);
+          }
+
+          .under-hood { margin-top: 80px; padding: 40px 36px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 20px; max-width: 1080px; margin-left: auto; margin-right: auto; }
+          .under-hood-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+          .under-hood-head h3 { font-size: 22px; font-weight: 800; color: #0F172A; letter-spacing: -0.3px; }
+          .under-hood-head .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #5EC4E3; }
+          .under-hood p { font-size: 15px; line-height: 1.7; color: #475569; margin-bottom: 20px; max-width: 760px; }
+          .under-hood-bits {
+            display: flex; flex-wrap: nowrap; gap: 8px;
+            overflow-x: auto; padding-bottom: 2px;
+            scrollbar-width: none;
+          }
+          .under-hood-bits::-webkit-scrollbar { display: none; }
+          .under-hood-pill {
+            padding: 6px 14px; background: #fff; border: 1px solid #E2E8F0;
+            border-radius: 100px; font-size: 13px; font-weight: 600; color: #0F172A;
+            white-space: nowrap; flex-shrink: 0;
+          }
+          .under-hood-mockups-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+            color: #5EC4E3; margin-top: 28px; margin-bottom: 12px;
+          }
+          .under-hood-mockups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+          .platform-mockup {
+            background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
+            padding: 0; overflow: hidden; cursor: pointer; position: relative;
+            transition: all 0.2s; font: inherit; text-align: left;
+          }
+          .platform-mockup:hover {
+            border-color: #3730A3; box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-1px);
+          }
+          .platform-mockup img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
+          .platform-mockup-label {
+            position: absolute; left: 10px; bottom: 10px;
+            background: rgba(15,23,42,0.85); color: #fff;
+            font-size: 11px; font-weight: 700;
+            padding: 5px 10px; border-radius: 100px;
+          }
+          @media (max-width: 768px) {
+            .under-hood-mockups { grid-template-columns: 1fr; }
+          }
+
+          .lightbox-backdrop {
+            position: fixed; inset: 0; background: rgba(15,23,42,0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999999 !important; padding: 40px 24px;
+            animation: lbFade 0.18s ease;
+          }
+          @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+          .lightbox-inner { max-width: 1300px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+          .lightbox-img-wrap {
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            max-width: 100%; max-height: 82vh;
+            overflow: auto;
+          }
+          .lightbox-img-wrap img { display: block; width: 100%; height: auto; max-width: 1300px; }
+          .lightbox-caption {
+            color: #fff; font-size: 14px; font-weight: 600;
+            display: flex; align-items: center; gap: 12px;
+          }
+          .lightbox-close {
+            background: #fff; color: #0F172A; border: none;
+            font-family: inherit; font-weight: 700; font-size: 13px;
+            padding: 6px 14px; border-radius: 100px; cursor: pointer;
+          }
+
+          @media (max-width: 768px) {
+            .agents-section { padding: 72px 0; }
+            .agents-head h2 { font-size: 30px; }
+            .agents-grid { grid-template-columns: 1fr; }
+            .agent-card { padding: 28px 24px; }
+            .under-hood { padding: 32px 24px; }
+          }
+        `}</style>
+        <div className="container">
+          <div className="agents-head reveal">
+            <div className="agents-eyebrow">Meet your AI team</div>
+            <h2>Four named agents. Each one a specialist.</h2>
+            <p>Each one trained on your protocols, your tone, your pipeline.</p>
+          </div>
+          <div className="agents-grid">
+            {agents.map((a) => (
+              <div
+                key={a.name}
+                className="agent-card reveal"
+                style={{
+                  ["--agent-color" as string]: a.color,
+                  ["--agent-tint" as string]: a.tint,
+                  ["--agent-border" as string]: a.border,
+                } as React.CSSProperties}
+              >
+                <div className="agent-row">
+                  <img className="agent-portrait" src={`/agents/${a.slug}.png`} alt={`${a.name}, ${a.role}`} />
+                  <div>
+                    <div className="agent-name">{a.name}</div>
+                    <div className="agent-role">{a.role}</div>
+                  </div>
+                </div>
+                <div className="agent-headline">{a.headline}</div>
+                <p className="agent-body">{a.body}</p>
+                {a.badge && <span className="agent-badge">{a.badge}</span>}
+                <button
+                  type="button"
+                  className="agent-mockup-trigger"
+                  onClick={() => openLightbox(a.slug)}
+                  aria-label={`See ${a.name} in action`}
+                >
+                  <img src={`/mockups/${a.slug}.png`} alt="" loading="lazy" />
+                  <span className="agent-mockup-caption">See {a.name} in action</span>
+                </button>
+              </div>
             ))}
           </div>
-          <div className="tab-content" key={activeTab}>
-            <div>
-              <h3>{productTabs[activeTab].title}</h3>
-              <p>{productTabs[activeTab].desc}</p>
+
+          <div className="under-hood reveal">
+            <div className="under-hood-head">
+              <span className="label">Under the hood</span>
+              <h3>A full clinic OS, not just an inbox.</h3>
             </div>
-            <div className="tab-mockup">
-              <div className="tab-mockup-bar">
-                <div className="tab-mockup-dots"><span></span><span></span><span></span></div>
-                {productTabs[activeTab].title}
-              </div>
-              <div className="tab-mockup-body">
-                {/* Unified Inbox */}
-                {activeTab === 0 && (<>
-                  <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap" as const}}>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#1877F2",color:"#fff"}}>Facebook</span>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",color:"#fff"}}>Instagram</span>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#25D366",color:"#fff"}}>WhatsApp</span>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#3730A3",color:"#fff"}}>SMS</span>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#64748B",color:"#fff"}}>Email</span>
-                    <span style={{fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,background:"#0F172A",color:"#fff"}}>Web Chat</span>
-                  </div>
-                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#25D366",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>WA</span><span className="tab-mockup-name">Sarah M.</span><span className="tab-mockup-detail">How much is knee treatment?</span><span style={{fontSize:9,color:"#94A3B8"}}>2m ago</span></div>
-                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#1877F2",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>FB</span><span className="tab-mockup-name">James K.</span><span className="tab-mockup-detail">Sent a message</span><span style={{fontSize:9,color:"#94A3B8"}}>14m ago</span></div>
-                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#3730A3",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>SMS</span><span className="tab-mockup-name">Maria L.</span><span className="tab-mockup-detail">Yes I want to book</span><span style={{fontSize:9,color:"#94A3B8"}}>1h ago</span></div>
-                  <div className="tab-mockup-row"><span style={{fontSize:9,background:"#64748B",color:"#fff",padding:"2px 6px",borderRadius:4,fontWeight:700,marginRight:6}}>Email</span><span className="tab-mockup-name">Robert T.</span><span className="tab-mockup-detail">Re: Travel logistics</span><span style={{fontSize:9,color:"#94A3B8"}}>3h ago</span></div>
-                </>)}
-                {/* RegenCRM - Kanban */}
-                {activeTab === 1 && (<div style={{display:"flex",gap:8,overflow:"hidden"}}>
-                  {[{title:"New Lead",color:"#3730A3",patients:["Sarah M.","James K."]},{title:"Consulted",color:"#D97706",patients:["Maria L."]},{title:"Booked",color:"#22C55E",patients:["Robert T.","Lisa W."]},{title:"Treated",color:"#6366F1",patients:["David R."]}].map((col,i) => (
-                    <div key={i} style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:"0.5px",color:col.color,borderBottom:`2px solid ${col.color}`,paddingBottom:6,marginBottom:8}}>{col.title} <span style={{color:"#94A3B8"}}>{col.patients.length}</span></div>
-                      {col.patients.map((p,j) => (
-                        <div key={j} style={{background:"#fff",border:"1px solid #E2E8F0",borderRadius:6,padding:"8px 10px",marginBottom:6,fontSize:10}}>
-                          <div style={{fontWeight:700,color:"#0F172A"}}>{p}</div>
-                          <div style={{color:"#94A3B8",fontSize:9,marginTop:2}}>Knee Stem Cell</div>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>)}
-                {/* AI Patient Concierge */}
-                {activeTab === 2 && (<div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  <div className="tab-mockup-msg user">What does stem cell therapy for my knee involve? How much does it cost?</div>
-                  <div className="tab-mockup-msg bot"><span style={{fontSize:9,fontWeight:700,color:"#3730A3",background:"rgba(55,48,163,0.06)",padding:"2px 6px",borderRadius:100,marginBottom:4,display:"inline-block"}}>AI</span><br/>Our knee stem cell therapy uses MSCs harvested from your bone marrow. The procedure takes 2-3 hours and costs $8,000-$15,000. We coordinate travel from the US including airport pickup and hotel.</div>
-                  <div className="tab-mockup-msg user">Can I book a consultation?</div>
-                  <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:8,padding:"8px 12px",fontSize:10,color:"#15803D",fontWeight:600}}>&#10003; Consultation booked: Apr 22, 10 AM</div>
-                </div>)}
-                {/* Automated Follow-Ups */}
-                {activeTab === 3 && (<>
-                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Hot Lead Sequence</span><span className="tab-mockup-badge green">Active</span></div>
-                  <div style={{display:"flex",gap:4,margin:"4px 0 8px",paddingLeft:12,flexWrap:"wrap" as const}}>
-                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Instant SMS</span>
-                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Day 1 Email</span>
-                    <span style={{fontSize:9,padding:"3px 8px",background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,color:"#15803D"}}>Day 3 Call</span>
-                  </div>
-                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Warm Nurture (30-day)</span><span className="tab-mockup-badge amber">Active</span></div>
-                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Cold Drip (90-day)</span><span className="tab-mockup-badge gray">Active</span></div>
-                  <div className="tab-mockup-row"><span style={{fontWeight:700,color:"#0F172A",fontSize:11}}>Patient Reactivation (12-mo)</span><span className="tab-mockup-badge blue">Active</span></div>
-                </>)}
-                {/* Review Generation */}
-                {activeTab === 4 && (<>
-                  <div className="tab-mockup-stat"><div className="tab-mockup-stat-num">4.9</div><div className="tab-mockup-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div className="tab-mockup-stat-label">Average across 312 reviews</div></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">Sarah M.</span><span className="tab-mockup-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span className="tab-mockup-badge green">Posted</span></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">James K.</span><span className="tab-mockup-detail">Request sent</span><span className="tab-mockup-badge amber">Pending</span></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">Maria L.</span><span className="tab-mockup-detail">Negative</span><span className="tab-mockup-badge blue">Routed</span></div>
-                </>)}
-                {/* Online Scheduling - Calendar */}
-                {activeTab === 5 && (<>
-                  <div style={{display:"grid",gridTemplateColumns:"40px repeat(5,1fr)",gap:3,fontSize:9}}>
-                    <div></div>
-                    {["Mon","Tue","Wed","Thu","Fri"].map(d => <div key={d} style={{textAlign:"center",fontWeight:700,color:"#94A3B8",paddingBottom:4}}>{d}</div>)}
-                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>9am</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Sarah M.</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>James K.</div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Maria L.</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Robert T.</div>
-                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>11am</div>
-                    <div style={{background:"#FFFBEB",border:"1px solid #FDE68A",borderRadius:4,padding:4,textAlign:"center",color:"#92400E",fontWeight:600}}>Lisa W.</div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>David R.</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Anna P.</div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                    <div style={{color:"#94A3B8",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:4}}>2pm</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Tom B.</div>
-                    <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:4,padding:4,textAlign:"center",color:"#15803D",fontWeight:600}}>Karen R.</div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                    <div style={{background:"#F8FAFC",border:"1px dashed #E2E8F0",borderRadius:4,padding:4}}></div>
-                  </div>
-                  <div style={{fontSize:10,color:"#22C55E",fontWeight:600,marginTop:8,textAlign:"center" as const}}>+12 self-booked this week</div>
-                </>)}
-                {/* Protocol Builder */}
-                {activeTab === 6 && (<>
-                  <div className="tab-mockup-checklist">
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Pre-treatment instructions sent</div>
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Consent form signed digitally</div>
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Stem cell knee protocol assigned</div>
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Post-care recovery plan shared</div>
-                    <div className="tab-mockup-check"><span style={{color:"#94A3B8"}}>&#9711;</span> Week 4 follow-up scheduled</div>
-                  </div>
-                </>)}
-                {/* Boost Online Presence */}
-                {activeTab === 7 && (<>
-                  <div className="tab-mockup-stat"><div className="tab-mockup-stat-num">+190%</div><div className="tab-mockup-stat-label">Organic traffic growth</div></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">Google Business</span><span className="tab-mockup-badge green">Optimized</span></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">SEO Blog Posts</span><span className="tab-mockup-detail">12 published</span><span className="tab-mockup-badge green">Live</span></div>
-                  <div className="tab-mockup-row"><span className="tab-mockup-name">Local Citations</span><span className="tab-mockup-detail">34 directories</span><span className="tab-mockup-badge green">Synced</span></div>
-                </>)}
-                {/* Travel Concierge */}
-                {activeTab === 8 && (<>
-                  <div className="tab-mockup-checklist">
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Flight: AA 1247, Apr 15 9:30am</div>
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Hotel: Grand Resort, 2 nights</div>
-                    <div className="tab-mockup-check"><span className="tab-mockup-check-icon">&#10003;</span> Pickup: Carlos M. confirmed</div>
-                    <div className="tab-mockup-check"><span style={{color:"#D97706"}}>&#9711;</span> Pre-arrival form: pending</div>
-                  </div>
-                  <div style={{marginTop:8,fontSize:10,color:"#94A3B8",textAlign:"center" as const}}>3 patients arriving this week</div>
-                </>)}
-              </div>
+            <p>
+              Your agents do not work in a vacuum. They run on the operating system underneath: pipeline, intake, protocols, follow-ups, and patient stories all in one place, built for regenerative medicine clinics.
+            </p>
+            <div className="under-hood-bits">
+              {platformBits.map((bit) => (
+                <span key={bit} className="under-hood-pill">{bit}</span>
+              ))}
+            </div>
+            <div className="under-hood-mockups-label">Glimpses from inside ClinicTech</div>
+            <div className="under-hood-mockups">
+              {platformMockups.map((m) => (
+                <button
+                  key={m.slug}
+                  type="button"
+                  className="platform-mockup"
+                  onClick={() => openLightbox(m.slug)}
+                  aria-label={`Open ${m.label} preview`}
+                >
+                  <img src={`/mockups/${m.slug}.png`} alt="" loading="lazy" />
+                  <span className="platform-mockup-label">{m.label}</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </section>
+
+      {mounted && lightbox && createPortal(
+        <div
+          className="lightbox-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={mockupCaptions[lightbox] ?? "Preview"}
+          onClick={closeLightbox}
+        >
+          <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
+            <div className="lightbox-img-wrap">
+              <img src={`/mockups/${lightbox}.png`} alt={mockupCaptions[lightbox] ?? "Preview"} />
+            </div>
+            <div className="lightbox-caption">
+              <span>{mockupCaptions[lightbox] ?? "Preview"}</span>
+              <button type="button" className="lightbox-close" onClick={closeLightbox} autoFocus>Close</button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
 
       {/* ===== DAY IN LIFE ===== */}
       <section className="daylife-section">

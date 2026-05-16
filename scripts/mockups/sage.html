@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Sage — Sales Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent active" style="background:#16A34A;"><div class="nav-agent-avatar" style="background:rgba(255,255,255,0.25);">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="agent-big-avatar" style="background:#16A34A;">S</div>
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Sage</h1>
+            <span class="role-text">Sales Coach</span>
+            <span class="pill">Auto-send</span>
+          </div>
+          <div class="main-header-desc">Watches the pipeline daily. Spots stuck deals, hot patterns, and coaching opportunities. Internal only.</div>
+        </div>
+        <button class="btn-pause">⏻ Pause</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">Morning brief</div>
+        <div class="tab">Patterns <span class="badge-red">3</span></div>
+        <div class="tab">Suggested rules</div>
+        <div class="tab">Performance</div>
+        <div class="tab">Rules &amp; behavior</div>
+      </div>
+    </header>
+
+    <div class="content single">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num">12</div><div class="label">Hot leads in pipeline</div><div class="trend">↑ 4 since yesterday</div></div>
+        <div class="stat-card"><div class="num">5</div><div class="label">Stuck &gt; 4 days</div><div class="trend" style="color:#EF4444;">↑ 2 this week</div></div>
+        <div class="stat-card"><div class="num">38%</div><div class="label">Lead to consult rate</div><div class="trend">↑ 6 pts MoM</div></div>
+        <div class="stat-card"><div class="num">8</div><div class="label">Rules accepted this week</div><div class="trend">Mia adopted 7</div></div>
+      </div>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;">Today's brief</div>
+        <a href="#" class="link-blue">Full brief →</a>
+      </div>
+
+      <div class="coach-alert high">
+        <div class="coach-alert-head">
+          <div class="activity-icon" style="background:#16A34A;">S</div>
+          <div class="coach-alert-title">3 leads stuck in Coordinator Call for over 4 days</div>
+          <span class="coach-alert-tag" style="background:#FEE2E2;color:#B91C1C;">High priority</span>
+        </div>
+        <div class="coach-alert-body">
+          John Johnson, Karim Hassan, and Priya Shah were all hot leads at first touch. They have not moved since Friday. Mia has follow-ups queued but I noticed her cadence assumes a weekday workday. Suggest pushing the next nudge to Sunday evening, since two of three responded to weekend messages historically.
+        </div>
+        <div class="coach-alert-actions">
+          <button class="btn-sm primary">Add to Mia's rules</button>
+          <button class="btn-sm">Open in pipeline</button>
+          <button class="btn-sm">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="coach-alert mid">
+        <div class="coach-alert-head">
+          <div class="activity-icon" style="background:#16A34A;">S</div>
+          <div class="coach-alert-title">Hot lead pattern: nerve damage inquiries spike on Sundays</div>
+          <span class="coach-alert-tag" style="background:#FEF3C7;color:#92400E;">Pattern</span>
+        </div>
+        <div class="coach-alert-body">
+          Across the last 90 days, 7 of your 10 highest-scoring nerve damage leads came in between Sunday 6pm and Monday noon. Mia's first-touch response on Sundays averages 14 minutes. Worth tightening on weekends.
+        </div>
+        <div class="coach-alert-actions">
+          <button class="btn-sm primary">Suggest a rule for Mia</button>
+          <button class="btn-sm">View source leads</button>
+        </div>
+      </div>
+
+      <div class="coach-alert opp">
+        <div class="coach-alert-head">
+          <div class="activity-icon" style="background:#16A34A;">S</div>
+          <div class="coach-alert-title">Rio just collected 2 high-impact stories. Worth citing.</div>
+          <span class="coach-alert-tag" style="background:#DCFCE7;color:#15803D;">Opportunity</span>
+        </div>
+        <div class="coach-alert-body">
+          Diana Reeves (knee OA, video) and James Nakamura (rotator cuff, written) closed strong outcomes this week. Mia has 4 active leads asking about those exact conditions. Suggest auto-citing the new stories in her next touches.
+        </div>
+        <div class="coach-alert-actions">
+          <button class="btn-sm primary">Tell Mia to cite</button>
+          <button class="btn-sm">Open Library</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

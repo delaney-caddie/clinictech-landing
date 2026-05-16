@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Library — Patient Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+<style>
+.subnav { display: flex; gap: 4px; padding: 14px 28px 0; }
+.subnav a {
+  padding: 8px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: #64748B; text-decoration: none;
+}
+.subnav a.active { background: #EEF2FF; color: #3730A3; }
+.type-filters { display: flex; gap: 8px; margin-bottom: 16px; }
+.type-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 100px;
+  background: #fff; border: 1px solid #E2E8F0;
+  font-size: 13px; font-weight: 600; color: #475569;
+}
+.type-pill.active { border-color: #2563EB; color: #2563EB; background: #EEF2FF; }
+.type-pill .ct { font-size: 11px; color: #94A3B8; }
+.type-pill.active .ct { color: #2563EB; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item active"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Library</h1>
+            <span class="role-text">Patient stories, protocols, knowledge, forms</span>
+          </div>
+          <div class="main-header-desc">Everything your agents draw on, in one place.</div>
+        </div>
+        <button class="btn-pause">+ Add story</button>
+      </div>
+      <div class="subnav">
+        <a href="#">Knowledge</a>
+        <a href="#">Protocols</a>
+        <a href="#" class="active">Patient stories</a>
+        <a href="#">Forms &amp; capture</a>
+      </div>
+      <div class="tabs" style="margin-top:0;">
+        <div class="tab active">All <span class="ct" style="color:#94A3B8;font-weight:600;font-size:12px;margin-left:4px;">78</span></div>
+        <div class="tab">Most cited</div>
+        <div class="tab">Recently collected</div>
+      </div>
+    </header>
+
+    <div class="content single">
+      <div class="type-filters">
+        <span class="type-pill active">All <span class="ct">78</span></span>
+        <span class="type-pill">Google reviews <span class="ct">47</span></span>
+        <span class="type-pill">Written <span class="ct">18</span></span>
+        <span class="type-pill">Video <span class="ct">9</span></span>
+        <span class="type-pill">Case studies <span class="ct">4</span></span>
+      </div>
+
+      <div class="story-grid">
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#FCE7F3;color:#9D174D;">CM</div>
+            <div>
+              <div class="story-name">Carla Mendez</div>
+              <div class="story-meta">Knee stem cell · Day 30 · Houston, TX</div>
+            </div>
+          </div>
+          <div class="story-quote">"Pain went from a 7 to a 1. I'm hiking with my daughter again for the first time in two years."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-pink">Written</span>
+            <span class="pill-sm tag-green">Strong outcome</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected by Rio</span>
+            <span class="cites">Cited by Mia 12x</span>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#DCFCE7;color:#15803D;">GT</div>
+            <div>
+              <div class="story-name">Greg Tanaka</div>
+              <div class="story-meta">Shoulder PRP · Day 60 · Seattle, WA</div>
+            </div>
+          </div>
+          <div class="story-quote">"I was looking at surgery in 6 months. After two PRP rounds I'm back in the gym at 80%."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-blue">Video</span>
+            <span class="pill-sm tag-green">5-star Google</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected by Rio</span>
+            <span class="cites">Cited by Mia 9x</span>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#FEF3C7;color:#92400E;">PS</div>
+            <div>
+              <div class="story-name">Priya Shah</div>
+              <div class="story-meta">Hip exosomes · Day 90 · Toronto, ON</div>
+            </div>
+          </div>
+          <div class="story-quote">"The team checked in on me every two weeks, even when I forgot to reply. That made all the difference."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-green">Written</span>
+            <span class="pill-sm tag-amber">Service quote</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected by Rio</span>
+            <span class="cites">Cited by Mia 6x</span>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#EEF2FF;color:#3730A3;">AP</div>
+            <div>
+              <div class="story-name">Aisha Patel</div>
+              <div class="story-meta">Bilateral knee · Case study · 12mo</div>
+            </div>
+          </div>
+          <div class="story-quote">"At 12 months, MRI shows cartilage stabilization both sides. Patient resumed long-distance running."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-blue">Case study</span>
+            <span class="pill-sm tag-green">Dr. James L.</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected with Atlas</span>
+            <span class="cites">Cited by Mia 18x</span>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#FCE7F3;color:#9D174D;">DR</div>
+            <div>
+              <div class="story-name">Diana Reeves</div>
+              <div class="story-meta">Knee OA · Day 90 · San Diego, CA</div>
+            </div>
+          </div>
+          <div class="story-quote">"I traveled here scared. I left feeling like part of a team. The Day 60 video call was unexpected and meant a lot."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-blue">Video</span>
+            <span class="pill-sm tag-green">Strong outcome</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected by Rio</span>
+            <span class="cites">Cited by Mia 14x</span>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-card-head">
+            <div class="story-avatar" style="background:#DCFCE7;color:#15803D;">JN</div>
+            <div>
+              <div class="story-name">James Nakamura</div>
+              <div class="story-meta">Rotator cuff PRP · Day 60 · Vancouver, BC</div>
+            </div>
+          </div>
+          <div class="story-quote">"Range of motion is back to where it was before the injury. I'm shocked, and I am rarely shocked."</div>
+          <div class="story-foot">
+            <span class="pill-sm tag-pink">Written</span>
+            <span class="pill-sm tag-green">5-star Google</span>
+            <span style="font-size:11px;color:#94A3B8;">Collected by Rio</span>
+            <span class="cites">Cited by Mia 7x</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

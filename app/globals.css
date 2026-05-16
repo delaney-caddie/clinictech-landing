@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* Force all fixed/absolute positioned embed elements below nav */
-body > div:not(#__next):not([data-nextjs-router]) {
+body > div:not(#__next):not([data-nextjs-router]):not(.lightbox-backdrop) {
   z-index: 9000 !important;
 }
 body > iframe {
