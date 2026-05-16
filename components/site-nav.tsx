@@ -107,7 +107,7 @@ export function SiteNav() {
           <img src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
         <div className="site-nav-center">
-          <a href="/#products">Features</a>
+          <a href="/#products">AI Assistants</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/#results">Results</a>
           <div className="nav-dropdown" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
@@ -118,7 +118,6 @@ export function SiteNav() {
               <Link href="/about" onClick={() => setResourcesOpen(false)}>About</Link>
             </div>
           </div>
-          <Link href="/contact">Smart Form</Link>
         </div>
         <div className="site-nav-right">
           <a href="https://app.clinictech.io" className="site-nav-login">Log in</a>
@@ -130,11 +129,11 @@ export function SiteNav() {
       </nav>
       <div className={`site-nav-mobile-menu ${mobileOpen ? "open" : ""}`}>
         <Link href="/" className={pathname === "/" ? "active" : ""} onClick={() => setMobileOpen(false)}>Home</Link>
-        <a href="/#products" onClick={() => setMobileOpen(false)}>Features</a>
+        <a href="/#products" onClick={() => setMobileOpen(false)}>AI Assistants</a>
+        <a href="/#how-it-works" onClick={() => setMobileOpen(false)}>How it works</a>
         <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
         <Link href="/regen-news" onClick={() => setMobileOpen(false)}>Regen News</Link>
         <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
-        <Link href="/contact" onClick={() => setMobileOpen(false)}>Try it</Link>
         <div className="mobile-cta-wrap">
           <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="mobile-cta-primary" onClick={() => setMobileOpen(false)}>Book a demo</a>
         </div>

@@ -14,7 +14,7 @@ const agents = [
     color: "#2563EB",
     tint: "rgba(37,99,235,0.08)",
     border: "rgba(37,99,235,0.22)",
-    headline: "She gets them in the door.",
+    headline: "Never lose a patient to a slow reply.",
     body: "Answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, loops your team in the moment a conversation needs a human.",
     badge: null as string | null,
   },
@@ -25,7 +25,7 @@ const agents = [
     color: "#D97706",
     tint: "rgba(217,119,6,0.08)",
     border: "rgba(217,119,6,0.22)",
-    headline: "He designs the care.",
+    headline: "Highly customized protocols. Doctor reviews instead of writes.",
     body: "Drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
     badge: "Doctor approval required",
   },
@@ -36,7 +36,7 @@ const agents = [
     color: "#DB2777",
     tint: "rgba(219,39,119,0.08)",
     border: "rgba(219,39,119,0.22)",
-    headline: "He walks with patients after.",
+    headline: "Turn happy patients into your marketing engine.",
     body: "Phased post-treatment check-ins on Day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
     badge: null,
   },
@@ -47,7 +47,7 @@ const agents = [
     color: "#16A34A",
     tint: "rgba(22,163,74,0.08)",
     border: "rgba(22,163,74,0.22)",
-    headline: "He makes the team sharper.",
+    headline: "Turn more consults into booked patients.",
     body: "Daily pipeline brief. Watches what Mia does and proposes new rules you can accept in one click. Internal only.",
     badge: "Internal only",
   },
@@ -845,13 +845,13 @@ body {
               Built for regenerative medicine. Trusted by the top clinics worldwide.
             </div>
             <h1 className="hero-title">
-              Fill your pipeline, design better care, <span className="hl">keep patients coming back.</span>
+              Built to grow your regen clinic. <span className="hl">Run by an AI team.</span>
             </h1>
             <p className="hero-sub">
               A team of AI staff for your regenerative medicine clinic, built on the platform that runs everything around them. Your team focuses on patients. ClinicTech handles the rest.
             </p>
             <div className="hero-ctas">
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
               <a href="#how-it-works" className="hero-see-link">See how it works &darr;</a>
             </div>
           </div>
@@ -925,24 +925,24 @@ body {
           <h2 className="section-title">If any of this sounds familiar, you&apos;re not alone.</h2>
           <div className="problem-grid">
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(239,68,68,0.08)"}}>&#9200;</div>
-              <h3>Leads go cold before you respond</h3>
-              <p>The average regen med inquiry waits 24+ hours for a reply. Most patients have already booked with a competitor by the time you call back.</p>
+              <div className="problem-card-icon" style={{background: "rgba(37,99,235,0.08)", color: "#2563EB"}}>&#9200;</div>
+              <h3>Your leads go cold from slow response rates</h3>
+              <p>Most regen med inquiries wait hours, sometimes a full day, for a first reply. By then, the patient has already booked with a competitor who answered faster.</p>
             </div>
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(245,158,11,0.08)"}}>&#128233;</div>
-              <h3>Your intake form is a black hole</h3>
-              <p>Generic contact forms land in an inbox. No qualification, no routing, no follow-up sequence. Warm leads die in someone&apos;s unread folder.</p>
+              <div className="problem-card-icon" style={{background: "rgba(22,163,74,0.08)", color: "#16A34A"}}>&#128202;</div>
+              <h3>Your team goes into sales calls blind and unprepared</h3>
+              <p>Coordinators jump on consults without a brief, without lead history, without context. The good calls happen by chance, not by system.</p>
             </div>
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(94,196,227,0.12)"}}>&#9992;&#65039;</div>
-              <h3>International patients need hand-holding</h3>
-              <p>70% of stem cell patients travel for treatment. Every flight, hotel, and pickup question routes back to your coordinator&apos;s WhatsApp.</p>
+              <div className="problem-card-icon" style={{background: "rgba(217,119,6,0.08)", color: "#D97706"}}>&#128221;</div>
+              <h3>Your protocols are time-consuming to draft and rarely customized</h3>
+              <p>Every patient deserves a plan tailored to their case. In practice, your doctor reuses templates or writes from scratch under time pressure, every single time.</p>
             </div>
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(55,48,163,0.08)"}}>&#128268;</div>
-              <h3>Your tools don&apos;t talk to each other</h3>
-              <p>Website, CRM, email, scheduler, spreadsheets. Your team copy-pastes between five tabs just to book one consultation.</p>
+              <div className="problem-card-icon" style={{background: "rgba(219,39,119,0.08)", color: "#DB2777"}}>&#11088;</div>
+              <h3>Your happy patients are your biggest missed opportunity</h3>
+              <p>The strongest outcomes never get captured as reviews, testimonials, or case studies. Your best marketing asset walks out the door and never comes back.</p>
             </div>
           </div>
         </div>
@@ -1174,7 +1174,7 @@ body {
       {/* ===== DAY IN LIFE ===== */}
       <section className="daylife-section">
         <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">What your clinic looks like on ClinicTech</h2>
+          <h2 className="section-title">Your team of agents grow your practice while you sleep.</h2>
           <div className="daylife-layout">
             {/* Left column - what the agent did */}
             <div className="daylife-col">
@@ -1271,26 +1271,27 @@ body {
       {/* ===== HOW IT WORKS ===== */}
       <section className="how-section" id="how-it-works">
         <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">From setup to growth in 3 simple steps.</h2>
+          <h2 className="section-title">Onboarding is simple. White-glove the whole way.</h2>
+          <p className="section-sub" style={{margin: "0 auto 48px", textAlign: "center"}}>Think of us as an extra member of your tech team. We set up, train, and tune your agents alongside you.</p>
           <div className="how-steps">
             <div className="how-step reveal">
               <div className="how-step-num">1</div>
-              <h3>Get an audit of your current website</h3>
-              <p>Free 15-minute audit. We analyze your intake flow, response time, Google visibility, and conversion rate against top regen med clinics in your market.</p>
+              <h3>Add the knowledge base specific to your clinic</h3>
+              <p>No two operating systems are the same. Each one is unique to your clinic. Your protocols, your pricing, your patient stories, your tone, all loaded in.</p>
             </div>
             <div className="how-step reveal">
               <div className="how-step-num">2</div>
-              <h3>We build your growth engine</h3>
-              <p>Custom to your clinic. Your brand, your protocols, your integrations. Most clinics go live in 2 to 4 weeks.</p>
+              <h3>Select which agents you want to hire</h3>
+              <p>Mia, Sage, Atlas, and Rio are ready out of the box. Turn on the ones you need today. Add the rest as your clinic grows.</p>
             </div>
             <div className="how-step reveal">
               <div className="how-step-num">3</div>
-              <h3>Watch your practice grow</h3>
-              <p>Leads get captured and followed up automatically. Patients book themselves. Your team spends time on care, not admin.</p>
+              <h3>Your agents go to work while you sleep</h3>
+              <p>They engage every patient, draft every reply, surface every coaching opportunity, and capture every story. Your team focuses on care. The bookings keep coming in.</p>
             </div>
           </div>
           <div className="how-cta">
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Get my free audit &rarr;</a>
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
           </div>
         </div>
       </section>
@@ -1299,15 +1300,11 @@ body {
       <section className="final-cta-section">
         <div className="container">
           <div className="final-cta-grid">
-            <div className="final-cta-card reveal">
-              <h3>Get a free clinic audit</h3>
-              <p>15-minute call. We audit your site, your intake flow, and your Google presence against top regen med clinics.</p>
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a free audit &rarr;</a>
-            </div>
-            <div className="final-cta-card reveal">
-              <h3>See how it works</h3>
-              <p>Watch a 3-minute walkthrough of the platform. See RegenCRM, the AI concierge, automated follow-ups, and the travel portal in action.</p>
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-outline-white">See the demo &rarr;</a>
+            <div className="final-cta-card reveal" style={{gridColumn: "1 / -1"}}>
+              <div style={{fontSize: 48, fontWeight: 800, letterSpacing: "-1px", color: "#3730A3", lineHeight: 1, marginBottom: 12}}>78%</div>
+              <h3>Of patients book with the first clinic that responds to them.</h3>
+              <p>Don&apos;t lose out on more patient bookings. Let your AI team answer first, every time.</p>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
             </div>
           </div>
         </div>
