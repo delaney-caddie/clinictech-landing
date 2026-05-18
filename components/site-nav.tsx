@@ -46,11 +46,6 @@ export function SiteNav() {
         }
         .nav-dropdown-menu a:hover { background: #F8FAFC; color: #0F172A !important; }
         .site-nav-right { display: flex; align-items: center; gap: 20px; }
-        .site-nav-login {
-          font-size: 14px; color: #475569; text-decoration: none; font-weight: 500;
-          transition: color 0.2s;
-        }
-        .site-nav-login:hover { color: #0F172A; }
         .site-nav-cta {
           background: #3730A3 !important; color: #fff !important; padding: 10px 24px;
           border-radius: 8px; font-weight: 600; font-size: 14px;
@@ -120,7 +115,6 @@ export function SiteNav() {
           </div>
         </div>
         <div className="site-nav-right">
-          <a href="https://app.clinictech.io" className="site-nav-login">Log in</a>
           <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="site-nav-cta">Book a demo</a>
         </div>
         <button className={`site-nav-hamburger ${mobileOpen ? "open" : ""}`} onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
