@@ -51,6 +51,17 @@ const agents = [
     body: "Daily pipeline brief. Watches what Mia does and proposes new rules you can accept in one click. Internal only.",
     badge: "Internal only",
   },
+  {
+    name: "Tomas",
+    slug: "tomas",
+    role: "Growth Marketer",
+    color: "#7C3AED",
+    tint: "rgba(124,58,237,0.08)",
+    border: "rgba(124,58,237,0.22)",
+    headline: "Turn ad spend into booked patients.",
+    body: "Plans and runs your Google, Meta, and LinkedIn campaigns. Writes ad copy built for regenerative medicine patients. Optimizes against one number that matters: cost per booked consult. Every lead lands in your pipeline where Mia picks it up.",
+    badge: "Budget-capped",
+  },
 ];
 
 const platformBits = [
@@ -64,7 +75,7 @@ const platformBits = [
 ];
 
 const platformMockups = [
-  { slug: "home", label: "Home", caption: "Daily activity feed across all four agents" },
+  { slug: "home", label: "Home", caption: "Daily activity feed across all your agents" },
   { slug: "pipeline", label: "Pipeline", caption: "Lead pipeline with agent-aware drawer" },
   { slug: "patient-stories", label: "Patient stories", caption: "Reviews, testimonials, and case studies in one library" },
 ];
@@ -74,6 +85,7 @@ const mockupCaptions: Record<string, string> = {
   atlas: "Atlas, Protocol Architect",
   rio: "Rio, Care Advocate",
   sage: "Sage, Sales Coach",
+  tomas: "Tomas, Growth Marketer",
   home: "Home, daily activity across your agents",
   pipeline: "Pipeline with agent-aware drawer",
   "patient-stories": "Patient stories library",
@@ -328,7 +340,7 @@ body {
 /* ===== PROBLEM ===== */
 .problem-section { padding: 100px 0; background: #F8FAFC; }
 .problem-grid {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; margin-top: 48px;
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; margin-top: 48px;
 }
 .problem-card {
   background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px 24px;
@@ -944,6 +956,11 @@ body {
               <h3>Your happy patients are your biggest missed opportunity</h3>
               <p>The strongest outcomes never get captured as reviews, testimonials, or case studies. Your best marketing asset walks out the door and never comes back.</p>
             </div>
+            <div className="problem-card reveal">
+              <div className="problem-card-icon" style={{background: "rgba(124,58,237,0.08)", color: "#7C3AED"}}>&#128200;</div>
+              <h3>Your ads spend without a system that converts</h3>
+              <p>You either ignore paid ads or hand a credit card to an agency and hope. Budgets drift, creative goes stale, and no one is watching cost per booked consult.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -958,6 +975,42 @@ body {
           .agents-head h2 { font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -0.5px; color: #0F172A; margin-bottom: 16px; }
           .agents-head p { font-size: 17px; line-height: 1.7; color: #475569; }
           .agents-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+          .agents-team-divider {
+            grid-column: 1 / -1;
+            display: flex; align-items: center; gap: 16px;
+            margin: 28px 0 4px;
+          }
+          .agents-team-divider::before,
+          .agents-team-divider::after {
+            content: ""; flex: 1; height: 1px; background: #E2E8F0;
+          }
+          .agents-team-divider span {
+            font-size: 12px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1.5px; color: #94A3B8;
+          }
+          .agent-card.featured {
+            grid-column: 1 / -1;
+            display: grid; grid-template-columns: 1.05fr 1fr;
+            gap: 32px; padding: 40px; align-items: center;
+          }
+          .agent-card.featured .agent-portrait { width: 96px; height: 96px; border-width: 3px; }
+          .agent-card.featured .agent-name { font-size: 26px; }
+          .agent-card.featured .agent-role { font-size: 14px; }
+          .agent-card.featured .agent-headline { font-size: 22px; line-height: 1.3; margin-bottom: 14px; }
+          .agent-card.featured .agent-body { font-size: 16px; }
+          .agent-card.featured .agent-mockup-trigger { margin-top: 0; }
+          .agent-card.featured .featured-meta {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 4px 12px; border-radius: 100px;
+            background: var(--agent-tint); color: var(--agent-color);
+            font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            border: 1px solid var(--agent-border);
+          }
+          @media (max-width: 768px) {
+            .agent-card.featured { grid-template-columns: 1fr; padding: 28px 24px; gap: 24px; }
+            .agent-card.featured .agent-headline { font-size: 19px; }
+          }
           .agent-card {
             background: #fff; border: 1px solid #E2E8F0; border-radius: 20px;
             padding: 36px; position: relative; transition: all 0.25s;
@@ -1080,41 +1133,84 @@ body {
         <div className="container">
           <div className="agents-head reveal">
             <div className="agents-eyebrow">Meet your AI team</div>
-            <h2>Four named agents. Each one a specialist.</h2>
+            <h2>Five named agents. Each one a specialist.</h2>
             <p>Each one trained on your protocols, your tone, your pipeline.</p>
           </div>
           <div className="agents-grid">
-            {agents.map((a) => (
-              <div
-                key={a.name}
-                className="agent-card reveal"
-                style={{
-                  ["--agent-color" as string]: a.color,
-                  ["--agent-tint" as string]: a.tint,
-                  ["--agent-border" as string]: a.border,
-                } as React.CSSProperties}
-              >
-                <div className="agent-row">
-                  <img className="agent-portrait" src={`/agents/${a.slug}.png`} alt={`${a.name}, ${a.role}`} />
-                  <div>
-                    <div className="agent-name">{a.name}</div>
-                    <div className="agent-role">{a.role}</div>
+            {(() => {
+              const mia = agents[0];
+              const rest = agents.slice(1);
+              return (
+                <>
+                  <div
+                    key={mia.name}
+                    className="agent-card reveal featured"
+                    style={{
+                      ["--agent-color" as string]: mia.color,
+                      ["--agent-tint" as string]: mia.tint,
+                      ["--agent-border" as string]: mia.border,
+                    } as React.CSSProperties}
+                  >
+                    <div>
+                      <span className="featured-meta">Your lead patient coordinator</span>
+                      <div className="agent-row">
+                        <img className="agent-portrait" src={`/agents/${mia.slug}.png`} alt={`${mia.name}, ${mia.role}`} />
+                        <div>
+                          <div className="agent-name">{mia.name}</div>
+                          <div className="agent-role">{mia.role}</div>
+                        </div>
+                      </div>
+                      <div className="agent-headline">{mia.headline}</div>
+                      <p className="agent-body">{mia.body}</p>
+                      {mia.badge && <span className="agent-badge">{mia.badge}</span>}
+                    </div>
+                    <button
+                      type="button"
+                      className="agent-mockup-trigger"
+                      onClick={() => openLightbox(mia.slug)}
+                      aria-label={`See ${mia.name} in action`}
+                    >
+                      <img src={`/mockups/${mia.slug}.png`} alt="" loading="lazy" />
+                      <span className="agent-mockup-caption">See {mia.name} in action</span>
+                    </button>
                   </div>
-                </div>
-                <div className="agent-headline">{a.headline}</div>
-                <p className="agent-body">{a.body}</p>
-                {a.badge && <span className="agent-badge">{a.badge}</span>}
-                <button
-                  type="button"
-                  className="agent-mockup-trigger"
-                  onClick={() => openLightbox(a.slug)}
-                  aria-label={`See ${a.name} in action`}
-                >
-                  <img src={`/mockups/${a.slug}.png`} alt="" loading="lazy" />
-                  <span className="agent-mockup-caption">See {a.name} in action</span>
-                </button>
-              </div>
-            ))}
+                  <div className="agents-team-divider">
+                    <span>Mia&apos;s supporting team</span>
+                  </div>
+                  {rest.map((a) => (
+                    <div
+                      key={a.name}
+                      className="agent-card reveal"
+                      style={{
+                        ["--agent-color" as string]: a.color,
+                        ["--agent-tint" as string]: a.tint,
+                        ["--agent-border" as string]: a.border,
+                      } as React.CSSProperties}
+                    >
+                      <div className="agent-row">
+                        <img className="agent-portrait" src={`/agents/${a.slug}.png`} alt={`${a.name}, ${a.role}`} />
+                        <div>
+                          <div className="agent-name">{a.name}</div>
+                          <div className="agent-role">{a.role}</div>
+                        </div>
+                      </div>
+                      <div className="agent-headline">{a.headline}</div>
+                      <p className="agent-body">{a.body}</p>
+                      {a.badge && <span className="agent-badge">{a.badge}</span>}
+                      <button
+                        type="button"
+                        className="agent-mockup-trigger"
+                        onClick={() => openLightbox(a.slug)}
+                        aria-label={`See ${a.name} in action`}
+                      >
+                        <img src={`/mockups/${a.slug}.png`} alt="" loading="lazy" />
+                        <span className="agent-mockup-caption">See {a.name} in action</span>
+                      </button>
+                    </div>
+                  ))}
+                </>
+              );
+            })()}
           </div>
 
           <div className="under-hood reveal">
@@ -1282,7 +1378,7 @@ body {
             <div className="how-step reveal">
               <div className="how-step-num">2</div>
               <h3>Select which agents you want to hire</h3>
-              <p>Mia, Sage, Atlas, and Rio are ready out of the box. Turn on the ones you need today. Add the rest as your clinic grows.</p>
+              <p>Mia, Sage, Atlas, Rio, and Tomas are ready out of the box. Turn on the ones you need today. Add the rest as your clinic grows.</p>
             </div>
             <div className="how-step reveal">
               <div className="how-step-num">3</div>

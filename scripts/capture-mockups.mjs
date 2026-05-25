@@ -11,6 +11,7 @@ const captures = [
   { html: "sage.html", slug: "sage" },
   { html: "atlas.html", slug: "atlas" },
   { html: "rio.html", slug: "rio" },
+  { html: "tomas.html", slug: "tomas" },
   { html: "home.html", slug: "home" },
   { html: "pipeline.html", slug: "pipeline" },
   { html: "patient-stories.html", slug: "patient-stories" },

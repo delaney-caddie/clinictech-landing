@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tomas — Growth Marketer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css" />
+<style>
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.kpi-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 18px; }
+.kpi-num { font-size: 26px; font-weight: 800; color: #0F172A; line-height: 1; }
+.kpi-label { font-size: 12px; color: #64748B; margin-top: 6px; font-weight: 600; }
+.kpi-trend { font-size: 11px; margin-top: 6px; font-weight: 700; }
+.kpi-trend.up { color: #16A34A; }
+.kpi-trend.down { color: #EF4444; }
+.campaign-row {
+  display: grid; grid-template-columns: 26px 1fr 90px 90px 90px 90px 70px;
+  align-items: center; gap: 14px;
+  padding: 12px 16px; background: #fff;
+  border: 1px solid #E2E8F0; border-radius: 10px; margin-bottom: 6px;
+}
+.campaign-row.header { background: transparent; border-color: transparent; padding: 4px 16px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94A3B8; }
+.platform-chip { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; color: #fff; }
+.platform-chip.google { background: #4285F4; }
+.platform-chip.meta { background: #0866FF; }
+.platform-chip.linkedin { background: #0A66C2; }
+.campaign-name { font-weight: 700; font-size: 13.5px; color: #0F172A; }
+.campaign-sub { font-size: 11px; color: #94A3B8; margin-top: 2px; }
+.campaign-num { font-weight: 700; font-size: 13px; color: #0F172A; text-align: right; }
+.campaign-num-sub { font-size: 10px; color: #94A3B8; font-weight: 600; text-align: right; }
+.delta-up { color: #16A34A; font-size: 11px; font-weight: 700; text-align: right; }
+.delta-down { color: #EF4444; font-size: 11px; font-weight: 700; text-align: right; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; vertical-align: middle; }
+.recap {
+  background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px;
+  padding: 16px 18px; margin-bottom: 14px; line-height: 1.65;
+}
+.recap-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.recap-avatar { width: 28px; height: 28px; border-radius: 50%; background: #7C3AED; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; }
+.recap-title { font-weight: 700; font-size: 14px; color: #0F172A; }
+.recap-time { font-size: 11px; color: #94A3B8; margin-left: auto; font-weight: 600; }
+.recap-body { font-size: 13.5px; color: #334155; }
+.recap-body strong { color: #0F172A; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-avatar">S</div>
+      <div class="brand-name">Sunrise Clinic</div>
+    </div>
+    <div class="section-label">Workspace</div>
+    <div class="nav-item"><span class="ico">⌂</span><span>Home</span></div>
+    <div class="nav-item"><span class="ico">⫴</span><span>Pipeline</span></div>
+    <div class="nav-item"><span class="ico">⎙</span><span>Library</span></div>
+    <div class="nav-item"><span class="ico">⚙</span><span>Settings</span></div>
+    <div class="section-label" style="margin-top:24px;">Your agents</div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#2563EB;">M</div><div><div class="nav-agent-name">Mia</div><div class="nav-agent-role">Patient Coordinator</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#16A34A;">S</div><div><div class="nav-agent-name">Sage</div><div class="nav-agent-role">Sales Coach</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#D97706;">A</div><div><div class="nav-agent-name">Atlas</div><div class="nav-agent-role">Protocol Architect</div></div></div>
+    <div class="nav-agent"><div class="nav-agent-avatar" style="background:#DB2777;">R</div><div><div class="nav-agent-name">Rio</div><div class="nav-agent-role">Care Advocate</div></div></div>
+    <div class="nav-agent active" style="background:#7C3AED;"><div class="nav-agent-avatar" style="background:rgba(255,255,255,0.25);">T</div><div><div class="nav-agent-name">Tomas</div><div class="nav-agent-role">Growth Marketer</div></div></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">D</div>
+      <div>
+        <div class="sidebar-footer-name">delaney</div>
+        <div class="sidebar-footer-role">Owner</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+  </aside>
+
+  <section class="main">
+    <header class="main-header">
+      <div class="main-header-top">
+        <div class="agent-big-avatar" style="background:#7C3AED;">T</div>
+        <div class="main-header-title">
+          <div class="main-header-name">
+            <h1>Tomas</h1>
+            <span class="role-text">Growth Marketer</span>
+            <span class="pill" style="border-color:#DDD6FE;color:#5B21B6;background:#F5F3FF;">Budget-capped</span>
+          </div>
+          <div class="main-header-desc">Plans and runs your Google, Meta, and LinkedIn campaigns. Optimizes against one number: cost per booked consult.</div>
+        </div>
+        <button class="btn-pause">⏻ Pause spend</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active">This week</div>
+        <div class="tab">Campaigns <span class="badge-red">7</span></div>
+        <div class="tab">Creative</div>
+        <div class="tab">Landing pages</div>
+        <div class="tab">Rules &amp; budget</div>
+      </div>
+    </header>
+
+    <div class="content single">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-num">$4,820</div><div class="kpi-label">Spent this week</div><div class="kpi-trend up">On pace · 64% of weekly cap</div></div>
+        <div class="kpi-card"><div class="kpi-num">147</div><div class="kpi-label">Leads generated</div><div class="kpi-trend up">↑ 23% vs last week</div></div>
+        <div class="kpi-card"><div class="kpi-num">11</div><div class="kpi-label">Booked consults</div><div class="kpi-trend up">↑ 4 vs last week</div></div>
+        <div class="kpi-card"><div class="kpi-num">$438</div><div class="kpi-label">Cost per booked consult</div><div class="kpi-trend up">↓ $112 vs last week</div></div>
+      </div>
+
+      <div class="recap">
+        <div class="recap-head">
+          <div class="recap-avatar">T</div>
+          <div class="recap-title">Monday morning recap, in plain language</div>
+          <div class="recap-time">Sent 7:02am via WhatsApp + email</div>
+        </div>
+        <div class="recap-body">
+          Good week. You spent <strong>$4,820</strong> and got <strong>11 booked consults</strong> for an average of <strong>$438 each</strong>, which is down $112 from last week. Knee Stem Cell on Google is doing the heavy lifting and the new "non-surgical knee" ad set on Meta is finally cheaper than the Google version. I want to shift <strong>$300/week</strong> out of the Shoulder PRP campaign on Meta (cost per booked is creeping up) and into Knee Stem Cell on Google. Reply <em>yes</em> and I'll apply it Monday.
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;">Active campaigns</div>
+        <a href="#" class="link-blue">All campaigns →</a>
+      </div>
+
+      <div class="campaign-row header">
+        <div></div>
+        <div>Campaign</div>
+        <div style="text-align:right;">Spend</div>
+        <div style="text-align:right;">Leads</div>
+        <div style="text-align:right;">Booked</div>
+        <div style="text-align:right;">CPBC</div>
+        <div style="text-align:right;">Δ</div>
+      </div>
+
+      <div class="campaign-row">
+        <div class="platform-chip google">G</div>
+        <div>
+          <div class="campaign-name"><span class="status-dot" style="background:#16A34A;"></span>Knee Stem Cell · Phoenix metro</div>
+          <div class="campaign-sub">Search · 4 ad groups · 3 landing pages live</div>
+        </div>
+        <div><div class="campaign-num">$1,640</div></div>
+        <div><div class="campaign-num">52</div></div>
+        <div><div class="campaign-num">5</div></div>
+        <div><div class="campaign-num">$328</div></div>
+        <div><div class="delta-up">↓ 18%</div></div>
+      </div>
+
+      <div class="campaign-row">
+        <div class="platform-chip meta">M</div>
+        <div>
+          <div class="campaign-name"><span class="status-dot" style="background:#16A34A;"></span>Non-surgical knee · Lookalike 1%</div>
+          <div class="campaign-sub">Advantage+ · 2 creatives rotating</div>
+        </div>
+        <div><div class="campaign-num">$1,180</div></div>
+        <div><div class="campaign-num">41</div></div>
+        <div><div class="campaign-num">3</div></div>
+        <div><div class="campaign-num">$393</div></div>
+        <div><div class="delta-up">↓ 9%</div></div>
+      </div>
+
+      <div class="campaign-row">
+        <div class="platform-chip google">G</div>
+        <div>
+          <div class="campaign-name"><span class="status-dot" style="background:#16A34A;"></span>Peripheral neuropathy</div>
+          <div class="campaign-sub">Search · National · brand-safe placements</div>
+        </div>
+        <div><div class="campaign-num">$910</div></div>
+        <div><div class="campaign-num">28</div></div>
+        <div><div class="campaign-num">2</div></div>
+        <div><div class="campaign-num">$455</div></div>
+        <div><div class="delta-up">↓ 4%</div></div>
+      </div>
+
+      <div class="campaign-row">
+        <div class="platform-chip meta">M</div>
+        <div>
+          <div class="campaign-name"><span class="status-dot" style="background:#F59E0B;"></span>Shoulder PRP · Retargeting</div>
+          <div class="campaign-sub">Engagement custom audience · 90 days</div>
+        </div>
+        <div><div class="campaign-num">$720</div></div>
+        <div><div class="campaign-num">19</div></div>
+        <div><div class="campaign-num">1</div></div>
+        <div><div class="campaign-num">$720</div></div>
+        <div><div class="delta-down">↑ 22%</div></div>
+      </div>
+
+      <div class="campaign-row">
+        <div class="platform-chip linkedin">L</div>
+        <div>
+          <div class="campaign-name"><span class="status-dot" style="background:#94A3B8;"></span>Referring physicians · Texas</div>
+          <div class="campaign-sub">InMail + sponsored content · MDs &amp; DOs</div>
+        </div>
+        <div><div class="campaign-num">$370</div></div>
+        <div><div class="campaign-num">7</div></div>
+        <div><div class="campaign-num">0</div></div>
+        <div><div class="campaign-num">—</div></div>
+        <div><div class="campaign-num-sub">building audience</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
