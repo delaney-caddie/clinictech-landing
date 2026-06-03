@@ -340,7 +340,14 @@ body {
 /* ===== PROBLEM ===== */
 .problem-section { padding: 100px 0; background: #F8FAFC; }
 .problem-grid {
-  display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; margin-top: 48px;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px;
+}
+.problem-eyebrow {
+  display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #3730A3; margin-bottom: 12px;
+}
+.problem-lead {
+  font-size: 17px; line-height: 1.65; color: #475569; max-width: 720px; margin: 20px auto 0;
 }
 .problem-card {
   background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px 24px;
@@ -934,32 +941,24 @@ body {
       {/* ===== 2. PROBLEM STATEMENT ===== */}
       <section className="problem-section">
         <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">If you&apos;re running a regen clinic in 2026, you know the pattern.</h2>
+          <span className="problem-eyebrow">The reality</span>
+          <h2 className="section-title">You know AI should be running your clinic by now. You just don&apos;t have time to build it.</h2>
+          <p className="problem-lead">Every clinic owner can feel the pressure. The ones putting AI to work are answering faster, closing more, and freeing their staff for actual care. Catching up is another item on a list you do not have time for.</p>
           <div className="problem-grid">
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(37,99,235,0.08)", color: "#2563EB"}}>&#9200;</div>
-              <h3>Your leads go cold from slow response rates</h3>
-              <p>Most regen med inquiries wait hours, sometimes a full day, for a first reply. By then, the patient has already booked with a competitor who answered faster.</p>
+              <div className="problem-card-icon" style={{background: "rgba(55,48,163,0.08)", color: "#3730A3"}}>&#128172;</div>
+              <h3>ChatGPT is the most you have time for</h3>
+              <p>You open it to draft an email, polish a follow-up, summarize a note. That is the extent of it. You have patients to see and a business to run.</p>
             </div>
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(22,163,74,0.08)", color: "#16A34A"}}>&#128202;</div>
-              <h3>Your team goes into sales calls blind and unprepared</h3>
-              <p>Coordinators jump on consults without a brief, without lead history, without context. The good calls happen by chance, not by system.</p>
+              <div className="problem-card-icon" style={{background: "rgba(94,196,227,0.15)", color: "#0E9AC0"}}>&#128218;</div>
+              <h3>AI workshops aren&apos;t on your calendar</h3>
+              <p>Picking the right tools, configuring agents, writing prompts, learning the platform of the week. None of that happens between consults.</p>
             </div>
             <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(217,119,6,0.08)", color: "#D97706"}}>&#128221;</div>
-              <h3>Your protocols are time-consuming to draft and rarely customized</h3>
-              <p>Every patient deserves a plan tailored to their case. In practice, your doctor reuses templates or writes from scratch under time pressure, every single time.</p>
-            </div>
-            <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(219,39,119,0.08)", color: "#DB2777"}}>&#11088;</div>
-              <h3>Your happy patients are your biggest missed opportunity</h3>
-              <p>The strongest outcomes never get captured as reviews, testimonials, or case studies. Your best marketing asset walks out the door and never comes back.</p>
-            </div>
-            <div className="problem-card reveal">
-              <div className="problem-card-icon" style={{background: "rgba(124,58,237,0.08)", color: "#7C3AED"}}>&#128200;</div>
-              <h3>Your ads spend without a system that converts</h3>
-              <p>You either ignore paid ads or hand a credit card to an agency and hope. Budgets drift, creative goes stale, and no one is watching cost per booked consult.</p>
+              <div className="problem-card-icon" style={{background: "rgba(245,158,11,0.1)", color: "#D97706"}}>&#128295;</div>
+              <h3>And nobody to fix it when something breaks</h3>
+              <p>Even if you set something up, who is on call when it stops working? Who updates it when your protocols change? Who keeps it in your voice as you grow?</p>
             </div>
           </div>
         </div>
