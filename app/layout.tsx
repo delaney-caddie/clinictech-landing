@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClinicTech - Your Clinic's Growth Engine",
-  description: "A fully custom back-office platform and patient portal for regenerative medicine clinics. Branded to you, connected to your tools, live in days.",
+  title: "ClinicTech — We build AI employees for your clinic",
+  description: "We learn how your regen clinic actually runs, start you with proven AI agents, and build custom ones as you grow.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },

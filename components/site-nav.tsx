@@ -102,7 +102,7 @@ export function SiteNav() {
           <img src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
         <div className="site-nav-center">
-          <a href="/#products">AI Assistants</a>
+          <a href="/#products">Agents</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/#results">Results</a>
           <div className="nav-dropdown" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
@@ -123,7 +123,7 @@ export function SiteNav() {
       </nav>
       <div className={`site-nav-mobile-menu ${mobileOpen ? "open" : ""}`}>
         <Link href="/" className={pathname === "/" ? "active" : ""} onClick={() => setMobileOpen(false)}>Home</Link>
-        <a href="/#products" onClick={() => setMobileOpen(false)}>AI Assistants</a>
+        <a href="/#products" onClick={() => setMobileOpen(false)}>Agents</a>
         <a href="/#how-it-works" onClick={() => setMobileOpen(false)}>How it works</a>
         <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
         <Link href="/regen-news" onClick={() => setMobileOpen(false)}>Regen News</Link>

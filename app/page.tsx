@@ -857,10 +857,10 @@ body {
               Built for regenerative medicine. Trusted by the top clinics worldwide.
             </div>
             <h1 className="hero-title">
-              Built to grow your regen clinic. <span className="hl">Run by an AI team.</span>
+              We build AI employees <span className="hl">for your clinic.</span>
             </h1>
             <p className="hero-sub">
-              A team of AI staff for your regenerative medicine clinic, built on the platform that runs everything around them. Your team focuses on patients. ClinicTech handles the rest.
+              We don&apos;t hand you a fixed set of tools and hope they fit. We learn how your clinic actually runs, start you with proven agents, and build new ones as your needs grow.
             </p>
             <div className="hero-ctas">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
@@ -934,7 +934,7 @@ body {
       {/* ===== 2. PROBLEM STATEMENT ===== */}
       <section className="problem-section">
         <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">If any of this sounds familiar, you&apos;re not alone.</h2>
+          <h2 className="section-title">If you&apos;re running a regen clinic in 2026, you know the pattern.</h2>
           <div className="problem-grid">
             <div className="problem-card reveal">
               <div className="problem-card-icon" style={{background: "rgba(37,99,235,0.08)", color: "#2563EB"}}>&#9200;</div>
@@ -965,6 +965,53 @@ body {
         </div>
       </section>
 
+
+      {/* ===== HOW WE WORK TOGETHER ===== */}
+      <section className="how-section" id="how-it-works">
+        <style>{`
+          .how-section .how-eyebrow {
+            display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: #3730A3; margin-bottom: 12px;
+          }
+          .how-section .how-lead {
+            font-size: 17px; line-height: 1.65; color: #475569; max-width: 760px; margin: 0 auto 48px;
+          }
+          .how-section .how-close {
+            font-size: 16px; line-height: 1.6; color: #0F172A; font-weight: 600;
+            max-width: 760px; margin: 40px auto 28px; text-align: center;
+          }
+        `}</style>
+        <div className="container" style={{textAlign: "center"}}>
+          <span className="how-eyebrow">How we work together</span>
+          <h2 className="section-title">Most platforms sell you a feature list. We build you a team.</h2>
+          <p className="how-lead">
+            It starts with a conversation about how your clinic actually runs. From there we put the right AI employees in place, and build new ones as your team grows.
+          </p>
+          <div className="how-steps">
+            <div className="how-step reveal">
+              <div className="how-step-num">1</div>
+              <h3>We learn your clinic</h3>
+              <p>How patients find you. How protocols get built. How follow-up happens. Where your staff loses hours every week. We sit with you until we understand it the way you do.</p>
+            </div>
+            <div className="how-step reveal">
+              <div className="how-step-num">2</div>
+              <h3>You start with proven agents</h3>
+              <p>Mia, Sage, Atlas, Rio, and Tomas handle the roles every regen clinic needs filled. They go live on day one, trained on your protocols, your tone, your pipeline.</p>
+            </div>
+            <div className="how-step reveal">
+              <div className="how-step-num">3</div>
+              <h3>We build the rest</h3>
+              <p>As you grow, as you spot a gap, as you imagine a role that does not exist yet, we build the agent to fill it. Trained on your process. Working the way your clinic works.</p>
+            </div>
+          </div>
+          <p className="how-close reveal">
+            Your AI team grows with you. You are never boxed in by what we shipped last quarter.
+          </p>
+          <div className="how-cta">
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
+          </div>
+        </div>
+      </section>
 
       <section className="agents-section" id="products">
         <style>{`
@@ -1132,9 +1179,9 @@ body {
         `}</style>
         <div className="container">
           <div className="agents-head reveal">
-            <div className="agents-eyebrow">Meet your AI team</div>
-            <h2>Five named agents. Each one a specialist.</h2>
-            <p>Each one trained on your protocols, your tone, your pipeline.</p>
+            <div className="agents-eyebrow">The starting lineup</div>
+            <h2>Five agents most regen clinics start with.</h2>
+            <p>Ready on day one. Trained on your protocols, your tone, your pipeline.</p>
           </div>
           <div className="agents-grid">
             {(() => {
@@ -1211,6 +1258,70 @@ body {
                 </>
               );
             })()}
+          </div>
+
+          <div className="custom-agent reveal">
+            <style>{`
+              .custom-agent {
+                margin-top: 56px; max-width: 1080px; margin-left: auto; margin-right: auto;
+                display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px;
+                background: #fff; border: 1px solid #E2E8F0; border-radius: 20px;
+                padding: 40px;
+              }
+              .custom-agent .custom-eyebrow {
+                display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 1.5px; color: #3730A3; margin-bottom: 12px;
+              }
+              .custom-agent h2 {
+                font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;
+                color: #0F172A; margin-bottom: 16px;
+              }
+              .custom-agent p {
+                font-size: 16px; line-height: 1.65; color: #475569; margin-bottom: 24px;
+              }
+              .custom-agent-cta {
+                display: inline-flex; align-items: center; gap: 8px;
+                padding: 12px 24px; background: #3730A3; color: #fff;
+                border-radius: 100px; font-weight: 700; font-size: 14px; text-decoration: none;
+                transition: all 0.2s;
+              }
+              .custom-agent-cta:hover { background: #4338CA; box-shadow: 0 4px 16px rgba(55,48,163,0.25); transform: translateY(-1px); }
+              .custom-agent-card {
+                border: 2px dashed #C7D2FE; border-radius: 20px;
+                background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%);
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                padding: 36px 24px; text-align: center; min-height: 280px;
+              }
+              .custom-agent-card .plus {
+                width: 56px; height: 56px; border-radius: 50%;
+                background: #fff; border: 2px solid #C7D2FE; color: #3730A3;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 28px; font-weight: 700; margin-bottom: 16px;
+              }
+              .custom-agent-card .label {
+                font-size: 15px; font-weight: 800; color: #3730A3; margin-bottom: 4px;
+              }
+              .custom-agent-card .sub {
+                font-size: 13px; color: #64748B; line-height: 1.5; max-width: 240px;
+              }
+              @media (max-width: 768px) {
+                .custom-agent { grid-template-columns: 1fr; padding: 28px 24px; gap: 24px; }
+                .custom-agent h2 { font-size: 22px; }
+              }
+            `}</style>
+            <div>
+              <span className="custom-eyebrow">Custom builds</span>
+              <h2>Don&apos;t see the role you need to fill?</h2>
+              <p>
+                Tell us what you wish a member of your team could just handle. We will build the agent for it. Trained on your process, integrated with your pipeline, working the way your clinic works.
+              </p>
+              <a className="custom-agent-cta" href="mailto:delaney@clinictech.io?subject=Custom%20agent%20for%20our%20clinic">Tell us about the role &rarr;</a>
+            </div>
+            <div className="custom-agent-card">
+              <div className="plus">+</div>
+              <div className="label">Your custom agent</div>
+              <div className="sub">A role unique to your clinic, built and trained for you.</div>
+            </div>
           </div>
 
           <div className="under-hood reveal">
@@ -1364,33 +1475,6 @@ body {
         </div>
       </section>
 
-      {/* ===== HOW IT WORKS ===== */}
-      <section className="how-section" id="how-it-works">
-        <div className="container" style={{textAlign: "center"}}>
-          <h2 className="section-title">Onboarding is simple. White-glove the whole way.</h2>
-          <p className="section-sub" style={{margin: "0 auto 48px", textAlign: "center"}}>Think of us as an extra member of your tech team. We set up, train, and tune your agents alongside you.</p>
-          <div className="how-steps">
-            <div className="how-step reveal">
-              <div className="how-step-num">1</div>
-              <h3>Add the knowledge base specific to your clinic</h3>
-              <p>No two operating systems are the same. Each one is unique to your clinic. Your protocols, your pricing, your patient stories, your tone, all loaded in.</p>
-            </div>
-            <div className="how-step reveal">
-              <div className="how-step-num">2</div>
-              <h3>Select which agents you want to hire</h3>
-              <p>Mia, Sage, Atlas, Rio, and Tomas are ready out of the box. Turn on the ones you need today. Add the rest as your clinic grows.</p>
-            </div>
-            <div className="how-step reveal">
-              <div className="how-step-num">3</div>
-              <h3>Your agents go to work while you sleep</h3>
-              <p>They engage every patient, draft every reply, surface every coaching opportunity, and capture every story. Your team focuses on care. The bookings keep coming in.</p>
-            </div>
-          </div>
-          <div className="how-cta">
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">Book a demo &rarr;</a>
-          </div>
-        </div>
-      </section>
 
       {/* ===== 9. FINAL CTA ===== */}
       <section className="final-cta-section">
@@ -1414,7 +1498,7 @@ body {
               <div className="footer-brand-name">
                 <img src="/clinictech-logo.png" alt="ClinicTech" style={{height: 28, filter: "brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg)"}} />
               </div>
-              <p>The growth platform built for regenerative medicine clinics.</p>
+              <p>We build AI employees for regenerative medicine clinics.</p>
             </div>
             <div className="footer-col">
               <h4>Resources</h4>
