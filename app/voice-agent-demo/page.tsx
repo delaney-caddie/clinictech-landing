@@ -151,20 +151,21 @@ export default function VoiceAgentDemoPage() {
           transform: rotate(45deg);
         }
         .vad-pointer-arrow {
-          font-size: 32px;
+          font-size: 36px;
+          line-height: 1;
           color: #3E6AEF;
           font-weight: 800;
-          margin-right: 14px;
+          margin-right: 28px;
           text-shadow: 0 4px 12px rgba(62,106,239,0.35);
-          animation: vadPointerWiggle 1.2s ease-in-out infinite;
+          animation: vadPointerBob 1s ease-in-out infinite alternate;
         }
         @keyframes vadPointerFloat {
           0% { transform: translateY(0); }
           100% { transform: translateY(-8px); }
         }
-        @keyframes vadPointerWiggle {
-          0%, 100% { transform: rotate(0deg); }
-          50% { transform: rotate(8deg); }
+        @keyframes vadPointerBob {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(6px); }
         }
 
         @media (max-width: 720px) {
@@ -198,19 +199,15 @@ export default function VoiceAgentDemoPage() {
         </section>
 
         <section className="vad-card">
-          <div className="vad-orb">
-            <div className="vad-orb-inner">&#127908;</div>
-          </div>
           <h2>Tap the blue pill in the bottom-right corner.</h2>
           <p>
             Look for &quot;Talk to our AI receptionist&quot; floating in the bottom-right of your screen. Tap it, allow microphone access when prompted, and start the conversation.
           </p>
-          <span className="hint">&#8600; Down and to the right</span>
         </section>
 
         <div className="vad-pointer">
           <div className="vad-pointer-label">Click here to talk!</div>
-          <div className="vad-pointer-arrow">&#8600;</div>
+          <div className="vad-pointer-arrow">&#8595;</div>
         </div>
 
         <section className="vad-notes">
