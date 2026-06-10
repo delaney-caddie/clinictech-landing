@@ -20,6 +20,10 @@ export default function VoiceAgentDemoPage() {
           padding: 140px 24px 48px;
           text-align: center;
         }
+        .vad-kicker-row {
+          display: inline-flex; align-items: center; gap: 8px;
+          margin-bottom: 18px;
+        }
         .vad-kicker {
           display: inline-block;
           font-size: 11px; font-weight: 800;
@@ -27,7 +31,21 @@ export default function VoiceAgentDemoPage() {
           color: #3E6AEF;
           background: rgba(62, 106, 239, 0.08);
           padding: 6px 14px; border-radius: 100px;
-          margin-bottom: 18px;
+        }
+        .vad-beta {
+          display: inline-block;
+          font-size: 11px; font-weight: 800;
+          text-transform: uppercase; letter-spacing: 1.6px;
+          color: #fff;
+          background: linear-gradient(135deg, #F59E0B 0%, #EF4444 120%);
+          padding: 6px 14px; border-radius: 100px;
+          box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+        }
+        .vad-disclaimer {
+          font-size: 14px !important;
+          color: #94A3B8 !important;
+          margin-top: 20px !important;
+          font-style: italic;
         }
         .vad-hero h1 {
           font-size: 52px; font-weight: 800;
@@ -166,10 +184,16 @@ export default function VoiceAgentDemoPage() {
         <SiteNav />
 
         <section className="vad-hero">
-          <span className="vad-kicker">Live demo</span>
-          <h1>Talk to our AI receptionist.</h1>
+          <div className="vad-kicker-row">
+            <span className="vad-beta">Beta</span>
+            <span className="vad-kicker">Live demo</span>
+          </div>
+          <h1>Meet Mia, our AI patient coordinator.</h1>
           <p>
-            A real conversation, in your browser, right now. Ask about ClinicTech, ask about regenerative treatments, ask what it would be like to have her on your team. She is one of the agents we build for clinics.
+            Mia is the agent we have built for regenerative medicine clinics that need to be the first to respond. She talks with people who are living with pain, injuries, or chronic conditions, helps them understand at a high level whether regenerative treatments might be right for them, answers questions about what a consultation looks like, and books them in with the clinical team.
+          </p>
+          <p className="vad-disclaimer">
+            She does not diagnose, give medical advice, quote exact pricing, or interpret test results. Anything in that territory she gently routes back to the clinical team.
           </p>
         </section>
 
