@@ -146,6 +146,36 @@ export default function VoiceAgentDemoPage() {
         </section>
       </div>
 
+      {/* Hide the ClinicTech chat widget on this page so the Retell voice widget is the only floating CTA */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        #clinictech-widget,
+        [id^="clinictech-widget-"],
+        [class*="clinictech-widget"],
+        iframe[src*="app.clinictech.io"],
+        iframe[src*="clinictech.io/embed"] {
+          display: none !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+      ` }} />
+      <script dangerouslySetInnerHTML={{ __html: `
+        // Belt-and-suspenders: also remove any DOM nodes the chat widget injected.
+        (function() {
+          function nuke() {
+            try {
+              document.querySelectorAll(
+                '#clinictech-widget, [id^="clinictech-widget-"], [class*="clinictech-widget"], iframe[src*="app.clinictech.io"], iframe[src*="clinictech.io/embed"]'
+              ).forEach(function(el) { el.remove(); });
+            } catch (e) {}
+          }
+          nuke();
+          [400, 1200, 3000].forEach(function(ms) { setTimeout(nuke, ms); });
+          try {
+            new MutationObserver(nuke).observe(document.documentElement, { childList: true, subtree: true });
+          } catch (e) {}
+        })();
+      ` }} />
+
       <script
         id="retell-widget"
         src="https://dashboard.retellai.com/retell-widget-v2.js"
