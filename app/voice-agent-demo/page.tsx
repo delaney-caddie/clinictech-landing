@@ -106,6 +106,49 @@ export default function VoiceAgentDemoPage() {
         .vad-notes a { color: #3E6AEF; text-decoration: none; font-weight: 700; }
         .vad-notes a:hover { text-decoration: underline; }
 
+        /* Animated pointer that draws attention to the FAB in the corner */
+        .vad-pointer {
+          position: fixed;
+          right: 24px;
+          bottom: 96px;
+          z-index: 9998;
+          display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+          pointer-events: none;
+          animation: vadPointerFloat 1.6s ease-in-out infinite alternate;
+        }
+        .vad-pointer-label {
+          background: #0F172A; color: #fff;
+          font-weight: 700; font-size: 13px;
+          padding: 8px 14px; border-radius: 100px;
+          box-shadow: 0 8px 24px rgba(15,23,42,0.25);
+          white-space: nowrap;
+          position: relative;
+        }
+        .vad-pointer-label::after {
+          content: "";
+          position: absolute;
+          bottom: -5px; right: 22px;
+          width: 10px; height: 10px;
+          background: #0F172A;
+          transform: rotate(45deg);
+        }
+        .vad-pointer-arrow {
+          font-size: 32px;
+          color: #3E6AEF;
+          font-weight: 800;
+          margin-right: 14px;
+          text-shadow: 0 4px 12px rgba(62,106,239,0.35);
+          animation: vadPointerWiggle 1.2s ease-in-out infinite;
+        }
+        @keyframes vadPointerFloat {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-8px); }
+        }
+        @keyframes vadPointerWiggle {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(8deg); }
+        }
+
         @media (max-width: 720px) {
           .vad-hero { padding: 120px 20px 40px; }
           .vad-hero h1 { font-size: 36px; letter-spacing: -0.4px; }
@@ -114,6 +157,8 @@ export default function VoiceAgentDemoPage() {
           .vad-card h2 { font-size: 22px; }
           .vad-orb { width: 140px; height: 140px; }
           .vad-orb-inner { width: 60px; height: 60px; font-size: 24px; }
+          .vad-pointer { right: 16px; bottom: 80px; }
+          .vad-pointer-label { font-size: 12px; padding: 6px 12px; }
         }
       `}</style>
 
@@ -132,12 +177,17 @@ export default function VoiceAgentDemoPage() {
           <div className="vad-orb">
             <div className="vad-orb-inner">&#127908;</div>
           </div>
-          <h2>Tap the button to start the call.</h2>
+          <h2>Tap the blue pill in the bottom-right corner.</h2>
           <p>
-            Look for &quot;Talk to our AI receptionist&quot; in the bottom corner. Make sure your microphone is enabled in the browser when prompted.
+            Look for &quot;Talk to our AI receptionist&quot; floating in the bottom-right of your screen. Tap it, allow microphone access when prompted, and start the conversation.
           </p>
-          <span className="hint">&#8628; Bottom-right of the page</span>
+          <span className="hint">&#8600; Down and to the right</span>
         </section>
+
+        <div className="vad-pointer">
+          <div className="vad-pointer-label">Click here to talk!</div>
+          <div className="vad-pointer-arrow">&#8600;</div>
+        </div>
 
         <section className="vad-notes">
           <p>
