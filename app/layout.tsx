@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -49,9 +50,9 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
         <div id="clinictech-widget" data-widget-id="17af3dba-6740-4133-a6cd-804de4a6a281" data-host="https://app.clinictech.io"></div>
-        <script src="https://app.clinictech.io/embed-widget.js" async></script>
+        <Script src="https://app.clinictech.io/embed-widget.js" strategy="afterInteractive" />
         <div id="clinictech-form" data-form-id="6c1b45ad-f597-4fb3-a1c5-d1a31e91ef8f" data-host="https://app.clinictech.io" data-mode="popup" data-button-text="Book a Consultation" data-button-color="#2563eb" style={{display: "none"}}></div>
-        <script src="https://app.clinictech.io/embed-form.js" async></script>
+        <Script src="https://app.clinictech.io/embed-form.js" strategy="afterInteractive" />
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
+import { VoiceWidgetClient } from "./VoiceWidgetClient";
 
 export const metadata = {
   title: "Voice agent demo — ClinicTech",
@@ -228,37 +229,6 @@ export default function VoiceAgentDemoPage() {
           visibility: hidden !important;
           pointer-events: none !important;
         }
-      ` }} />
-      <script dangerouslySetInnerHTML={{ __html: `
-        // Belt-and-suspenders: also remove any DOM nodes the chat widget injected.
-        (function() {
-          function nuke() {
-            try {
-              document.querySelectorAll(
-                '#clinictech-widget, [id^="clinictech-widget-"], [class*="clinictech-widget"], iframe[src*="app.clinictech.io"], iframe[src*="clinictech.io/embed"]'
-              ).forEach(function(el) { el.remove(); });
-            } catch (e) {}
-          }
-          nuke();
-          [400, 1200, 3000].forEach(function(ms) { setTimeout(nuke, ms); });
-          try {
-            new MutationObserver(nuke).observe(document.documentElement, { childList: true, subtree: true });
-          } catch (e) {}
-        })();
-      ` }} />
-
-      <script
-        id="retell-widget"
-        src="https://dashboard.retellai.com/retell-widget-v2.js"
-        type="module"
-        data-voice-public-key="public_key_1b257bbeaa7704429e87e"
-        data-voice-agent-id="agent_9115fb18ba4d5489414ae0c06f"
-        data-title="Talk to our AI receptionist"
-        data-bot-name="Your AI receptionist"
-        data-fab-text="Talk to our AI receptionist"
-        data-color="#3E6AEF"
-      ></script>
-      <style dangerouslySetInnerHTML={{ __html: `
         a[href*="retellai.com"],
         a[href*="retell.ai"],
         [class*="powered-by-retell" i],
@@ -271,78 +241,10 @@ export default function VoiceAgentDemoPage() {
           pointer-events: none !important;
         }
       ` }} />
-      <script dangerouslySetInnerHTML={{ __html: `
-        (function() {
-          var phrases = [
-            /^\\s*powered by retell/i,
-            /^\\s*your retell ?ai( assistant)?\\s*$/i,
-            /^\\s*retell ?ai assistant\\s*$/i,
-          ];
-          var skipTags = { SCRIPT: 1, STYLE: 1, META: 1, LINK: 1, HEAD: 1, HTML: 1, BODY: 1, MAIN: 1, SECTION: 1, HEADER: 1, FOOTER: 1, NAV: 1, ARTICLE: 1 };
-          var observed = new WeakSet();
-          function hide(el) {
-            if (!el || el.nodeType !== 1) return;
-            if (skipTags[el.tagName]) return;
-            if (el.children && el.children.length > 6) return;
-            if (el.dataset && el.dataset.retellHidden) return;
-            try { el.dataset && (el.dataset.retellHidden = '1'); } catch (e) {}
-            el.style.setProperty('display', 'none', 'important');
-            el.style.setProperty('visibility', 'hidden', 'important');
-          }
-          function scanTextNodesIn(root) {
-            if (!root || !root.createTreeWalker) return;
-            try {
-              var walker = root.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-                acceptNode: function(n) {
-                  var p = n.parentElement;
-                  if (p && skipTags[p.tagName]) return NodeFilter.FILTER_REJECT;
-                  return NodeFilter.FILTER_ACCEPT;
-                }
-              });
-              var node, hits = [];
-              while ((node = walker.nextNode())) {
-                var t = (node.textContent || '').trim();
-                if (!t || t.length > 80) continue;
-                for (var i = 0; i < phrases.length; i++) {
-                  if (phrases[i].test(t)) { hits.push(node); break; }
-                }
-              }
-              hits.forEach(function(n) {
-                var el = n.parentElement;
-                var depth = 0;
-                while (el && depth < 3 && !skipTags[el.tagName]) {
-                  hide(el); el = el.parentElement; depth++;
-                }
-              });
-            } catch (e) {}
-          }
-          function walkRoots(root) {
-            if (!root) return;
-            scanTextNodesIn(root);
-            try {
-              var all = root.querySelectorAll ? root.querySelectorAll('*') : [];
-              for (var i = 0; i < all.length; i++) {
-                var el = all[i];
-                if (el.tagName === 'A' && el.href && /retell\\.(ai|com|io)/i.test(el.href)) hide(el);
-                if (el.shadowRoot && !observed.has(el.shadowRoot)) {
-                  observed.add(el.shadowRoot);
-                  walkRoots(el.shadowRoot);
-                  try {
-                    new MutationObserver(function() { walkRoots(el.shadowRoot); })
-                      .observe(el.shadowRoot, { childList: true, subtree: true, characterData: true });
-                  } catch (e) {}
-                }
-              }
-            } catch (e) {}
-          }
-          function runAll() { walkRoots(document); }
-          try {
-            runAll();
-            new MutationObserver(runAll).observe(document.documentElement, { childList: true, subtree: true });
-            [800, 2000, 4000, 8000].forEach(function(ms) { setTimeout(runAll, ms); });
-          } catch (e) {}
-        })();
-      ` }} />
+
+      {/* Loads the Retell widget, removes the chat widget, and hides Retell branding.
+          Runs as client effects so it works on client-side navigation too. */}
+      <VoiceWidgetClient />
     </>
   );
 }
