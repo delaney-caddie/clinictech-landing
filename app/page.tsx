@@ -88,30 +88,63 @@ const impactStories = [
   },
 ];
 
+const outcomes = [
+  {
+    title: "Stop missing patient bookings",
+    body: "Every inquiry gets an answer in seconds, and every lead gets followed up until they book or say no. No more patients lost to a slow reply.",
+    punch: "+25% patient conversion",
+  },
+  {
+    title: "Have a practice available 24/7",
+    body: "Nights, weekends, and other time zones stop being dead hours. Patients get answers and book consults whenever they reach out.",
+    punch: "Around the clock, no extra shifts",
+  },
+  {
+    title: "Cut old tech and personnel costs",
+    body: "One build replaces a stack of subscriptions and hours of manual admin. Stop paying for software nobody uses and work nobody should be doing.",
+    punch: "Run your clinic with 50%+ more efficiency",
+  },
+  {
+    title: "Run patient acquisition on autopilot",
+    body: "From ad click to follow-up to booked consult, the funnel runs itself and optimizes against the only number that matters: cost per booked consult.",
+    punch: "From ad spend to booked consults, hands off",
+  },
+  {
+    title: "Let your staff do 5x more with less",
+    body: "Agents take the admin, the chasing, and the coordination. Your team keeps the judgment calls and the patient care.",
+    punch: "5x more output from the team you already have",
+  },
+  {
+    title: "Keep an extended tech team on call",
+    body: "When you spot the next bottleneck, you do not hire or go software shopping. You tell us, and we build the agent for it.",
+    punch: "Automation built as you need it",
+  },
+];
+
 const faqs = [
   {
-    q: "How is this different from a chatbot or a CRM with AI features?",
-    a: "A chatbot answers questions and stops there. ClinicTech is a team of named agents working one pipeline: Mia follows up and books consults, Sage coaches your team, Atlas drafts protocols for your doctor, Rio runs post-treatment care, and Tomas fills the top of the funnel. The chat widget is just Mia's front door.",
+    q: "What do we actually get when we work with ClinicTech?",
+    a: "AI employees built for your clinic: agents that answer and follow up with patients, book consults, handle intake, run post-treatment check-ins, and automate the admin in between. And the team that builds, maintains, and improves them as your clinic changes.",
+  },
+  {
+    q: "How is this different from buying software?",
+    a: "Software hands you a fixed set of features and hopes they fit. We start from your problems. You tell us where the clinic loses time and patients, and we build agents around how you already work. There is no platform to configure and no tool to train your staff on.",
   },
   {
     q: "Do clinical decisions ever happen without a doctor?",
-    a: "No. Atlas drafts protocols, and every draft waits for doctor sign-off before anything reaches a patient. That rule is enforced inside the product itself, not just in policy.",
-  },
-  {
-    q: "What happens when a conversation needs a human?",
-    a: "Mia loops your team in the moment a conversation calls for one, and Rio escalates to your doctor the moment a post-treatment check-in sounds off. Every message and every action is logged, so you can always see exactly what an agent did and why.",
+    a: "No. Anything clinical, like a treatment protocol draft, waits for doctor sign-off before it reaches a patient. We enforce that rule in the build itself, not just in policy, and agents hand conversations to your team the moment one needs a human.",
   },
   {
     q: "Is patient data handled safely?",
-    a: "Yes. ClinicTech is built HIPAA-conscious from the ground up. Patient data is routed under a business associate agreement, access is permission-gated, and every agent action is recorded for audit.",
+    a: "Yes. Everything we build is HIPAA-conscious from the ground up. Patient data is routed under a business associate agreement, access is permission-gated, and every agent action is recorded for audit.",
   },
   {
-    q: "How long does it take to get started?",
-    a: "It starts with a conversation about how your clinic actually runs. From there we train your starting agents on your protocols, your tone, and your pipeline. Most clinics are live within the first couple of weeks.",
+    q: "How long until something is live?",
+    a: "It starts with a conversation about how your clinic actually runs. From there we build your first agents around the problems costing you the most. Most clinics have something live within the first couple of weeks.",
   },
   {
-    q: "What if we need a role you have not built yet?",
-    a: "Tell us what you wish a member of your team could just handle. We build the agent for it, trained on your process and integrated with your pipeline. Your AI team is never boxed in by what we shipped last quarter.",
+    q: "What if we need something you have not built before?",
+    a: "That is the point of working with us. Most of what we build starts as a clinic telling us about a problem no off-the-shelf tool solves. Your clinic is never boxed in by what we shipped last quarter.",
   },
 ];
 
@@ -479,6 +512,9 @@ export default function LandingPage() {
   margin-top: auto; padding: 13px 14px; font-weight: 560; display: block; font-size: .9rem;
 }
 .pillar-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+.outcome-card { min-height: 0; }
+.outcome-card h3 { font-size: 1.18rem; }
+.outcome-card strong { font-size: .88rem; }
 
 /* ===== PROOF STORY ===== */
 .proof-story {
@@ -618,6 +654,7 @@ export default function LandingPage() {
   .proof-bar { grid-template-columns: 1fr; grid-template-areas: "label" "logos" "copy"; }
   .hero-visual { min-height: 420px; }
   .pillar-grid { grid-template-columns: 1fr; }
+  .outcome-grid { grid-template-columns: repeat(2, 1fr); }
   .proof-story { grid-template-columns: 1fr; padding: 40px; }
   .impact-grid { grid-template-columns: 1fr; }
   .demo-tabs { grid-template-columns: repeat(5, 1fr); }
@@ -643,6 +680,7 @@ export default function LandingPage() {
   .demo-tab { justify-content: center; align-items: center; padding: 9px 6px; }
   .demo-tab-index { display: none; }
   .proof-story, .cta-section { padding: 30px; }
+  .outcome-grid { grid-template-columns: 1fr; }
   .calculator-result strong { font-size: 2.2rem; }
 }
       `}</style>
@@ -658,14 +696,14 @@ export default function LandingPage() {
               <h1>We build AI employees for your clinic.</h1>
               <p>
                 We don&apos;t hand you a fixed set of tools and hope they fit. We learn how your
-                clinic actually runs, start you with proven agents, and build new ones as your
-                needs grow.
+                clinic actually runs, build agents for the problems costing you the most, and
+                keep building as your needs grow.
               </p>
               <div className="hero-actions">
                 <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
                   Book a demo
                 </a>
-                <a href="#agents" className="button secondary">Meet the agents</a>
+                <a href="#why" className="button secondary">See what you get</a>
               </div>
             </div>
 
@@ -711,12 +749,12 @@ export default function LandingPage() {
             </div>
 
             <div className="hero-stats">
-              <Stat target={3} suffix=" sec" label="Median first reply" />
-              <Stat target={22} suffix=" hrs" label="Admin saved weekly" />
-              <Stat target={5} prefix="+" suffix=" /mo" label="Extra consults booked" />
+              <Stat target={25} prefix="+" suffix="%" label="Patient conversion" />
+              <Stat target={50} suffix="%+" label="More operating efficiency" />
+              <Stat target={5} suffix="x" label="Staff output, same headcount" />
               <div>
                 <strong>24/7</strong>
-                <span>Coverage, no shifts</span>
+                <span>Practice availability</span>
               </div>
             </div>
           </div>
@@ -736,15 +774,37 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* ===== WORKFLOW INTRO + AGENT DEMO ===== */}
-        <section className="section workflow-intro-section" id="agents">
+        {/* ===== OUTCOMES ===== */}
+        <section className="section" id="why">
           <div className="section-copy wide reveal-item">
-            <span className="eyebrow">The starting lineup</span>
-            <h2>One AI team for your whole clinic.</h2>
+            <span className="eyebrow">Why clinics work with us</span>
+            <h2>Hire outcomes, not software.</h2>
             <p>
-              ClinicTech is not another CRM with AI features bolted on. It is a team of named
-              agents working one pipeline, from the first inquiry through post-treatment care.
-              Five agents most regen clinics start with, ready on day one.
+              We are not selling you a platform to figure out. Tell us where your clinic loses
+              time and patients, and we build AI employees to fix exactly that. This is what
+              clinics hire us for.
+            </p>
+          </div>
+          <div className="pillar-grid outcome-grid reveal-item">
+            {outcomes.map((o) => (
+              <article key={o.title} className="pillar-card outcome-card">
+                <h3>{o.title}</h3>
+                <p>{o.body}</p>
+                <strong>{o.punch}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== EXAMPLE AGENTS INTRO + DEMO ===== */}
+        <section className="section workflow-intro-section" id="agents" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Example builds</span>
+            <h2>Agents we have built for clinics like yours.</h2>
+            <p>
+              Every clinic runs differently, so no two builds are the same. These five are real
+              examples of AI employees we have built for regenerative medicine clinics, each one
+              shaped around a problem the clinic needed solved.
             </p>
           </div>
         </section>
@@ -813,8 +873,8 @@ export default function LandingPage() {
 
             <div className="demo-custom-note">
               <p>
-                <strong>Don&apos;t see the role you need to fill?</strong> Tell us what you wish a
-                member of your team could just handle. We build the agent for it.
+                <strong>This is not a menu.</strong> Your agents get built around your problems,
+                your protocols, and your tone. Tell us where your clinic loses the most time.
               </p>
               <a className="button secondary small" href="mailto:delaney@clinictech.io?subject=Custom%20agent%20for%20our%20clinic">
                 Tell us about the role
@@ -902,21 +962,21 @@ export default function LandingPage() {
             </article>
             <article className="pillar-card">
               <span className="pillar-num">STEP 02</span>
-              <h3>You start with proven agents</h3>
+              <h3>We build your first agents</h3>
               <p>
-                Mia, Sage, Atlas, Rio, and Tomas handle the roles every regen clinic needs filled.
-                They go live trained on your protocols, your tone, and your pipeline.
+                We start where the bleeding is: missed bookings, slow follow-up, admin overload.
+                Your first agents go live trained on your protocols, your tone, and your pipeline.
               </p>
-              <strong>Five agents, live from day one.</strong>
+              <strong>Built around your problems, not our roadmap.</strong>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">STEP 03</span>
-              <h3>We build the rest</h3>
+              <h3>We keep building</h3>
               <p>
                 As you grow, as you spot a gap, as you imagine a role that does not exist yet, we
                 build the agent to fill it. You are never boxed in by what we shipped last quarter.
               </p>
-              <strong>Custom agents, trained on your process.</strong>
+              <strong>An extended tech team, on call as you grow.</strong>
             </article>
           </div>
           <div className="pillar-actions reveal-item">
@@ -1099,9 +1159,10 @@ export default function LandingPage() {
             and working your pipeline around the clock.
           </p>
         </div>
-        <nav className="footer-group" aria-label="Product">
-          <h2>Product</h2>
-          <a href="/#agents">Agents</a>
+        <nav className="footer-group" aria-label="Working with us">
+          <h2>Working with us</h2>
+          <a href="/#why">Why ClinicTech</a>
+          <a href="/#agents">Example agents</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/voice-agent-demo">Voice demo</a>
           <a href="/features">Our work</a>
