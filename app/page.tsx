@@ -1152,7 +1152,7 @@ export default function LandingPage() {
           <img
             src="/clinictech-logo.png"
             alt="ClinicTech"
-            style={{ height: 30, width: "auto", filter: "brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg)" }}
+            style={{ height: 36, width: "auto" }}
           />
           <p>
             We build AI employees for regenerative medicine clinics. Named, capable, accountable,

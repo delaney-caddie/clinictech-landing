@@ -31,12 +31,7 @@ export function SiteNav() {
     <>
       <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
         <Link href="/" className="brand" onClick={close}>
-          <img
-            className="brand-logo"
-            src="/clinictech-logo.png"
-            alt="ClinicTech"
-            style={{ filter: "brightness(0) saturate(100%) invert(13%) sepia(50%) saturate(3000%) hue-rotate(240deg)" }}
-          />
+          <img className="brand-logo" src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
         <nav className="desktop-nav">
           <a href="/#why">Why ClinicTech</a>

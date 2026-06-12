@@ -200,10 +200,10 @@ a.button { color: #fff; }
 }
 .site-header .brand {
   white-space: nowrap; border-radius: 999px; align-items: center; gap: 10px;
-  font-weight: 700; display: inline-flex; margin: -8px -16px; padding: 8px 16px;
+  font-weight: 700; display: inline-flex; margin: -6px -16px; padding: 6px 16px;
   transition: background .28s, box-shadow .28s; text-decoration: none; color: var(--ink);
 }
-.brand-logo { width: 92px; height: auto; display: block; }
+.brand-logo { width: 150px; height: auto; display: block; }
 .desktop-nav {
   border: 1px solid var(--line); box-shadow: var(--shadow-xs);
   color: var(--ink-soft); background: #ffffffeb; border-radius: 999px;
@@ -302,10 +302,10 @@ a.button { color: #fff; }
 }
 @media (max-width: 720px) {
   .site-header { gap: 10px; padding-left: 16px; padding-right: 16px; }
-  .site-header .brand { margin: -7px -12px; padding: 7px 12px; }
+  .site-header .brand { margin: -6px -12px; padding: 6px 12px; }
   .header-actions { gap: 8px; margin: -6px; padding: 6px; }
   .header-actions .button.small { min-height: 38px; padding-left: 14px; padding-right: 14px; font-size: .86rem; }
-  .brand-logo { width: 84px; }
+  .brand-logo { width: 122px; }
 }
 
 /* ---- Site footer ---- */
