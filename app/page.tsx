@@ -800,7 +800,7 @@ export default function LandingPage() {
         <section className="section workflow-intro-section" id="agents" style={{ paddingTop: 0 }}>
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">Example builds</span>
-            <h2>Agents we&apos;ve built for clinics like yours.</h2>
+            <h2>AI employees we&apos;ve built for clinics like yours.</h2>
             <p>
               Every clinic runs differently, so no two builds are the same. These five are real
               examples of AI employees we&apos;ve built for regenerative medicine clinics, each one
