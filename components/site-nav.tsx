@@ -46,7 +46,6 @@ export function SiteNav() {
           <div className="nav-dropdown">
             <button className="nav-dropdown-trigger" type="button">Resources</button>
             <div className="nav-dropdown-menu">
-              <Link href="/features">Our work</Link>
               <Link href="/blog">Blog</Link>
               <Link href="/regen-news">Regen news</Link>
               <Link href="/about">About</Link>
@@ -90,7 +89,6 @@ export function SiteNav() {
             <Link href="/voice-agent-demo" onClick={close}>Voice demo</Link>
             <div className="mobile-nav-group">
               <span>Resources</span>
-              <Link href="/features" onClick={close}>Our work</Link>
               <Link href="/blog" onClick={close}>Blog</Link>
               <Link href="/regen-news" onClick={close}>Regen news</Link>
               <Link href="/about" onClick={close}>About</Link>

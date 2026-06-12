@@ -1165,7 +1165,6 @@ export default function LandingPage() {
           <a href="/#agents">Example agents</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/voice-agent-demo">Voice demo</a>
-          <a href="/features">Our work</a>
         </nav>
         <nav className="footer-group" aria-label="Resources">
           <h2>Resources</h2>
