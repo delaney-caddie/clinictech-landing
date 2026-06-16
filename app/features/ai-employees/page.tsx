@@ -4,7 +4,7 @@ import { SiteNav } from "@/components/site-nav";
 export const metadata = {
   title: "AI Employees — ClinicTech",
   description:
-    "Five named agents trained on your clinic. Mia, Sage, Atlas, Rio, and Tomas handle patient coordination, sales coaching, protocol drafting, post-treatment care, and growth marketing. We build custom agents on top.",
+    "Five named agents trained on your clinic. Mia, Vidi, Rio, Sage, and Atlas handle patient coordination, content, post-treatment care, sales coaching, and protocol drafting. We build custom agents on top.",
 };
 
 const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
@@ -20,8 +20,9 @@ const agents = [
     tint: "rgba(37,99,235,0.08)",
     border: "rgba(37,99,235,0.22)",
     headline: "Never lose a patient to a slow reply.",
-    body: "Mia answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
+    body: "Mia is your 24/7 receptionist. She answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
     capabilities: [
+      "Works as your 24/7 receptionist across web, SMS, and WhatsApp",
       "Drafts and sends first-touch replies within seconds",
       "Runs Hot / Warm / Cold follow-up cadences",
       "Books consults straight onto your calendar",
@@ -31,6 +32,50 @@ const agents = [
     example: {
       title: "Example: John Johnson, nerve damage inquiry",
       body: "John messages your site at 11 PM saying he is desperate. Mia replies within seconds, asks about his preferred call window, drafts a follow-up, then pauses the cadence and flags it for your eyes because the tone is sensitive.",
+    },
+    badge: "Auto + notify",
+  },
+  {
+    name: "Vidi",
+    slug: "vidi",
+    role: "Content Creator",
+    color: "#7C3AED",
+    tint: "rgba(124,58,237,0.08)",
+    border: "rgba(124,58,237,0.22)",
+    headline: "Become the expert your patients already trust.",
+    body: "Vidi generates a lifelike AI avatar of you or your clinic, writes the scripts and captions, and turns your expertise into educational video that positions you as the authority in regenerative medicine. You approve the script, Vidi produces and schedules the video. No camera, no studio.",
+    capabilities: [
+      "Generates a lifelike AI avatar of you or your clinic",
+      "Writes educational video scripts in your voice",
+      "Drafts captions and hooks tuned for each platform",
+      "Produces talking-head videos without a camera or studio",
+      "Runs every medical claim past your team before it goes live",
+    ],
+    example: {
+      title: "Example: \"Is stem cell right for knee OA?\"",
+      body: "Vidi drafts a 45-second script answering the question patients ask most, generates the video with Dr. James's avatar, and writes the Instagram and TikTok captions with hooks. He reviews the claims and tweaks one line. Vidi publishes it under his name, plus three more in the series, on schedule.",
+    },
+    badge: "Compliance-checked",
+  },
+  {
+    name: "Rio",
+    slug: "rio",
+    role: "Care Advocate",
+    color: "#DB2777",
+    tint: "rgba(219,39,119,0.08)",
+    border: "rgba(219,39,119,0.22)",
+    headline: "Turn happy patients into your marketing engine.",
+    body: "Rio walks with every patient after treatment. Phased check-ins on Day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
+    capabilities: [
+      "Sends Day 7, 14, 30, 60, and 90 check-ins automatically",
+      "Captures Google reviews, written stories, video testimonials, case studies",
+      "Tiers story asks based on outcome strength",
+      "Escalates to your doctor on early warning signs",
+      "Feeds the patient stories library Mia cites from",
+    ],
+    example: {
+      title: "Example: Carla Mendez, Day 30",
+      body: "Carla reports pain down from 7 to 1 and says she is hiking again. Rio drafts a warm Day 30 reply with a tiered story ask: Google review now, written piece next week, optional video at Day 60. Mia ends up citing Carla's story 12 times in the next month.",
     },
     badge: "Auto + notify",
   },
@@ -77,50 +122,6 @@ const agents = [
       body: "Atlas drafts a 3-phase, 14-week protocol from 4 similar past cases and your clinic's Knee OA standard. Bilateral stem cell injection at week 2, PRP boosters at weeks 6 and 10, hand-off to Rio at week 14. Dr. James L. reviews and signs off before Robert sees anything.",
     },
     badge: "Doctor approval required",
-  },
-  {
-    name: "Rio",
-    slug: "rio",
-    role: "Care Advocate",
-    color: "#DB2777",
-    tint: "rgba(219,39,119,0.08)",
-    border: "rgba(219,39,119,0.22)",
-    headline: "Turn happy patients into your marketing engine.",
-    body: "Rio walks with every patient after treatment. Phased check-ins on Day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
-    capabilities: [
-      "Sends Day 7, 14, 30, 60, and 90 check-ins automatically",
-      "Captures Google reviews, written stories, video testimonials, case studies",
-      "Tiers story asks based on outcome strength",
-      "Escalates to your doctor on early warning signs",
-      "Feeds the patient stories library Mia cites from",
-    ],
-    example: {
-      title: "Example: Carla Mendez, Day 30",
-      body: "Carla reports pain down from 7 to 1 and says she is hiking again. Rio drafts a warm Day 30 reply with a tiered story ask: Google review now, written piece next week, optional video at Day 60. Mia ends up citing Carla's story 12 times in the next month.",
-    },
-    badge: "Auto + notify",
-  },
-  {
-    name: "Tomas",
-    slug: "tomas",
-    role: "Growth Marketer",
-    color: "#7C3AED",
-    tint: "rgba(124,58,237,0.08)",
-    border: "rgba(124,58,237,0.22)",
-    headline: "Turn ad spend into booked patients.",
-    body: "Tomas plans and runs your Google, Meta, and LinkedIn campaigns. Writes ad copy built for regenerative medicine patients. Optimizes against one number: cost per booked consult. Every lead lands in your pipeline where Mia picks it up.",
-    capabilities: [
-      "Campaign strategy + account setup across Google, Meta, LinkedIn",
-      "Ad creative and copy written for regen patients",
-      "Budget management against cost per booked consult",
-      "Landing pages built to convert clinic traffic",
-      "Plain-language Monday recap by email, WhatsApp, or Slack",
-    ],
-    example: {
-      title: "Example: Monday morning recap",
-      body: "Tomas messages: spent $4,820, got 11 booked consults at $438 each, down $112 from last week. Wants to shift $300/week from Shoulder PRP on Meta into Knee Stem Cell on Google. Reply yes and he applies it.",
-    },
-    badge: "Budget-capped",
   },
 ];
 
@@ -313,7 +314,7 @@ export default function AiEmployeesPage() {
           <div className="ae-hero-kicker">Our work / AI Employees</div>
           <h1>Five agents trained on your clinic. We build the rest as you grow.</h1>
           <p>
-            Mia, Sage, Atlas, Rio, and Tomas handle the roles every regen clinic needs filled. They go live on day one, trained on your protocols, your tone, your pipeline. When you need a role that does not exist yet, we build it.
+            Mia, Vidi, Rio, Sage, and Atlas handle the roles every regen clinic needs filled. They go live on day one, trained on your protocols, your tone, your pipeline. When you need a role that does not exist yet, we build it.
           </p>
           <div className="ae-hero-ctas">
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="ae-btn-primary">Book a demo &rarr;</a>

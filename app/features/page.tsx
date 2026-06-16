@@ -243,7 +243,7 @@ export default function FeaturesPage() {
             <div className="feat-card-eyebrow">AI Employees</div>
             <h2>A team of AI agents trained on your clinic.</h2>
             <p className="feat-card-desc">
-              Mia, Sage, Atlas, Rio, and Tomas handle the roles every regen clinic needs filled — patient coordination, sales coaching, protocol drafting, post-treatment care, and growth marketing. We build custom agents on top as your needs grow.
+              Mia, Vidi, Rio, Sage, and Atlas handle the roles every regen clinic needs filled: patient coordination, content, post-treatment care, sales coaching, and protocol drafting. We build custom agents on top as your needs grow.
             </p>
             <div className="feat-card-stat">Five roles ready on day one + custom builds</div>
             <Link href="/features/ai-employees" className="feat-card-link">

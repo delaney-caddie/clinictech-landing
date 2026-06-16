@@ -13,19 +13,19 @@ const agents = [
     role: "Patient Coordinator",
     color: "#2563EB",
     headline: "Never lose a patient to a slow reply.",
-    body: "Answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
+    body: "Your 24/7 receptionist. Answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
     keyFact: "Replies in seconds, day or night, in English and Spanish.",
     badge: null as string | null,
   },
   {
-    name: "Atlas",
-    slug: "atlas",
-    role: "Protocol Architect",
-    color: "#D97706",
-    headline: "Highly customized protocols. Your doctor reviews instead of writes.",
-    body: "Drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
-    keyFact: "Every draft waits for doctor sign-off. No exceptions.",
-    badge: "Doctor approval required",
+    name: "Vidi",
+    slug: "vidi",
+    role: "Content Creator",
+    color: "#7C3AED",
+    headline: "Become the expert your patients already trust.",
+    body: "Generates a lifelike AI avatar of you or your clinic, writes the scripts and captions, and turns your expertise into educational video that positions you as the authority in regenerative medicine. You approve the script, Vidi produces and schedules the video. No camera, no studio.",
+    keyFact: "A week of expert videos, and you never film a thing.",
+    badge: "Compliance-checked",
   },
   {
     name: "Rio",
@@ -48,14 +48,14 @@ const agents = [
     badge: "Internal only",
   },
   {
-    name: "Tomas",
-    slug: "tomas",
-    role: "Growth Marketer",
-    color: "#7C3AED",
-    headline: "Turn ad spend into booked patients.",
-    body: "Plans and runs your Google, Meta, and LinkedIn campaigns. Writes ad copy built for regenerative medicine patients. Every lead lands in your pipeline where Mia picks it up.",
-    keyFact: "Optimizes one number: cost per booked consult.",
-    badge: "Budget-capped",
+    name: "Atlas",
+    slug: "atlas",
+    role: "Protocol Architect",
+    color: "#D97706",
+    headline: "Highly customized protocols. Your doctor reviews instead of writes.",
+    body: "Drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
+    keyFact: "Every draft waits for doctor sign-off. No exceptions.",
+    badge: "Doctor approval required",
   },
 ];
 
@@ -202,10 +202,21 @@ export default function LandingPage() {
   const [coldShare, setColdShare] = useState(25);
 
   const upside = useMemo(() => {
+    // Conservative model: an instant, persistent first reply re-engages about
+    // 40% of inquiries that currently go cold, and lifts conversion by 10% on
+    // the rest. Both convert at the clinic's own consult-to-treatment rate.
+    const RECOVERY = 0.4;
+    const LIFT = 0.1;
     const yearly = inquiries * 12;
-    const recovered = yearly * (coldShare / 100) * (closeRate / 100) * avgValue;
-    const lift = yearly * (1 - coldShare / 100) * (closeRate / 100) * avgValue * 0.15;
-    return { recovered, lift, total: recovered + lift };
+    const recoveredTx = yearly * (coldShare / 100) * RECOVERY * (closeRate / 100);
+    const liftTx = yearly * (1 - coldShare / 100) * (closeRate / 100) * LIFT;
+    const totalTx = recoveredTx + liftTx;
+    return {
+      monthlyTx: totalTx / 12,
+      recoveredMonthlyTx: recoveredTx / 12,
+      liftMonthlyTx: liftTx / 12,
+      revenue: totalTx * avgValue,
+    };
   }, [inquiries, avgValue, closeRate, coldShare]);
 
   const fmt = (n: number) =>
@@ -1180,7 +1191,7 @@ export default function LandingPage() {
         </nav>
         <div className="footer-bottom">
           <span>&copy; 2026 ClinicTech. All rights reserved.</span>
-          <span>Mia. Atlas. Rio. Sage. Tomas.</span>
+          <span>Mia. Vidi. Rio. Sage. Atlas.</span>
         </div>
       </footer>
 
