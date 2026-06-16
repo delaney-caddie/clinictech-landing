@@ -212,10 +212,9 @@ export default function LandingPage() {
     const liftTx = yearly * (1 - coldShare / 100) * (closeRate / 100) * LIFT;
     const totalTx = recoveredTx + liftTx;
     return {
-      monthlyTx: totalTx / 12,
-      recoveredMonthlyTx: recoveredTx / 12,
-      liftMonthlyTx: liftTx / 12,
-      revenue: totalTx * avgValue,
+      total: totalTx * avgValue,
+      recovered: recoveredTx * avgValue,
+      lift: liftTx * avgValue,
     };
   }, [inquiries, avgValue, closeRate, coldShare]);
 
