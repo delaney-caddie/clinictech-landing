@@ -39,6 +39,38 @@ const SKIP_TAGS: Record<string, true> = {
 };
 
 export function VoiceWidgetClient() {
+  // The Retell widget mounts its own runtime into document.body (React-owned in
+  // the App Router) and offers no teardown API. A client-side route change away
+  // from this page leaves that mutated DOM behind, and Next's React reconciler
+  // crashes with insertBefore/removeChild errors. Force a full page load on any
+  // in-site navigation so the browser destroys the widget runtime cleanly.
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const anchor = (e.target as Element | null)?.closest?.("a");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href) return;
+      const target = anchor.getAttribute("target");
+      if (target && target !== "_self") return;
+      if (anchor.hasAttribute("download")) return;
+      let url: URL;
+      try {
+        url = new URL(href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.origin !== window.location.origin) return;
+      // Leave same-page navigation (in-page anchors) to the browser.
+      if (url.pathname === window.location.pathname) return;
+      e.preventDefault();
+      window.location.assign(url.href);
+    }
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+
   // Mount the Retell widget script on entry, tear it down on navigation away.
   useEffect(() => {
     // Avoid duplicate inject if a previous mount left one behind.
