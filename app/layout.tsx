@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Plus_Jakarta_Sans, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChatWidget } from "@/components/chat-widget";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -49,6 +50,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <Analytics />
+        <ChatWidget />
         <div id="clinictech-form" data-form-id="6c1b45ad-f597-4fb3-a1c5-d1a31e91ef8f" data-host="https://app.clinictech.io" data-mode="popup" data-button-text="Book a Consultation" data-button-color="#2563eb" style={{display: "none"}}></div>
         <Script src="https://app.clinictech.io/embed-form.js" strategy="afterInteractive" />
       </body>
