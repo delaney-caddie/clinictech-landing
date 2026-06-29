@@ -6,10 +6,11 @@ const RETELL_SCRIPT_URL = "https://dashboard.retellai.com/retell-widget-v2.js";
 const RETELL_ATTRS: Record<string, string> = {
   id: "retell-widget",
   "data-voice-public-key": "public_key_1b257bbeaa7704429e87e",
-  "data-voice-agent-id": "agent_9115fb18ba4d5489414ae0c06f",
-  "data-title": "Talk to our AI receptionist",
+  "data-voice-agent-id": "agent_3c3e0140740af0c25e467d5020",
+  "data-agent-version": "0",
+  "data-title": "ClinicTech Medical Center",
   "data-bot-name": "Your AI receptionist",
-  "data-fab-text": "Talk to our AI receptionist",
+  "data-fab-text": "Talk to our front desk",
   "data-color": "#3E6AEF",
 };
 
