@@ -269,7 +269,7 @@ export default function FeaturesPage() {
           <div className="feat-cta-box">
             <h2>Want something we have not built yet? Tell us about it.</h2>
             <a
-              href="https://calendar.app.google/YvNVdxRdiXVhjXQDA"
+              href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone"
               target="_blank"
               rel="noopener noreferrer"
               className="feat-cta-btn"

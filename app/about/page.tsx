@@ -121,7 +121,7 @@ export default function AboutPage() {
           <div className="about-cta-box">
             <h2>Let&apos;s chat.</h2>
             <p>15 minutes. We&apos;ll show you what your clinic&apos;s custom platform looks like.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="about-cta-btn">Book a Conversation &rarr;</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="about-cta-btn">Book a Conversation &rarr;</a>
           </div>
         </div>
 

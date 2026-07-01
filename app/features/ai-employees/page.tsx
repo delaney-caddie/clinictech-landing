@@ -7,7 +7,7 @@ export const metadata = {
     "Five named agents trained on your clinic. Mia, Vidi, Rio, Sage, and Atlas handle patient coordination, content, post-treatment care, sales coaching, and protocol drafting. We build custom agents on top.",
 };
 
-const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
+const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
 const CUSTOM_AGENT_MAILTO =
   "mailto:delaney@clinictech.io?subject=Custom%20agent%20for%20our%20clinic";
 

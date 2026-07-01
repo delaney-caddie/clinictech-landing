@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
+const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
 
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);

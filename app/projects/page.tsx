@@ -183,7 +183,7 @@ export default function ProjectsPage() {
       </div>
       <div className="projects-cta">
         <p>Want to see what we&apos;d build for your clinic?</p>
-        <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer">Book a Discovery Call</a>
+        <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer">Book a Discovery Call</a>
       </div>
     </>
   );

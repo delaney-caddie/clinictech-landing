@@ -683,7 +683,7 @@ export default function LeadCapturePage() {
             <div className="lc-kicker">Lead capture &amp; conversion</div>
             <h1>One form, instant increase in patient bookings.</h1>
             <p className="lc-hero-sub">67% of leads abandon your form before finishing. Your competitors respond in minutes while your team checks an inbox hours later. ClinicTech captures every inquiry, scores them instantly, and follows up automatically.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="lc-hero-cta">Book a discovery call</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="lc-hero-cta">Book a discovery call</a>
           </div>
         </section>
 
@@ -1159,7 +1159,7 @@ export default function LeadCapturePage() {
           <div className="lc-bottom-cta-box">
             <h2>See it live with your clinic&apos;s branding.</h2>
             <p>15-minute demo. We&apos;ll show you the smart intake, AI scoring, and follow-up sequences customized for your clinic.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer">Book a discovery call</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer">Book a discovery call</a>
           </div>
         </section>
 

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { SiteNav } from "@/components/site-nav";
 
-const CALENDAR_URL = "https://calendar.app.google/YvNVdxRdiXVhjXQDA";
+const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
 
 const agents = [
   {

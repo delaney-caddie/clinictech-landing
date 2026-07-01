@@ -322,7 +322,7 @@ export default function TravelConciergePage() {
             <div className="tc-hero-label">Travel concierge platform</div>
             <h1>70% of your patients fly in. Their experience starts before they land.</h1>
             <p>International patients juggle flights, hotels, ground transportation, and pre-arrival paperwork across email chains and WhatsApp threads. ClinicTech gives them one place to manage everything, and gives your team one dashboard to track every arrival.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="tc-hero-cta">Book a discovery call</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="tc-hero-cta">Book a discovery call</a>
           </div>
         </section>
 
@@ -629,7 +629,7 @@ export default function TravelConciergePage() {
           <div className="tc-bottom-cta-box">
             <h2>See the travel concierge in action with your clinic&apos;s branding.</h2>
             <p>Book a demo and we&apos;ll walk you through both the patient portal and admin dashboard, customized for your clinic.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer">Book a Demo</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer">Book a Demo</a>
           </div>
         </section>
 

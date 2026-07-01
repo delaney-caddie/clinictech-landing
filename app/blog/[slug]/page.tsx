@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="post-cta-box">
             <h3>Ready to modernize your clinic?</h3>
             <p>See what your custom platform looks like in 15 minutes.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="post-cta-btn">Book Your Walkthrough &rarr;</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="post-cta-btn">Book Your Walkthrough &rarr;</a>
           </div>
         </div>
       </div>

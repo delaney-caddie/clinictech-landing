@@ -338,7 +338,7 @@ export default function PatientExperiencePage() {
             <div className="pe-hero-label">Patient Experience Platform</div>
             <h1>The patient experience doesn&apos;t end when they leave your clinic.</h1>
             <p>Your patients just spent $15,000 on a procedure. They&apos;re navigating recovery protocols, tracking how they feel week over week, and wondering if this is working. Most clinics hand them a printed sheet and say &ldquo;call us if you need anything.&rdquo; ClinicTech gives every patient a modern, branded portal that keeps them connected to your clinic through every phase of their journey.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer" className="pe-hero-cta">Book a Discovery Call</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="pe-hero-cta">Book a Discovery Call</a>
           </div>
         </section>
 
@@ -594,7 +594,7 @@ export default function PatientExperiencePage() {
           <div className="pe-bottom-cta-box">
             <h2>See the patient portal live with your clinic&apos;s branding.</h2>
             <p>Book a 15-minute demo. We&apos;ll show you exactly how your patients will experience recovery, results tracking, and ongoing engagement.</p>
-            <a href="https://calendar.app.google/YvNVdxRdiXVhjXQDA" target="_blank" rel="noopener noreferrer">Book a 15-Minute Demo</a>
+            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer">Book a 15-Minute Demo</a>
           </div>
         </section>
 
