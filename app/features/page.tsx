@@ -233,7 +233,7 @@ export default function FeaturesPage() {
           <div className="feat-hero-kicker">Our work</div>
           <h1>We build AI employees, and the software platforms around them.</h1>
           <p className="feat-hero-sub">
-            A look at what we have shipped for regenerative medicine clinics. Some are agents. Some are full software platforms. All built around the way our clinics actually run.
+            A look at what we have shipped for our clinics. Some are agents. Some are full software platforms. All built around the way our clinics actually run.
           </p>
         </div>
 
@@ -243,9 +243,9 @@ export default function FeaturesPage() {
             <div className="feat-card-eyebrow">AI Employees</div>
             <h2>A team of AI agents trained on your clinic.</h2>
             <p className="feat-card-desc">
-              Mia, Vidi, Rio, Sage, and Atlas handle the roles every regen clinic needs filled: patient coordination, content, post-treatment care, sales coaching, and protocol drafting. We build custom agents on top as your needs grow.
+              Mia, Vidi, Rio, Juno, Quill, and Atlas handle the roles every clinic needs filled: patient coordination, content, retention, your inbox, SEO, and treatment plan drafting. One shared brain behind them all, and we build custom agents on top as your needs grow.
             </p>
-            <div className="feat-card-stat">Five roles ready on day one + custom builds</div>
+            <div className="feat-card-stat">Six roles ready on day one + custom builds</div>
             <Link href="/features/ai-employees" className="feat-card-link">
               See the lineup -&gt;
             </Link>

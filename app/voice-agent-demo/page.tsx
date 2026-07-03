@@ -192,7 +192,7 @@ export default function VoiceAgentDemoPage() {
           </div>
           <h1>Meet Mia, our AI patient coordinator.</h1>
           <p>
-            Mia is the agent we have built for regenerative medicine clinics that need to be the first to respond. She talks with people who are living with pain, injuries, or chronic conditions, helps them understand at a high level whether regenerative treatments might be right for them, answers questions about what a consultation looks like, and books them in with the clinical team.
+            Mia is the agent we have built for clinics that need to be the first to respond. She talks with people who are living with pain, injuries, or chronic conditions, helps them understand at a high level whether your clinic&apos;s treatments might be right for them, answers questions about what a consultation looks like, and books them in with the clinical team.
           </p>
           <p className="vad-disclaimer">
             She does not diagnose, give medical advice, quote exact pricing, or interpret test results. Anything in that territory she gently routes back to the clinical team.

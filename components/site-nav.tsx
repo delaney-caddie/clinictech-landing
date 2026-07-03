@@ -34,8 +34,8 @@ export function SiteNav() {
           <img className="brand-logo" src="/clinictech-logo.png" alt="ClinicTech" />
         </Link>
         <nav className="desktop-nav">
-          <a href="/#why">Why ClinicTech</a>
           <a href="/#agents">Example agents</a>
+          <a href="/#brain">Company brain</a>
           <a href="/#how-it-works">How it works</a>
           <Link href="/voice-agent-demo">Voice demo</Link>
           <div className="nav-dropdown">
@@ -78,8 +78,8 @@ export function SiteNav() {
       {mobileOpen && (
         <div className="mobile-nav-panel">
           <div className="mobile-nav-links">
-            <a href="/#why" onClick={close}>Why ClinicTech</a>
             <a href="/#agents" onClick={close}>Example agents</a>
+            <a href="/#brain" onClick={close}>Company brain</a>
             <a href="/#how-it-works" onClick={close}>How it works</a>
             <Link href="/voice-agent-demo" onClick={close}>Voice demo</Link>
             <div className="mobile-nav-group">

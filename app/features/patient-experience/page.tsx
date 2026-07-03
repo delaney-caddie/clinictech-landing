@@ -423,7 +423,7 @@ export default function PatientExperiencePage() {
               <div>
                 <div className="pe-section-label">Why This Matters</div>
                 <h2>Patient satisfaction is your growth engine.</h2>
-                <p className="desc">In regenerative medicine, your reputation IS your marketing. Patients who feel supported and informed through recovery become your best referral sources. Patients who feel abandoned after paying $15,000 become your worst reviews. The difference between a 5-star Google review and a BBB complaint is usually not the treatment outcome. It&apos;s the experience around it.</p>
+                <p className="desc">In specialty care, your reputation IS your marketing. Patients who feel supported and informed through recovery become your best referral sources. Patients who feel abandoned after paying $15,000 become your worst reviews. The difference between a 5-star Google review and a BBB complaint is usually not the treatment outcome. It&apos;s the experience around it.</p>
                 <div className="pe-stat-row">
                   <div className="pe-stat-card">
                     <div className="stat-value">3x</div>

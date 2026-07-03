@@ -1,0 +1,102 @@
+<svg viewBox="0 0 1500 980" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="1500" height="980" fill="#F8FAFC"/>
+  <!-- sidebar -->
+  <rect width="248" height="980" fill="#FFFFFF"/>
+  <line x1="248" y1="0" x2="248" y2="980" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="46" cy="46" r="14" fill="#D97706"/>
+  <text x="70" y="52" font-size="21" font-weight="700" fill="#0F172A">ClinicTech</text>
+  <text x="32" y="112" font-size="19" fill="#64748B">Home</text>
+  <text x="32" y="156" font-size="19" fill="#64748B">Pipeline</text>
+  <text x="32" y="200" font-size="19" fill="#64748B">Calendar</text>
+  <text x="32" y="244" font-size="19" fill="#64748B">Library</text>
+  <text x="32" y="308" font-size="14" font-weight="700" fill="#94A3B8" letter-spacing="1.5">AGENTS</text>
+  <circle cx="42" cy="344" r="6" fill="#2563EB"/><text x="60" y="351" font-size="19" fill="#64748B">Mia</text>
+  <circle cx="42" cy="388" r="6" fill="#7C3AED"/><text x="60" y="395" font-size="19" fill="#64748B">Vidi</text>
+  <circle cx="42" cy="432" r="6" fill="#DB2777"/><text x="60" y="439" font-size="19" fill="#64748B">Rio</text>
+  <circle cx="42" cy="476" r="6" fill="#16A34A"/><text x="60" y="483" font-size="19" fill="#64748B">Juno</text>
+  <circle cx="42" cy="520" r="6" fill="#0D9488"/><text x="60" y="527" font-size="19" fill="#64748B">Quill</text>
+  <rect x="20" y="544" width="208" height="44" rx="10" fill="rgba(217,119,6,0.10)"/>
+  <circle cx="42" cy="566" r="6" fill="#D97706"/><text x="60" y="573" font-size="19" font-weight="700" fill="#B45309">Atlas</text>
+
+  <!-- header -->
+  <text x="292" y="70" font-size="30" font-weight="800" fill="#0F172A">Atlas &#183; Protocol drafts</text>
+  <text x="292" y="102" font-size="18" fill="#64748B">Every draft waits for doctor sign-off. No exceptions.</text>
+
+  <!-- stat cards -->
+  <g>
+    <rect x="292" y="130" width="272" height="104" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="316" y="178" font-size="30" font-weight="800" fill="#D97706">3</text>
+    <text x="316" y="208" font-size="16" fill="#64748B">drafts awaiting review</text>
+    <rect x="580" y="130" width="272" height="104" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="604" y="178" font-size="30" font-weight="800" fill="#0F172A">4</text>
+    <text x="604" y="208" font-size="16" fill="#64748B">similar cases referenced</text>
+    <rect x="868" y="130" width="272" height="104" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="892" y="178" font-size="30" font-weight="800" fill="#0F172A">15 min</text>
+    <text x="892" y="208" font-size="16" fill="#64748B">average doctor review time</text>
+    <rect x="1156" y="130" width="272" height="104" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="1180" y="178" font-size="30" font-weight="800" fill="#16A34A">100%</text>
+    <text x="1180" y="208" font-size="16" fill="#64748B">require doctor sign-off</text>
+  </g>
+
+  <!-- protocol draft -->
+  <rect x="292" y="266" width="700" height="672" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="320" y="312" font-size="16" font-weight="700" fill="#94A3B8" letter-spacing="1.2">DRAFT &#183; ROBERT HAYES &#183; KNEE OA, BILATERAL</text>
+  <rect x="820" y="290" width="148" height="32" rx="16" fill="#FEF3C7"/>
+  <text x="894" y="312" font-size="14" font-weight="700" fill="#B45309" text-anchor="middle">Awaiting sign-off</text>
+
+  <g font-size="18">
+    <rect x="316" y="336" width="652" height="104" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+    <text x="336" y="372" font-weight="700" fill="#0F172A">Phase 1 &#183; Weeks 1-2</text>
+    <text x="336" y="402" fill="#64748B">Assessment, imaging review, baseline pain and mobility scores</text>
+    <text x="948" y="372" font-size="17" font-weight="700" fill="#0F172A" text-anchor="end">$800</text>
+
+    <rect x="316" y="456" width="652" height="104" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+    <text x="336" y="492" font-weight="700" fill="#0F172A">Phase 2 &#183; Week 2</text>
+    <text x="336" y="522" fill="#64748B">Bilateral joint injections, guided, with post-care plan</text>
+    <text x="948" y="492" font-size="17" font-weight="700" fill="#0F172A" text-anchor="end">$6,400</text>
+
+    <rect x="316" y="576" width="652" height="104" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+    <text x="336" y="612" font-weight="700" fill="#0F172A">Phase 3 &#183; Weeks 6 and 10</text>
+    <text x="336" y="642" fill="#64748B">Booster treatments, mobility program progression</text>
+    <text x="948" y="612" font-size="17" font-weight="700" fill="#0F172A" text-anchor="end">$2,200</text>
+
+    <rect x="316" y="696" width="652" height="104" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+    <text x="336" y="732" font-weight="700" fill="#0F172A">Phase 4 &#183; Week 14</text>
+    <text x="336" y="762" fill="#64748B">Outcomes review, then hand-off to Rio for long-term follow-up</text>
+    <text x="948" y="732" font-size="17" font-weight="700" fill="#0F172A" text-anchor="end">Included</text>
+  </g>
+  <text x="316" y="852" font-size="15" fill="#94A3B8">Drafted from intake notes, consult notes, your knee OA template, and 4 similar cases.</text>
+  <text x="316" y="896" font-size="17" font-weight="700" fill="#0F172A">Total: $9,400 &#183; 14 weeks</text>
+
+  <!-- doctor review panel -->
+  <rect x="1024" y="266" width="404" height="672" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="1052" y="312" font-size="16" font-weight="700" fill="#94A3B8" letter-spacing="1.2">DOCTOR REVIEW</text>
+  <g font-size="17">
+    <circle cx="1064" cy="352" r="11" fill="#FEF3C7"/><text x="1064" y="357" font-size="12" font-weight="800" fill="#B45309" text-anchor="middle">&#10003;</text>
+    <text x="1088" y="358" fill="#0F172A" font-weight="700">Dosing within clinic standards</text>
+
+    <circle cx="1064" cy="404" r="11" fill="#FEF3C7"/><text x="1064" y="409" font-size="12" font-weight="800" fill="#B45309" text-anchor="middle">&#10003;</text>
+    <text x="1088" y="410" fill="#0F172A" font-weight="700">Timing matches similar cases</text>
+
+    <circle cx="1064" cy="456" r="11" fill="#FEF3C7"/><text x="1064" y="461" font-size="12" font-weight="800" fill="#B45309" text-anchor="middle">&#10003;</text>
+    <text x="1088" y="462" fill="#0F172A" font-weight="700">Costs pulled from your price list</text>
+
+    <circle cx="1064" cy="508" r="11" fill="#FEE2E2"/><text x="1064" y="513" font-size="12" font-weight="800" fill="#DC2626" text-anchor="middle">!</text>
+    <text x="1088" y="514" fill="#0F172A" font-weight="700">1 flag for your attention</text>
+    <text x="1088" y="540" fill="#64748B" font-size="15">Patient on anticoagulants, see phase 2</text>
+  </g>
+
+  <rect x="1052" y="580" width="348" height="2" fill="#E2E8F0"/>
+  <g font-size="15" fill="#64748B">
+    <text x="1052" y="622">Edit any phase, ask Atlas to rework it,</text>
+    <text x="1052" y="646">or sign off as is.</text>
+  </g>
+  <rect x="1052" y="678" width="220" height="52" rx="26" fill="#D97706"/>
+  <text x="1162" y="711" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Review and sign off</text>
+  <rect x="1288" y="678" width="112" height="52" rx="26" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="1344" y="711" font-size="18" font-weight="700" fill="#475569" text-anchor="middle">Rework</text>
+
+  <rect x="1052" y="766" width="348" height="2" fill="#E2E8F0"/>
+  <text x="1052" y="808" font-size="15" fill="#94A3B8">Hard-locked to manual approval. Nothing</text>
+  <text x="1052" y="832" font-size="15" fill="#94A3B8">reaches a patient without your doctor.</text>
+</svg>
