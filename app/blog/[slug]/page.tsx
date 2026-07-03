@@ -1,15 +1,21 @@
-import { getBlogPost, getAllBlogPosts } from "@/lib/blog-data";
+import { getBlogPost, getAllBlogPosts } from "@/lib/blog-store";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
+// Posts come from Supabase; revalidate periodically and on publish. Slugs
+// published after build are rendered on demand.
+export const revalidate = 300;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return getAllBlogPosts().map((post) => ({ slug: post.slug }));
+  const posts = await getAllBlogPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) return { title: "Not Found" };
   return {
     title: `${post.title} - ClinicTech Blog`,
@@ -19,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) notFound();
 
   return (
