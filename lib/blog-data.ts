@@ -941,10 +941,5 @@ export const blogPosts: BlogPost[] = [
 
 ];
 
-export function getBlogPost(slug: string): BlogPost | undefined {
-  return blogPosts.find((p) => p.slug === slug);
-}
-
-export function getAllBlogPosts(): BlogPost[] {
-  return blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
+// Data access moved to lib/blog-store.ts, which merges these seed posts with
+// posts published to Supabase by the ClinicTech app's Blog agent.
