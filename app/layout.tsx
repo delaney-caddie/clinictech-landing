@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ClinicTech — We build AI employees for your clinic",
-  description: "We learn how your regen clinic actually runs, start you with proven AI agents, and build custom ones as you grow.",
+  description: "We learn how your clinic actually runs, start you with proven AI agents, and build custom ones as you grow.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },

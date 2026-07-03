@@ -2,9 +2,9 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "AI Employees — ClinicTech",
+  title: "AI Employees | ClinicTech",
   description:
-    "Five named agents trained on your clinic. Mia, Vidi, Rio, Sage, and Atlas handle patient coordination, content, post-treatment care, sales coaching, and protocol drafting. We build custom agents on top.",
+    "Six named agents trained on your clinic. Mia, Vidi, Rio, Juno, Quill, and Atlas handle patient coordination, content, retention, your inbox, SEO, and protocol drafting. One shared brain behind them all.",
 };
 
 const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
@@ -19,87 +19,128 @@ const agents = [
     color: "#2563EB",
     tint: "rgba(37,99,235,0.08)",
     border: "rgba(37,99,235,0.22)",
-    headline: "Never lose a patient to a slow reply.",
-    body: "Mia is your 24/7 receptionist. She answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
+    portrait: "/agents/mia.png",
+    mockup: "/mockups/mia.svg",
+    quote: "I answer in seconds, so the first reply a patient gets is always yours.",
+    headline: "Your AI receptionist. Speed to lead, solved.",
+    body: "Mia answers your phone and your web chat 24/7. She replies to new inquiries in seconds, answers treatment and pricing questions, drafts emails, runs follow-ups until a lead books or says no, and confirms every appointment. Your front desk stops drowning in admin, and no lead ever waits until morning.",
     capabilities: [
-      "Works as your 24/7 receptionist across web, SMS, and WhatsApp",
-      "Drafts and sends first-touch replies within seconds",
-      "Runs Hot / Warm / Cold follow-up cadences",
-      "Books consults straight onto your calendar",
-      "Cites patient stories from your library when it helps the sale",
-      "Pauses and pings you the moment something is sensitive",
+      "Answers your phone and web chat 24/7, in English and Spanish",
+      "Replies to new inquiries in seconds across web, SMS, and WhatsApp",
+      "Answers treatment, pricing, and logistics questions on the spot",
+      "Drafts emails and runs follow-up cadences until a lead books or says no",
+      "Books consults and confirms every appointment automatically",
+      "Hands the conversation to your team the moment it needs a human",
     ],
     example: {
       title: "Example: John Johnson, nerve damage inquiry",
-      body: "John messages your site at 11 PM saying he is desperate. Mia replies within seconds, asks about his preferred call window, drafts a follow-up, then pauses the cadence and flags it for your eyes because the tone is sensitive.",
+      body: "John messages your site at 11 PM saying he is desperate. Mia replies within seconds, answers his pricing questions, asks about his preferred call window, drafts a follow-up, then pauses the cadence and flags it for your eyes because the tone is sensitive.",
     },
     badge: "Auto + notify",
   },
   {
     name: "Vidi",
     slug: "vidi",
-    role: "Content Creator",
+    role: "Content Marketer",
     color: "#7C3AED",
     tint: "rgba(124,58,237,0.08)",
     border: "rgba(124,58,237,0.22)",
-    headline: "Become the expert your patients already trust.",
-    body: "Vidi generates a lifelike AI avatar of you or your clinic, writes the scripts and captions, and turns your expertise into educational video that positions you as the authority in regenerative medicine. You approve the script, Vidi produces and schedules the video. No camera, no studio.",
+    portrait: "/agents/vidi.png",
+    mockup: "/mockups/vidi.svg",
+    quote: "Send me an idea in a voice note. I will turn it into a week of content.",
+    headline: "A junior marketer on staff, without the hire.",
+    body: "Vidi creates lifelike AI avatars of you or anyone on your team and turns your expertise into a steady stream of content. Videos with no camera or studio, on-brand graphics through your Canva, captions tuned to each platform, all generated and scheduled. You approve, Vidi publishes.",
     capabilities: [
-      "Generates a lifelike AI avatar of you or your clinic",
-      "Writes educational video scripts in your voice",
-      "Drafts captions and hooks tuned for each platform",
-      "Produces talking-head videos without a camera or studio",
+      "Creates lifelike AI avatars of you or anyone on your team",
+      "Produces talking-head videos with no camera or studio",
+      "Designs on-brand graphics through your Canva",
+      "Writes scripts, captions, and hooks tuned to each platform",
+      "Generates and schedules content across your channels",
       "Runs every medical claim past your team before it goes live",
     ],
     example: {
-      title: "Example: \"Is stem cell right for knee OA?\"",
-      body: "Vidi drafts a 45-second script answering the question patients ask most, generates the video with Dr. James's avatar, and writes the Instagram and TikTok captions with hooks. He reviews the claims and tweaks one line. Vidi publishes it under his name, plus three more in the series, on schedule.",
+      title: "Example: \"Is PRP right for knee pain?\"",
+      body: "Vidi drafts a 45-second script answering the question patients ask most, generates the video with Dr. James's avatar, designs the carousel version in Canva, and writes the Instagram and TikTok captions. He reviews the claims and tweaks one line. Vidi schedules the whole series.",
     },
     badge: "Compliance-checked",
   },
   {
     name: "Rio",
     slug: "rio",
-    role: "Care Advocate",
+    role: "Retention Specialist",
     color: "#DB2777",
     tint: "rgba(219,39,119,0.08)",
     border: "rgba(219,39,119,0.22)",
-    headline: "Turn happy patients into your marketing engine.",
-    body: "Rio walks with every patient after treatment. Phased check-ins on Day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
+    portrait: "/agents/rio.png",
+    mockup: "/mockups/rio.svg",
+    quote: "I remember every patient, and I know exactly when to ask for the review.",
+    headline: "Your cheapest revenue is a patient you already treated.",
+    body: "Rio keeps patients coming back. Check-ins after every treatment, review asks at the moment patients are happiest, re-engagement for the ones who went quiet, and rebooking for follow-up care. Escalates to your doctor the moment something sounds off.",
     capabilities: [
-      "Sends Day 7, 14, 30, 60, and 90 check-ins automatically",
-      "Captures Google reviews, written stories, video testimonials, case studies",
-      "Tiers story asks based on outcome strength",
+      "Checks in on day 7, 14, 30, 60, and 90 after treatment",
+      "Asks for Google reviews at the moment patients are happiest",
+      "Re-engages patients who went quiet with personal follow-ups",
+      "Books maintenance and follow-up visits back onto your calendar",
+      "Feeds strong outcomes into the stories library Mia cites from",
       "Escalates to your doctor on early warning signs",
-      "Feeds the patient stories library Mia cites from",
     ],
     example: {
-      title: "Example: Carla Mendez, Day 30",
-      body: "Carla reports pain down from 7 to 1 and says she is hiking again. Rio drafts a warm Day 30 reply with a tiered story ask: Google review now, written piece next week, optional video at Day 60. Mia ends up citing Carla's story 12 times in the next month.",
+      title: "Example: Carla Mendez, day 30",
+      body: "Carla reports pain down from 7 to 1 and says she is hiking again. Rio drafts a warm day 30 reply with a review ask, books her 6-month follow-up, and logs the outcome. Mia cites Carla's story 12 times to new leads over the next month.",
     },
     badge: "Auto + notify",
   },
   {
-    name: "Sage",
-    slug: "sage",
-    role: "Sales Coach",
+    name: "Juno",
+    slug: "juno",
+    role: "Executive Assistant",
     color: "#16A34A",
     tint: "rgba(22,163,74,0.08)",
     border: "rgba(22,163,74,0.22)",
-    headline: "Turn more consults into booked patients.",
-    body: "Sage watches the pipeline every day, spots patterns, surfaces coaching opportunities, and proposes new rules you can accept in one click. Internal only.",
+    portrait: "/agents/juno.svg",
+    mockup: "/mockups/juno.svg",
+    quote: "I keep your inbox at zero and your calendar honest. Nothing sends without you.",
+    headline: "Get your inbox and your evenings back.",
+    body: "Juno is the executive assistant for you, not your patients. She triages your email, clears the noise, labels what matters, routes patient questions to Mia, drafts replies in your voice, and keeps your calendar conflict-free. You get a short brief of the few things that actually need you.",
     capabilities: [
-      "Daily pipeline brief, ranked by priority",
-      "Flags deals stuck past your healthy stage time",
-      "Spots conversion patterns across condition + source + week",
-      "Proposes new rules Mia adopts on a click",
-      "Tracks rule acceptance and what is moving the number",
+      "Triages your inbox and clears the noise before you open it",
+      "Labels and prioritizes what actually needs your attention",
+      "Routes patient questions to Mia so they never sit unanswered",
+      "Drafts replies in your voice, ready to approve",
+      "Keeps your calendar conflict-free around your clinic hours",
+      "Never sends anything without your approval",
     ],
     example: {
-      title: "Example: Sunday-night spike",
-      body: "Sage notices that 7 of your last 10 high-scoring nerve damage leads came in Sunday 6 PM to Monday noon. Mia's average first-touch on Sundays is 14 minutes. Sage suggests a tighter weekend cadence rule. One click and Mia adopts it.",
+      title: "Example: Monday, 7:00 AM",
+      body: "Your inbox took 74 emails over the weekend. Juno filed 49 as noise, routed 12 patient questions to Mia, drafted replies to 8 vendors and partners, and flagged 2 that genuinely need you, with the lab results on top. You clear it before your first consult.",
     },
-    badge: "Internal only",
+    badge: "You approve every send",
+  },
+  {
+    name: "Quill",
+    slug: "quill",
+    role: "SEO Blog Writer",
+    color: "#0D9488",
+    tint: "rgba(13,148,136,0.08)",
+    border: "rgba(13,148,136,0.22)",
+    portrait: "/agents/quill.svg",
+    mockup: "/mockups/quill.svg",
+    quote: "I write what your future patients are searching for, then publish it on schedule.",
+    headline: "Patients search before they book. Make sure they find you.",
+    body: "Quill researches the exact questions patients type into Google and AI assistants, writes full posts in your voice with your treatments and pricing as context, and publishes straight to your site on a schedule. Every post links back to your booking pages, and traffic compounds while you see patients.",
+    capabilities: [
+      "Researches the questions your future patients actually search",
+      "Targets high-intent, low-competition keywords for your treatments",
+      "Writes full posts in your voice, with your protocols as context",
+      "Optimizes for Google rankings and AI assistant citations",
+      "Publishes straight to your site on a schedule you set",
+      "Compliance-checks medical claims before anything goes live",
+    ],
+    example: {
+      title: "Example: \"how much does PRP for knee pain cost\"",
+      body: "Quill finds the question, sees competitors rank for it and you do not, and writes a straight answer in Dr. James's voice with your real pricing ranges. It publishes Tuesday at 9 AM with links to the knee program page, and becomes one of the top pages sending new inquiries to Mia.",
+    },
+    badge: "Compliance-checked",
   },
   {
     name: "Atlas",
@@ -108,10 +149,13 @@ const agents = [
     color: "#D97706",
     tint: "rgba(217,119,6,0.08)",
     border: "rgba(217,119,6,0.22)",
-    headline: "Highly customized protocols. Doctor reviews instead of writes.",
-    body: "Atlas drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
+    portrait: "/agents/atlas.png",
+    mockup: "/mockups/atlas.svg",
+    quote: "I do the protocol paperwork. Your doctor does the medicine.",
+    headline: "Your doctor reviews protocols instead of writing them.",
+    body: "Atlas is your doctor's drafting assistant. He builds multi-phase treatment protocols from intake notes, consult notes, and similar past cases, with dosing, costs, and timing laid out per phase. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
     capabilities: [
-      "Drafts multi-phase protocols from intake + consult notes",
+      "Drafts multi-phase protocols from intake and consult notes",
       "Pulls from similar past cases and your clinic templates",
       "Surfaces dosing, costs, and timing per phase",
       "Flags edge cases for doctor attention",
@@ -119,7 +163,7 @@ const agents = [
     ],
     example: {
       title: "Example: Robert Hayes, bilateral knee OA",
-      body: "Atlas drafts a 3-phase, 14-week protocol from 4 similar past cases and your clinic's Knee OA standard. Bilateral stem cell injection at week 2, PRP boosters at weeks 6 and 10, hand-off to Rio at week 14. Dr. James L. reviews and signs off before Robert sees anything.",
+      body: "Atlas drafts a 3-phase, 14-week protocol from 4 similar past cases and your clinic's knee OA standard. Bilateral joint injections at week 2, boosters at weeks 6 and 10, hand-off to Rio at week 14. Dr. James L. reviews and signs off before Robert sees anything.",
     },
     badge: "Doctor approval required",
   },
@@ -208,6 +252,38 @@ export default function AiEmployeesPage() {
         }
         .ae-agent-name { font-size: 32px; font-weight: 800; color: #0F172A; line-height: 1.05; letter-spacing: -0.4px; }
         .ae-agent-role { font-size: 15px; color: #64748B; margin-top: 4px; }
+        .ae-agent-quote {
+          font-size: 14.5px; font-style: italic; color: var(--c);
+          line-height: 1.55; margin: 0 0 18px;
+        }
+        .ae-brain {
+          max-width: 1100px; margin: 0 auto 64px;
+          padding: 48px;
+          background: #fff; border: 1px solid #E2E8F0; border-radius: 24px;
+          text-align: center;
+        }
+        .ae-brain h2 {
+          font-size: 30px; font-weight: 800; color: #0F172A;
+          letter-spacing: -0.4px; margin-bottom: 14px;
+        }
+        .ae-brain > p {
+          font-size: 16px; line-height: 1.7; color: #475569;
+          max-width: 680px; margin: 0 auto 32px;
+        }
+        .ae-brain-grid {
+          display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left;
+        }
+        .ae-brain-cell {
+          background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 14px; padding: 22px;
+        }
+        .ae-brain-cell strong {
+          display: block; font-size: 15px; font-weight: 800; color: #0F172A; margin-bottom: 8px;
+        }
+        .ae-brain-cell span { font-size: 14px; line-height: 1.65; color: #475569; }
+        @media (max-width: 900px) {
+          .ae-brain { padding: 32px 24px; }
+          .ae-brain-grid { grid-template-columns: 1fr; }
+        }
         .ae-agent-badge {
           display: inline-block; margin-bottom: 18px;
           padding: 5px 14px; border-radius: 100px;
@@ -312,9 +388,9 @@ export default function AiEmployeesPage() {
 
         <section className="ae-hero">
           <div className="ae-hero-kicker">Our work / AI Employees</div>
-          <h1>Five agents trained on your clinic. We build the rest as you grow.</h1>
+          <h1>Six AI employees trained on your clinic. We build the rest as you grow.</h1>
           <p>
-            Mia, Vidi, Rio, Sage, and Atlas handle the roles every regen clinic needs filled. They go live on day one, trained on your protocols, your tone, your pipeline. When you need a role that does not exist yet, we build it.
+            Mia, Vidi, Rio, Juno, Quill, and Atlas cover the roles every clinic needs filled. They go live trained on your treatments, your tone, your pipeline, and they share one brain, so what one learns, the whole team knows. When you need a role that does not exist yet, we build it.
           </p>
           <div className="ae-hero-ctas">
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="ae-btn-primary">Book a demo &rarr;</a>
@@ -329,7 +405,7 @@ export default function AiEmployeesPage() {
                 className="ae-roster-chip"
                 style={{ ["--c" as string]: a.color, ["--t" as string]: a.tint } as React.CSSProperties}
               >
-                <img src={`/agents/${a.slug}.png`} alt={a.name} />
+                <img src={a.portrait} alt={a.name} />
                 {a.name}
                 <span className="role">· {a.role}</span>
               </a>
@@ -350,12 +426,13 @@ export default function AiEmployeesPage() {
           >
             <div>
               <div className="ae-agent-id">
-                <img className="ae-agent-portrait" src={`/agents/${a.slug}.png`} alt={`${a.name}, ${a.role}`} />
+                <img className="ae-agent-portrait" src={a.portrait} alt={`${a.name}, ${a.role}`} />
                 <div>
                   <div className="ae-agent-name">{a.name}</div>
                   <div className="ae-agent-role">{a.role}</div>
                 </div>
               </div>
+              <p className="ae-agent-quote">&ldquo;{a.quote}&rdquo;</p>
               <span className="ae-agent-badge">{a.badge}</span>
               <div className="ae-agent-headline">{a.headline}</div>
               <p className="ae-agent-body">{a.body}</p>
@@ -375,12 +452,44 @@ export default function AiEmployeesPage() {
 
             <div className="ae-agent-visual">
               <div className="ae-agent-mockup">
-                <img src={`/mockups/${a.slug}.png`} alt={`${a.name} workspace`} />
+                <img src={a.mockup} alt={`${a.name} workspace`} />
               </div>
               <div className="ae-agent-visual-caption">{a.name} at work in ClinicTech</div>
             </div>
           </section>
         ))}
+
+        <section className="ae-brain">
+          <h2>Six employees, one shared brain</h2>
+          <p>
+            Your agents are not six separate tools. They work from one memory: your protocols,
+            your pricing, your patient stories, your tone, and the context inside the tools your
+            clinic already uses. Teach it once, and the whole team knows it.
+          </p>
+          <div className="ae-brain-grid">
+            <div className="ae-brain-cell">
+              <strong>Shared knowledge</strong>
+              <span>
+                When Rio logs a great outcome, Mia cites it to the next lead. When Atlas drafts a
+                protocol, Quill can write the patient explainer for it.
+              </span>
+            </div>
+            <div className="ae-brain-cell">
+              <strong>Connected to your tools</strong>
+              <span>
+                Gmail, your calendar, WhatsApp, Canva, your website. The brain pulls context from
+                where your clinic already works, so nobody re-enters anything.
+              </span>
+            </div>
+            <div className="ae-brain-cell">
+              <strong>Ask anything</strong>
+              <span>
+                One question bar across the whole platform. Ask about a patient, a number, or a
+                policy and get an answer with sources, in seconds.
+              </span>
+            </div>
+          </div>
+        </section>
 
         <section className="ae-custom">
           <h2>Don&apos;t see the role you need to fill?</h2>

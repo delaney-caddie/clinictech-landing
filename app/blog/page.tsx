@@ -1,14 +1,17 @@
-import { getAllBlogPosts } from "@/lib/blog-data";
+import { getAllBlogPosts } from "@/lib/blog-store";
 import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
   title: "Blog - ClinicTech",
-  description: "Insights on growing your regenerative medicine clinic with better operations, patient management, and digital strategy.",
+  description: "Insights on growing your clinic with better operations, patient management, and digital strategy.",
 };
 
-export default function BlogPage() {
-  const posts = getAllBlogPosts();
+// Posts come from Supabase; revalidate periodically and on publish.
+export const revalidate = 300;
+
+export default async function BlogPage() {
+  const posts = await getAllBlogPosts();
 
   return (
     <>
@@ -41,7 +44,7 @@ export default function BlogPage() {
 
         <div className="blog-hero">
           <h1>The ClinicTech Blog</h1>
-          <p>Insights on growing your regenerative medicine clinic with better operations, patient management, and digital strategy.</p>
+          <p>Insights on growing your clinic with better operations, patient management, and digital strategy.</p>
         </div>
 
         {posts.length > 0 ? (

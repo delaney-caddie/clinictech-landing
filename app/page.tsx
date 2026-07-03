@@ -12,49 +12,77 @@ const agents = [
     slug: "mia",
     role: "Patient Coordinator",
     color: "#2563EB",
-    headline: "Never lose a patient to a slow reply.",
-    body: "Your 24/7 receptionist. Answers new leads the moment they come in, runs follow-up cadences, books consults, cites real patient stories when it helps the sale, and loops your team in the moment a conversation needs a human.",
-    keyFact: "Replies in seconds, day or night, in English and Spanish.",
+    portrait: "/agents/mia.png",
+    mockup: "/mockups/mia.svg",
+    quote: "I answer in seconds, so the first reply a patient gets is always yours.",
+    headline: "Your AI receptionist. Speed to lead, solved.",
+    body: "Mia answers your phone and your web chat 24/7, replies to new inquiries in seconds, answers treatment and pricing questions, drafts emails, runs follow-ups until a lead books or says no, and confirms every appointment. Your front desk stops drowning in admin.",
+    keyFact: "78% of patients book with the clinic that answers first. With Mia, that is you.",
     badge: null as string | null,
   },
   {
     name: "Vidi",
     slug: "vidi",
-    role: "Content Creator",
+    role: "Content Marketer",
     color: "#7C3AED",
-    headline: "Become the expert your patients already trust.",
-    body: "Generates a lifelike AI avatar of you or your clinic, writes the scripts and captions, and turns your expertise into educational video that positions you as the authority in regenerative medicine. You approve the script, Vidi produces and schedules the video. No camera, no studio.",
-    keyFact: "A week of expert videos, and you never film a thing.",
+    portrait: "/agents/vidi.png",
+    mockup: "/mockups/vidi.svg",
+    quote: "Send me an idea in a voice note. I will turn it into a week of content.",
+    headline: "A junior marketer on staff, without the hire.",
+    body: "Vidi creates lifelike AI avatars of you or anyone on your team, produces educational videos with no camera or studio, designs on-brand graphics through your Canva, writes the captions, and schedules everything. You approve, Vidi publishes.",
+    keyFact: "A month of on-brand content, produced and scheduled, and you never film a thing.",
     badge: "Compliance-checked",
   },
   {
     name: "Rio",
     slug: "rio",
-    role: "Care Advocate",
+    role: "Retention Specialist",
     color: "#DB2777",
-    headline: "Turn happy patients into your marketing engine.",
-    body: "Phased post-treatment check-ins on day 7, 14, 30, 60, and 90. Asks for reviews and case studies when outcomes are strong. Escalates to your doctor the moment something sounds off.",
-    keyFact: "Check-ins on day 7, 14, 30, 60, and 90, on schedule.",
+    portrait: "/agents/rio.png",
+    mockup: "/mockups/rio.svg",
+    quote: "I remember every patient, and I know exactly when to ask for the review.",
+    headline: "Your cheapest revenue is a patient you already treated.",
+    body: "Rio checks in after every treatment, asks for the Google review at the moment patients are happiest, re-engages the ones who went quiet, and books them back in for follow-up care. Escalates to your doctor the moment something sounds off.",
+    keyFact: "Reviews, rebookings, and reactivated patients, on schedule, with no staff chasing.",
     badge: null,
   },
   {
-    name: "Sage",
-    slug: "sage",
-    role: "Sales Coach",
+    name: "Juno",
+    slug: "juno",
+    role: "Executive Assistant",
     color: "#16A34A",
-    headline: "Turn more consults into booked patients.",
-    body: "Delivers a daily pipeline brief, watches what Mia does, and proposes new rules you can accept in one click. Sage talks to your team, never to patients.",
-    keyFact: "Internal only. Your team sees everything Sage suggests.",
-    badge: "Internal only",
+    portrait: "/agents/juno.svg",
+    mockup: "/mockups/juno.svg",
+    quote: "I keep your inbox at zero and your calendar honest. Nothing sends without you.",
+    headline: "Get your inbox and your evenings back.",
+    body: "Juno triages your email, clears the noise, labels what matters, routes patient questions to Mia, drafts replies in your voice, keeps your calendar conflict-free, and hands you a short brief of the few things that actually need you.",
+    keyFact: "Hours back every week, and nothing sends without your approval.",
+    badge: "You approve every send",
+  },
+  {
+    name: "Quill",
+    slug: "quill",
+    role: "SEO Blog Writer",
+    color: "#0D9488",
+    portrait: "/agents/quill.svg",
+    mockup: "/mockups/quill.svg",
+    quote: "I write what your future patients are searching for, then publish it on schedule.",
+    headline: "Patients search before they book. Make sure they find you.",
+    body: "Quill researches the exact questions patients type into Google and AI assistants, writes posts in your voice with your treatments and pricing as context, and publishes straight to your site on a schedule. Traffic compounds while you see patients.",
+    keyFact: "Search-optimized posts on your site every week, hands off.",
+    badge: "Compliance-checked",
   },
   {
     name: "Atlas",
     slug: "atlas",
     role: "Protocol Architect",
     color: "#D97706",
-    headline: "Highly customized protocols. Your doctor reviews instead of writes.",
-    body: "Drafts multi-phase treatment protocols from intake notes, consult notes, and similar patient cases. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
-    keyFact: "Every draft waits for doctor sign-off. No exceptions.",
+    portrait: "/agents/atlas.png",
+    mockup: "/mockups/atlas.svg",
+    quote: "I do the protocol paperwork. Your doctor does the medicine.",
+    headline: "Your doctor reviews protocols instead of writing them.",
+    body: "Atlas drafts multi-phase treatment protocols from intake notes, consult notes, and similar past cases, with dosing, costs, and timing laid out per phase. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
+    keyFact: "Hours of protocol writing become minutes of review. Sign-off required, always.",
     badge: "Doctor approval required",
   },
 ];
@@ -85,39 +113,6 @@ const impactStories = [
     statLabel: "first reply, down from a day",
     quote:
       "Our response time dropped from over a day to under 3 seconds. That alone changed everything. Patients were booking with competitors because we were too slow. Now we are always the first clinic to reply.",
-  },
-];
-
-const outcomes = [
-  {
-    title: "Stop missing patient bookings",
-    body: "Every inquiry gets an answer in seconds, and every lead gets followed up until they book or say no. No more patients lost to a slow reply.",
-    punch: "+25% patient conversion",
-  },
-  {
-    title: "Have a practice available 24/7",
-    body: "Nights, weekends, and other time zones stop being dead hours. Patients get answers and book consults whenever they reach out.",
-    punch: "Around the clock, no extra shifts",
-  },
-  {
-    title: "Cut old tech and personnel costs",
-    body: "One build replaces a stack of subscriptions and hours of manual admin. Stop paying for software nobody uses and work nobody should be doing.",
-    punch: "Run your clinic with 50%+ more efficiency",
-  },
-  {
-    title: "Run patient acquisition on autopilot",
-    body: "From ad click to follow-up to booked consult, the funnel runs itself and optimizes against the only number that matters: cost per booked consult.",
-    punch: "From ad spend to booked consults, hands off",
-  },
-  {
-    title: "Let your staff do 5x more with less",
-    body: "Agents take the admin, the chasing, and the coordination. Your team keeps the judgment calls and the patient care.",
-    punch: "5x more output from the team you already have",
-  },
-  {
-    title: "Keep an extended tech team on call",
-    body: "When you spot the next bottleneck, you do not hire or go software shopping. You tell us, and we build the agent for it.",
-    punch: "Automation built as you need it",
   },
 ];
 
@@ -396,7 +391,7 @@ export default function LandingPage() {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink); padding: 28px;
 }
-.demo-tabs { grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 26px; display: grid; }
+.demo-tabs { grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 26px; display: grid; }
 .demo-tab {
   background: var(--wash); border: 1px solid var(--line); color: var(--muted-ink);
   text-align: left; border-radius: 12px; align-items: center; gap: 12px;
@@ -465,6 +460,74 @@ export default function LandingPage() {
 }
 .demo-custom-note p { margin: 0; font-size: .94rem; }
 .demo-custom-note p strong { color: var(--ink); font-weight: 600; }
+.demo-agent-quote {
+  color: var(--agent-color, var(--blue)); font-size: .92rem; font-style: italic;
+  line-height: 1.5; margin: 0;
+}
+.demo-agent-quote::before { content: "\\201C"; }
+.demo-agent-quote::after { content: "\\201D"; }
+
+/* ===== BRAIN (the company brain) ===== */
+.brain-panel {
+  color: #eef2fb;
+  background:
+    radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
+    radial-gradient(640px 460px at -6% 112%, #8b5cf64d, #0000 60%),
+    radial-gradient(520px 380px at 52% 118%, #14b8a63d, #0000 65%),
+    linear-gradient(152deg, #1a2b5c 0%, #23407e 52%, #1a2b5c 100%);
+  border: 1px solid #ffffff26;
+  border-radius: var(--r-xl);
+  box-shadow: 0 14px 34px #1a2b5c30, 0 40px 90px #1a2b5c3d;
+  margin-bottom: var(--section-y);
+  padding: clamp(36px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(360px, 1.05fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  position: relative; overflow: hidden;
+  scroll-margin-top: 110px;
+}
+.brain-panel::before {
+  content: ""; pointer-events: none; position: absolute; inset: 0;
+  background-image: radial-gradient(#a7c0ff40 1px, #0000 1.5px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
+  mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
+}
+.brain-copy { position: relative; z-index: 1; }
+.brain-panel .eyebrow { color: #a7c0ff; }
+.brain-panel h2 { color: #fff; }
+.brain-copy > p { color: #c2cff0; }
+.brain-points { display: grid; gap: 18px; margin-top: 28px; }
+.brain-point { border-left: 2px solid #9db9ff73; padding-left: 16px; }
+.brain-point strong { display: block; color: #fff; font-size: .95rem; font-weight: 600; margin-bottom: 3px; }
+.brain-point span { color: #b7c6e8; font-size: .9rem; line-height: 1.6; }
+.brain-visual { position: relative; z-index: 1; align-self: center; }
+.brain-hub { width: 100%; height: auto; display: block; }
+.brain-ask {
+  grid-column: 1 / -1; position: relative; z-index: 1;
+  background: #ffffff14; border: 1px solid #ffffff2b; border-radius: var(--r);
+  padding: 16px 20px;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.brain-ask-row { display: flex; align-items: center; gap: 12px; }
+.brain-ask-row::before {
+  content: ""; flex: none; width: 8px; height: 8px; border-radius: 999px;
+  background: #6ee7b7; box-shadow: 0 0 12px #6ee7b7cc;
+  animation: 2.4s ease-in-out infinite ct-pulse;
+}
+.brain-ask-q { color: #fff; font-weight: 560; font-size: .98rem; flex: 1; letter-spacing: -.01em; }
+.brain-ask kbd {
+  background: #ffffff14; border: 1px solid #ffffff2b; border-radius: 6px;
+  color: #cdd9f2; padding: 3px 9px; font-size: .72rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.brain-ask-a {
+  border-top: 1px solid #ffffff1f; color: #c2cff0;
+  margin: 14px 0 0; padding-top: 14px; font-size: .92rem; line-height: 1.6;
+}
+.brain-ask-a strong { color: #fff; font-weight: 620; }
+.brain-ask-src { display: block; margin-top: 8px; color: #97a9d4; font-size: .78rem; font-weight: 600; }
 
 /* ===== SPLIT (overnight) ===== */
 .split-section {
@@ -522,9 +585,6 @@ export default function LandingPage() {
   margin-top: auto; padding: 13px 14px; font-weight: 560; display: block; font-size: .9rem;
 }
 .pillar-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
-.outcome-card { min-height: 0; }
-.outcome-card h3 { font-size: 1.18rem; }
-.outcome-card strong { font-size: .88rem; }
 
 /* ===== PROOF STORY ===== */
 .proof-story {
@@ -660,14 +720,13 @@ export default function LandingPage() {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1020px) {
-  .hero-panel, .split-section, .faq-section, .calculator-grid { grid-template-columns: 1fr; }
+  .hero-panel, .split-section, .brain-panel, .faq-section, .calculator-grid { grid-template-columns: 1fr; }
   .proof-bar { grid-template-columns: 1fr; grid-template-areas: "label" "logos" "copy"; }
   .hero-visual { min-height: 420px; }
   .pillar-grid { grid-template-columns: 1fr; }
-  .outcome-grid { grid-template-columns: repeat(2, 1fr); }
   .proof-story { grid-template-columns: 1fr; padding: 40px; }
   .impact-grid { grid-template-columns: 1fr; }
-  .demo-tabs { grid-template-columns: repeat(5, 1fr); }
+  .demo-tabs { grid-template-columns: repeat(3, 1fr); }
   .demo-tab { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; font-size: .86rem; }
   .demo-tab-role { display: none; }
   .demo-panel { grid-template-columns: 1fr; }
@@ -686,11 +745,10 @@ export default function LandingPage() {
   .hero-visual { min-height: 380px; }
   .demo-shell { padding: 18px; }
   .demo-copy { min-height: auto; padding-left: 0; }
-  .demo-tabs { gap: 6px; grid-template-columns: repeat(5, 1fr); }
+  .demo-tabs { gap: 6px; grid-template-columns: repeat(3, 1fr); }
   .demo-tab { justify-content: center; align-items: center; padding: 9px 6px; }
   .demo-tab-index { display: none; }
   .proof-story, .cta-section { padding: 30px; }
-  .outcome-grid { grid-template-columns: 1fr; }
   .calculator-result strong { font-size: 2.2rem; }
 }
       `}</style>
@@ -702,7 +760,7 @@ export default function LandingPage() {
         <section className="hero">
           <div className="hero-panel">
             <div className="hero-copy reveal-item is-visible">
-              <div className="hero-badge">Built for regenerative medicine clinics</div>
+              <div className="hero-badge">Built for clinics that run on bookings</div>
               <h1>We build AI employees for your clinic.</h1>
               <p>
                 We don&apos;t hand you a fixed set of tools and hope they fit. We learn how your
@@ -713,25 +771,25 @@ export default function LandingPage() {
                 <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
                   Book a demo
                 </a>
-                <a href="#why" className="button secondary">See what you get</a>
+                <a href="#agents" className="button secondary">See what you get</a>
               </div>
             </div>
 
             <div className="hero-visual">
               <div className="hv-signals" aria-hidden="true">
                 <span className="hv-signal">New inquiry, 9:14 PM</span>
-                <span className="hv-signal">Asked about stem cell pricing</span>
-                <span className="hv-signal">Traveling from the US</span>
+                <span className="hv-signal">Asked about treatment pricing</span>
+                <span className="hv-signal">Wants an appointment this week</span>
               </div>
               <div className="hv-card">
                 <div className="hv-card-kicker">
                   <span>Qualified lead</span>
                   <em>Mia replied in 3 seconds</em>
                 </div>
-                <h3>Knee stem cell therapy</h3>
+                <h3>Knee pain consultation</h3>
                 <p>
-                  US patient traveling for treatment. Pricing shared, travel logistics explained,
-                  free consultation offered.
+                  New patient asking about treatment options. Pricing shared, recovery questions
+                  answered, free consultation offered.
                 </p>
                 <div className="hv-meta">
                   <div className="hv-score" aria-hidden="true"><span>94</span></div>
@@ -752,7 +810,7 @@ export default function LandingPage() {
                   <span>&#10003;</span> Consultation booked for Apr 22 at 10:00 AM with Dr. Rivera
                 </div>
                 <div className="hv-next">
-                  <span>Next step: Sage briefs your coordinator</span>
+                  <span>Next step: Juno adds it to your morning brief</span>
                   <span aria-hidden="true">&rarr;</span>
                 </div>
               </div>
@@ -784,37 +842,15 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* ===== OUTCOMES ===== */}
-        <section className="section" id="why">
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">Why clinics work with us</span>
-            <h2>Hire outcomes, not software.</h2>
-            <p>
-              We are not selling you a platform to figure out. Tell us where your clinic loses
-              time and patients, and we build AI employees to fix exactly that. This is what
-              clinics hire us for.
-            </p>
-          </div>
-          <div className="pillar-grid outcome-grid reveal-item">
-            {outcomes.map((o) => (
-              <article key={o.title} className="pillar-card outcome-card">
-                <h3>{o.title}</h3>
-                <p>{o.body}</p>
-                <strong>{o.punch}</strong>
-              </article>
-            ))}
-          </div>
-        </section>
-
         {/* ===== EXAMPLE AGENTS INTRO + DEMO ===== */}
-        <section className="section workflow-intro-section" id="agents" style={{ paddingTop: 0 }}>
+        <section className="section workflow-intro-section" id="agents">
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">Example builds</span>
             <h2>AI employees we&apos;ve built for clinics like yours.</h2>
             <p>
-              Every clinic runs differently, so no two builds are the same. These five are real
-              examples of AI employees we&apos;ve built for regenerative medicine clinics, each one
-              shaped around a problem the clinic needed solved.
+              Every clinic runs differently, so no two builds are the same. These six are real
+              examples of AI employees we&apos;ve built for clinics, each one shaped around a
+              problem the clinic needed solved.
             </p>
           </div>
         </section>
@@ -847,14 +883,15 @@ export default function LandingPage() {
               style={{ ["--agent-color" as string]: agent.color } as React.CSSProperties}
             >
               <div className="demo-copy">
-                <div>
+                <div style={{ display: "grid", gap: 12 }}>
                   <div className="demo-agent-row">
-                    <img className="demo-portrait" src={`/agents/${agent.slug}.png`} alt={`${agent.name}, ${agent.role}`} />
+                    <img className="demo-portrait" src={agent.portrait} alt={`${agent.name}, ${agent.role}`} />
                     <div>
                       <h3>{agent.name}</h3>
                       <span className="demo-agent-role">{agent.role}</span>
                     </div>
                   </div>
+                  <p className="demo-agent-quote">{agent.quote}</p>
                 </div>
                 <div style={{ display: "grid", gap: 16 }}>
                   <p style={{ color: "var(--ink)", fontWeight: 560, fontSize: "1.06rem" }}>{agent.headline}</p>
@@ -869,7 +906,7 @@ export default function LandingPage() {
                 onClick={() => openLightbox(agent.slug)}
                 aria-label={`See ${agent.name} in action`}
               >
-                <img className="demo-screenshot" src={`/mockups/${agent.slug}.png`} alt={`${agent.name} inside ClinicTech`} loading="lazy" />
+                <img className="demo-screenshot" src={agent.mockup} alt={`${agent.name} inside ClinicTech`} loading="lazy" />
               </button>
             </div>
 
@@ -892,6 +929,146 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* ===== BRAIN: THE COMPANY BRAIN ===== */}
+        <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <section className="brain-panel reveal-item" id="brain">
+            <div className="brain-copy">
+              <span className="eyebrow">The company brain</span>
+              <h2>One brain. Every tool. Every agent.</h2>
+              <p>
+                Not another dashboard to feed. The brain connects to the tools your clinic
+                already runs on, remembers everything your team teaches it, and powers every
+                agent working for you. Teach it once, and everyone you hire on it already knows
+                your clinic.
+              </p>
+              <div className="brain-points">
+                <div className="brain-point">
+                  <strong>All your tools, connected</strong>
+                  <span>
+                    Gmail, your calendar, WhatsApp, Canva, your website, your booking system.
+                    The brain reads and writes where your clinic already works.
+                  </span>
+                </div>
+                <div className="brain-point">
+                  <strong>One living memory</strong>
+                  <span>
+                    Your treatments, pricing, tone, and every conversation and outcome. It gets
+                    smarter every day, and nothing gets entered twice.
+                  </span>
+                </div>
+                <div className="brain-point">
+                  <strong>Agents built on top</strong>
+                  <span>
+                    Start with one agent or a whole team. Every agent we build plugs into the
+                    same brain and knows your clinic on day one.
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="brain-visual" aria-hidden="true">
+              <svg className="brain-hub" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="bhGlow">
+                    <stop offset="0%" stopColor="#5d82ff" stopOpacity=".5" />
+                    <stop offset="100%" stopColor="#5d82ff" stopOpacity="0" />
+                  </radialGradient>
+                  <linearGradient id="bhCore" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#3757e8" />
+                    <stop offset="100%" stopColor="#7c3aed" />
+                  </linearGradient>
+                </defs>
+
+                {/* connections: tools to brain */}
+                <g stroke="#a7c0ff66" strokeWidth="1.5" fill="none" strokeDasharray="3 9" strokeLinecap="round">
+                  <path d="M172 80 C 250 80, 250 240, 252 250">
+                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.8s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M172 170 C 240 170, 240 250, 250 256">
+                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.5s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M172 260 C 220 260, 230 260, 248 260">
+                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="2.1s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M172 350 C 240 350, 240 270, 250 264">
+                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.6s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M172 440 C 250 440, 250 280, 252 270">
+                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="2s" repeatCount="indefinite" />
+                  </path>
+                </g>
+                {/* connections: brain to agents */}
+                <g stroke="#a7c0ff66" strokeWidth="1.5" fill="none" strokeDasharray="3 9" strokeLinecap="round">
+                  <path d="M392 250 C 440 240, 450 110, 496 100">
+                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.7s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M392 256 C 440 250, 450 210, 496 205">
+                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M392 264 C 440 270, 450 310, 496 315">
+                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.5s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M392 270 C 440 280, 450 410, 496 420">
+                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.2s" repeatCount="indefinite" />
+                  </path>
+                </g>
+
+                {/* tool nodes */}
+                <g fontFamily="inherit" fontSize="14" fontWeight="600">
+                  <rect x="40" y="60" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
+                  <text x="106" y="85" fill="#dbe4f8" textAnchor="middle">Gmail</text>
+                  <rect x="40" y="150" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
+                  <text x="106" y="175" fill="#dbe4f8" textAnchor="middle">Calendar</text>
+                  <rect x="40" y="240" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
+                  <text x="106" y="265" fill="#dbe4f8" textAnchor="middle">WhatsApp</text>
+                  <rect x="40" y="330" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
+                  <text x="106" y="355" fill="#dbe4f8" textAnchor="middle">Canva</text>
+                  <rect x="40" y="420" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
+                  <text x="106" y="445" fill="#dbe4f8" textAnchor="middle">Your website</text>
+                </g>
+
+                {/* brain core */}
+                <circle cx="320" cy="260" r="130" fill="url(#bhGlow)">
+                  <animate attributeName="r" values="122;138;122" dur="4.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="320" cy="260" r="96" fill="none" stroke="#8fb0ff33" strokeWidth="1" strokeDasharray="2 10">
+                  <animateTransform attributeName="transform" type="rotate" from="0 320 260" to="360 320 260" dur="40s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="320" cy="260" r="80" fill="none" stroke="#8fb0ff40" strokeWidth="1" strokeDasharray="18 10">
+                  <animateTransform attributeName="transform" type="rotate" from="360 320 260" to="0 320 260" dur="30s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="320" cy="260" r="64" fill="url(#bhCore)" stroke="#ffffff2e" strokeWidth="1.5" />
+                <text x="320" y="252" fill="#ffffff" fontSize="16" fontWeight="700" textAnchor="middle">Your clinic&apos;s</text>
+                <text x="320" y="276" fill="#ffffff" fontSize="16" fontWeight="700" textAnchor="middle">brain</text>
+
+                {/* agent nodes */}
+                <g fontSize="14" fontWeight="600">
+                  <circle cx="520" cy="100" r="19" fill="#2563EB" stroke="#ffffff33" strokeWidth="1.5" />
+                  <text x="552" y="105" fill="#dbe4f8">Reception</text>
+                  <circle cx="520" cy="205" r="19" fill="#7C3AED" stroke="#ffffff33" strokeWidth="1.5" />
+                  <text x="552" y="210" fill="#dbe4f8">Marketing</text>
+                  <circle cx="520" cy="315" r="19" fill="#DB2777" stroke="#ffffff33" strokeWidth="1.5" />
+                  <text x="552" y="320" fill="#dbe4f8">Retention</text>
+                  <circle cx="520" cy="420" r="19" fill="none" stroke="#8fb0ff66" strokeWidth="1.5" strokeDasharray="4 5" />
+                  <text x="533" y="426" fill="#8fb0ff" fontSize="17" fontWeight="700" textAnchor="middle">+</text>
+                  <text x="552" y="425" fill="#8fb0ff">Your next hire</text>
+                </g>
+              </svg>
+            </div>
+            <div className="brain-ask">
+              <div className="brain-ask-row">
+                <span className="brain-ask-q">How did we do on knee consults last month?</span>
+                <kbd>&#8984;K</kbd>
+              </div>
+              <p className="brain-ask-a">
+                <strong>14 booked in June, up from 9 in May.</strong>{" "}
+                11 came through web chat and 3 from reactivation follow-ups. 2 more are awaiting
+                confirmation this week.
+                <span className="brain-ask-src">Sources: Pipeline &#183; Calendar &#183; Patient conversations</span>
+              </p>
+            </div>
+          </section>
+        </div>
 
         {/* ===== SPLIT: WHILE YOU SLEEP ===== */}
         <section className="section split-section">
@@ -926,7 +1103,7 @@ export default function LandingPage() {
                 <span className="overnight-check">&#10003;</span>
                 <div>
                   <strong>7 patient questions answered</strong>
-                  <span>Stem cell pricing, recovery times, travel logistics</span>
+                  <span>Treatment pricing, recovery times, appointment prep</span>
                 </div>
               </div>
               <div className="overnight-row">
@@ -1018,7 +1195,7 @@ export default function LandingPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="section-copy reveal-item">
             <span className="eyebrow">Customer impact</span>
-            <h2>Trusted by regenerative medicine clinics across North America.</h2>
+            <h2>Trusted by clinics across North America.</h2>
           </div>
           <div className="impact-grid reveal-item">
             {impactStories.map((s) => (
@@ -1165,13 +1342,13 @@ export default function LandingPage() {
             style={{ height: 36, width: "auto" }}
           />
           <p>
-            We build AI employees for regenerative medicine clinics. Named, capable, accountable,
-            and working your pipeline around the clock.
+            We build AI employees for clinics. Named, capable, accountable, and working your
+            pipeline around the clock.
           </p>
         </div>
         <nav className="footer-group" aria-label="Working with us">
           <h2>Working with us</h2>
-          <a href="/#why">Why ClinicTech</a>
+          <a href="/#brain">The company brain</a>
           <a href="/#agents">Example agents</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/voice-agent-demo">Voice demo</a>
@@ -1190,7 +1367,7 @@ export default function LandingPage() {
         </nav>
         <div className="footer-bottom">
           <span>&copy; 2026 ClinicTech. All rights reserved.</span>
-          <span>Mia. Vidi. Rio. Sage. Atlas.</span>
+          <span>Mia. Vidi. Rio. Juno. Quill. Atlas.</span>
         </div>
       </footer>
 
@@ -1204,7 +1381,7 @@ export default function LandingPage() {
         >
           <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
             <div className="lightbox-img-wrap">
-              <img src={`/mockups/${lightbox}.png`} alt="ClinicTech preview" />
+              <img src={agents.find((a) => a.slug === lightbox)?.mockup ?? `/mockups/${lightbox}.png`} alt="ClinicTech preview" />
             </div>
             <div className="lightbox-caption">
               <span>{agents.find((a) => a.slug === lightbox)?.name ?? "ClinicTech"} inside ClinicTech</span>

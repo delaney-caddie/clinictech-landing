@@ -3,7 +3,7 @@ import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
   title: "About Us - ClinicTech",
-  description: "Meet Delaney and Danika, the co-founders building ClinicTech - a custom back-office platform for regenerative medicine clinics.",
+  description: "Meet Delaney and Danika, the co-founders building ClinicTech - a custom back-office platform for clinics.",
 };
 
 export default function AboutPage() {
