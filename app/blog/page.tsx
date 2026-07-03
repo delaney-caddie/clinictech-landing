@@ -1,4 +1,4 @@
-import { getAllBlogPosts } from "@/lib/blog-store";
+import { getAllBlogPosts } from "@/lib/blog-data";
 import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
@@ -7,11 +7,8 @@ export const metadata = {
   description: "Insights on growing your clinic with better operations, patient management, and digital strategy.",
 };
 
-// Posts come from Supabase; revalidate periodically and on publish.
-export const revalidate = 300;
-
-export default async function BlogPage() {
-  const posts = await getAllBlogPosts();
+export default function BlogPage() {
+  const posts = getAllBlogPosts();
 
   return (
     <>
