@@ -55,7 +55,7 @@ export default function ContactPage() {
         <div className="contact-hero">
           <div className="contact-hero-label">Smart Form Demo</div>
           <h1>This is the form your patients would see.</h1>
-          <p>Try it yourself. This smart intake form captures leads at step one, qualifies by condition and budget, and embeds on any website with a single line of code. Every submission goes straight to your ClinicTech dashboard.</p>
+          <p>Try it yourself. This smart intake form captures leads at step one, qualifies by condition and budget, and embeds on any website with a single line of code. Every submission goes straight to your Caddie AI dashboard.</p>
         </div>
         <div className="contact-form-wrap">
           <div
@@ -67,7 +67,7 @@ export default function ContactPage() {
         </div>
         <div className="contact-footer">
           <Link href="/">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="contact-footer-links">
             <Link href="/features">Features</Link>

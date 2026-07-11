@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "text/csv",
-        "Content-Disposition": `attachment; filename="clinictech-outreach-${date}.csv"`,
+        "Content-Disposition": `attachment; filename="caddie-outreach-${date}.csv"`,
         "X-Total-Count": String(allClinics.length),
         "X-With-Email": String(withEmail),
         "X-Without-Email": String(withoutEmail),

@@ -2,8 +2,8 @@ import { SiteNav } from "@/components/site-nav";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Terms of Service - ClinicTech",
-  description: "ClinicTech terms of service. Messaging program terms, opt-out instructions, and usage guidelines.",
+  title: "Terms of Service - Caddie AI",
+  description: "Caddie AI terms of service. Messaging program terms, opt-out instructions, and usage guidelines.",
 };
 
 export default function TermsPage() {
@@ -59,20 +59,20 @@ export default function TermsPage() {
         </div>
         <div className="legal-content">
           <h2>Agreement to Terms</h2>
-          <p>By accessing or using ClinicTech&apos;s website (clinictech.io), platform (app.clinictech.io), or any related services (collectively, the &ldquo;Services&rdquo;), you agree to be bound by these Terms of Service. ClinicTech is operated by Caddie AI Inc.</p>
+          <p>By accessing or using Caddie AI&apos;s website (caddieai.com), platform (app.clinictech.io), or any related services (collectively, the &ldquo;Services&rdquo;), you agree to be bound by these Terms of Service. Caddie AI is operated by Caddie AI Inc.</p>
 
           <h2>Description of Services</h2>
-          <p>ClinicTech provides a CRM and patient engagement platform for regenerative medicine and wellness clinics. Our Services include smart intake forms, automated follow-up sequences, patient portals, review generation, online scheduling, and travel concierge tools.</p>
+          <p>Caddie AI provides a CRM and patient engagement platform for regenerative medicine and wellness clinics. Our Services include smart intake forms, automated follow-up sequences, patient portals, review generation, online scheduling, and travel concierge tools.</p>
 
           <h2>SMS Messaging Program</h2>
           <h3>Program name</h3>
-          <p>ClinicTech Patient Messaging</p>
+          <p>Caddie AI Patient Messaging</p>
 
           <h3>Program description</h3>
-          <p>ClinicTech sends text messages on behalf of regenerative medicine and wellness clinics to their patients and leads. Messages include appointment reminders, lead follow-ups, intake form links, treatment information, and post-treatment check-ins.</p>
+          <p>Caddie AI sends text messages on behalf of regenerative medicine and wellness clinics to their patients and leads. Messages include appointment reminders, lead follow-ups, intake form links, treatment information, and post-treatment check-ins.</p>
 
           <h3>Consent</h3>
-          <p>By providing your phone number and checking the SMS consent checkbox on a ClinicTech-powered intake form, website contact form, or during a clinic consultation, you consent to receive text messages from ClinicTech or the clinic you are engaging with. Consent is not required as a condition of purchasing any goods or services.</p>
+          <p>By providing your phone number and checking the SMS consent checkbox on a Caddie AI-powered intake form, website contact form, or during a clinic consultation, you consent to receive text messages from Caddie AI or the clinic you are engaging with. Consent is not required as a condition of purchasing any goods or services.</p>
 
           <h3>Message frequency</h3>
           <p>Message frequency varies based on your interactions with the clinic. You may receive between 2 and 8 messages per month.</p>
@@ -115,7 +115,7 @@ export default function TermsPage() {
           <p>To the maximum extent permitted by law, Caddie AI Inc. shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Services.</p>
 
           <h2>HIPAA</h2>
-          <p>ClinicTech implements security measures aligned with HIPAA requirements. Clinics using our platform to handle protected health information (PHI) should contact us to execute a Business Associate Agreement (BAA).</p>
+          <p>Caddie AI implements security measures aligned with HIPAA requirements. Clinics using our platform to handle protected health information (PHI) should contact us to execute a Business Associate Agreement (BAA).</p>
 
           <h2>Termination</h2>
           <p>We may terminate or suspend your access to the Services at any time, with or without cause, with or without notice. Upon termination, your right to use the Services will immediately cease.</p>
@@ -131,7 +131,7 @@ export default function TermsPage() {
           <p>
             Caddie AI Inc.<br/>
             Email: <a href="mailto:support@clinictech.io">support@clinictech.io</a><br/>
-            Website: <a href="https://clinictech.io">clinictech.io</a>
+            Website: <a href="https://caddieai.com">caddieai.com</a>
           </p>
         </div>
         <div className="legal-footer">

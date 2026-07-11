@@ -31,7 +31,7 @@ export function SiteNav() {
     <>
       <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
         <Link href="/" className="brand" onClick={close}>
-          <img className="brand-logo" src="/clinictech-logo.png" alt="ClinicTech" />
+          <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie AI" />
         </Link>
         <nav className="desktop-nav">
           <a href="/#agents">Example agents</a>

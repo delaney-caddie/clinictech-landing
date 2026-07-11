@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata: Metadata = {
-  title: "Projects - ClinicTech",
+  title: "Projects - Caddie AI",
   description: "Detailed examples of what we've built for regenerative medicine clinics, with screenshots, metrics, and impact.",
 };
 

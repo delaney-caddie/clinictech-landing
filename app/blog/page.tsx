@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "Blog - ClinicTech",
+  title: "Blog - Caddie AI",
   description: "Insights on growing your clinic with better operations, patient management, and digital strategy.",
 };
 
@@ -43,7 +43,7 @@ export default async function BlogPage() {
         <SiteNav />
 
         <div className="blog-hero">
-          <h1>The ClinicTech Blog</h1>
+          <h1>The Caddie AI Blog</h1>
           <p>Insights on growing your clinic with better operations, patient management, and digital strategy.</p>
         </div>
 

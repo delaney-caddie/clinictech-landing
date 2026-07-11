@@ -230,7 +230,7 @@ export default function RegenNewsPage() {
         <section className="rn-hero">
           <div className="rn-hero-inner">
             <div>
-              <div className="rn-hero-kicker">Regen News by ClinicTech</div>
+              <div className="rn-hero-kicker">Regen News by Caddie AI</div>
               <h1>The weekly briefing for regenerative medicine clinic owners.</h1>
               <p>Research, regulatory moves, and market shifts that affect your clinic. We read the papers, track the trials, and follow the money so you don&apos;t have to.</p>
               <div className="rn-hero-stats">
@@ -325,11 +325,11 @@ export default function RegenNewsPage() {
 
         {/* Footer */}
         <div className="rn-footer">
-          <span>Regen News by <Link href="/">ClinicTech</Link></span>
+          <span>Regen News by <Link href="/">Caddie AI</Link></span>
           <div className="rn-footer-links">
             <Link href="/blog">Blog</Link>
             <Link href="/about">About</Link>
-            <Link href="/">clinictech.io</Link>
+            <Link href="/">caddieai.com</Link>
           </div>
         </div>
       </div>

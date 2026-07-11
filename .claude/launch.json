@@ -5,6 +5,13 @@
       "name": "dev",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "clinictech-app",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/delaneythompson/clinictech-app", "dev"],
       "port": 3000
     }
   ]

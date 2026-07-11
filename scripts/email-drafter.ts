@@ -1,5 +1,5 @@
-// clinictech-email-drafter.ts
-// Usage: npx ts-node clinictech-email-drafter.ts [slug]
+// caddie-email-drafter.ts
+// Usage: npx ts-node caddie-email-drafter.ts [slug]
 //
 // If slug is provided: drafts email for that specific clinic
 // If no slug: drafts emails for all clinics with status "scraped" or "preview_generated"
@@ -24,9 +24,9 @@ dotenv.config({ path: ".env.local" });
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "clinictech.io";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
 const SENDER_NAME = process.env.SENDER_NAME || "Delaney";
-const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, ClinicTech";
+const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, Caddie AI";
 const SENDER_EMAIL = process.env.SENDER_EMAIL || "delaney@clinictech.io";
 const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendly.com/clinictech/intro";
 
@@ -102,7 +102,7 @@ I've been researching regenerative medicine clinics and ${clinic.name} caught my
 
 ${previewUrl}
 
-We're building ClinicTech specifically for clinics like yours. It handles lead tracking, patient intake, appointment management, and AI-powered follow-ups, all branded to your clinic.
+We're building Caddie AI specifically for clinics like yours. It handles lead tracking, patient intake, appointment management, and AI-powered follow-ups, all branded to your clinic.
 
 Curious if managing leads and patient communications is a pain point for your team? Most clinic owners we talk to say it's their biggest bottleneck after clinical work.
 
@@ -123,7 +123,7 @@ I put together a custom preview of what a back-office platform could look like f
 
 ${previewUrl}
 
-It's branded to your clinic and shows how ClinicTech handles lead tracking, patient management, AI-assisted follow-ups, and intake, all purpose-built for regenerative medicine.
+It's branded to your clinic and shows how Caddie AI handles lead tracking, patient management, AI-assisted follow-ups, and intake, all purpose-built for regenerative medicine.
 
 We're working with a handful of clinics in the space and would love to include ${clinic.name}. Happy to walk you through it.
 

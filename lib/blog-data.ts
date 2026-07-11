@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
     slug: "how-to-start-a-stem-cell-clinic",
     title: "How to Start a Stem Cell Clinic in 2026: The Complete Playbook",
     excerpt: "Everything you need to know about opening a regenerative medicine clinic — from licensing and lab setup to hiring, marketing, and building the back office that keeps it all running.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 31, 2026",
     readTime: "14 min read",
     category: "Getting Started",
@@ -94,7 +94,7 @@ export const blogPosts: BlogPost[] = [
 
 <p>Most clinics cobble together 4–5 different tools for this. A patient portal here, a CRM there, a scheduling tool, a separate intake form system. It works until it doesn't — usually around patient #50 when things start falling through the cracks.</p>
 
-<p>This is exactly what we built ClinicTech to solve. One branded platform that handles intake, scheduling, lead management, patient portal, and follow-up — purpose-built for regenerative medicine clinics. But whatever you use, build the system before you start seeing patients.</p>
+<p>This is exactly what we built Caddie AI to solve. One branded platform that handles intake, scheduling, lead management, patient portal, and follow-up — purpose-built for regenerative medicine clinics. But whatever you use, build the system before you start seeing patients.</p>
 
 <h2>Step 6: Price Your Services</h2>
 
@@ -141,7 +141,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-marketing",
     title: "Stem Cell Clinic Marketing: How to Get Your First 50 Patients",
     excerpt: "The marketing playbook for regenerative medicine clinics. Covers SEO, paid ads, referral networks, medical tourism, and the follow-up systems that turn inquiries into treatments.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 30, 2026",
     readTime: "12 min read",
     category: "Marketing",
@@ -230,7 +230,7 @@ export const blogPosts: BlogPost[] = [
 
 <p>Most clinics have the founder or a part-time coordinator handling this manually. They respond when they remember, follow up when they have time, and lose track of leads constantly. It's not a people problem — it's a systems problem.</p>
 
-<p>This is the core of what ClinicTech does. Every inquiry is tracked, follow-up sequences are automated, and no lead falls through the cracks — even when you're in the middle of a procedure. The clinics using systematic follow-up consistently see their conversion rate double from 15% to 30%+.</p>
+<p>This is the core of what Caddie AI does. Every inquiry is tracked, follow-up sequences are automated, and no lead falls through the cracks — even when you're in the middle of a procedure. The clinics using systematic follow-up consistently see their conversion rate double from 15% to 30%+.</p>
 
 <h2>Content Marketing That Actually Works</h2>
 
@@ -260,7 +260,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-operations",
     title: "Stem Cell Clinic Operations: How to Run the Back Office Without Burning Out",
     excerpt: "The operational playbook for regenerative medicine clinics. Covers scheduling, intake, consent, follow-up, billing, and the systems that keep your clinic running without you micromanaging everything.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 28, 2026",
     readTime: "11 min read",
     category: "Operations",
@@ -307,7 +307,7 @@ export const blogPosts: BlogPost[] = [
 
 <p><strong>Post-treatment (patients):</strong> Recovery check-ins, progress tracking, satisfaction surveys, maintenance treatment reminders.</p>
 
-<p>These are fundamentally different communication flows, and most CRMs handle one well and the other poorly. Purpose-built clinic platforms like ClinicTech handle both because they're designed around the patient journey, not a generic sales pipeline.</p>
+<p>These are fundamentally different communication flows, and most CRMs handle one well and the other poorly. Purpose-built clinic platforms like Caddie AI handle both because they're designed around the patient journey, not a generic sales pipeline.</p>
 
 <h3>4. Treatment Documentation and Outcomes Tracking</h3>
 
@@ -349,7 +349,7 @@ export const blogPosts: BlogPost[] = [
 
 <p>Usually not. And that's where things fall apart.</p>
 
-<p>ClinicTech was built specifically to solve this integration problem for regenerative medicine clinics. One platform handles intake, scheduling, lead management, patient communication, and follow-up — all connected, all branded to your clinic, all designed for how stem cell practices actually operate.</p>
+<p>Caddie AI was built specifically to solve this integration problem for regenerative medicine clinics. One platform handles intake, scheduling, lead management, patient communication, and follow-up — all connected, all branded to your clinic, all designed for how stem cell practices actually operate.</p>
 
 <h2>The 80/20 of Clinic Operations</h2>
 
@@ -370,7 +370,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-lead-follow-up",
     title: "How to Follow Up With Stem Cell Leads (And Why Most Clinics Lose Them)",
     excerpt: "The average stem cell clinic converts only 15-20% of inquiries. The fix isn't more leads — it's better follow-up. Here's the system that doubles conversion rates.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 27, 2026",
     readTime: "10 min read",
     category: "Sales",
@@ -418,7 +418,7 @@ export const blogPosts: BlogPost[] = [
 
 <p>The solution is automation with a personal touch. The initial response and scheduling are automated. The educational content drips are automated. The coordinator focuses their time on the personal outreach — the calls and customized messages that actually require a human.</p>
 
-<p>This is the core of ClinicTech's lead management system. Every inquiry is captured automatically, the follow-up sequence triggers immediately, and your coordinator gets a daily list of "these people need a personal call today" instead of trying to track everything in their head or a spreadsheet.</p>
+<p>This is the core of Caddie AI's lead management system. Every inquiry is captured automatically, the follow-up sequence triggers immediately, and your coordinator gets a daily list of "these people need a personal call today" instead of trying to track everything in their head or a spreadsheet.</p>
 
 <h2>The Math That Should Convince You</h2>
 
@@ -435,7 +435,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-business-model",
     title: "Stem Cell Clinic Business Model: How to Price Your Protocols and Actually Be Profitable",
     excerpt: "How to structure pricing for regenerative medicine treatments, build profitable treatment packages, and understand the unit economics that make a stem cell clinic work.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 25, 2026",
     readTime: "11 min read",
     category: "Business",
@@ -517,7 +517,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-tech-stack",
     title: "The Stem Cell Clinic Tech Stack: What Software You Actually Need",
     excerpt: "A breakdown of every software category a regenerative medicine clinic needs — CRM, scheduling, intake, billing — and how to avoid the 6-tool frankenstack that most clinics end up with.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 23, 2026",
     readTime: "10 min read",
     category: "Technology",
@@ -568,7 +568,7 @@ export const blogPosts: BlogPost[] = [
 
 <h2>The All-in-One Alternative</h2>
 
-<p>This is exactly why we built ClinicTech. Instead of six disconnected tools, you get one platform designed specifically for regenerative medicine clinics:</p>
+<p>This is exactly why we built Caddie AI. Instead of six disconnected tools, you get one platform designed specifically for regenerative medicine clinics:</p>
 
 <ul>
 <li><strong>Scheduling</strong> that understands stem cell procedures</li>
@@ -590,7 +590,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-medical-tourism",
     title: "How to Attract Medical Tourism Patients to Your Stem Cell Clinic",
     excerpt: "A guide for regenerative medicine clinics looking to attract international patients. Covers trust signals, multilingual intake, international payments, and the operational infrastructure for medical tourism.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 21, 2026",
     readTime: "10 min read",
     category: "Growth",
@@ -652,7 +652,7 @@ export const blogPosts: BlogPost[] = [
 <li><strong>Remote follow-up system</strong> — post-treatment communication, progress tracking, and care coordination across time zones</li>
 </ul>
 
-<p>ClinicTech handles all of this with a branded patient portal that works for international patients: multilingual forms, remote progress tracking, and communication tools that bridge the distance between your clinic and the patient's home.</p>
+<p>Caddie AI handles all of this with a branded patient portal that works for international patients: multilingual forms, remote progress tracking, and communication tools that bridge the distance between your clinic and the patient's home.</p>
 
 <h2>Marketing Channels for International Patients</h2>
 
@@ -672,7 +672,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-compliance",
     title: "Stem Cell Clinic Compliance 101: What You Need Before You Open",
     excerpt: "A practical guide to the regulatory landscape for regenerative medicine clinics. Covers FDA rules, state regulations, consent requirements, and how to stay out of trouble.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 19, 2026",
     readTime: "9 min read",
     category: "Compliance",
@@ -759,7 +759,7 @@ export const blogPosts: BlogPost[] = [
 <li>Adverse event reporting if anything goes wrong</li>
 </ul>
 
-<p>ClinicTech's digital intake and documentation system creates a complete, timestamped record for every patient interaction — from consent through follow-up. It's not just good operations; it's compliance infrastructure that protects your clinic.</p>
+<p>Caddie AI's digital intake and documentation system creates a complete, timestamped record for every patient interaction — from consent through follow-up. It's not just good operations; it's compliance infrastructure that protects your clinic.</p>
 
 <h2>The Bottom Line</h2>
 
@@ -767,12 +767,12 @@ export const blogPosts: BlogPost[] = [
 `,
   },
 
-  // ─── 9. Jane App vs ClinicTech ───
+  // ─── 9. Jane App vs Caddie AI ───
   {
     slug: "jane-app-vs-clinictech",
-    title: "Jane App vs ClinicTech: Which is Better for Regenerative Medicine Clinics?",
-    excerpt: "An honest comparison of Jane App and ClinicTech for stem cell and regenerative medicine practices. Different tools for different needs — here's how to decide.",
-    author: "ClinicTech Team",
+    title: "Jane App vs Caddie AI: Which is Better for Regenerative Medicine Clinics?",
+    excerpt: "An honest comparison of Jane App and Caddie AI for stem cell and regenerative medicine practices. Different tools for different needs — here's how to decide.",
+    author: "Caddie AI Team",
     date: "March 17, 2026",
     readTime: "8 min read",
     category: "Comparison",
@@ -811,9 +811,9 @@ export const blogPosts: BlogPost[] = [
 <h3>No Follow-Up Automation</h3>
 <p>Post-treatment follow-up — the check-ins, progress assessments, and maintenance reminders that drive patient outcomes and repeat revenue — isn't built into Jane. You'd need yet another tool (Mailchimp, ActiveCampaign) to handle this.</p>
 
-<h2>What ClinicTech Does Differently</h2>
+<h2>What Caddie AI Does Differently</h2>
 
-<p>ClinicTech is built specifically for regenerative medicine clinics. That means:</p>
+<p>Caddie AI is built specifically for regenerative medicine clinics. That means:</p>
 
 <ul>
 <li><strong>Lead management built in</strong> — every inquiry is tracked from first contact through treatment and follow-up. No separate CRM needed.</li>
@@ -835,7 +835,7 @@ export const blogPosts: BlogPost[] = [
 <li>Follow-up and outcomes tracking matter</li>
 </ul>
 
-<p>Then ClinicTech is built for exactly your situation. It's not a general practice tool adapted for regenerative medicine — it's a regenerative medicine platform from the ground up.</p>
+<p>Then Caddie AI is built for exactly your situation. It's not a general practice tool adapted for regenerative medicine — it's a regenerative medicine platform from the ground up.</p>
 `,
   },
 
@@ -844,7 +844,7 @@ export const blogPosts: BlogPost[] = [
     slug: "stem-cell-clinic-website",
     title: "How to Build a Stem Cell Clinic Website That Actually Books Consultations",
     excerpt: "What separates a stem cell clinic website that generates 30+ consultations per month from one that gets traffic but no bookings. Trust signals, CTAs, and the structure that converts.",
-    author: "ClinicTech Team",
+    author: "Caddie AI Team",
     date: "March 15, 2026",
     readTime: "9 min read",
     category: "Marketing",
@@ -942,4 +942,4 @@ export const blogPosts: BlogPost[] = [
 ];
 
 // Data access moved to lib/blog-store.ts, which merges these seed posts with
-// posts published to Supabase by the ClinicTech app's Blog agent.
+// posts published to Supabase by the Caddie AI app's Blog agent.

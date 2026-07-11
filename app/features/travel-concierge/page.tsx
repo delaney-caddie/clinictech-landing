@@ -321,7 +321,7 @@ export default function TravelConciergePage() {
           <div className="tc-hero-inner">
             <div className="tc-hero-label">Travel concierge platform</div>
             <h1>70% of your patients fly in. Their experience starts before they land.</h1>
-            <p>International patients juggle flights, hotels, ground transportation, and pre-arrival paperwork across email chains and WhatsApp threads. ClinicTech gives them one place to manage everything, and gives your team one dashboard to track every arrival.</p>
+            <p>International patients juggle flights, hotels, ground transportation, and pre-arrival paperwork across email chains and WhatsApp threads. Caddie AI gives them one place to manage everything, and gives your team one dashboard to track every arrival.</p>
             <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="tc-hero-cta">Book a discovery call</a>
           </div>
         </section>
@@ -635,7 +635,7 @@ export default function TravelConciergePage() {
 
         <div className="tc-footer">
           <Link href="/">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="tc-footer-links">
             <Link href="/features">Features</Link>

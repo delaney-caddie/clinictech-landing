@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "Patient Experience & Reengagement - ClinicTech",
+  title: "Patient Experience & Reengagement - Caddie AI",
   description: "Give every patient a modern, branded portal. Recovery protocols, results tracking, document sharing, and automated lifecycle sequences that drive retention.",
 };
 
@@ -337,7 +337,7 @@ export default function PatientExperiencePage() {
           <div className="pe-hero-inner">
             <div className="pe-hero-label">Patient Experience Platform</div>
             <h1>The patient experience doesn&apos;t end when they leave your clinic.</h1>
-            <p>Your patients just spent $15,000 on a procedure. They&apos;re navigating recovery protocols, tracking how they feel week over week, and wondering if this is working. Most clinics hand them a printed sheet and say &ldquo;call us if you need anything.&rdquo; ClinicTech gives every patient a modern, branded portal that keeps them connected to your clinic through every phase of their journey.</p>
+            <p>Your patients just spent $15,000 on a procedure. They&apos;re navigating recovery protocols, tracking how they feel week over week, and wondering if this is working. Most clinics hand them a printed sheet and say &ldquo;call us if you need anything.&rdquo; Caddie AI gives every patient a modern, branded portal that keeps them connected to your clinic through every phase of their journey.</p>
             <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="pe-hero-cta">Book a Discovery Call</a>
           </div>
         </section>
@@ -572,7 +572,7 @@ export default function PatientExperiencePage() {
             <div style={{maxWidth: 700}}>
               <div className="pe-section-label">Reengagement Campaigns</div>
               <h2>Bring back the patients you&apos;ve already won.</h2>
-              <p className="desc">Every clinic has hundreds of past patients sitting in a spreadsheet or old CRM who haven&apos;t been contacted in months. ClinicTech identifies dormant patients and runs targeted reengagement campaigns: new treatment announcements, seasonal wellness check-ins, and &ldquo;how are you feeling?&rdquo; sequences. These patients already trust you. They just need a reason to come back.</p>
+              <p className="desc">Every clinic has hundreds of past patients sitting in a spreadsheet or old CRM who haven&apos;t been contacted in months. Caddie AI identifies dormant patients and runs targeted reengagement campaigns: new treatment announcements, seasonal wellness check-ins, and &ldquo;how are you feeling?&rdquo; sequences. These patients already trust you. They just need a reason to come back.</p>
               <div className="pe-reengage-stat">
                 <div className="stat-value">40% increase in returning patients</div>
                 <div className="stat-text">with automated reengagement.</div>
@@ -600,7 +600,7 @@ export default function PatientExperiencePage() {
 
         <div className="pe-footer">
           <Link href="/">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="pe-footer-links">
             <Link href="/features">Features</Link>
