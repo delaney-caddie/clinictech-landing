@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
       `}</style>
       <div className="login-wrap">
         <div className="login-card">
-          <div className="login-logo">ClinicTech</div>
+          <div className="login-logo">Caddie AI</div>
           <div className="login-sub">Admin Access</div>
           {error && <div className="login-error">{error}</div>}
           <form onSubmit={handleSubmit}>

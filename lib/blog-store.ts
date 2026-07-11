@@ -1,6 +1,6 @@
 // Blog content source.
 //
-// Posts now live in Supabase (table `blog_posts`), written by the ClinicTech
+// Posts now live in Supabase (table `blog_posts`), written by the Caddie AI
 // app's Blog agent via /api/blog/publish. The 10 original posts in
 // `blog-data.ts` are kept as a seed/fallback so the site still renders if
 // Supabase is unconfigured (local dev) or the query fails. Database rows win
@@ -44,7 +44,7 @@ function rowToPost(row: BlogRow): BlogPost {
     title: row.title,
     excerpt: row.excerpt,
     content: row.content,
-    author: row.author || "ClinicTech Team",
+    author: row.author || "Caddie AI Team",
     category: row.category || "Insights",
     readTime: row.read_time || "5 min read",
     date: formatDate(row.published_at),

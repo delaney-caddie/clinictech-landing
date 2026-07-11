@@ -21,7 +21,7 @@ body > iframe {
 }
 
 /* ===================================================================
-   ClinicTech design system (Settle-style)
+   Caddie AI design system (Settle-style)
    Shared by the site header, footer, and marketing pages.
    Radius and muted tokens are prefixed (--r-*, --muted-ink) so they
    do not collide with the shadcn/Tailwind tokens defined below.
@@ -348,7 +348,7 @@ a.button { color: #fff; }
 }
 
 :root {
-  /* ClinicTech - Blue, Navy & Light Blue Theme */
+  /* Caddie AI - Blue, Navy & Light Blue Theme */
   --background: oklch(0.98 0.005 240);
   --foreground: oklch(0.18 0.03 240);
   --card: oklch(1 0 0);

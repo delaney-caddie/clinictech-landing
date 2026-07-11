@@ -59,7 +59,7 @@ async function fetchPageData(website: string): Promise<PageData> {
   // Fallback: direct fetch, no screenshot
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; Caddie AI/1.0)" },
       signal: AbortSignal.timeout(10000),
     });
     const html = await res.text();

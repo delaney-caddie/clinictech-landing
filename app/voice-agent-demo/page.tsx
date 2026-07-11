@@ -3,7 +3,7 @@ import { SiteNav } from "@/components/site-nav";
 import { VoiceWidgetClient } from "./VoiceWidgetClient";
 
 export const metadata = {
-  title: "Voice agent demo — ClinicTech",
+  title: "Voice agent demo — Caddie AI",
   description: "Talk to one of our AI receptionists. Real conversation, in your browser, right now.",
 };
 
@@ -218,7 +218,7 @@ export default function VoiceAgentDemoPage() {
         </section>
       </div>
 
-      {/* Hide the ClinicTech chat widget on this page so the Retell voice widget is the only floating CTA */}
+      {/* Hide the Caddie AI chat widget on this page so the Retell voice widget is the only floating CTA */}
       <style dangerouslySetInnerHTML={{ __html: `
         #clinictech-widget,
         [id^="clinictech-widget-"],

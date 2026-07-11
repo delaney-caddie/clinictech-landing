@@ -8,9 +8,9 @@ function getSupabase() {
   );
 }
 
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "clinictech.io";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
 const SENDER_NAME = process.env.SENDER_NAME || "Danika";
-const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, ClinicTech";
+const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, Caddie AI";
 const SENDER_EMAIL = process.env.SENDER_EMAIL || "danika@clinictech.io";
 const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
 
@@ -36,7 +36,7 @@ function generateEmail(clinic: ClinicData): { subject: string; body: string; to:
   const firstName = getFirstName(clinic.contact_name);
   const greeting = firstName ? `Hi ${firstName},` : "Hi there,";
 
-  const signature = `${SENDER_NAME} Chilibeck\nCofounder & CEO\nClinicTech.io`;
+  const signature = `${SENDER_NAME} Chilibeck\nCofounder & CEO\nCaddie AI.io`;
 
   // Primary template — personalized with name
   if (clinic.contact_name) {

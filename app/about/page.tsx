@@ -2,8 +2,8 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "About Us - ClinicTech",
-  description: "Meet Delaney and Danika, the co-founders building ClinicTech - a custom back-office platform for clinics.",
+  title: "About Us - Caddie AI",
+  description: "Meet Delaney and Danika, the co-founders building Caddie AI - a custom back-office platform for clinics.",
 };
 
 export default function AboutPage() {
@@ -87,7 +87,7 @@ export default function AboutPage() {
         <div className="about-content">
           <div className="about-grid">
             <div className="about-img">
-              <img src="/founders.png" alt="Delaney and Danika, co-founders of ClinicTech" />
+              <img src="/founders.png" alt="Delaney and Danika, co-founders of Caddie AI" />
             </div>
             <div className="about-body">
               <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
@@ -127,7 +127,7 @@ export default function AboutPage() {
 
         <div className="about-footer">
           <Link href="/" className="about-nav-brand">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="about-footer-links">
             <Link href="/blog">Blog</Link>

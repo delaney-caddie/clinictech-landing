@@ -3,7 +3,7 @@
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 
-// Renders the ClinicTech chat widget on every page except the voice agent
+// Renders the Caddie AI chat widget on every page except the voice agent
 // demo, where the Retell voice widget owns the bottom corner instead.
 export function ChatWidget() {
   const pathname = usePathname();

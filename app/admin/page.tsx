@@ -1442,7 +1442,7 @@ function SettingsTab() {
         <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 8, padding: 16, fontSize: 13, lineHeight: 1.6, color: "#475569" }}>
           <strong>Danika Chilibeck</strong><br />
           Cofounder &amp; CEO<br />
-          ClinicTech.io
+          Caddie AI.io
         </div>
         <p style={{ fontSize: 11, color: "#94A3B8", marginTop: 8 }}>
           Update SENDER_NAME and SENDER_TITLE in environment variables to change.
@@ -2198,7 +2198,7 @@ export default function AdminPanel() {
       const a = document.createElement("a");
       a.href = url;
       a.download = res.headers.get("Content-Disposition")?.match(/filename="(.+)"/)?.[1]
-        || `clinictech-outreach-${new Date().toISOString().split("T")[0]}.csv`;
+        || `caddie-outreach-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -2370,7 +2370,7 @@ export default function AdminPanel() {
         {/* Sidebar */}
         <div className="admin-sidebar">
           <div className="admin-sidebar-header">
-            <div className="admin-brand">ClinicTech</div>
+            <div className="admin-brand">Caddie AI</div>
             <div className="admin-brand-sub">OUTBOUND ENGINE</div>
           </div>
           <div className="admin-nav">

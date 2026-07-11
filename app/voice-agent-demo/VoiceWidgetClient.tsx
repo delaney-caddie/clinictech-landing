@@ -8,7 +8,7 @@ const RETELL_ATTRS: Record<string, string> = {
   "data-voice-public-key": "public_key_1b257bbeaa7704429e87e",
   "data-voice-agent-id": "agent_3c3e0140740af0c25e467d5020",
   "data-agent-version": "0",
-  "data-title": "ClinicTech Medical Center",
+  "data-title": "Caddie AI Medical Center",
   "data-bot-name": "Your AI receptionist",
   "data-fab-text": "Talk to our front desk",
   "data-color": "#3E6AEF",
@@ -96,7 +96,7 @@ export function VoiceWidgetClient() {
     };
   }, []);
 
-  // Remove the ClinicTech chat widget DOM while this page is mounted.
+  // Remove the Caddie AI chat widget DOM while this page is mounted.
   useEffect(() => {
     function nuke() {
       try {

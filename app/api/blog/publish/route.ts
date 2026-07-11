@@ -1,4 +1,4 @@
-// Publish endpoint for the ClinicTech app's Blog agent.
+// Publish endpoint for the Caddie AI app's Blog agent.
 //
 // The app POSTs a finished post here with a shared bearer secret. We upsert it
 // into Supabase (`blog_posts`, keyed by slug) and revalidate the blog routes so
@@ -23,7 +23,7 @@ const PostSchema = z.object({
   excerpt: z.string().min(1).max(600),
   content: z.string().min(1), // HTML
   category: z.string().min(1).max(80).default("Insights"),
-  author: z.string().min(1).max(120).default("ClinicTech Team"),
+  author: z.string().min(1).max(120).default("Caddie AI Team"),
   readTime: z.string().min(1).max(40).default("5 min read"),
   image: z.string().url().optional(),
   published: z.boolean().default(true),

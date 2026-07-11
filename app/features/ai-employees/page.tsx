@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "AI Employees | ClinicTech",
+  title: "AI Employees | Caddie AI",
   description:
     "Six named agents trained on your clinic. Mia, Vidi, Rio, Juno, Quill, and Atlas handle patient coordination, content, retention, your inbox, SEO, and protocol drafting. One shared brain behind them all.",
 };
@@ -454,7 +454,7 @@ export default function AiEmployeesPage() {
               <div className="ae-agent-mockup">
                 <img src={a.mockup} alt={`${a.name} workspace`} />
               </div>
-              <div className="ae-agent-visual-caption">{a.name} at work in ClinicTech</div>
+              <div className="ae-agent-visual-caption">{a.name} at work in Caddie AI</div>
             </div>
           </section>
         ))}
@@ -501,7 +501,7 @@ export default function AiEmployeesPage() {
 
         <div className="ae-footer">
           <Link href="/">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="ae-footer-links">
             <Link href="/features">Our work</Link>

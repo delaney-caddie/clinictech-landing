@@ -118,7 +118,7 @@ const impactStories = [
 
 const faqs = [
   {
-    q: "What do we actually get when we work with ClinicTech?",
+    q: "What do we actually get when we work with Caddie AI?",
     a: "AI employees built for your clinic: agents that answer and follow up with patients, book consults, handle intake, run post-treatment check-ins, and automate the admin in between. And the team that builds, maintains, and improves them as your clinic changes.",
   },
   {
@@ -838,7 +838,7 @@ export default function LandingPage() {
           </div>
           <p className="proof-bar-copy">
             <strong>Operators and investors</strong>{" "}
-            behind some of the world&apos;s best software and AI companies back ClinicTech.
+            behind some of the world&apos;s best software and AI companies back Caddie AI.
           </p>
         </div>
 
@@ -857,7 +857,7 @@ export default function LandingPage() {
 
         <section className="section demo-section">
           <div className="demo-shell reveal-item">
-            <div className="demo-tabs" role="tablist" aria-label="ClinicTech agents">
+            <div className="demo-tabs" role="tablist" aria-label="Caddie AI agents">
               {agents.map((a, i) => (
                 <button
                   key={a.slug}
@@ -906,7 +906,7 @@ export default function LandingPage() {
                 onClick={() => openLightbox(agent.slug)}
                 aria-label={`See ${agent.name} in action`}
               >
-                <img className="demo-screenshot" src={agent.mockup} alt={`${agent.name} inside ClinicTech`} loading="lazy" />
+                <img className="demo-screenshot" src={agent.mockup} alt={`${agent.name} inside Caddie AI`} loading="lazy" />
               </button>
             </div>
 
@@ -1177,12 +1177,12 @@ export default function LandingPage() {
         <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
           <div className="proof-story reveal-item">
             <div>
-              <span className="eyebrow">ClinicTech success story</span>
+              <span className="eyebrow">Caddie AI success story</span>
               <h2>An extra 5 consults a month from leads that would have gone cold.</h2>
             </div>
             <p>
               Dr. James L. was getting inquiries but barely booking any. After switching his
-              clinic&apos;s intake to ClinicTech, the follow-up sequences run themselves, and
+              clinic&apos;s intake to Caddie AI, the follow-up sequences run themselves, and
               inquiries that used to die in the inbox now turn into booked consultations.
             </p>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button secondary">
@@ -1295,7 +1295,7 @@ export default function LandingPage() {
         <section className="section faq-section">
           <div className="section-copy reveal-item">
             <span className="eyebrow">FAQ</span>
-            <h2>Clear answers for clinics considering ClinicTech.</h2>
+            <h2>Clear answers for clinics considering Caddie AI.</h2>
             <p>
               Anything else? Bring it to a demo and we will answer it against your clinic&apos;s
               real pipeline.
@@ -1337,9 +1337,9 @@ export default function LandingPage() {
       <footer className="site-footer">
         <div>
           <img
-            src="/clinictech-logo.png"
-            alt="ClinicTech"
-            style={{ height: 36, width: "auto" }}
+            src="/caddie-logo.svg"
+            alt="Caddie AI"
+            style={{ height: 32, width: "auto" }}
           />
           <p>
             We build AI employees for clinics. Named, capable, accountable, and working your
@@ -1366,7 +1366,7 @@ export default function LandingPage() {
           <a href="/contact">Contact</a>
         </nav>
         <div className="footer-bottom">
-          <span>&copy; 2026 ClinicTech. All rights reserved.</span>
+          <span>&copy; 2026 Caddie AI. All rights reserved.</span>
           <span>Mia. Vidi. Rio. Juno. Quill. Atlas.</span>
         </div>
       </footer>
@@ -1381,10 +1381,10 @@ export default function LandingPage() {
         >
           <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
             <div className="lightbox-img-wrap">
-              <img src={agents.find((a) => a.slug === lightbox)?.mockup ?? `/mockups/${lightbox}.png`} alt="ClinicTech preview" />
+              <img src={agents.find((a) => a.slug === lightbox)?.mockup ?? `/mockups/${lightbox}.png`} alt="Caddie AI preview" />
             </div>
             <div className="lightbox-caption">
-              <span>{agents.find((a) => a.slug === lightbox)?.name ?? "ClinicTech"} inside ClinicTech</span>
+              <span>{agents.find((a) => a.slug === lightbox)?.name ?? "Caddie AI"} inside Caddie AI</span>
               <button type="button" className="lightbox-close" onClick={closeLightbox} autoFocus>Close</button>
             </div>
           </div>

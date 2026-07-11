@@ -682,7 +682,7 @@ export default function LeadCapturePage() {
           <div className="lc-hero-inner">
             <div className="lc-kicker">Lead capture &amp; conversion</div>
             <h1>One form, instant increase in patient bookings.</h1>
-            <p className="lc-hero-sub">67% of leads abandon your form before finishing. Your competitors respond in minutes while your team checks an inbox hours later. ClinicTech captures every inquiry, scores them instantly, and follows up automatically.</p>
+            <p className="lc-hero-sub">67% of leads abandon your form before finishing. Your competitors respond in minutes while your team checks an inbox hours later. Caddie AI captures every inquiry, scores them instantly, and follows up automatically.</p>
             <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="lc-hero-cta">Book a discovery call</a>
           </div>
         </section>
@@ -755,11 +755,11 @@ export default function LeadCapturePage() {
 
               {/* NEW WAY */}
               <div className="lc-ba-col">
-                <div className="lc-ba-col-label">With ClinicTech</div>
+                <div className="lc-ba-col-label">With Caddie AI</div>
                 <div className="lc-ba-visual">
                   {/* Floating filter card */}
                   <div className="lc-ba-filter-float">
-                    <div className="lc-ba-filter-logo"><div className="lc-ba-filter-logo-icon">CT</div> Smart intake filters</div>
+                    <div className="lc-ba-filter-logo"><div className="lc-ba-filter-logo-icon">CA</div> Smart intake filters</div>
                     <div className="lc-ba-filter-row"><div className="lc-ba-filter-toggle on"></div> Budget pre-qualification</div>
                     <div className="lc-ba-filter-row"><div className="lc-ba-filter-toggle on"></div> Treatment match scoring</div>
                     <div className="lc-ba-filter-row"><div className="lc-ba-filter-toggle on"></div> AI lead scoring</div>
@@ -1013,7 +1013,7 @@ export default function LeadCapturePage() {
             <div>
               <div className="lc-kicker">Credit score enrichment is live</div>
               <h2>Qualify their financial readiness, before they get on a call</h2>
-              <p className="desc">ClinicTech runs a silent credit soft-pull in the background while your patient fills out the intake form. No extra steps, no SSN field, no friction. By the time they hit submit, your team already knows if they can afford a $15,000 procedure. Only qualified patients reach your calendar.</p>
+              <p className="desc">Caddie AI runs a silent credit soft-pull in the background while your patient fills out the intake form. No extra steps, no SSN field, no friction. By the time they hit submit, your team already knows if they can afford a $15,000 procedure. Only qualified patients reach your calendar.</p>
               <div className="lc-us-badge">&#127482;&#127480; Available for U.S.-based leads</div>
             </div>
 
@@ -1034,7 +1034,7 @@ export default function LeadCapturePage() {
               {/* Top right: Patient intake form */}
               <div className="lc-fin-card">
                 <div className="lc-fin-form-header">
-                  <div className="lc-fin-form-logo">CT</div>
+                  <div className="lc-fin-form-logo">CA</div>
                   <div>
                     <div className="lc-fin-form-title">Patient intake form</div>
                     <div className="lc-fin-form-step">Step 1 of 3</div>
@@ -1141,7 +1141,7 @@ export default function LeadCapturePage() {
                   <div className="lc-roi-value" style={{color:"#EF4444"}}>~60%</div>
                 </div>
                 <div className="lc-roi-row">
-                  <div className="lc-roi-label">Recovered with ClinicTech</div>
+                  <div className="lc-roi-label">Recovered with Caddie AI</div>
                   <div className="lc-roi-value" style={{color:"#22C55E"}}>+{recovered}/mo</div>
                 </div>
                 <div className="lc-roi-result">
@@ -1165,7 +1165,7 @@ export default function LeadCapturePage() {
 
         <div className="lc-footer">
           <Link href="/">
-            <img src="/clinictech-logo.png" alt="ClinicTech" style={{ height: 20, opacity: 0.5 }} />
+            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="lc-footer-links">
             <Link href="/features">Features</Link>

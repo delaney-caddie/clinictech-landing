@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata = {
-  title: "Our work — ClinicTech",
+  title: "Our work — Caddie AI",
   description:
     "We build AI employees for clinics, and the software platforms around them. A look at what we have shipped for regenerative medicine clinics.",
 };
@@ -283,9 +283,9 @@ export default function FeaturesPage() {
         <div className="feat-footer">
           <Link href="/">
             <img
-              src="/clinictech-logo.png"
-              alt="ClinicTech"
-              style={{ height: 20, opacity: 0.5 }}
+              src="/caddie-logo.svg"
+              alt="Caddie AI"
+              style={{ height: 18, opacity: 0.5 }}
             />
           </Link>
           <div className="feat-footer-links">

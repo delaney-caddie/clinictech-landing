@@ -8,7 +8,7 @@ function getSupabase() {
   );
 }
 
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "clinictech.io";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
 
 function getFirstName(fullName: string | null): string {
   if (!fullName) return "";
@@ -23,7 +23,7 @@ function generateFollowUp(
   const firstName = getFirstName(clinic.contact_name);
   const greeting = firstName ? `Hi ${firstName},` : "Hi there,";
   const to = clinic.contact_email || `contact@${clinic.website}`;
-  const signature = `Danika Chilibeck\nCofounder & CEO\nClinicTech.io`;
+  const signature = `Danika Chilibeck\nCofounder & CEO\nCaddie AI.io`;
 
   if (followupNumber === 1) {
     return {

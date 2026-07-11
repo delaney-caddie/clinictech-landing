@@ -191,7 +191,7 @@ async function discoverClinics() {
 
   if (!location) {
     console.log(`
-ClinicTech — Clinic Discovery
+Caddie AI — Clinic Discovery
 ==============================
 
 Usage:
@@ -213,7 +213,7 @@ Examples:
     process.exit(1);
   }
 
-  console.log(`\n🔍 ClinicTech — Clinic Discovery`);
+  console.log(`\n🔍 Caddie AI — Clinic Discovery`);
   console.log(`================================`);
   console.log(`Location: ${location}`);
   console.log(`Radius: ${(radius / 1000).toFixed(0)}km`);

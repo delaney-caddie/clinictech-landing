@@ -83,7 +83,7 @@ export function SidebarNav({ view, onViewChange, activePage, onPageChange, clini
             </div>
           ) : (
             <span className="text-sm font-bold text-sidebar-foreground truncate block max-w-[180px]">
-              {clinicName || "ClinicTech"}
+              {clinicName || "Caddie AI"}
             </span>
           )}
         </div>

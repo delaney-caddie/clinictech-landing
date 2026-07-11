@@ -253,7 +253,7 @@ async function scrapeWebsite(website: string): Promise<{
       html = firecrawlHtml;
     } else {
       const res = await fetch(url, {
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; ClinicTech/1.0)" },
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; Caddie AI/1.0)" },
         signal: AbortSignal.timeout(10000),
       });
       html = await res.text();

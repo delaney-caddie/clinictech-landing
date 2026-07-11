@@ -144,14 +144,14 @@ export default function ClinicPreviewPage() {
         )}
       </main>
 
-      {/* ClinicTech preview banner */}
+      {/* Caddie AI preview banner */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-white">
         <div className="flex items-center justify-between px-5 py-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Preview</span>
               <span className="text-xs text-gray-500">|</span>
-              <span className="text-xs text-gray-400">Powered by <span className="font-semibold text-white">ClinicTech</span></span>
+              <span className="text-xs text-gray-400">Powered by <span className="font-semibold text-white">Caddie AI</span></span>
             </div>
             <p className="text-[11px] text-gray-400 leading-snug max-w-2xl">
               This is a preview of what your custom platform could look like. Your brand colors, logo, and workflows are fully customizable - every feature can be tailored to how your clinic operates.
@@ -159,7 +159,7 @@ export default function ClinicPreviewPage() {
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">
             <a
-              href="https://clinictech.io"
+              href="https://caddieai.com"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md border border-gray-600 px-3 py-1.5 text-xs font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"

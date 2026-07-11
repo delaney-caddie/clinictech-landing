@@ -1,5 +1,5 @@
-// clinictech-scraper.ts
-// Usage: npx ts-node clinictech-scraper.ts "https://example-clinic.com"
+// caddie-scraper.ts
+// Usage: npx ts-node caddie-scraper.ts "https://example-clinic.com"
 // 
 // Requires env vars:
 //   FIRECRAWL_API_KEY - from firecrawl.dev (free tier: 500 pages/mo)
@@ -25,7 +25,7 @@ dotenv.config({ path: ".env.local" });
 const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "clinictech.io";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
 
 if (!FIRECRAWL_KEY) throw new Error("Missing FIRECRAWL_API_KEY in .env.local");
 if (!SUPABASE_URL) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL in .env.local");
@@ -392,8 +392,8 @@ function extractLocation(text: string): string | null {
 
 const targetUrl = process.argv[2];
 if (!targetUrl) {
-  console.log("Usage: npx ts-node clinictech-scraper.ts <clinic-website-url>");
-  console.log("Example: npx ts-node clinictech-scraper.ts https://rescore.com");
+  console.log("Usage: npx ts-node caddie-scraper.ts <clinic-website-url>");
+  console.log("Example: npx ts-node caddie-scraper.ts https://example-regen-clinic.com");
   process.exit(1);
 }
 
