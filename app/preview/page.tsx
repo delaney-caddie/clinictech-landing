@@ -53,7 +53,7 @@ function PreviewContent() {
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">
             <a
-              href="https://caddieai.com"
+              href="https://hirecaddie.ai"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md border border-gray-600 px-3 py-1.5 text-xs font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"

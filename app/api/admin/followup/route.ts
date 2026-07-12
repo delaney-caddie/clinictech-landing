@@ -8,7 +8,7 @@ function getSupabase() {
   );
 }
 
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "hirecaddie.ai";
 
 function getFirstName(fullName: string | null): string {
   if (!fullName) return "";
