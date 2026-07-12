@@ -329,7 +329,7 @@ export default function RegenNewsPage() {
           <div className="rn-footer-links">
             <Link href="/blog">Blog</Link>
             <Link href="/about">About</Link>
-            <Link href="/">caddieai.com</Link>
+            <Link href="/">hirecaddie.ai</Link>
           </div>
         </div>
       </div>

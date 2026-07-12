@@ -8,7 +8,7 @@ function getSupabase() {
   );
 }
 
-const DOMAIN = process.env.CLINICTECH_DOMAIN || "caddieai.com";
+const DOMAIN = process.env.CLINICTECH_DOMAIN || "hirecaddie.ai";
 const SENDER_NAME = process.env.SENDER_NAME || "Danika";
 const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, Caddie AI";
 const SENDER_EMAIL = process.env.SENDER_EMAIL || "danika@clinictech.io";
