@@ -506,7 +506,7 @@ export default function LandingPage() {
 .brain-hub { width: 100%; height: auto; display: block; }
 .brain-ask {
   grid-column: 1 / -1; position: relative; z-index: 1;
-  background: #ffffff14; border: 1px solid #ffffff2b; border-radius: var(--r);
+  background: #0d1a44b8; border: 1px solid #ffffff2b; border-radius: var(--r);
   padding: 16px 20px;
   -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
 }
@@ -523,11 +523,11 @@ export default function LandingPage() {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
 .brain-ask-a {
-  border-top: 1px solid #ffffff1f; color: #c2cff0;
+  border-top: 1px solid #ffffff1f; color: #dde6fa;
   margin: 14px 0 0; padding-top: 14px; font-size: .92rem; line-height: 1.6;
 }
 .brain-ask-a strong { color: #fff; font-weight: 620; }
-.brain-ask-src { display: block; margin-top: 8px; color: #97a9d4; font-size: .78rem; font-weight: 600; }
+.brain-ask-src { display: block; margin-top: 8px; color: #a7b9e2; font-size: .78rem; font-weight: 600; }
 
 /* ===== SPLIT (overnight) ===== */
 .split-section {
