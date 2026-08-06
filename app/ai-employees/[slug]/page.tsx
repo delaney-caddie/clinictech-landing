@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { agents, getAgent, CALENDAR_URL } from "@/lib/agents";
+import { RetellVoiceWidget, VoiceDemoButton } from "@/components/retell-voice-widget";
 import "../agents.css";
 
 export function generateStaticParams() {
@@ -52,9 +53,9 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
                   Book a demo
                 </a>
                 {agent.voiceDemo && (
-                  <Link href="/voice-agent-demo" className="button secondary">
+                  <a href="#voice-demo" className="button secondary">
                     Talk to {agent.name} live
-                  </Link>
+                  </a>
                 )}
               </div>
             </div>
@@ -65,6 +66,29 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             />
           </div>
         </section>
+
+        {/* Live voice demo (Retell widget, currently Mia only) */}
+        {agent.voiceDemo && (
+          <section className="section agent-voice" id="voice-demo">
+            <div className="agent-voice-card">
+              <div className="agent-voice-kicker">
+                <span className="agent-voice-beta">Beta</span>
+                <span className="agent-voice-live">Live demo</span>
+              </div>
+              <h2>Talk to {agent.name} right now.</h2>
+              <p>
+                A real conversation, in your browser. Start the call, allow microphone access
+                when prompted, and ask {agent.name} anything a patient would ask.
+              </p>
+              <VoiceDemoButton agentName={agent.name} />
+              <p className="agent-voice-fineprint">
+                {agent.name} does not diagnose, give medical advice, quote exact pricing, or
+                interpret test results. Anything in that territory she gently routes back to the
+                clinical team.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* What they do + what they handle */}
         <section className="section agent-section-grid">
@@ -157,11 +181,8 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
       </main>
       <SiteFooter />
 
-      {agent.voiceDemo && (
-        <Link href="/voice-agent-demo" className="button agent-voice-fab">
-          Talk to {agent.name} live
-        </Link>
-      )}
+      {/* Mounts the Retell voice widget and its floating call button. */}
+      {agent.voiceDemo && <RetellVoiceWidget />}
     </div>
   );
 }

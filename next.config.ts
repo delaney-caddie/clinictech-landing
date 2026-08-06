@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       // The blog was retired pending a replacement, so these point at the
       // homepage rather than at /blog, which no longer exists.
       { source: "/regen-news", destination: "/", permanent: true },
+      // The standalone voice demo now lives on Mia's own page.
+      { source: "/voice-agent-demo", destination: "/ai-employees/mia", permanent: true },
       { source: "/blog", destination: "/", permanent: false },
       { source: "/blog/:slug", destination: "/", permanent: false },
     ];

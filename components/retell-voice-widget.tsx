@@ -1,18 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-
-const RETELL_SCRIPT_URL = "https://dashboard.retellai.com/retell-widget-v2.js";
-const RETELL_ATTRS: Record<string, string> = {
-  id: "retell-widget",
-  "data-voice-public-key": "public_key_1b257bbeaa7704429e87e",
-  "data-voice-agent-id": "agent_3c3e0140740af0c25e467d5020",
-  "data-agent-version": "0",
-  "data-title": "Caddie AI Medical Center",
-  "data-bot-name": "Your AI receptionist",
-  "data-fab-text": "Talk to our front desk",
-  "data-color": "#3E6AEF",
-};
+import { useEffect, useState } from "react";
+import { RETELL_SCRIPT_URL, RETELL_WIDGET_ATTRS } from "@/lib/retell";
 
 const CHAT_WIDGET_SELECTOR =
   '#clinictech-widget, [id^="clinictech-widget-"], [class*="clinictech-widget"], iframe[src*="app.clinictech.io"], iframe[src*="clinictech.io/embed"]';
@@ -39,7 +28,99 @@ const SKIP_TAGS: Record<string, true> = {
   ARTICLE: true,
 };
 
-export function VoiceWidgetClient() {
+/**
+ * The widget renders its floating button inside a shadow root, so a plain
+ * document.querySelector never sees it. Walk open shadow roots looking for the
+ * button the widget styles with its own `_fabBase_*` CSS-module class.
+ */
+function findRetellFab(): HTMLButtonElement | null {
+  const roots: (Document | ShadowRoot)[] = [document];
+  const seen = new WeakSet<ShadowRoot>();
+
+  for (let i = 0; i < roots.length; i++) {
+    let elements: Element[];
+    try {
+      elements = Array.from(roots[i].querySelectorAll("*"));
+    } catch {
+      continue;
+    }
+    for (const el of elements) {
+      if (el.tagName === "BUTTON" && /(^|\s)_fabBase_/.test(el.className)) {
+        return el as HTMLButtonElement;
+      }
+      const shadow = (el as HTMLElement).shadowRoot;
+      if (shadow && !seen.has(shadow)) {
+        seen.add(shadow);
+        roots.push(shadow);
+      }
+    }
+  }
+  return null;
+}
+
+/** True once the widget button is mounted and not already showing an open panel. */
+function isRetellFabClosed(fab: HTMLButtonElement) {
+  return !/(^|\s)_fabOpen_/.test(fab.className);
+}
+
+/**
+ * Button that opens the Retell widget. The widget exposes no JS API, so this
+ * clicks its floating button for the visitor. It stays hidden until the widget
+ * has actually mounted, so we never show a button that cannot do anything.
+ */
+export function VoiceDemoButton({ agentName }: { agentName: string }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const started = Date.now();
+
+    function poll() {
+      if (cancelled) return;
+      if (findRetellFab()) {
+        setReady(true);
+        return;
+      }
+      // The script is third-party; give it a generous window, then give up
+      // and let the fallback copy point at the corner instead.
+      if (Date.now() - started > 20000) return;
+      window.setTimeout(poll, 400);
+    }
+    poll();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!ready) {
+    return (
+      <p className="agent-voice-fallback">
+        Look for the &ldquo;Talk to {agentName}&rdquo; pill in the bottom-right corner of your screen.
+      </p>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className="button agent-voice-start"
+      onClick={() => {
+        const fab = findRetellFab();
+        if (fab && isRetellFabClosed(fab)) fab.click();
+        fab?.scrollIntoView({ block: "nearest" });
+      }}
+    >
+      Start a call with {agentName}
+    </button>
+  );
+}
+
+/**
+ * Mounts the Retell voice widget for the page it is rendered on, and cleans up
+ * the DOM it leaves behind. Render it once per page.
+ */
+export function RetellVoiceWidget() {
   // The Retell widget mounts its own runtime into document.body (React-owned in
   // the App Router) and offers no teardown API. A client-side route change away
   // from this page leaves that mutated DOM behind, and Next's React reconciler
@@ -80,7 +161,7 @@ export function VoiceWidgetClient() {
     const script = document.createElement("script");
     script.src = RETELL_SCRIPT_URL;
     script.type = "module";
-    for (const [k, v] of Object.entries(RETELL_ATTRS)) {
+    for (const [k, v] of Object.entries(RETELL_WIDGET_ATTRS)) {
       if (k === "id") script.id = v;
       else script.setAttribute(k, v);
     }
@@ -96,7 +177,8 @@ export function VoiceWidgetClient() {
     };
   }, []);
 
-  // Remove the Caddie AI chat widget DOM while this page is mounted.
+  // Remove the Caddie AI chat widget DOM while this page is mounted, so the
+  // voice widget is the only thing in the bottom-right corner.
   useEffect(() => {
     function nuke() {
       try {
