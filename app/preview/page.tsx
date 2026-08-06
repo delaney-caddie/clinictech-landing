@@ -61,7 +61,7 @@ function PreviewContent() {
               Learn More
             </a>
             <a
-              href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone"
+              href="https://calendly.com/caddie-ai/demo"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-500"

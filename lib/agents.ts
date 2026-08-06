@@ -33,7 +33,7 @@ export type Agent = {
 };
 
 export const CALENDAR_URL =
-  "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
+  "https://calendly.com/caddie-ai/demo";
 
 export const agents: Agent[] = [
   {
