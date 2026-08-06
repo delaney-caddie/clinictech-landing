@@ -27,10 +27,29 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const SITE_URL = "https://caddie.app";
+const TITLE = "Caddie | AI Employees Scaling Your Clinic 24/7";
+const DESCRIPTION =
+  "Caddie is an agentic CRM and operating system for clinics, with a team of AI employees built in that runs your front office around the clock.";
+
 export const metadata: Metadata = {
-  title: "Caddie | AI Employees Scaling Your Clinic 24/7",
-  description:
-    "Caddie is an agentic CRM and operating system for clinics, with a team of AI employees built in that runs your front office around the clock.",
+  // Without metadataBase, Next resolves the social preview image against
+  // localhost, so shared links render with no image at all.
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "Caddie",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
