@@ -1,141 +1,146 @@
-import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
+import { SiteFooter } from "@/components/site-footer";
+import { InvestorStrip } from "@/components/investor-strip";
+import { CALENDAR_URL } from "@/lib/agents";
 
 export const metadata = {
-  title: "About Us - Caddie AI",
-  description: "Meet Delaney and Danika, the co-founders building Caddie AI - a custom back-office platform for clinics.",
+  title: "About | Caddie",
+  description:
+    "Meet Danika and Delaney, the founders bringing the automation and technology the tech industry runs on into medical.",
 };
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="ct-page">
       <style>{`
-        .about-page { min-height: 100vh; background: #FAFBFD; }
-        .about-hero { max-width: 880px; margin: 0 auto; padding: 160px 40px 0; text-align: center; }
-        .about-hero-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #5EC4E3; margin-bottom: 12px; }
-        .about-hero h1 {
-          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-          font-size: 44px; font-weight: 800; font-style: normal;
-          color: #0F172A; line-height: 1.15; letter-spacing: 0.5px; margin-bottom: 20px;
-        }
-        .about-hero p { font-size: 17px; color: #64748B; max-width: 600px; margin: 0 auto; line-height: 1.6; }
-        .about-content { max-width: 880px; margin: 0 auto; padding: 60px 40px; }
-        .about-grid { display: flex; gap: 60px; align-items: center; }
-        .about-img { flex-shrink: 0; width: 360px; height: 360px; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(55, 48, 163, 0.1); }
-        .about-img img { width: 100%; height: 100%; object-fit: cover; }
-        .about-body { flex: 1; }
-        .about-body p { font-size: 16px; line-height: 1.75; color: #475569; margin-bottom: 16px; }
-        .about-body p:last-child { margin-bottom: 0; }
-        .about-body strong { color: #0F172A; }
-        .about-cta { max-width: 880px; margin: 0 auto; padding: 0 40px 80px; }
-        .about-cta-box {
-          background: linear-gradient(135deg, #3730A3 0%, #5EC4E3 100%);
-          border-radius: 20px; padding: 48px; text-align: center;
-        }
-        .about-cta-box h2 {
-          font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-          font-size: 28px; font-weight: 800; font-style: normal;
-          color: #fff; margin-bottom: 10px;
-        }
-        .about-cta-box p { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 24px; }
-        .about-cta-btn {
-          display: inline-block; background: #fff; color: #3730A3;
-          font-weight: 700; font-size: 15px; padding: 14px 32px;
-          border-radius: 12px; text-decoration: none; transition: all 0.2s;
-        }
-        .about-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-        .about-footer { padding: 40px; border-top: 1px solid rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; max-width: 880px; margin: 0 auto; }
-        .about-footer-links { display: flex; gap: 24px; }
-        .about-footer-links a { font-size: 13px; color: #94A3B8; text-decoration: none; }
-        .about-footer-links a:hover { color: #3730A3; }
-        .about-logo-bar { padding: 40px 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.04); border-bottom: 1px solid rgba(0,0,0,0.04); overflow: hidden; }
-        .about-logo-bar-label {
-          text-align: center; font-size: 12px; font-weight: 600; color: #94A3B8;
-          text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px;
-        }
-        .about-logo-bar-track {
-          display: flex; align-items: center; gap: 64px;
-          animation: aboutLogoScroll 25s linear infinite;
-          width: max-content;
-        }
-        .about-logo-bar-track img { height: 36px; max-width: 140px; width: auto; object-fit: contain; flex-shrink: 0; }
-        @keyframes aboutLogoScroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @media (max-width: 768px) {
-          .about-hero { padding: 140px 20px 0; }
-          .about-hero h1 { font-size: 30px; }
-          .about-content { padding: 40px 20px; }
-          .about-grid { flex-direction: column; gap: 32px; }
-          .about-img { width: 280px; height: 280px; margin: 0 auto; }
-          .about-cta { padding: 0 20px 60px; }
-          .about-cta-box { padding: 32px 20px; }
-          .about-nav { padding: 16px 20px; }
-          .about-footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 20px; }
-        }
+.about-hero {
+  max-width: 820px; margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) 24px 0; text-align: center;
+}
+.about-hero h1 { margin-left: auto; margin-right: auto; }
+.about-hero p { font-size: 1.06rem; max-width: 620px; margin: 0 auto; }
+.about-grid {
+  display: grid; grid-template-columns: minmax(280px, 400px) 1fr;
+  gap: clamp(32px, 5vw, 60px); align-items: center;
+}
+.about-img {
+  border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-lg);
+  border: 1px solid var(--line);
+}
+.about-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.about-body p { font-size: 1.02rem; margin-bottom: 16px; }
+.about-body p:last-child { margin-bottom: 0; }
+.about-quote {
+  border-left: 3px solid var(--blue); margin: 0; padding: 6px 0 6px 20px;
+  color: var(--ink); font-size: 1.08rem; font-style: italic; line-height: 1.6;
+}
+.about-ai-panel {
+  color: #eef2fb;
+  background:
+    radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
+    radial-gradient(640px 460px at -6% 112%, #8b5cf64d, #0000 60%),
+    linear-gradient(152deg, #1a2b5c 0%, #23407e 52%, #1a2b5c 100%);
+  border: 1px solid #ffffff26;
+  border-radius: var(--r-xl);
+  box-shadow: 0 14px 34px #1a2b5c30, 0 40px 90px #1a2b5c3d;
+  margin-bottom: var(--section-y);
+  padding: clamp(36px, 5vw, 64px);
+}
+.about-ai-panel .eyebrow { color: #a7c0ff; }
+.about-ai-panel h2 { color: #fff; }
+.about-ai-panel p { color: #c2cff0; max-width: 680px; margin-bottom: 0; font-size: 1.02rem; }
+.about-cta-panel {
+  border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink);
+  gap: var(--grid-gap-lg); margin-bottom: var(--section-y);
+  background:
+    radial-gradient(900px 500px at 88% 0, #355cff29, #0000 62%),
+    linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
+  border: 1px solid #dde6f8;
+  justify-content: space-between; align-items: center; padding: 56px; display: flex;
+}
+.about-cta-panel h2 { margin-bottom: 10px; }
+.about-cta-panel p { color: var(--ink-soft); max-width: 640px; margin-bottom: 0; }
+@media (max-width: 1020px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-img { max-width: 400px; margin: 0 auto; }
+  .about-cta-panel { flex-direction: column; align-items: stretch; }
+}
+@media (max-width: 720px) {
+  .about-cta-panel { padding: 30px; }
+}
       `}</style>
-      <div className="about-page">
-        <SiteNav />
+      <SiteNav />
+      <main>
+        <section className="about-hero">
+          <span className="eyebrow">Our mission</span>
+          <h1>Bringing tech-industry automation into medical.</h1>
+          <p>
+            We&apos;re on a mission to bring the same level of automation and technology
+            the tech industry runs on into medical. Clinics deliver world-class care,
+            but the systems behind them are still stuck a decade back. We&apos;re here
+            to close that gap.
+          </p>
+        </section>
 
-        <div className="about-hero">
-          <div className="about-hero-label">About Us</div>
-          <h1>Built by <span style={{color: "#5EC4E3"}}>operators,</span><br/>for operators.</h1>
-          <p>We started building because we saw how much time clinic teams waste on disconnected tools and manual processes. There&apos;s a better way.</p>
-        </div>
-
-        <div className="about-content">
+        <section className="section">
           <div className="about-grid">
             <div className="about-img">
-              <img src="/founders.png" alt="Delaney and Danika, co-founders of Caddie AI" />
+              <img src="/founders.png" alt="Danika and Delaney, founders of Caddie" />
             </div>
             <div className="about-body">
-              <p>We&apos;re <strong>Delaney and Danika</strong>, co-founders who&apos;ve spent the last two years building AI products from the ground up. We started in recruiting tech, learned what works (and what doesn&apos;t), and followed the signal to where AI can make the biggest impact: underserved verticals with real operational pain.</p>
-              <p><strong>Delaney</strong> leads product and engineering, building full-stack applications with the latest AI tooling. <strong>Danika</strong> drives go-to-market strategy, bringing operational experience from Shopify and Rewind to help teams actually adopt and get value from what we build.</p>
-              <p>We&apos;re AI-first in everything we do. We build with the latest models, ship with modern dev tooling, and move at a pace that traditional agencies and legacy software companies can&apos;t match. The result is better software, faster, at a fraction of the cost. If you&apos;re running a clinic and your back office still runs on spreadsheets, phone calls, and disconnected systems - we built this for you.</p>
+              <span className="eyebrow">The founders</span>
+              <p>
+                With over 15 years in tech between them, Danika and Delaney are bringing
+                everything they&apos;ve learned to the medical industry. It started when
+                a family friend needed help scaling their practice. The founders got to
+                work and built what every medical clinic wished they&apos;d had 10 years
+                ago.
+              </p>
+              <p>
+                With their AI-first and go-to-market expertise, they&apos;ve built a team
+                where practicality, simplicity, and outcomes come first in everything
+                they ship.
+              </p>
+              <blockquote className="about-quote">
+                &ldquo;Every product, feature, and system we&apos;ve built solves a
+                specific problem our clinic owners brought to us.&rdquo;
+              </blockquote>
             </div>
           </div>
+        </section>
+
+        <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <section className="about-ai-panel">
+            <span className="eyebrow">AI-first, always</span>
+            <h2>Better software, faster, at a fraction of the cost.</h2>
+            <p>
+              We&apos;re AI-first in everything we do. We build with the latest models,
+              ship with modern dev tooling, and move at a pace traditional agencies and
+              legacy software companies can&apos;t match. The result is better software,
+              faster, at a fraction of the cost. If you&apos;re running a clinic and
+              your back office still runs on spreadsheets, phone calls, and disconnected
+              systems, we built this for you.
+            </p>
+          </section>
         </div>
 
-        <div className="about-logo-bar">
-          <div className="about-logo-bar-label">Backed by investors from</div>
-          <div className="about-logo-bar-track">
-            <img src="/logos/shopify.png" alt="Shopify" />
-            <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
-            <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
-            <img src="/logos/fellow.png" alt="Fellow" />
-            <img src="/logos/y-combinator.png" alt="Y Combinator" />
-            <img src="/logos/noibu.webp" alt="Noibu" />
-            <img src="/logos/mistral.avif" alt="Mistral" />
-            <img src="/logos/shopify.png" alt="Shopify" />
-            <img src="/logos/deepmind.png" alt="Google DeepMind" style={{height: 44, maxWidth: 180}} />
-            <img src="/logos/rewind.png" alt="Rewind" style={{height: 44, maxWidth: 160}} />
-            <img src="/logos/fellow.png" alt="Fellow" />
-            <img src="/logos/y-combinator.png" alt="Y Combinator" />
-            <img src="/logos/noibu.webp" alt="Noibu" />
-            <img src="/logos/mistral.avif" alt="Mistral" />
-          </div>
+        <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <section className="about-cta-panel">
+            <div>
+              <h2>See what Caddie can do for your clinic.</h2>
+              <p>
+                It starts with a short conversation about how your clinic actually runs.
+              </p>
+            </div>
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
+              Book a demo
+            </a>
+          </section>
         </div>
 
-        <div className="about-cta">
-          <div className="about-cta-box">
-            <h2>Let&apos;s chat.</h2>
-            <p>15 minutes. We&apos;ll show you what your clinic&apos;s custom platform looks like.</p>
-            <a href="https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone" target="_blank" rel="noopener noreferrer" className="about-cta-btn">Book a Conversation &rarr;</a>
-          </div>
-        </div>
-
-        <div className="about-footer">
-          <Link href="/" className="about-nav-brand">
-            <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
-          </Link>
-          <div className="about-footer-links">
-            <Link href="/blog">Blog</Link>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-          </div>
-        </div>
-      </div>
-    </>
+        <InvestorStrip divider={false} standalone />
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

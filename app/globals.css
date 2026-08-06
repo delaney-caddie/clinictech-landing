@@ -4,8 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 /* Force all fixed/absolute positioned embed elements below nav */
-body > div:not(#__next):not([data-nextjs-router]):not(.lightbox-backdrop) {
+body > div:not(#__next):not([data-nextjs-router]):not(.lightbox-backdrop):not(.calendly-overlay) {
   z-index: 9000 !important;
+}
+/* The Calendly popup is a modal and must sit ABOVE the sticky header. At the
+   embed default (9000) the header (99999) covered the popup's close button,
+   swallowing the click so the overlay could not be dismissed. */
+.calendly-overlay {
+  z-index: 100000 !important;
 }
 body > iframe {
   z-index: 9000 !important;
@@ -203,7 +209,7 @@ a.button { color: #fff; }
   font-weight: 700; display: inline-flex; margin: -6px -16px; padding: 6px 16px;
   transition: background .28s, box-shadow .28s; text-decoration: none; color: var(--ink);
 }
-.brand-logo { width: 150px; height: auto; display: block; }
+.brand-logo { width: 178px; height: auto; display: block; }
 .desktop-nav {
   border: 1px solid var(--line); box-shadow: var(--shadow-xs);
   color: var(--ink-soft); background: #ffffffeb; border-radius: 999px;
@@ -237,7 +243,9 @@ a.button { color: #fff; }
 }
 .header-login:hover { color: var(--ink); }
 .nav-dropdown { position: relative; }
-.nav-dropdown::before { content: ""; height: 22px; position: absolute; top: 100%; left: -24px; right: -24px; }
+/* Hover bridge between the trigger and its menu. Spans only the trigger's own
+   width so the menu never opens from hovering below neighboring items. */
+.nav-dropdown::before { content: ""; height: 14px; position: absolute; top: 100%; left: 0; right: 0; }
 .nav-dropdown-trigger {
   color: inherit; cursor: pointer; font: inherit; background: none; border: 0;
   border-radius: 999px; align-items: center; gap: 6px; padding: 8px 15px;
@@ -270,6 +278,30 @@ a.button { color: #fff; }
   transition: color .14s; text-decoration: none;
 }
 .nav-dropdown-menu a:hover { color: var(--blue); }
+
+/* AI Employees mega menu: 8 agents with photos, 2 per row */
+.nav-dropdown-menu.nav-menu-agents {
+  width: min(480px, 100vw - 48px);
+  grid-template-columns: 1fr 1fr;
+  gap: 6px; padding: 14px;
+}
+.nav-menu-agent {
+  border-radius: 12px; align-items: center; gap: 12px; padding: 8px 10px;
+  display: flex; transition: background .14s;
+}
+.nav-menu-agent:hover { background: var(--wash); }
+.nav-menu-agent img {
+  width: 42px; height: 42px; border-radius: 10px; object-fit: cover; flex: none;
+  border: 1.5px solid var(--agent-edge, var(--line-strong));
+}
+.nav-menu-agent strong {
+  display: block; color: var(--ink); font-size: .92rem; font-weight: 620;
+  letter-spacing: -.01em; line-height: 1.2;
+}
+.nav-menu-agent span {
+  display: block; color: var(--agent-role, var(--faint));
+  font-size: .74rem; font-weight: 550; line-height: 1.25;
+}
 .mobile-nav-toggle {
   background: none; border: none; border-radius: 999px; cursor: pointer;
   justify-content: center; align-items: center; width: 40px; height: 40px; padding: 0;
@@ -305,7 +337,7 @@ a.button { color: #fff; }
   .site-header .brand { margin: -6px -12px; padding: 6px 12px; }
   .header-actions { gap: 8px; margin: -6px; padding: 6px; }
   .header-actions .button.small { min-height: 38px; padding-left: 14px; padding-right: 14px; font-size: .86rem; }
-  .brand-logo { width: 122px; }
+  .brand-logo { width: 142px; }
 }
 
 /* ---- Site footer ---- */

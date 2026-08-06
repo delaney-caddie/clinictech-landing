@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
+import { agents, CALENDAR_URL } from "@/lib/agents";
 
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -31,19 +30,40 @@ export function SiteNav() {
     <>
       <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
         <Link href="/" className="brand" onClick={close}>
-          <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie AI" />
+          <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie" />
         </Link>
         <nav className="desktop-nav">
-          <a href="/#agents">Example agents</a>
-          <a href="/#brain">Company brain</a>
-          <a href="/#how-it-works">How it works</a>
-          <Link href="/voice-agent-demo">Voice demo</Link>
+          <div className="nav-dropdown">
+            <Link href="/ai-employees" className="nav-dropdown-trigger" style={{ textDecoration: "none" }}>
+              AI Employees
+            </Link>
+            <div className="nav-dropdown-menu nav-menu-agents">
+              {agents.map((a) => (
+                <Link
+                  key={a.slug}
+                  href={`/ai-employees/${a.slug}`}
+                  className="nav-menu-agent"
+                  style={{
+                    ["--agent-edge" as string]: a.bgEdge,
+                    ["--agent-role" as string]: a.roleColor,
+                  } as React.CSSProperties}
+                >
+                  <img src={a.portrait} alt="" />
+                  <span>
+                    <strong>{a.name}</strong>
+                    <span>{a.role}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <Link href="/platform">Platform</Link>
+          <Link href="/pricing">Pricing</Link>
           <div className="nav-dropdown">
             <button className="nav-dropdown-trigger" type="button">Resources</button>
             <div className="nav-dropdown-menu">
-              <Link href="/blog">Blog</Link>
-              <Link href="/regen-news">Regen news</Link>
               <Link href="/about">About</Link>
+              <Link href="/contact">Contact</Link>
             </div>
           </div>
         </nav>
@@ -78,15 +98,21 @@ export function SiteNav() {
       {mobileOpen && (
         <div className="mobile-nav-panel">
           <div className="mobile-nav-links">
-            <a href="/#agents" onClick={close}>Example agents</a>
-            <a href="/#brain" onClick={close}>Company brain</a>
-            <a href="/#how-it-works" onClick={close}>How it works</a>
-            <Link href="/voice-agent-demo" onClick={close}>Voice demo</Link>
+            <Link href="/ai-employees" onClick={close}>AI Employees</Link>
+            <Link href="/platform" onClick={close}>Platform</Link>
+            <Link href="/pricing" onClick={close}>Pricing</Link>
+            <div className="mobile-nav-group">
+              <span>Meet the team</span>
+              {agents.map((a) => (
+                <Link key={a.slug} href={`/ai-employees/${a.slug}`} onClick={close}>
+                  {a.name} &middot; {a.role}
+                </Link>
+              ))}
+            </div>
             <div className="mobile-nav-group">
               <span>Resources</span>
-              <Link href="/blog" onClick={close}>Blog</Link>
-              <Link href="/regen-news" onClick={close}>Regen news</Link>
               <Link href="/about" onClick={close}>About</Link>
+              <Link href="/contact" onClick={close}>Contact</Link>
             </div>
             <div className="mobile-nav-actions">
               <a

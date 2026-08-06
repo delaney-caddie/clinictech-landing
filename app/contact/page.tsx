@@ -20,22 +20,17 @@ export default function ContactPage() {
         .contact-hero {
           padding: 180px 0 60px; text-align: center;
         }
-        .contact-hero-label {
-          font-size: 11px; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 2px; color: #0E9AC0; margin-bottom: 16px;
-        }
         .contact-hero h1 {
           font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
           font-size: 44px; font-weight: 800; color: #0F172A;
-          margin-bottom: 16px; line-height: 1.1;
-        }
-        .contact-hero p {
-          font-size: 17px; color: #64748B; max-width: 500px;
-          margin: 0 auto; line-height: 1.7;
+          margin: 0; line-height: 1.1;
         }
         .contact-form-wrap {
           max-width: 700px; margin: 0 auto; padding: 0 24px 100px;
+          display: flex; justify-content: center;
         }
+        /* The embed is fixed-width (600px); keep it from overflowing on phones. */
+        .contact-form-wrap > div { max-width: 100%; }
         .contact-footer {
           padding: 40px 24px; border-top: 1px solid rgba(0,0,0,0.06);
           display: flex; justify-content: space-between; align-items: center;
@@ -53,16 +48,16 @@ export default function ContactPage() {
       <div className="contact-page">
         <SiteNav />
         <div className="contact-hero">
-          <div className="contact-hero-label">Smart Form Demo</div>
-          <h1>This is the form your patients would see.</h1>
-          <p>Try it yourself. This smart intake form captures leads at step one, qualifies by condition and budget, and embeds on any website with a single line of code. Every submission goes straight to your Caddie AI dashboard.</p>
+          <h1>Get in touch with the Caddie team</h1>
         </div>
         <div className="contact-form-wrap">
           <div
             id="clinictech-form"
-            data-form-id="6c1b45ad-f597-4fb3-a1c5-d1a31e91ef8f"
+            data-form-id="9e17265b-42e5-41b5-9df9-fa1674679fb5"
             data-host="https://app.clinictech.io"
             data-mode="inline"
+            data-width="600px"
+            data-height="700px"
           ></div>
         </div>
         <div className="contact-footer">
@@ -70,9 +65,9 @@ export default function ContactPage() {
             <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="contact-footer-links">
-            <Link href="/features">Features</Link>
+            <Link href="/platform">Platform</Link>
             <Link href="/about">About</Link>
-            <Link href="/blog">Blog</Link>
+            <Link href="/pricing">Pricing</Link>
           </div>
         </div>
       </div>

@@ -1,195 +1,127 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
+import { SiteFooter } from "@/components/site-footer";
+import { FaqSection } from "@/components/faq-section";
+import { PlaybookPanel } from "@/components/playbook-panel";
+import { InvestorStrip } from "@/components/investor-strip";
+import { agents, getAgent, CALENDAR_URL } from "@/lib/agents";
 
-const CALENDAR_URL = "https://calendly.com/danika-clinictech/clinictech-1-hour-meeting-clone";
+const problemsLeft = [
+  "You start your day with 100+ unread emails",
+  "Patient called after hours without a response",
+  "Your social media hasn't been updated in weeks",
+];
 
-const agents = [
+const problemsRight = [
+  "Your staff is buried in admin",
+  "You can't hire because payroll is getting out of control",
+];
+
+const outcomes = [
   {
-    name: "Mia",
-    slug: "mia",
-    role: "Patient Coordinator",
-    color: "#2563EB",
-    portrait: "/agents/mia.png",
-    mockup: "/mockups/mia.svg",
-    quote: "I answer in seconds, so the first reply a patient gets is always yours.",
-    headline: "Your AI receptionist. Speed to lead, solved.",
-    body: "Mia answers your phone and your web chat 24/7, replies to new inquiries in seconds, answers treatment and pricing questions, drafts emails, runs follow-ups until a lead books or says no, and confirms every appointment. Your front desk stops drowning in admin.",
-    keyFact: "78% of patients book with the clinic that answers first. With Mia, that is you.",
-    badge: null as string | null,
+    title: "More patients booked",
+    body: "Caddie replies to every inquiry in seconds and follows up until the patient books or says no.",
+    proof: "Leads are 5x more likely to book when you respond within 5 minutes.",
   },
   {
-    name: "Vidi",
-    slug: "vidi",
-    role: "Content Marketer",
-    color: "#7C3AED",
-    portrait: "/agents/vidi.png",
-    mockup: "/mockups/vidi.svg",
-    quote: "Send me an idea in a voice note. I will turn it into a week of content.",
-    headline: "A junior marketer on staff, without the hire.",
-    body: "Vidi creates lifelike AI avatars of you or anyone on your team, produces educational videos with no camera or studio, designs on-brand graphics through your Canva, writes the captions, and schedules everything. You approve, Vidi publishes.",
-    keyFact: "A month of on-brand content, produced and scheduled, and you never film a thing.",
-    badge: "Compliance-checked",
+    title: "Lower operating costs",
+    body: "Your AI employees handle the busywork, so you scale volume without adding headcount.",
+    proof: "Cut admin hours and grow without adding more headcount.",
   },
   {
-    name: "Rio",
-    slug: "rio",
-    role: "Retention Specialist",
-    color: "#DB2777",
-    portrait: "/agents/rio.png",
-    mockup: "/mockups/rio.svg",
-    quote: "I remember every patient, and I know exactly when to ask for the review.",
-    headline: "Your cheapest revenue is a patient you already treated.",
-    body: "Rio checks in after every treatment, asks for the Google review at the moment patients are happiest, re-engages the ones who went quiet, and books them back in for follow-up care. Escalates to your doctor the moment something sounds off.",
-    keyFact: "Reviews, rebookings, and reactivated patients, on schedule, with no staff chasing.",
-    badge: null,
-  },
-  {
-    name: "Juno",
-    slug: "juno",
-    role: "Executive Assistant",
-    color: "#16A34A",
-    portrait: "/agents/juno.svg",
-    mockup: "/mockups/juno.svg",
-    quote: "I keep your inbox at zero and your calendar honest. Nothing sends without you.",
-    headline: "Get your inbox and your evenings back.",
-    body: "Juno triages your email, clears the noise, labels what matters, routes patient questions to Mia, drafts replies in your voice, keeps your calendar conflict-free, and hands you a short brief of the few things that actually need you.",
-    keyFact: "Hours back every week, and nothing sends without your approval.",
-    badge: "You approve every send",
-  },
-  {
-    name: "Quill",
-    slug: "quill",
-    role: "SEO Blog Writer",
-    color: "#0D9488",
-    portrait: "/agents/quill.svg",
-    mockup: "/mockups/quill.svg",
-    quote: "I write what your future patients are searching for, then publish it on schedule.",
-    headline: "Patients search before they book. Make sure they find you.",
-    body: "Quill researches the exact questions patients type into Google and AI assistants, writes posts in your voice with your treatments and pricing as context, and publishes straight to your site on a schedule. Traffic compounds while you see patients.",
-    keyFact: "Search-optimized posts on your site every week, hands off.",
-    badge: "Compliance-checked",
-  },
-  {
-    name: "Atlas",
-    slug: "atlas",
-    role: "Protocol Architect",
-    color: "#D97706",
-    portrait: "/agents/atlas.png",
-    mockup: "/mockups/atlas.svg",
-    quote: "I do the protocol paperwork. Your doctor does the medicine.",
-    headline: "Your doctor reviews protocols instead of writing them.",
-    body: "Atlas drafts multi-phase treatment protocols from intake notes, consult notes, and similar past cases, with dosing, costs, and timing laid out per phase. Every draft waits for doctor sign-off. Nothing reaches a patient without it.",
-    keyFact: "Hours of protocol writing become minutes of review. Sign-off required, always.",
-    badge: "Doctor approval required",
+    title: "A 5-star patient experience",
+    body: "Every patient gets instant answers and constant follow-through, even when the clinic is slammed.",
+    proof: "Personalized messages get 20% more responses.",
   },
 ];
 
-const investorLogos = [
-  { src: "/logos/shopify.png", alt: "Shopify" },
-  { src: "/logos/deepmind.png", alt: "Google DeepMind" },
-  { src: "/logos/rewind.png", alt: "Rewind" },
-  { src: "/logos/fellow.png", alt: "Fellow" },
-  { src: "/logos/y-combinator.png", alt: "Y Combinator" },
-  { src: "/logos/noibu.webp", alt: "Noibu" },
-  { src: "/logos/mistral.avif", alt: "Mistral" },
-];
-
-const impactStories = [
+// The patient journey diagram. `agent: "patient"` marks a patient step.
+const journey: { agent: string; tag: string; text: string }[] = [
   {
-    name: "Dr. Carlos M.",
-    role: "Medical Director, regenerative clinic, Tijuana",
-    stat: "22 hrs",
-    statLabel: "of admin saved every week",
-    quote:
-      "I used to spend half my day on WhatsApp coordinating travel for international patients. Flights, hotels, pickups. Now patients handle it themselves through the portal. I actually get to focus on patient care instead of logistics.",
+    agent: "vidi",
+    tag: "Instagram",
+    text: "Vidi posts a knee pain video on your clinic's Instagram.",
   },
   {
-    name: "Sofia R.",
-    role: "Patient Coordinator, multi-location stem cell network",
-    stat: "3 sec",
-    statLabel: "first reply, down from a day",
-    quote:
-      "Our response time dropped from over a day to under 3 seconds. That alone changed everything. Patients were booking with competitors because we were too slow. Now we are always the first clinic to reply.",
-  },
-];
-
-const faqs = [
-  {
-    q: "What do we actually get when we work with Caddie AI?",
-    a: "AI employees built for your clinic: agents that answer and follow up with patients, book consults, handle intake, run post-treatment check-ins, and automate the admin in between. And the team that builds, maintains, and improves them as your clinic changes.",
+    agent: "iris",
+    tag: "Comments & DMs",
+    text: "A patient comments asking about your knee pain treatments. Iris replies in your clinic's voice.",
   },
   {
-    q: "How is this different from buying software?",
-    a: "Software hands you a fixed set of features and hopes they fit. We start from your problems. You tell us where the clinic loses time and patients, and we build agents around how you already work. There is no platform to configure and no tool to train your staff on.",
+    agent: "mia",
+    tag: "Phone",
+    text: "The patient calls for pricing. Mia already has the knee pain context and shares pricing on the spot.",
   },
   {
-    q: "Do clinical decisions ever happen without a doctor?",
-    a: "No. Anything clinical, like a treatment protocol draft, waits for doctor sign-off before it reaches a patient. We enforce that rule in the build itself, not just in policy, and agents hand conversations to your team the moment one needs a human.",
+    agent: "mia",
+    tag: "Calendar",
+    text: "Mia books the consult straight into your doctor's calendar.",
   },
   {
-    q: "Is patient data handled safely?",
-    a: "Yes. Everything we build is HIPAA-conscious from the ground up. Patient data is routed under a business associate agreement, access is permission-gated, and every agent action is recorded for audit.",
+    agent: "atlas",
+    tag: "Protocols",
+    text: "Atlas drafts a knee pain protocol for the patient.",
   },
   {
-    q: "How long until something is live?",
-    a: "It starts with a conversation about how your clinic actually runs. From there we build your first agents around the problems costing you the most. Most clinics have something live within the first couple of weeks.",
+    agent: "juno",
+    tag: "Doctor review",
+    text: "Juno flags the protocol to your doctor for review and sign-off.",
   },
   {
-    q: "What if we need something you have not built before?",
-    a: "That is the point of working with us. Most of what we build starts as a clinic telling us about a problem no off-the-shelf tool solves. Your clinic is never boxed in by what we shipped last quarter.",
+    agent: "sage",
+    tag: "Call prep",
+    text: "Sage preps your concierge with the protocol and full patient context before the call.",
+  },
+  {
+    agent: "patient",
+    tag: "In clinic",
+    text: "The patient comes in and gets treatment.",
+  },
+  {
+    agent: "rio",
+    tag: "Follow-up",
+    text: "Rio follows up for a 5-star review and testimonial.",
   },
 ];
 
-function useCountUp(target: number, decimals = 0, duration = 1400) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [value, setValue] = useState(0);
-  const started = useRef(false);
+const timeline = [
+  {
+    time: "6:14 PM",
+    agent: "mia",
+    text: "A new inquiry comes in. Mia replies in 3 seconds, answers pricing, and offers a consult.",
+  },
+  {
+    time: "8:00 PM",
+    agent: "iris",
+    text: "Iris spots a comment on your latest reel and slides into the DMs to get them booked.",
+  },
+  {
+    time: "6:30 AM",
+    agent: "rio",
+    text: "Rio sends a warm check-in to a patient who went quiet, and reopens the conversation.",
+  },
+  {
+    time: "7:02 AM",
+    agent: "vidi",
+    text: "Vidi posts an educational video about your latest treatments.",
+  },
+];
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting || started.current) return;
-        started.current = true;
-        const t0 = performance.now();
-        const tick = (t: number) => {
-          const p = Math.min((t - t0) / duration, 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setValue(target * eased);
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      },
-      { threshold: 0.4 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target, duration]);
-
-  return { ref, display: value.toFixed(decimals) };
+function agentVars(slug: string | null) {
+  const a = slug ? getAgent(slug) : undefined;
+  if (!a) return {};
+  return {
+    ["--agent-color" as string]: a.color,
+    ["--agent-bg" as string]: a.bg,
+    ["--agent-edge" as string]: a.bgEdge,
+    ["--agent-role" as string]: a.roleColor,
+  } as React.CSSProperties;
 }
-
-function Stat({ target, prefix = "", suffix = "", label }: { target: number; prefix?: string; suffix?: string; label: string }) {
-  const { ref, display } = useCountUp(target);
-  return (
-    <div>
-      <strong ref={ref as React.RefObject<HTMLElement>}>{prefix}{display}{suffix}</strong>
-      <span>{label}</span>
-    </div>
-  );
-}
-
-const DEMO_INTERVAL = 9000;
 
 export default function LandingPage() {
-  const [activeAgent, setActiveAgent] = useState(0);
-  const [lightbox, setLightbox] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
   // Calculator state
   const [inquiries, setInquiries] = useState(60);
   const [avgValue, setAvgValue] = useState(9000);
@@ -213,18 +145,7 @@ export default function LandingPage() {
     };
   }, [inquiries, avgValue, closeRate, coldShare]);
 
-  const fmt = (n: number) =>
-    "$" + Math.round(n).toLocaleString("en-US");
-
-  useEffect(() => { setMounted(true); }, []);
-
-  // Auto-advance the agent demo
-  useEffect(() => {
-    const id = setInterval(() => {
-      setActiveAgent((i) => (i + 1) % agents.length);
-    }, DEMO_INTERVAL);
-    return () => clearInterval(id);
-  }, [activeAgent]);
+  const fmt = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
 
   // Scroll reveal
   useEffect(() => {
@@ -243,26 +164,6 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  // Lightbox keyboard + scroll lock
-  useEffect(() => {
-    if (!lightbox) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
-    };
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [lightbox]);
-
-  const openLightbox = useCallback((slug: string) => setLightbox(slug), []);
-  const closeLightbox = useCallback(() => setLightbox(null), []);
-
-  const agent = agents[activeAgent];
-
   return (
     <div className="ct-page">
       <style>{`
@@ -276,10 +177,9 @@ export default function LandingPage() {
     linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
   border: 1px solid #dde6f8;
   border-radius: clamp(22px, 2.6vw, 34px);
-  grid-template-columns: minmax(0,1.04fr) minmax(0,.96fr);
-  gap: clamp(28px, 4vw, 64px);
-  padding: clamp(34px, 4.8vw, 72px);
-  display: grid; position: relative; overflow: hidden;
+  padding: clamp(40px, 5vw, 76px) clamp(24px, 4vw, 64px) clamp(34px, 4vw, 56px);
+  display: grid; justify-items: center; text-align: center;
+  position: relative; overflow: hidden;
   box-shadow: 0 10px 28px #1c2e6e12, 0 36px 90px #1c2e6e1a;
 }
 .hero-panel::before {
@@ -287,339 +187,193 @@ export default function LandingPage() {
   background-image: radial-gradient(#355cff33 1px, #0000 1.5px);
   background-size: 26px 26px;
   position: absolute; inset: 0;
-  -webkit-mask-image: radial-gradient(640px 480px at 78% 38%, #000, #0000 75%);
-  mask-image: radial-gradient(640px 480px at 78% 38%, #000, #0000 75%);
+  -webkit-mask-image: radial-gradient(720px 420px at 50% 0%, #000, #0000 78%);
+  mask-image: radial-gradient(720px 420px at 50% 0%, #000, #0000 78%);
 }
-.hero-copy { z-index: 1; align-self: center; position: relative; }
 .hero-badge {
   box-shadow: var(--shadow-xs); color: var(--blue-deep); letter-spacing: -.005em;
   background: #ffffffd9; border: 1px solid #355cff2e; border-radius: 999px;
   align-items: center; gap: 9px; margin-bottom: 26px; padding: 8px 15px;
   font-size: .84rem; font-weight: 600; display: inline-flex;
+  position: relative; z-index: 1;
 }
 .hero-badge::before {
   background: var(--green); content: ""; border-radius: 999px; width: 6px; height: 6px;
   animation: 2.4s ease-in-out infinite ct-pulse; box-shadow: 0 0 0 3px #1f9d6a29;
 }
-.hero h1 {
-  font-size: clamp(2.7rem, 4.5vw, 4rem); max-width: 560px; margin-bottom: 22px; line-height: 1.04;
-}
-.hero-copy > p:not(.eyebrow) { color: var(--ink-soft); font-size: var(--text-lg); max-width: 470px; line-height: 1.62; }
-.hero-actions { flex-wrap: wrap; gap: 12px; margin: 30px 0 0; display: flex; }
-.hero-stats {
-  z-index: 1; border-top: 1px solid #1c2e6e24; grid-column: 1/-1;
-  gap: clamp(36px, 6vw, 72px); margin: 0; padding-top: clamp(22px, 2.6vw, 30px);
-  display: flex; position: relative;
-}
-.hero-stats div { gap: 6px; display: grid; }
-.hero-stats strong {
-  color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em;
-  font-size: clamp(1.4rem, 2vw, 1.7rem); font-weight: 620; line-height: 1;
-}
-.hero-stats span { color: var(--muted-ink); letter-spacing: -.005em; font-size: .84rem; font-weight: 500; }
-.hero-visual { z-index: 1; align-self: center; min-height: 440px; position: relative; display: grid; align-content: center; gap: 12px; }
+.hero h1 { font-size: clamp(2.7rem, 5vw, 4.2rem); max-width: 800px; margin: 0 auto 20px; line-height: 1.04; position: relative; z-index: 1; }
+.hero-sub { color: var(--ink-soft); font-size: var(--text-lg); max-width: 620px; margin: 0 auto; line-height: 1.62; position: relative; z-index: 1; }
+.hero-actions { justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; display: flex; position: relative; z-index: 1; }
 
-/* Hero console */
-.hv-signals { display: grid; gap: 8px; margin-bottom: 4px; }
-.hv-signal {
-  background: #ffffffd9; border: 1px solid #355cff24; border-radius: 999px;
-  box-shadow: var(--shadow-xs); color: var(--ink-soft);
-  align-items: center; gap: 9px; padding: 8px 16px; width: fit-content;
-  font-size: .82rem; font-weight: 500; display: inline-flex;
+/* Hero lineup */
+.hero-lineup {
+  width: 100%; margin-top: clamp(34px, 4vw, 52px);
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px;
+  position: relative; z-index: 1;
 }
-.hv-signal::before { content: ""; background: var(--blue); border-radius: 999px; width: 5px; height: 5px; flex: none; }
-.hv-signal:nth-child(2) { margin-left: 22px; }
-.hv-signal:nth-child(3) { margin-left: 44px; }
-.hv-card {
+.lineup-card {
+  background: #ffffffd9; border: 1px solid #355cff24; border-radius: 16px;
+  box-shadow: var(--shadow-xs); padding: 12px 8px 14px;
+  display: grid; justify-items: center; gap: 8px; text-decoration: none;
+  transition: transform .2s var(--ease), box-shadow .2s ease, border-color .2s ease;
+}
+.lineup-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--agent-edge, var(--blue)); }
+.lineup-card img {
+  width: 100%; max-width: 92px; aspect-ratio: 1; border-radius: 14px; object-fit: cover;
+  border: 2px solid var(--agent-edge, var(--line-strong));
+}
+.lineup-card strong { color: var(--ink); font-size: .95rem; font-weight: 620; letter-spacing: -.01em; line-height: 1; }
+.lineup-card span { color: var(--agent-role, var(--muted-ink)); font-size: .72rem; font-weight: 550; line-height: 1.25; text-align: center; }
+
+/* ===== HERO RATING ===== */
+.hero-rating {
+  z-index: 1; position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 7px; margin-top: clamp(20px, 2.4vw, 30px);
+}
+.hero-rating-top { display: flex; align-items: center; gap: 10px; }
+.hero-stars { display: inline-flex; gap: 3px; }
+.hero-stars svg { width: 18px; height: 18px; fill: #f4b740; display: block; }
+.hero-rating strong { color: var(--ink); font-size: 1rem; font-weight: 650; letter-spacing: -.012em; }
+.hero-rating-note { color: var(--ink-soft); font-size: .94rem; font-weight: 500; }
+
+/* ===== PROBLEM ===== */
+.problem-section { text-align: center; }
+.problem-section .section-copy { margin: 0 auto; }
+.problem-layout {
+  max-width: 1020px; margin: 40px auto 0;
+  display: grid; grid-template-columns: 1fr minmax(280px, 400px) 1fr;
+  gap: 24px; align-items: center;
+}
+.problem-col { display: grid; gap: 18px; }
+.problem-img {
+  border-radius: var(--r-xl); overflow: hidden;
+  border: 1px solid var(--line); box-shadow: var(--shadow-lg);
+}
+.problem-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.problem-bubble {
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 22px;
+  box-shadow: var(--shadow-sm); color: var(--ink); text-align: left;
+  padding: 14px 20px; font-size: .96rem; font-weight: 530; line-height: 1.45;
 }
-.hv-card-kicker {
-  color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
-  letter-spacing: .08em; text-transform: uppercase; font-size: .68rem; font-weight: 500;
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+.problem-bubble::before {
+  content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--coral);
+  display: inline-block; margin-right: 10px; vertical-align: 2px;
 }
-.hv-card-kicker em { font-style: normal; color: var(--green); }
-.hv-card h3 { font-size: 1.22rem; margin-bottom: 6px; }
-.hv-card > p { font-size: .88rem; line-height: 1.55; margin-bottom: 16px; }
-.hv-meta { display: flex; gap: 18px; align-items: center; border-top: 1px solid var(--line); padding-top: 14px; margin-bottom: 14px; }
-.hv-score {
-  width: 52px; height: 52px; border-radius: 999px; flex: none;
-  background: conic-gradient(var(--blue) 338deg, #d9e2f8 0);
-  display: grid; place-items: center;
-}
-.hv-score span {
-  width: 42px; height: 42px; border-radius: 999px; background: var(--surface);
-  display: grid; place-items: center; font-weight: 640; font-size: .92rem;
-  font-variant-numeric: tabular-nums; color: var(--ink);
-}
-.hv-meta-item { display: grid; gap: 2px; }
-.hv-meta-item strong { font-size: .92rem; font-weight: 620; color: var(--ink); letter-spacing: -.01em; }
-.hv-meta-item span { font-size: .74rem; color: var(--faint); }
-.hv-booked {
-  background: var(--mint); border: 1px solid #1f9d6a3d; border-radius: var(--r-sm);
-  color: #14684a; align-items: center; gap: 8px; padding: 10px 14px; margin-bottom: 12px;
-  font-size: .84rem; font-weight: 560; display: flex;
-}
-.hv-next {
-  background: var(--blue-wash); border-radius: var(--r-sm); color: var(--blue-ink);
-  justify-content: space-between; align-items: center; gap: 10px; padding: 12px 14px;
-  font-size: .86rem; font-weight: 560; display: flex;
-}
-.hv-next span:last-child { transition: transform .2s var(--ease); }
-.hv-card:hover .hv-next span:last-child { transform: translateX(2px); }
+.problem-col:first-child .problem-bubble { border-radius: 18px 18px 4px 18px; }
+.problem-col:last-child .problem-bubble { border-radius: 18px 18px 18px 4px; }
 
-/* ===== PROOF BAR ===== */
-.proof-bar {
-  border-bottom: 1px solid var(--line);
-  grid-template-columns: 1fr 1.05fr;
-  grid-template-areas: "label ." "logos copy";
-  align-items: center; gap: 18px 48px; padding-top: 34px; padding-bottom: 34px;
-  display: grid;
-}
-.proof-bar .ui-label { color: var(--faint); grid-area: label; margin-bottom: 0; }
-.proof-bar-logos { grid-area: logos; display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }
-.proof-bar-logos img { height: 28px; width: auto; max-width: 110px; object-fit: contain; opacity: .82; filter: grayscale(1); }
-.proof-bar-copy { grid-area: copy; align-self: center; font-size: .96rem; margin-bottom: 0; }
-.proof-bar-copy strong { color: var(--ink); font-weight: 600; }
-
-/* ===== DEMO (agents) ===== */
-.workflow-intro-section { text-align: center; padding-bottom: 28px; }
-.workflow-intro-section .section-copy { margin: 0 auto; }
-.demo-section { gap: 26px; display: grid; padding-top: 0; }
-.demo-shell {
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink); padding: 28px;
-}
-.demo-tabs { grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 26px; display: grid; }
-.demo-tab {
-  background: var(--wash); border: 1px solid var(--line); color: var(--muted-ink);
-  text-align: left; border-radius: 12px; align-items: center; gap: 12px;
-  padding: 14px 18px; font-size: .95rem; font-weight: 560; font-family: inherit;
-  transition: background .18s, border-color .18s, box-shadow .18s, color .18s;
-  display: flex; position: relative; overflow: hidden; cursor: pointer;
-}
-.demo-tab:hover { border-color: var(--line-strong); color: var(--ink); }
-.demo-tab.is-active { background: var(--surface); border-color: var(--line-strong); box-shadow: var(--shadow-sm); color: var(--ink); }
-.demo-tab-index {
-  color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: .7rem; font-weight: 500;
-}
-.demo-tab.is-active .demo-tab-index { color: var(--blue); }
-.demo-tab-role { color: var(--faint); font-size: .74rem; font-weight: 500; display: block; }
-.demo-tab-progress { background: none; height: 2px; position: absolute; bottom: 0; left: 0; right: 0; }
-.demo-tab-progress.is-running::after {
-  background: var(--blue); content: ""; height: 100%; display: block;
-  animation: ${DEMO_INTERVAL}ms linear both tab-progress;
-}
-@keyframes tab-progress { from { width: 0; } to { width: 100%; } }
-.demo-panel {
-  animation: panel-swap .32s var(--ease);
-  grid-template-columns: minmax(240px, 340px) 1fr;
-  align-items: center; gap: 36px; display: grid;
-}
-.demo-copy { grid-template-rows: auto 1fr auto; align-items: flex-start; gap: 18px; min-height: 0; padding: 12px 0 12px 4px; display: grid; }
-.demo-agent-row { display: flex; align-items: center; gap: 12px; }
-.demo-portrait {
-  width: 52px; height: 52px; border-radius: 999px; object-fit: cover; flex: none;
-  border: 2px solid var(--agent-color, var(--blue)); background: var(--wash);
-}
-.demo-copy h3 { font-size: 1.6rem; font-weight: var(--font-heading); letter-spacing: -.022em; margin-bottom: 0; }
-.demo-agent-role { color: var(--faint); font-size: .86rem; font-weight: 500; }
-.demo-copy p { margin-bottom: 0; color: var(--muted-ink); }
-.demo-copy strong {
-  border-left: 2px solid var(--agent-color, var(--blue)); color: var(--ink);
-  padding: 4px 0 4px 16px; font-weight: 530; line-height: 1.5; display: block;
-}
-.demo-badge {
-  width: fit-content; border: 1px solid var(--line-strong); border-radius: 999px;
-  color: var(--ink-soft); padding: 4px 12px; font-size: .76rem; font-weight: 600;
-}
-.demo-screenshot-frame {
-  aspect-ratio: 1500/980; background: var(--wash); border: 1px solid var(--line);
-  border-radius: var(--r); box-shadow: var(--shadow-sm); align-self: center;
-  overflow: hidden; padding: 0; cursor: zoom-in; display: block; width: 100%;
-}
-.demo-screenshot { object-fit: cover; object-position: top left; width: 100%; height: 100%; display: block; }
-.demo-carousel-controls { color: var(--faint); justify-content: flex-end; align-items: center; gap: 14px; margin-top: 20px; display: flex; }
-.demo-carousel-controls > span {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-variant-numeric: tabular-nums; font-size: .8rem; font-weight: 500;
-}
-.demo-carousel-controls > div { gap: 8px; display: flex; }
-.demo-carousel-controls button {
-  background: var(--surface); border: 1px solid var(--line-strong); color: var(--ink);
-  height: 36px; width: 36px; border-radius: 999px; font-size: 1rem; cursor: pointer;
-  justify-content: center; align-items: center; display: inline-flex;
-  transition: background .16s ease, border-color .16s ease, transform .16s var(--ease);
-}
-.demo-carousel-controls button:hover { background: var(--wash); border-color: #0d111742; transform: translateY(-1px); }
-.demo-custom-note {
-  border-top: 1px solid var(--line); margin-top: 24px; padding-top: 20px;
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
-}
-.demo-custom-note p { margin: 0; font-size: .94rem; }
-.demo-custom-note p strong { color: var(--ink); font-weight: 600; }
-.demo-agent-quote {
-  color: var(--agent-color, var(--blue)); font-size: .92rem; font-style: italic;
-  line-height: 1.5; margin: 0;
-}
-.demo-agent-quote::before { content: "\\201C"; }
-.demo-agent-quote::after { content: "\\201D"; }
-
-/* ===== BRAIN (the company brain) ===== */
-.brain-panel {
-  color: #eef2fb;
-  background:
-    radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
-    radial-gradient(640px 460px at -6% 112%, #8b5cf64d, #0000 60%),
-    radial-gradient(520px 380px at 52% 118%, #14b8a63d, #0000 65%),
-    linear-gradient(152deg, #1a2b5c 0%, #23407e 52%, #1a2b5c 100%);
-  border: 1px solid #ffffff26;
-  border-radius: var(--r-xl);
-  box-shadow: 0 14px 34px #1a2b5c30, 0 40px 90px #1a2b5c3d;
-  margin-bottom: var(--section-y);
-  padding: clamp(36px, 5vw, 64px);
-  display: grid;
-  grid-template-columns: minmax(0, .95fr) minmax(360px, 1.05fr);
-  gap: clamp(28px, 4vw, 56px);
-  align-items: center;
-  position: relative; overflow: hidden;
-  scroll-margin-top: 110px;
-}
-.brain-panel::before {
-  content: ""; pointer-events: none; position: absolute; inset: 0;
-  background-image: radial-gradient(#a7c0ff40 1px, #0000 1.5px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
-  mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
-}
-.brain-copy { position: relative; z-index: 1; }
-.brain-panel .eyebrow { color: #a7c0ff; }
-.brain-panel h2 { color: #fff; }
-.brain-copy > p { color: #c2cff0; }
-.brain-points { display: grid; gap: 18px; margin-top: 28px; }
-.brain-point { border-left: 2px solid #9db9ff73; padding-left: 16px; }
-.brain-point strong { display: block; color: #fff; font-size: .95rem; font-weight: 600; margin-bottom: 3px; }
-.brain-point span { color: #b7c6e8; font-size: .9rem; line-height: 1.6; }
-.brain-visual { position: relative; z-index: 1; align-self: center; }
-.brain-hub { width: 100%; height: auto; display: block; }
-.brain-ask {
-  grid-column: 1 / -1; position: relative; z-index: 1;
-  background: #0d1a44b8; border: 1px solid #ffffff2b; border-radius: var(--r);
-  padding: 16px 20px;
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-}
-.brain-ask-row { display: flex; align-items: center; gap: 12px; }
-.brain-ask-row::before {
-  content: ""; flex: none; width: 8px; height: 8px; border-radius: 999px;
-  background: #6ee7b7; box-shadow: 0 0 12px #6ee7b7cc;
-  animation: 2.4s ease-in-out infinite ct-pulse;
-}
-.brain-ask-q { color: #fff; font-weight: 560; font-size: .98rem; flex: 1; letter-spacing: -.01em; }
-.brain-ask kbd {
-  background: #ffffff14; border: 1px solid #ffffff2b; border-radius: 6px;
-  color: #cdd9f2; padding: 3px 9px; font-size: .72rem;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-}
-.brain-ask-a {
-  border-top: 1px solid #ffffff1f; color: #dde6fa;
-  margin: 14px 0 0; padding-top: 14px; font-size: .92rem; line-height: 1.6;
-}
-.brain-ask-a strong { color: #fff; font-weight: 620; }
-.brain-ask-src { display: block; margin-top: 8px; color: #a7b9e2; font-size: .78rem; font-weight: 600; }
-
-/* ===== SPLIT (overnight) ===== */
-.split-section {
-  grid-template-columns: minmax(0,.82fr) minmax(360px,1fr);
-  align-items: center; gap: 56px; display: grid;
-}
-.overnight-card {
+/* ===== OUTCOMES ===== */
+.outcome-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; }
+.outcome-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); overflow: hidden;
-}
-.overnight-head {
-  background: var(--navy); color: #fff; padding: 14px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.overnight-head span:first-child { font-size: .88rem; font-weight: 600; letter-spacing: -.01em; }
-.overnight-head span:last-child {
-  color: #aab5c7; font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: .72rem; font-variant-numeric: tabular-nums;
-}
-.overnight-rows { padding: 10px 20px; }
-.overnight-row {
-  display: flex; gap: 12px; align-items: flex-start; padding: 13px 0;
-  border-bottom: 1px solid var(--line); font-size: .9rem;
-}
-.overnight-row:last-child { border-bottom: 0; }
-.overnight-check {
-  flex: none; width: 20px; height: 20px; border-radius: 999px; margin-top: 1px;
-  background: var(--mint); color: #14684a; font-size: .68rem; font-weight: 700;
-  display: grid; place-items: center;
-}
-.overnight-row div strong { display: block; color: var(--ink); font-weight: 600; font-size: .9rem; letter-spacing: -.01em; }
-.overnight-row div span { color: var(--faint); font-size: .8rem; }
-.overnight-needs-you {
-  margin: 6px 20px 20px; background: var(--blue-wash); border-radius: var(--r-sm);
-  color: var(--blue-ink); padding: 12px 14px; font-size: .86rem; font-weight: 560;
-}
-
-/* ===== PILLARS (how it works) ===== */
-.pillar-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; }
-.pillar-card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); min-height: 300px; padding: var(--card-pad);
-  flex-direction: column; display: flex;
+  box-shadow: var(--shadow-xs); padding: var(--card-pad);
+  display: flex; flex-direction: column;
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s var(--ease);
 }
-.pillar-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.pillar-num {
+.outcome-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.outcome-num {
   color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: .72rem; font-weight: 500; letter-spacing: .08em; margin-bottom: 14px;
 }
-.pillar-card h3 { margin-bottom: 16px; font-size: var(--h2-card); font-weight: var(--font-subhead); }
-.pillar-card p { margin-bottom: 24px; font-size: .96rem; }
-.pillar-card strong {
+.outcome-card h3 { margin-bottom: 12px; font-size: var(--h2-card); font-weight: var(--font-subhead); }
+.outcome-card p { margin-bottom: 22px; font-size: .96rem; }
+.outcome-card strong {
   background: var(--blue-wash); border-radius: var(--r-sm); color: var(--blue-ink);
   margin-top: auto; padding: 13px 14px; font-weight: 560; display: block; font-size: .9rem;
 }
-.pillar-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+.outcome-actions { margin-top: 28px; display: flex; justify-content: center; }
 
-/* ===== PROOF STORY ===== */
-.proof-story {
-  border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink);
-  margin-bottom: var(--section-y);
-  background:
-    radial-gradient(560px 360px at 14% 0, #fff9, #0000 70%),
-    linear-gradient(125deg, #d8f0e4 0%, #d6e5fb 38%, #ebe3fb 70%, #fbe7dc 100%);
-  border: 1px solid #e4e2ee;
-  grid-template-columns: .85fr 1fr auto; align-items: center; gap: 32px;
-  padding: 56px; display: grid;
+/* ===== PATIENT JOURNEY ===== */
+.journey-section { text-align: center; }
+.journey-section .section-copy { margin: 0 auto; }
+.journey {
+  max-width: 860px; margin: 44px auto 0; position: relative;
+  display: grid; gap: 26px; text-align: left;
 }
-.proof-story .eyebrow { margin-bottom: 10px; }
-.proof-story h2 { margin-bottom: 0; }
-.proof-story p { color: var(--ink-soft); margin-bottom: 0; }
-
-/* ===== IMPACT GRID ===== */
-.impact-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(2, 1fr); margin-top: 28px; }
-.impact-grid article {
+.journey::before {
+  content: ""; position: absolute; top: 28px; bottom: 28px; left: 50%;
+  border-left: 2px dashed #b9c6e6; transform: translateX(-1px);
+}
+.journey-step {
+  display: grid; grid-template-columns: 1fr 64px 1fr;
+  align-items: center; gap: 18px; position: relative;
+}
+.journey-node {
+  grid-column: 2; justify-self: center; position: relative; z-index: 1;
+}
+.journey-node img {
+  width: 60px; height: 60px; border-radius: 999px; object-fit: cover; display: block;
+  border: 2.5px solid var(--agent-edge, var(--line-strong));
+  background: var(--agent-bg, var(--wash));
+  box-shadow: 0 0 0 5px var(--paper), var(--shadow-sm);
+}
+.journey-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); padding: var(--card-pad);
-  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow-sm); padding: 16px 20px;
+}
+.journey-step:nth-child(odd) .journey-card { grid-column: 1; grid-row: 1; }
+.journey-step:nth-child(even) .journey-card { grid-column: 3; grid-row: 1; }
+.journey-tag {
+  color: var(--agent-role, var(--faint)); letter-spacing: .06em; text-transform: uppercase;
+  font-size: .68rem; font-weight: 700; display: block; margin-bottom: 5px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.journey-card p { margin: 0; color: var(--ink); font-size: .94rem; font-weight: 510; line-height: 1.55; }
+.journey-actions { margin-top: 36px; display: flex; justify-content: center; }
+
+/* ===== TEAM GRID ===== */
+.team-section { text-align: center; }
+.team-section .section-copy { margin: 0 auto; }
+.team-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 32px; text-align: left; }
+.team-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs); overflow: hidden; text-decoration: none; display: flex; flex-direction: column;
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s var(--ease);
 }
-.impact-grid article:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.impact-stat { display: flex; align-items: baseline; gap: 10px; }
-.impact-stat strong {
-  color: var(--blue); font-size: 2rem; font-weight: 620; letter-spacing: -.03em;
-  font-variant-numeric: tabular-nums; line-height: 1;
+.team-card:hover { border-color: var(--agent-edge, var(--blue)); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.team-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.team-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.team-card-body strong { color: var(--ink); font-size: 1.05rem; font-weight: 620; letter-spacing: -.014em; }
+.team-card-role { color: var(--agent-role, var(--blue)); font-size: .8rem; font-weight: 650; }
+.team-card-quote { color: var(--muted-ink); font-size: .88rem; font-style: italic; line-height: 1.5; margin: 4px 0 10px; }
+.team-card-more { margin-top: auto; color: var(--ink); font-size: .84rem; font-weight: 600; }
+.team-card:hover .team-card-more { color: var(--agent-role, var(--blue)); }
+
+/* ===== TIMELINE ===== */
+.timeline-section {
+  grid-template-columns: minmax(0,.82fr) minmax(360px,1fr);
+  align-items: center; gap: 56px; display: grid;
 }
-.impact-stat span { color: var(--faint); font-size: .84rem; font-weight: 500; }
-.impact-grid blockquote { margin: 0; color: var(--muted-ink); font-size: .96rem; line-height: 1.65; flex: 1; }
-.impact-author { border-top: 1px solid var(--line); padding-top: 14px; }
-.impact-author strong { display: block; color: var(--ink); font-size: .9rem; font-weight: 600; }
-.impact-author span { color: var(--faint); font-size: .82rem; }
+.timeline-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.timeline-head {
+  background: var(--navy); color: #fff; padding: 14px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.timeline-head span:first-child { font-size: .88rem; font-weight: 600; letter-spacing: -.01em; }
+.timeline-head span:last-child {
+  color: #aab5c7; font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: .72rem;
+}
+.timeline-rows { padding: 8px 20px 14px; }
+.timeline-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.timeline-row:last-child { border-bottom: 0; }
+.timeline-avatar {
+  width: 40px; height: 40px; border-radius: 999px; object-fit: cover; flex: none; margin-top: 2px;
+  border: 2px solid var(--agent-edge, var(--line-strong));
+}
+.timeline-row time {
+  display: block; color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: .72rem; font-variant-numeric: tabular-nums; margin-bottom: 3px;
+}
+.timeline-row p { margin: 0; color: var(--ink-soft); font-size: .92rem; line-height: 1.55; }
+.timeline-proof {
+  margin: 0 20px 20px; background: var(--blue-wash); border-radius: var(--r-sm);
+  color: var(--blue-ink); padding: 12px 14px; font-size: .86rem; font-weight: 560;
+}
 
 /* ===== CALCULATOR ===== */
 .calculator-section {
@@ -666,25 +420,6 @@ export default function LandingPage() {
 .calculator-result .fine-print { color: var(--faint); }
 .calculator-cta { margin-top: 22px; }
 
-/* ===== FAQ ===== */
-.faq-section { grid-template-columns: .72fr 1fr; gap: 56px; display: grid; }
-.faq-list { display: grid; }
-.faq-list details { border-top: 1px solid var(--line); }
-.faq-list details:last-child { border-bottom: 1px solid var(--line); }
-.faq-list summary {
-  color: var(--ink); cursor: pointer; letter-spacing: -.012em;
-  justify-content: space-between; align-items: center; gap: 18px; padding: 22px 0;
-  font-size: 1.04rem; font-weight: 560; list-style: none; transition: color .16s; display: flex;
-}
-.faq-list summary::-webkit-details-marker { display: none; }
-.faq-list summary::after {
-  color: var(--faint); content: "+"; flex: none; font-size: 1.3rem; font-weight: 400; line-height: 1;
-  transition: transform .22s var(--ease), color .16s ease;
-}
-.faq-list details[open] summary::after { color: var(--blue); transform: rotate(45deg); }
-.faq-list summary:hover { color: var(--blue); }
-.faq-list p { max-width: 560px; margin: 0 0 24px; }
-
 /* ===== CTA ===== */
 .cta-section {
   border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink);
@@ -699,56 +434,31 @@ export default function LandingPage() {
 .cta-section h2 { margin-bottom: 10px; }
 .cta-section p { color: var(--ink-soft); max-width: 640px; margin-bottom: 0; }
 
-/* ===== LIGHTBOX ===== */
-.lightbox-backdrop {
-  position: fixed; inset: 0; background: #0d1117d9;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 999999; padding: 40px 24px; animation: lb-fade .18s ease;
-}
-@keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
-.lightbox-inner { max-width: 1300px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.lightbox-img-wrap {
-  background: #fff; border-radius: var(--r); box-shadow: var(--shadow-lg);
-  max-width: 100%; max-height: 82vh; overflow: auto;
-}
-.lightbox-img-wrap img { display: block; width: 100%; height: auto; max-width: 1300px; }
-.lightbox-caption { color: #fff; font-size: .9rem; font-weight: 560; display: flex; align-items: center; gap: 12px; }
-.lightbox-close {
-  background: #fff; color: var(--ink); border: none; font-family: inherit;
-  font-weight: 600; font-size: .82rem; padding: 6px 14px; border-radius: 999px; cursor: pointer;
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1020px) {
-  .hero-panel, .split-section, .brain-panel, .faq-section, .calculator-grid { grid-template-columns: 1fr; }
-  .proof-bar { grid-template-columns: 1fr; grid-template-areas: "label" "logos" "copy"; }
-  .hero-visual { min-height: 420px; }
-  .pillar-grid { grid-template-columns: 1fr; }
-  .proof-story { grid-template-columns: 1fr; padding: 40px; }
-  .impact-grid { grid-template-columns: 1fr; }
-  .demo-tabs { grid-template-columns: repeat(3, 1fr); }
-  .demo-tab { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; font-size: .86rem; }
-  .demo-tab-role { display: none; }
-  .demo-panel { grid-template-columns: 1fr; }
+  .hero-lineup { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
+  .problem-img { order: -1; }
+  .outcome-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .timeline-section, .calculator-grid { grid-template-columns: 1fr; }
+  .journey::before { left: 30px; }
+  .journey-step { grid-template-columns: 64px 1fr; }
+  .journey-node { grid-column: 1; }
+  .journey-step:nth-child(odd) .journey-card,
+  .journey-step:nth-child(even) .journey-card { grid-column: 2; grid-row: 1; }
   .cta-section { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) {
   .hero { padding-top: 10px; padding-left: 10px; padding-right: 10px; }
-  .hero-panel { gap: 22px; padding: 28px 22px; }
+  .hero-panel { padding: 32px 18px 26px; }
   .hero h1 { font-size: 2.3rem; line-height: 1.06; }
-  .hero-copy > p:not(.eyebrow) { font-size: 1rem; }
+  .hero-sub { font-size: 1rem; }
   .hero-actions { margin: 22px 0 0; }
-  .hero-actions .button { min-height: 42px; padding-left: 13px; padding-right: 13px; font-size: .9rem; }
-  .hero-stats { flex-wrap: wrap; gap: 20px 28px; margin-top: 4px; padding-top: 24px; }
-  .hero-stats strong { font-size: 1.15rem; }
-  .hero-stats span { font-size: .7rem; }
-  .hero-visual { min-height: 380px; }
-  .demo-shell { padding: 18px; }
-  .demo-copy { min-height: auto; padding-left: 0; }
-  .demo-tabs { gap: 6px; grid-template-columns: repeat(3, 1fr); }
-  .demo-tab { justify-content: center; align-items: center; padding: 9px 6px; }
-  .demo-tab-index { display: none; }
-  .proof-story, .cta-section { padding: 30px; }
+  .hero-lineup { grid-template-columns: repeat(2, 1fr); }
+  .lineup-card img { max-width: 120px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 30px; }
   .calculator-result strong { font-size: 2.2rem; }
 }
       `}</style>
@@ -759,326 +469,194 @@ export default function LandingPage() {
         {/* ===== HERO ===== */}
         <section className="hero">
           <div className="hero-panel">
-            <div className="hero-copy reveal-item is-visible">
-              <div className="hero-badge">Built for clinics that run on bookings</div>
-              <h1>We build AI employees for your clinic.</h1>
-              <p>
-                We don&apos;t hand you a fixed set of tools and hope they fit. We learn how your
-                clinic actually runs, build agents for the problems costing you the most, and
-                keep building as your needs grow.
-              </p>
-              <div className="hero-actions">
-                <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-                  Book a demo
-                </a>
-                <a href="#agents" className="button secondary">See what you get</a>
-              </div>
+            <div className="hero-badge">Your front office, running while you sleep</div>
+            <h1>AI Employees Scaling Your Clinic 24/7</h1>
+            <p className="hero-sub">
+              Get an AI team who handles patient inquiries, your inbox, socials, SEO,
+              lead gen, protocols and marketing around the clock.
+            </p>
+            <div className="hero-actions">
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
+                Book a demo
+              </a>
             </div>
-
-            <div className="hero-visual">
-              <div className="hv-signals" aria-hidden="true">
-                <span className="hv-signal">New inquiry, 9:14 PM</span>
-                <span className="hv-signal">Asked about treatment pricing</span>
-                <span className="hv-signal">Wants an appointment this week</span>
-              </div>
-              <div className="hv-card">
-                <div className="hv-card-kicker">
-                  <span>Qualified lead</span>
-                  <em>Mia replied in 3 seconds</em>
-                </div>
-                <h3>Knee pain consultation</h3>
-                <p>
-                  New patient asking about treatment options. Pricing shared, recovery questions
-                  answered, free consultation offered.
-                </p>
-                <div className="hv-meta">
-                  <div className="hv-score" aria-hidden="true"><span>94</span></div>
-                  <div className="hv-meta-item">
-                    <strong>Hot lead</strong>
-                    <span>Fit score</span>
-                  </div>
-                  <div className="hv-meta-item">
-                    <strong>$12K</strong>
-                    <span>Est. value</span>
-                  </div>
-                  <div className="hv-meta-item">
-                    <strong>EN / ES</strong>
-                    <span>Languages</span>
-                  </div>
-                </div>
-                <div className="hv-booked">
-                  <span>&#10003;</span> Consultation booked for Apr 22 at 10:00 AM with Dr. Rivera
-                </div>
-                <div className="hv-next">
-                  <span>Next step: Juno adds it to your morning brief</span>
-                  <span aria-hidden="true">&rarr;</span>
-                </div>
-              </div>
+            <div className="hero-lineup">
+              {agents.map((a) => (
+                <Link
+                  key={a.slug}
+                  href={`/ai-employees/${a.slug}`}
+                  className="lineup-card"
+                  style={agentVars(a.slug)}
+                >
+                  <img src={a.portrait} alt={`${a.name}, ${a.role}`} />
+                  <strong>{a.name}</strong>
+                  <span>{a.role}</span>
+                </Link>
+              ))}
             </div>
-
-            <div className="hero-stats">
-              <Stat target={25} prefix="+" suffix="%" label="Patient conversion" />
-              <Stat target={50} suffix="%+" label="More operating efficiency" />
-              <Stat target={5} suffix="x" label="Staff output, same headcount" />
-              <div>
-                <strong>24/7</strong>
-                <span>Practice availability</span>
+            <div className="hero-rating">
+              <div className="hero-rating-top">
+                <span className="hero-stars" role="img" aria-label="Rated 4.9 out of 5">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <svg key={i} viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M10 1.6l2.47 5.3 5.53.7-4.07 3.9 1.05 5.6L10 14.4l-5 2.7 1.05-5.6L1.98 7.6l5.53-.7z" />
+                    </svg>
+                  ))}
+                </span>
+                <strong>Excellent</strong>
               </div>
+              <span className="hero-rating-note">
+                4.9/5, trusted by top clinics worldwide
+              </span>
             </div>
           </div>
         </section>
 
         {/* ===== PROOF BAR ===== */}
-        <div className="proof-bar">
-          <span className="ui-label">Backed by investors from</span>
-          <div className="proof-bar-logos">
-            {investorLogos.map((logo) => (
-              <img key={logo.alt} src={logo.src} alt={logo.alt} loading="lazy" />
-            ))}
-          </div>
-          <p className="proof-bar-copy">
-            <strong>Operators and investors</strong>{" "}
-            behind some of the world&apos;s best software and AI companies back Caddie AI.
-          </p>
-        </div>
+        <InvestorStrip />
 
-        {/* ===== EXAMPLE AGENTS INTRO + DEMO ===== */}
-        <section className="section workflow-intro-section" id="agents">
+        {/* ===== PROBLEM ===== */}
+        <section className="section problem-section">
           <div className="section-copy wide reveal-item">
-            <span className="eyebrow">Example builds</span>
-            <h2>AI employees we&apos;ve built for clinics like yours.</h2>
-            <p>
-              Every clinic runs differently, so no two builds are the same. These six are real
-              examples of AI employees we&apos;ve built for clinics, each one shaped around a
-              problem the clinic needed solved.
-            </p>
+            <span className="eyebrow">Sound familiar?</span>
+            <h2>You want to scale your clinic, but&hellip;</h2>
           </div>
-        </section>
-
-        <section className="section demo-section">
-          <div className="demo-shell reveal-item">
-            <div className="demo-tabs" role="tablist" aria-label="Caddie AI agents">
-              {agents.map((a, i) => (
-                <button
-                  key={a.slug}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === activeAgent}
-                  className={`demo-tab${i === activeAgent ? " is-active" : ""}`}
-                  onClick={() => setActiveAgent(i)}
-                >
-                  <span className="demo-tab-index">0{i + 1}</span>
-                  <span>
-                    {a.name}
-                    <span className="demo-tab-role">{a.role}</span>
-                  </span>
-                  <span className={`demo-tab-progress${i === activeAgent ? " is-running" : ""}`} key={`p-${activeAgent}`} />
-                </button>
+          <div className="problem-layout reveal-item">
+            <div className="problem-col">
+              {problemsLeft.map((p) => (
+                <div key={p} className="problem-bubble">{p}</div>
               ))}
             </div>
-
-            <div
-              className="demo-panel"
-              key={agent.slug}
-              style={{ ["--agent-color" as string]: agent.color } as React.CSSProperties}
-            >
-              <div className="demo-copy">
-                <div style={{ display: "grid", gap: 12 }}>
-                  <div className="demo-agent-row">
-                    <img className="demo-portrait" src={agent.portrait} alt={`${agent.name}, ${agent.role}`} />
-                    <div>
-                      <h3>{agent.name}</h3>
-                      <span className="demo-agent-role">{agent.role}</span>
-                    </div>
-                  </div>
-                  <p className="demo-agent-quote">{agent.quote}</p>
-                </div>
-                <div style={{ display: "grid", gap: 16 }}>
-                  <p style={{ color: "var(--ink)", fontWeight: 560, fontSize: "1.06rem" }}>{agent.headline}</p>
-                  <p>{agent.body}</p>
-                  {agent.badge && <span className="demo-badge">{agent.badge}</span>}
-                </div>
-                <strong>{agent.keyFact}</strong>
-              </div>
-              <button
-                type="button"
-                className="demo-screenshot-frame"
-                onClick={() => openLightbox(agent.slug)}
-                aria-label={`See ${agent.name} in action`}
-              >
-                <img className="demo-screenshot" src={agent.mockup} alt={`${agent.name} inside Caddie AI`} loading="lazy" />
-              </button>
+            <div className="problem-img">
+              <img
+                src="/clinic-owner-stressed.jpg"
+                alt="A stressed clinic owner on the phone at their desk"
+                loading="lazy"
+              />
             </div>
-
-            <div className="demo-carousel-controls">
-              <span>0{activeAgent + 1} / 0{agents.length}</span>
-              <div>
-                <button type="button" aria-label="Previous agent" onClick={() => setActiveAgent((activeAgent + agents.length - 1) % agents.length)}>&larr;</button>
-                <button type="button" aria-label="Next agent" onClick={() => setActiveAgent((activeAgent + 1) % agents.length)}>&rarr;</button>
-              </div>
-            </div>
-
-            <div className="demo-custom-note">
-              <p>
-                <strong>This is not a menu.</strong> Your agents get built around your problems,
-                your protocols, and your tone. Tell us where your clinic loses the most time.
-              </p>
-              <a className="button secondary small" href="mailto:delaney@clinictech.io?subject=Custom%20agent%20for%20our%20clinic">
-                Tell us about the role
-              </a>
+            <div className="problem-col">
+              {problemsRight.map((p) => (
+                <div key={p} className="problem-bubble">{p}</div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ===== BRAIN: THE COMPANY BRAIN ===== */}
-        <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <section className="brain-panel reveal-item" id="brain">
-            <div className="brain-copy">
-              <span className="eyebrow">The company brain</span>
-              <h2>One brain. Every tool. Every agent.</h2>
-              <p>
-                Not another dashboard to feed. The brain connects to the tools your clinic
-                already runs on, remembers everything your team teaches it, and powers every
-                agent working for you. Teach it once, and everyone you hire on it already knows
-                your clinic.
-              </p>
-              <div className="brain-points">
-                <div className="brain-point">
-                  <strong>All your tools, connected</strong>
-                  <span>
-                    Gmail, your calendar, WhatsApp, Canva, your website, your booking system.
-                    The brain reads and writes where your clinic already works.
-                  </span>
-                </div>
-                <div className="brain-point">
-                  <strong>One living memory</strong>
-                  <span>
-                    Your treatments, pricing, tone, and every conversation and outcome. It gets
-                    smarter every day, and nothing gets entered twice.
-                  </span>
-                </div>
-                <div className="brain-point">
-                  <strong>Agents built on top</strong>
-                  <span>
-                    Start with one agent or a whole team. Every agent we build plugs into the
-                    same brain and knows your clinic on day one.
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="brain-visual" aria-hidden="true">
-              <svg className="brain-hub" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <radialGradient id="bhGlow">
-                    <stop offset="0%" stopColor="#5d82ff" stopOpacity=".5" />
-                    <stop offset="100%" stopColor="#5d82ff" stopOpacity="0" />
-                  </radialGradient>
-                  <linearGradient id="bhCore" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#3757e8" />
-                    <stop offset="100%" stopColor="#7c3aed" />
-                  </linearGradient>
-                </defs>
+        {/* ===== OUTCOMES ===== */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">What changes with Caddie</span>
+            <h2>Caddie employees handle the busywork so you can focus on patient care.</h2>
+          </div>
+          <div className="outcome-grid reveal-item">
+            {outcomes.map((o, i) => (
+              <article key={o.title} className="outcome-card">
+                <span className="outcome-num">0{i + 1}</span>
+                <h3>{o.title}</h3>
+                <p>{o.body}</p>
+                <strong>{o.proof}</strong>
+              </article>
+            ))}
+          </div>
+          <div className="outcome-actions reveal-item">
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
+              Book a demo
+            </a>
+          </div>
+        </section>
 
-                {/* connections: tools to brain */}
-                <g stroke="#a7c0ff66" strokeWidth="1.5" fill="none" strokeDasharray="3 9" strokeLinecap="round">
-                  <path d="M172 80 C 250 80, 250 240, 252 250">
-                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.8s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M172 170 C 240 170, 240 250, 250 256">
-                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.5s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M172 260 C 220 260, 230 260, 248 260">
-                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="2.1s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M172 350 C 240 350, 240 270, 250 264">
-                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.6s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M172 440 C 250 440, 250 280, 252 270">
-                    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="2s" repeatCount="indefinite" />
-                  </path>
-                </g>
-                {/* connections: brain to agents */}
-                <g stroke="#a7c0ff66" strokeWidth="1.5" fill="none" strokeDasharray="3 9" strokeLinecap="round">
-                  <path d="M392 250 C 440 240, 450 110, 496 100">
-                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.7s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M392 256 C 440 250, 450 210, 496 205">
-                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M392 264 C 440 270, 450 310, 496 315">
-                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.5s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M392 270 C 440 280, 450 410, 496 420">
-                    <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.2s" repeatCount="indefinite" />
-                  </path>
-                </g>
-
-                {/* tool nodes */}
-                <g fontFamily="inherit" fontSize="14" fontWeight="600">
-                  <rect x="40" y="60" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
-                  <text x="106" y="85" fill="#dbe4f8" textAnchor="middle">Gmail</text>
-                  <rect x="40" y="150" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
-                  <text x="106" y="175" fill="#dbe4f8" textAnchor="middle">Calendar</text>
-                  <rect x="40" y="240" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
-                  <text x="106" y="265" fill="#dbe4f8" textAnchor="middle">WhatsApp</text>
-                  <rect x="40" y="330" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
-                  <text x="106" y="355" fill="#dbe4f8" textAnchor="middle">Canva</text>
-                  <rect x="40" y="420" width="132" height="40" rx="20" fill="#ffffff1a" stroke="#ffffff3d" />
-                  <text x="106" y="445" fill="#dbe4f8" textAnchor="middle">Your website</text>
-                </g>
-
-                {/* brain core */}
-                <circle cx="320" cy="260" r="130" fill="url(#bhGlow)">
-                  <animate attributeName="r" values="122;138;122" dur="4.5s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="320" cy="260" r="96" fill="none" stroke="#8fb0ff33" strokeWidth="1" strokeDasharray="2 10">
-                  <animateTransform attributeName="transform" type="rotate" from="0 320 260" to="360 320 260" dur="40s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="320" cy="260" r="80" fill="none" stroke="#8fb0ff40" strokeWidth="1" strokeDasharray="18 10">
-                  <animateTransform attributeName="transform" type="rotate" from="360 320 260" to="0 320 260" dur="30s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="320" cy="260" r="64" fill="url(#bhCore)" stroke="#ffffff2e" strokeWidth="1.5" />
-                <text x="320" y="252" fill="#ffffff" fontSize="16" fontWeight="700" textAnchor="middle">Your clinic&apos;s</text>
-                <text x="320" y="276" fill="#ffffff" fontSize="16" fontWeight="700" textAnchor="middle">brain</text>
-
-                {/* agent nodes */}
-                <g fontSize="14" fontWeight="600">
-                  <circle cx="520" cy="100" r="19" fill="#2563EB" stroke="#ffffff33" strokeWidth="1.5" />
-                  <text x="552" y="105" fill="#dbe4f8">Reception</text>
-                  <circle cx="520" cy="205" r="19" fill="#7C3AED" stroke="#ffffff33" strokeWidth="1.5" />
-                  <text x="552" y="210" fill="#dbe4f8">Marketing</text>
-                  <circle cx="520" cy="315" r="19" fill="#DB2777" stroke="#ffffff33" strokeWidth="1.5" />
-                  <text x="552" y="320" fill="#dbe4f8">Retention</text>
-                  <circle cx="520" cy="420" r="19" fill="none" stroke="#8fb0ff66" strokeWidth="1.5" strokeDasharray="4 5" />
-                  <text x="533" y="426" fill="#8fb0ff" fontSize="17" fontWeight="700" textAnchor="middle">+</text>
-                  <text x="552" y="425" fill="#8fb0ff">Your next hire</text>
-                </g>
-              </svg>
-            </div>
-            <div className="brain-ask">
-              <div className="brain-ask-row">
-                <span className="brain-ask-q">How did we do on knee consults last month?</span>
-                <kbd>&#8984;K</kbd>
-              </div>
-              <p className="brain-ask-a">
-                <strong>14 booked in June, up from 9 in May.</strong>{" "}
-                11 came through web chat and 3 from reactivation follow-ups. 2 more are awaiting
-                confirmation this week.
-                <span className="brain-ask-src">Sources: Pipeline &#183; Calendar &#183; Patient conversations</span>
-              </p>
-            </div>
-          </section>
-        </div>
-
-        {/* ===== SPLIT: WHILE YOU SLEEP ===== */}
-        <section className="section split-section">
-          <div className="section-copy reveal-item">
-            <span className="eyebrow">While you sleep</span>
-            <h2>Your clinic keeps selling after the lights go out.</h2>
+        {/* ===== PATIENT JOURNEY (the platform) ===== */}
+        <section className="section journey-section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">The platform</span>
+            <h2>One platform running your entire front office.</h2>
             <p>
-              Most clinics reply the next morning. By then, 78% of patients have already booked
-              with whoever answered first. Your agents work the inbox overnight, answer in
-              English and Spanish, and hand you a brief with your coffee.
+              Caddie&apos;s platform is fully agentic. It actions leads in real time
+              with context, so every response a patient gets is custom to your clinic
+              and their needs. Here is one patient&apos;s journey through your AI team.
+            </p>
+          </div>
+          <div className="journey reveal-item">
+            {journey.map((step, i) => {
+              const a = getAgent(step.agent);
+              return (
+                <div
+                  key={i}
+                  className="journey-step"
+                  style={
+                    a
+                      ? agentVars(step.agent)
+                      : ({
+                          ["--agent-bg" as string]: "#C1CFFE",
+                          ["--agent-edge" as string]: "#8799D5",
+                          ["--agent-role" as string]: "#46538A",
+                        } as React.CSSProperties)
+                  }
+                >
+                  <div className="journey-node">
+                    {a ? (
+                      <img src={a.portrait} alt={`${a.name}, ${a.role}`} title={a.name} />
+                    ) : (
+                      <img src="/patient.jpg" alt="The patient" title="Patient" />
+                    )}
+                  </div>
+                  <div className="journey-card">
+                    <span className="journey-tag">{step.tag}</span>
+                    <p>{step.text}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="journey-actions reveal-item">
+            <Link href="/platform" className="button secondary">See the platform</Link>
+          </div>
+        </section>
+
+        {/* ===== MEET THE TEAM ===== */}
+        <section className="section team-section" id="team" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Meet your AI employees</span>
+            <h2>Meet the team running your clinic 24/7.</h2>
+            <p>
+              Hire the AI employees you need. Each one is built around your clinic and
+              gets to work from day one.
+            </p>
+          </div>
+          <div className="team-grid reveal-item">
+            {agents.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/ai-employees/${a.slug}`}
+                className="team-card"
+                style={agentVars(a.slug)}
+              >
+                <img src={a.portrait} alt={`${a.name}, ${a.role}`} loading="lazy" />
+                <div className="team-card-body">
+                  <strong>{a.name}</strong>
+                  <span className="team-card-role">{a.role}</span>
+                  <span className="team-card-quote">&ldquo;{a.cardLine}&rdquo;</span>
+                  <span className="team-card-more">Learn more &rarr;</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="outcome-actions reveal-item">
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
+              Book a demo
+            </a>
+          </div>
+        </section>
+
+        {/* ===== DAY IN THE LIFE ===== */}
+        <section className="section timeline-section">
+          <div className="section-copy reveal-item">
+            <span className="eyebrow">Day in the life</span>
+            <h2>Your clinic keeps working while you sleep.</h2>
+            <p>
+              Most clinics reply the next morning. By then, patients have already booked
+              with whoever answered first. Your AI team works the hours your staff
+              can&apos;t.
             </p>
             <div className="section-action">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button dark">
@@ -1086,131 +664,28 @@ export default function LandingPage() {
               </a>
             </div>
           </div>
-          <div className="overnight-card reveal-item">
-            <div className="overnight-head">
-              <span>Overnight brief</span>
-              <span>7:02 AM</span>
+          <div className="timeline-card reveal-item">
+            <div className="timeline-head">
+              <span>Overnight, handled</span>
+              <span>6:14 PM &ndash; 7:02 AM</span>
             </div>
-            <div className="overnight-rows">
-              <div className="overnight-row">
-                <span className="overnight-check">&#10003;</span>
-                <div>
-                  <strong>3 new leads followed up</strong>
-                  <span>First reply sent within 30 seconds of each inquiry</span>
-                </div>
-              </div>
-              <div className="overnight-row">
-                <span className="overnight-check">&#10003;</span>
-                <div>
-                  <strong>7 patient questions answered</strong>
-                  <span>Treatment pricing, recovery times, appointment prep</span>
-                </div>
-              </div>
-              <div className="overnight-row">
-                <span className="overnight-check">&#10003;</span>
-                <div>
-                  <strong>Travel confirmed for Sarah M.</strong>
-                  <span>Flight, hotel, and pickup all coordinated</span>
-                </div>
-              </div>
-              <div className="overnight-row">
-                <span className="overnight-check">&#10003;</span>
-                <div>
-                  <strong>2 review requests sent</strong>
-                  <span>Rio asked at the right moment, day 30 check-ins</span>
-                </div>
-              </div>
+            <div className="timeline-rows">
+              {timeline.map((t) => {
+                const a = getAgent(t.agent)!;
+                return (
+                  <div key={t.time} className="timeline-row" style={agentVars(t.agent)}>
+                    <img className="timeline-avatar" src={a.portrait} alt={a.name} loading="lazy" />
+                    <div>
+                      <time>{t.time}</time>
+                      <p>{t.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="overnight-needs-you">
-              1 item needs you: Michael T. wants to reschedule his consultation.
+            <div className="timeline-proof">
+              11% of patient inquiries come in outside business hours. Caddie handles every one.
             </div>
-          </div>
-        </section>
-
-        {/* ===== HOW WE WORK TOGETHER ===== */}
-        <section className="section" id="how-it-works">
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">How we work together</span>
-            <h2>Most platforms sell you a feature list. We build you a team.</h2>
-            <p>
-              It starts with a conversation about how your clinic actually runs. From there we put
-              the right AI employees in place, and build new ones as your team grows.
-            </p>
-          </div>
-          <div className="pillar-grid reveal-item">
-            <article className="pillar-card">
-              <span className="pillar-num">STEP 01</span>
-              <h3>We learn your clinic</h3>
-              <p>
-                How patients find you. How protocols get built. How follow-up happens. Where your
-                staff loses hours every week. We sit with you until we understand it the way you do.
-              </p>
-              <strong>Week one starts with a conversation, not an import.</strong>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">STEP 02</span>
-              <h3>We build your first agents</h3>
-              <p>
-                We start where the bleeding is: missed bookings, slow follow-up, admin overload.
-                Your first agents go live trained on your protocols, your tone, and your pipeline.
-              </p>
-              <strong>Built around your problems, not our roadmap.</strong>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">STEP 03</span>
-              <h3>We keep building</h3>
-              <p>
-                As you grow, as you spot a gap, as you imagine a role that does not exist yet, we
-                build the agent to fill it. You are never boxed in by what we shipped last quarter.
-              </p>
-              <strong>An extended tech team, on call as you grow.</strong>
-            </article>
-          </div>
-          <div className="pillar-actions reveal-item">
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
-            </a>
-          </div>
-        </section>
-
-        {/* ===== PROOF STORY ===== */}
-        <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <div className="proof-story reveal-item">
-            <div>
-              <span className="eyebrow">Caddie AI success story</span>
-              <h2>An extra 5 consults a month from leads that would have gone cold.</h2>
-            </div>
-            <p>
-              Dr. James L. was getting inquiries but barely booking any. After switching his
-              clinic&apos;s intake to Caddie AI, the follow-up sequences run themselves, and
-              inquiries that used to die in the inbox now turn into booked consultations.
-            </p>
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button secondary">
-              Book a demo
-            </a>
-          </div>
-        </div>
-
-        {/* ===== IMPACT GRID ===== */}
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="section-copy reveal-item">
-            <span className="eyebrow">Customer impact</span>
-            <h2>Trusted by clinics across North America.</h2>
-          </div>
-          <div className="impact-grid reveal-item">
-            {impactStories.map((s) => (
-              <article key={s.name}>
-                <div className="impact-stat">
-                  <strong>{s.stat}</strong>
-                  <span>{s.statLabel}</span>
-                </div>
-                <blockquote>&ldquo;{s.quote}&rdquo;</blockquote>
-                <div className="impact-author">
-                  <strong>{s.name}</strong>
-                  <span>{s.role}</span>
-                </div>
-              </article>
-            ))}
           </div>
         </section>
 
@@ -1277,12 +752,12 @@ export default function LandingPage() {
                     {fmt(upside.lift)} from a faster first reply on the rest.
                   </p>
                   <p className="fine-print">
-                    Estimate based on your inputs and a 15% conversion lift from instant follow-up.
-                    Bring your real numbers to a demo and we will run them properly.
+                    Estimate based on your inputs. Bring your real numbers to a demo and
+                    we will run them properly.
                   </p>
                   <div className="calculator-cta">
                     <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-                      Get the breakdown
+                      Book a demo
                     </a>
                   </div>
                 </div>
@@ -1291,30 +766,11 @@ export default function LandingPage() {
           </section>
         </div>
 
+        {/* ===== PLAYBOOK LEAD-GEN ===== */}
+        <PlaybookPanel />
+
         {/* ===== FAQ ===== */}
-        <section className="section faq-section">
-          <div className="section-copy reveal-item">
-            <span className="eyebrow">FAQ</span>
-            <h2>Clear answers for clinics considering Caddie AI.</h2>
-            <p>
-              Anything else? Bring it to a demo and we will answer it against your clinic&apos;s
-              real pipeline.
-            </p>
-            <div className="section-action">
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button secondary">
-                Book a demo
-              </a>
-            </div>
-          </div>
-          <div className="faq-list reveal-item">
-            {faqs.map((f) => (
-              <details key={f.q}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        <FaqSection />
 
         {/* ===== CTA ===== */}
         <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
@@ -1322,8 +778,8 @@ export default function LandingPage() {
             <div>
               <h2>Patients book with the clinic that answers first.</h2>
               <p>
-                78% of patients book with the first clinic that responds. Every day of slow
-                replies is consults booked somewhere else. Put a team on it tonight.
+                Every day of slow replies is consults booked somewhere else. Put a team
+                of AI employees on it tonight.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
@@ -1333,64 +789,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="site-footer">
-        <div>
-          <img
-            src="/caddie-logo.svg"
-            alt="Caddie AI"
-            style={{ height: 32, width: "auto" }}
-          />
-          <p>
-            We build AI employees for clinics. Named, capable, accountable, and working your
-            pipeline around the clock.
-          </p>
-        </div>
-        <nav className="footer-group" aria-label="Working with us">
-          <h2>Working with us</h2>
-          <a href="/#brain">The company brain</a>
-          <a href="/#agents">Example agents</a>
-          <a href="/#how-it-works">How it works</a>
-          <a href="/voice-agent-demo">Voice demo</a>
-        </nav>
-        <nav className="footer-group" aria-label="Resources">
-          <h2>Resources</h2>
-          <a href="/blog">Blog</a>
-          <a href="/regen-news">Regen news</a>
-          <a href="/about">About</a>
-        </nav>
-        <nav className="footer-group" aria-label="Legal">
-          <h2>Legal</h2>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms of service</a>
-          <a href="/contact">Contact</a>
-        </nav>
-        <div className="footer-bottom">
-          <span>&copy; 2026 Caddie AI. All rights reserved.</span>
-          <span>Mia. Vidi. Rio. Juno. Quill. Atlas.</span>
-        </div>
-      </footer>
-
-      {mounted && lightbox && createPortal(
-        <div
-          className="lightbox-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Preview"
-          onClick={closeLightbox}
-        >
-          <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-            <div className="lightbox-img-wrap">
-              <img src={agents.find((a) => a.slug === lightbox)?.mockup ?? `/mockups/${lightbox}.png`} alt="Caddie AI preview" />
-            </div>
-            <div className="lightbox-caption">
-              <span>{agents.find((a) => a.slug === lightbox)?.name ?? "Caddie AI"} inside Caddie AI</span>
-              <button type="button" className="lightbox-close" onClick={closeLightbox} autoFocus>Close</button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+      <SiteFooter />
     </div>
   );
 }

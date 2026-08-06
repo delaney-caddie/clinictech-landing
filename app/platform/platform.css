@@ -1,0 +1,288 @@
+/* Styles for the Platform page. */
+
+.plat-hero {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) 24px 12px;
+  text-align: center;
+}
+.plat-hero h1 {
+  margin-left: auto;
+  margin-right: auto;
+}
+.plat-hero p {
+  font-size: 1.06rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.plat-hero-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+/* Comparison table */
+.plat-compare {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: 28px;
+  overflow: hidden;
+}
+.plat-compare-head,
+.plat-compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.plat-compare-head span {
+  padding: 16px 24px;
+  font-size: 0.84rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+.plat-compare-head span:first-child {
+  background: #fdf1f0;
+  color: #a13c33;
+}
+.plat-compare-head span:last-child {
+  background: #128454;
+  color: #fff;
+}
+.plat-compare-row {
+  border-top: 1px solid var(--line);
+}
+.plat-compare-row > span {
+  padding: 15px 24px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.plat-compare-row > span:first-child {
+  background: #fdf1f066;
+  color: #8a4740;
+}
+.plat-compare-row > span:last-child {
+  border-left: 1px solid var(--line);
+  background: #e9f8f166;
+  color: #10502f;
+  font-weight: 560;
+}
+.plat-compare-mark {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  align-self: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plat-compare-row > span:first-child .plat-compare-mark {
+  background: #f6d9d6;
+  color: #b3372c;
+}
+.plat-compare-row > span:last-child .plat-compare-mark {
+  background: #cdeede;
+  color: #128454;
+}
+/* Scoped with .ct-page so it outranks the `.ct-page p { margin-top: 0 }` reset. */
+.ct-page .plat-compare-closing {
+  margin-top: 52px;
+  color: var(--ink);
+  font-size: 1.04rem;
+  font-weight: 560;
+}
+
+/* Product shot below the four pillars */
+.plat-product {
+  margin-top: 44px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+.plat-product img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ct-page .plat-product-caption {
+  color: var(--faint);
+  font-size: 0.88rem;
+  text-align: center;
+  margin: 14px 0 0;
+}
+
+/* Pillars */
+.plat-pillar-grid {
+  gap: var(--grid-gap);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 28px;
+}
+.plat-pillar {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  padding: var(--card-pad);
+  scroll-margin-top: 120px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s var(--ease);
+}
+.plat-pillar:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.plat-pillar-num {
+  color: var(--faint);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  display: block;
+}
+.plat-pillar h3 {
+  margin-bottom: 12px;
+  font-size: var(--h2-card);
+  font-weight: var(--font-subhead);
+}
+.plat-pillar p {
+  margin-bottom: 0;
+  font-size: 0.96rem;
+}
+
+/* Brain section (moved from the homepage) */
+.plat-brain {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.plat-brain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(#a7c0ff40 1px, #0000 1.5px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
+  mask-image: radial-gradient(720px 540px at 72% 38%, #000, #0000 75%);
+}
+.plat-brain-copy {
+  position: relative;
+  z-index: 1;
+}
+.plat-brain-visual {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+}
+.plat-brain-visual svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.plat-brain {
+  color: #eef2fb;
+  background:
+    radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
+    radial-gradient(640px 460px at -6% 112%, #8b5cf64d, #0000 60%),
+    linear-gradient(152deg, #1a2b5c 0%, #23407e 52%, #1a2b5c 100%);
+  border: 1px solid #ffffff26;
+  border-radius: var(--r-xl);
+  box-shadow: 0 14px 34px #1a2b5c30, 0 40px 90px #1a2b5c3d;
+  margin-bottom: var(--section-y);
+  padding: clamp(36px, 5vw, 64px);
+  scroll-margin-top: 110px;
+}
+.plat-brain .eyebrow {
+  color: #a7c0ff;
+}
+.plat-brain h2 {
+  color: #fff;
+}
+/* Scoped with .ct-page to outrank the `.ct-page p` color rule in globals.css. */
+.ct-page .plat-brain-copy > p {
+  color: #fff;
+  max-width: 680px;
+}
+.plat-brain-points {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+.plat-brain-point {
+  border-left: 2px solid #9db9ff73;
+  padding-left: 16px;
+}
+.plat-brain-point strong {
+  display: block;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.plat-brain-point span {
+  color: #dbe4f7;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* CTA */
+.plat-cta {
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+  color: var(--ink);
+  gap: var(--grid-gap-lg);
+  margin-bottom: var(--section-y);
+  background:
+    radial-gradient(900px 500px at 88% 0, #355cff29, #0000 62%),
+    linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
+  border: 1px solid #dde6f8;
+  justify-content: space-between;
+  align-items: center;
+  padding: 56px;
+  display: flex;
+}
+.plat-cta h2 {
+  margin-bottom: 10px;
+}
+.plat-cta p {
+  color: var(--ink-soft);
+  max-width: 640px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 1020px) {
+  .plat-pillar-grid {
+    grid-template-columns: 1fr;
+  }
+  .plat-brain {
+    grid-template-columns: 1fr;
+  }
+  .plat-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (max-width: 720px) {
+  .plat-compare-head span,
+  .plat-compare-row > span {
+    padding: 12px 14px;
+    font-size: 0.86rem;
+  }
+  .plat-cta {
+    padding: 30px;
+  }
+}

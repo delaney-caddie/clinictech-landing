@@ -28,8 +28,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Caddie AI | We build AI employees for your clinic",
-  description: "We learn how your clinic actually runs, start you with proven AI agents, and build custom ones as you grow.",
+  title: "Caddie | AI Employees Scaling Your Clinic 24/7",
+  description:
+    "Caddie is an agentic CRM and operating system for clinics, with a team of AI employees built in that runs your front office around the clock.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
