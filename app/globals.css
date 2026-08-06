@@ -263,7 +263,7 @@ a.button { color: #fff; }
 .nav-dropdown-menu {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
-  opacity: 0; pointer-events: none !important;
+  opacity: 0;
   transition: opacity .18s ease, transform .18s var(--ease); z-index: 40;
   display: grid; gap: 12px; width: min(260px, 100vw - 48px); padding: 20px;
   position: absolute; top: calc(100% + 14px); left: 50%;
@@ -271,8 +271,16 @@ a.button { color: #fff; }
 }
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu {
-  opacity: 1; pointer-events: auto !important; transform: translate(-50%) translateY(0);
+  opacity: 1; transform: translate(-50%) translateY(0);
 }
+/* Hit testing for the closed menu. Scoped under .site-header so these beat the
+   blanket `.site-header * { pointer-events: auto !important }` rule on
+   specificity rather than on source order, which was the fragile part: while
+   the closed menu is a 480x285 panel, any flip in ordering makes it hoverable
+   and the menu opens from well down the page. */
+.site-header .nav-dropdown-menu { pointer-events: none !important; }
+.site-header .nav-dropdown:hover .nav-dropdown-menu,
+.site-header .nav-dropdown:focus-within .nav-dropdown-menu { pointer-events: auto !important; }
 .nav-dropdown-menu a {
   color: var(--ink-soft); font-size: .94rem; font-weight: 500; line-height: 1.3;
   transition: color .14s; text-decoration: none;
