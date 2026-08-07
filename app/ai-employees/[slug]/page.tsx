@@ -52,11 +52,6 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
                 <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
                   Book a demo
                 </a>
-                {agent.voiceDemo && (
-                  <a href="#voice-demo" className="button secondary">
-                    Talk to {agent.name} live
-                  </a>
-                )}
               </div>
             </div>
             <img
@@ -72,7 +67,6 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
           <section className="section agent-voice" id="voice-demo">
             <div className="agent-voice-card">
               <div className="agent-voice-kicker">
-                <span className="agent-voice-beta">Beta</span>
                 <span className="agent-voice-live">Live demo</span>
               </div>
               <h2>Talk to {agent.name} right now.</h2>

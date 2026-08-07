@@ -7,8 +7,8 @@
       <stop offset="1" stop-color="#021A7C"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" rx="22" fill="#ffffff"/>
-  <g fill="url(#cd)" transform="translate(50 50) scale(1.13) translate(-50.19 -49.82)">
+  <rect width="100" height="100" fill="#C3CDFB"/>
+  <g fill="url(#cd)">
     <circle cx="57.22" cy="30.56" r="20.56"/>
     <circle cx="72.59" cy="72.59" r="17.04"/>
     <circle cx="22.59" cy="72.59" r="10.37"/>
