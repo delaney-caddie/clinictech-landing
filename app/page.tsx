@@ -616,7 +616,7 @@ export default function LandingPage() {
         <section className="hero">
           <div className="hero-panel">
             <div className="hero-badge">Your front office, running while you sleep</div>
-            <h1>AI Employees Scaling Your Clinic 24/7</h1>
+            <h1>Increase patient bookings without adding headcount</h1>
             <p className="hero-sub">
               Get an AI team who handles patient inquiries, your inbox, socials, SEO,
               lead gen, protocols and marketing around the clock.
