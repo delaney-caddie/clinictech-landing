@@ -11,6 +11,9 @@ import "./globals.css";
 // you can verify it fires; set it to false once the campaign is confirmed live.
 const OAIQ_PIXEL_ID = "Q7jZAvziW4BW326qSLUh2Z";
 
+// Meta (Facebook/Instagram) ads pixel.
+const META_PIXEL_ID = "2123085865271776";
+
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
@@ -82,6 +85,22 @@ export default function RootLayout({
         <Script id="oaiq-base" strategy="afterInteractive">
           {`!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"${OAIQ_PIXEL_ID}",debug:true});`}
         </Script>
+        {/* Meta ads pixel: loads fbevents.js and fires the first PageView.
+            Client-side route changes do not re-run this script, so subsequent
+            PageViews are fired from AdsTracking. */}
+        <Script id="meta-pixel-base" strategy="afterInteractive">
+          {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${META_PIXEL_ID}');fbq('track','PageView');`}
+        </Script>
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            alt=""
+            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+          />
+        </noscript>
         {/* Calendly popup widget script. */}
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
