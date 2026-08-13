@@ -12,11 +12,12 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
 }
 
 /* ---- left indigo panel, matching the deck ---- */
-.left{position:relative;overflow:hidden;background:#2A1F9E;
+/* The lighter arc is painted as a hard-stop radial gradient rather than an
+   oversized circle clipped by overflow:hidden. Canva's importer re-renders
+   clipped shapes imprecisely and the circle bled into the right-hand panel. */
+.left{position:relative;overflow:hidden;
+  background:radial-gradient(circle 620px at 6% 104%, #3227B2 0 100%, rgba(0,0,0,0) 100%), #2A1F9E;
   display:flex;flex-direction:column;justify-content:center;padding:0 84px}
-/* the soft lighter arc anchored bottom-left */
-.left::after{content:"";position:absolute;left:-380px;bottom:-560px;
-  width:1180px;height:1180px;border-radius:999px;background:#3227B2}
 .left-in{position:relative;z-index:1}
 
 .stack{display:flex;margin-bottom:56px}
