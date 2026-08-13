@@ -12,12 +12,11 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
 }
 
 /* ---- left indigo panel, matching the deck ---- */
-/* Flat linear fill only. Canva's importer turns circles and hard-stop radial
-   gradients into positioned shape elements, which it then placed outside the
-   panel and over the right-hand column. A linear gradient has no shape to
-   misplace, so it survives the import intact. */
-.left{position:relative;overflow:hidden;
-  background:linear-gradient(168deg, #3227B2 0%, #2A1F9E 62%);
+/* Flat solid fill. Canva's importer converts any gradient or clipped circle on
+   this panel into a positioned shape element and drops it outside the panel,
+   over the right-hand column. A plain background colour gives it nothing to
+   convert. Verified by sampling the exported PNG at the panel boundary. */
+.left{position:relative;overflow:hidden;background:#2A1F9E;
   display:flex;flex-direction:column;justify-content:center;padding:0 84px}
 .left-in{position:relative;z-index:1}
 
