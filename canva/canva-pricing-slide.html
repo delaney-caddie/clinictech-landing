@@ -31,7 +31,10 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
   letter-spacing:.16em;text-transform:uppercase;line-height:1.4}
 
 /* ---- right content ---- */
-.right{padding:88px 96px 76px;display:flex;flex-direction:column}
+/* Explicit white fill: Canva applies the team brand-kit background (an indigo
+   arc) to imported presentation pages, which was showing through the bottom
+   left of this column. */
+.right{background:#fff;padding:88px 96px 76px;display:flex;flex-direction:column}
 .group-label{font-size:24px;font-weight:800;color:#8E93B8;
   letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
 
