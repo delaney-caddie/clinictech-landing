@@ -40,10 +40,8 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
 
 .brow.total{border-bottom:none;padding-top:24px}
 .brow.total .nm{color:#767CA0;font-weight:600;font-size:27px}
-.brow.total .pr{display:flex;align-items:baseline;gap:5px}
-.brow.total .strike{font-size:38px;font-weight:800;color:#767CA0;
+.brow.total .pr{font-size:36px;font-weight:800;color:#767CA0;
   text-decoration:line-through;text-decoration-thickness:3px}
-.brow.total .per{font-size:24px;font-weight:600;color:#767CA0}
 
 /* the bundle card */
 .bundle{background:#2A1F9E;border-radius:26px;padding:56px 52px;margin-top:44px;
@@ -52,10 +50,8 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
 .bundle .lab b{display:block;font-size:38px;font-weight:800;color:#fff;
   letter-spacing:-.02em;line-height:1.15}
 .bundle .lab span{display:block;font-size:22px;font-weight:500;color:#B9B2F4;margin-top:8px}
-.bundle .amt{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
-.bundle .amt .num{font-size:82px;font-weight:800;color:#fff;
-  letter-spacing:-.04em;line-height:1}
-.bundle .amt .per{font-size:28px;font-weight:600;color:#B9B2F4}
+.bundle .amt{font-size:70px;font-weight:800;color:#fff;letter-spacing:-.04em;
+  line-height:1;white-space:nowrap}
 
 /* savings stats */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:38px}
@@ -95,7 +91,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
     </div>
     <div class="brow total">
       <span class="nm">Total if bought piece by piece</span>
-      <div class="pr"><div class="strike">$3,140</div><div class="per">/mo</div></div>
+      <div class="pr">$3,140/mo</div>
     </div>
 
     <div class="bundle">
@@ -103,7 +99,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
         <b>The entire stack</b>
         <span>Full platform, all 8 AI employees, one invoice</span>
       </div>
-      <div class="amt"><div class="num">$2,500</div><div class="per">/mo</div></div>
+      <div class="amt">$2,500/mo</div>
     </div>
 
     <div class="stats">
