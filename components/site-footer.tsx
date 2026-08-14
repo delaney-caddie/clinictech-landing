@@ -31,6 +31,8 @@ export function SiteFooter() {
         <h2>Company</h2>
         <Link href="/about">About</Link>
         <Link href="/pricing">Pricing</Link>
+        <Link href="/integrations">Integrations</Link>
+        <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
         <Link href="/contact">Contact</Link>
       </nav>
       <nav className="footer-group" aria-label="Legal">

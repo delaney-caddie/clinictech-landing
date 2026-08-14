@@ -126,29 +126,6 @@ const journeySteps = (() => {
   });
 })();
 
-const timeline = [
-  {
-    time: "6:14 PM",
-    agent: "mia",
-    text: "A new inquiry comes in. Mia replies in 3 seconds, answers pricing, and offers a consult.",
-  },
-  {
-    time: "8:00 PM",
-    agent: "iris",
-    text: "Iris spots a comment on your latest reel and slides into the DMs to get them booked.",
-  },
-  {
-    time: "6:30 AM",
-    agent: "rio",
-    text: "Rio sends a warm check-in to a patient who went quiet, and reopens the conversation.",
-  },
-  {
-    time: "7:02 AM",
-    agent: "vidi",
-    text: "Vidi posts an educational video about your latest treatments.",
-  },
-];
-
 function agentVars(slug: string | null) {
   const a = slug ? getAgent(slug) : undefined;
   if (!a) return {};
@@ -340,18 +317,6 @@ export default function LandingPage() {
 .lineup-card strong { color: var(--ink); font-size: .95rem; font-weight: 620; letter-spacing: -.01em; line-height: 1; }
 .lineup-card span { color: var(--agent-role, var(--muted-ink)); font-size: .72rem; font-weight: 550; line-height: 1.25; text-align: center; }
 
-/* ===== HERO RATING ===== */
-.hero-rating {
-  z-index: 1; position: relative;
-  display: flex; flex-direction: column; align-items: center;
-  gap: 7px; margin-top: clamp(20px, 2.4vw, 30px);
-}
-.hero-rating-top { display: flex; align-items: center; gap: 10px; }
-.hero-stars { display: inline-flex; gap: 3px; }
-.hero-stars svg { width: 18px; height: 18px; fill: #f4b740; display: block; }
-.hero-rating strong { color: var(--ink); font-size: 1rem; font-weight: 650; letter-spacing: -.012em; }
-.hero-rating-note { color: var(--ink-soft); font-size: .94rem; font-weight: 500; }
-
 /* ===== PROBLEM ===== */
 .problem-section { text-align: center; }
 .problem-section .section-copy { margin: 0 auto; }
@@ -523,57 +488,37 @@ export default function LandingPage() {
 .journey-card p { margin: 0; color: var(--ink); font-size: .94rem; font-weight: 510; line-height: 1.55; }
 .journey-actions { margin-top: 36px; display: flex; justify-content: center; }
 
-/* ===== TEAM GRID ===== */
-.team-section { text-align: center; }
-.team-section .section-copy { margin: 0 auto; }
-.team-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 32px; text-align: left; }
-.team-card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); overflow: hidden; text-decoration: none; display: flex; flex-direction: column;
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s var(--ease);
+/* ===== WHY CADDIE VS A TRADITIONAL CRM ===== */
+.crm-section { text-align: center; }
+.crm-section .section-copy { margin: 0 auto; }
+.crm-shot {
+  margin: 40px auto 0; max-width: 980px;
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); overflow: hidden; background: var(--surface);
 }
-.team-card:hover { border-color: var(--agent-edge, var(--blue)); box-shadow: var(--shadow-md); transform: translateY(-3px); }
-.team-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-.team-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.team-card-body strong { color: var(--ink); font-size: 1.05rem; font-weight: 620; letter-spacing: -.014em; }
-.team-card-role { color: var(--agent-role, var(--blue)); font-size: .8rem; font-weight: 650; }
-.team-card-quote { color: var(--muted-ink); font-size: .88rem; font-style: italic; line-height: 1.5; margin: 4px 0 10px; }
-.team-card-more { margin-top: auto; color: var(--ink); font-size: .84rem; font-weight: 600; }
-.team-card:hover .team-card-more { color: var(--agent-role, var(--blue)); }
+.crm-shot img { display: block; width: 100%; height: auto; }
 
-/* ===== TIMELINE ===== */
-.timeline-section {
-  grid-template-columns: minmax(0,.82fr) minmax(360px,1fr);
-  align-items: center; gap: 56px; display: grid;
+/* ===== HIPAA / TRUST ===== */
+.hipaa-strip {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+  gap: 48px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-xs);
+  padding: var(--card-pad);
 }
-.timeline-card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); overflow: hidden;
+.hipaa-copy h2 { margin-bottom: 14px; }
+.hipaa-copy p { font-size: .96rem; margin-bottom: 18px; }
+.hipaa-link { color: var(--blue-ink); font-size: .92rem; font-weight: 620; text-decoration: none; }
+.hipaa-link:hover { text-decoration: underline; }
+.hipaa-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.hipaa-points li {
+  background: var(--blue-wash); border-radius: var(--r-sm); color: var(--blue-ink);
+  padding: 13px 16px; font-size: .9rem; font-weight: 560;
+  display: flex; align-items: center; gap: 10px;
 }
-.timeline-head {
-  background: var(--navy); color: #fff; padding: 14px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.timeline-head span:first-child { font-size: .88rem; font-weight: 600; letter-spacing: -.01em; }
-.timeline-head span:last-child {
-  color: #aab5c7; font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: .72rem;
-}
-.timeline-rows { padding: 8px 20px 14px; }
-.timeline-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.timeline-row:last-child { border-bottom: 0; }
-.timeline-avatar {
-  width: 40px; height: 40px; border-radius: 999px; object-fit: cover; flex: none; margin-top: 2px;
-  border: 2px solid var(--agent-edge, var(--line-strong));
-}
-.timeline-row time {
-  display: block; color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: .72rem; font-variant-numeric: tabular-nums; margin-bottom: 3px;
-}
-.timeline-row p { margin: 0; color: var(--ink-soft); font-size: .92rem; line-height: 1.55; }
-.timeline-proof {
-  margin: 0 20px 20px; background: var(--blue-wash); border-radius: var(--r-sm);
-  color: var(--blue-ink); padding: 12px 14px; font-size: .86rem; font-weight: 560;
+.hipaa-points li::before {
+  content: ""; width: 8px; height: 8px; border-radius: 999px;
+  background: var(--blue-ink); flex: none; opacity: .55;
 }
 
 /* ===== CALCULATOR ===== */
@@ -641,8 +586,8 @@ export default function LandingPage() {
   .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
   .problem-img { order: -1; }
   .outcome-grid { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: repeat(2, 1fr); }
-  .timeline-section, .calculator-grid { grid-template-columns: 1fr; }
+  .calculator-grid { grid-template-columns: 1fr; }
+  .hipaa-strip { grid-template-columns: 1fr; gap: 26px; }
   .journey::before, .journey::after { left: 30px; }
   .journey-step { grid-template-columns: 64px 1fr; align-items: start; row-gap: 12px; }
   .journey-node { grid-column: 1; grid-row: 1; }
@@ -658,7 +603,6 @@ export default function LandingPage() {
   .hero-actions { margin: 22px 0 0; }
   .hero-lineup { grid-template-columns: repeat(2, 1fr); }
   .lineup-card img { max-width: 120px; }
-  .team-grid { grid-template-columns: 1fr; }
   .cta-section { padding: 30px; }
   .calculator-result strong { font-size: 2.2rem; }
 }
@@ -694,21 +638,6 @@ export default function LandingPage() {
                   <span>{a.role}</span>
                 </Link>
               ))}
-            </div>
-            <div className="hero-rating">
-              <div className="hero-rating-top">
-                <span className="hero-stars" role="img" aria-label="Rated 4.9 out of 5">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <svg key={i} viewBox="0 0 20 20" aria-hidden="true">
-                      <path d="M10 1.6l2.47 5.3 5.53.7-4.07 3.9 1.05 5.6L10 14.4l-5 2.7 1.05-5.6L1.98 7.6l5.53-.7z" />
-                    </svg>
-                  ))}
-                </span>
-                <strong>Excellent</strong>
-              </div>
-              <span className="hero-rating-note">
-                4.9/5, trusted by top clinics worldwide
-              </span>
             </div>
           </div>
         </section>
@@ -801,19 +730,44 @@ export default function LandingPage() {
                 Start a call with Mia
               </Link>
               <span>Talk to her live, right now. No booking required.</span>
+              <Link href="/ai-employees" className="button secondary">
+                Meet the rest of the team
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* ===== PATIENT JOURNEY (the platform) ===== */}
-        <section className="section journey-section" style={{ paddingTop: 0 }}>
+        {/* ===== WHY CADDIE VS A TRADITIONAL CRM ===== */}
+        <section className="section crm-section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">The platform</span>
-            <h2>One platform running your entire front office.</h2>
+            <h2>Why modern clinics use Caddie instead of a traditional CRM.</h2>
             <p>
-              Caddie&apos;s platform is fully agentic. It actions leads in real time
-              with context, so every response a patient gets is custom to your clinic
-              and their needs. Here is one patient&apos;s journey through your AI team.
+              Caddie&apos;s AI employees run on our agentic CRM platform. Unlike
+              traditional CRMs that store leads and wait for your staff to work
+              them, Caddie&apos;s platform is fully agentic: it actions leads in
+              real time with context, so every response a patient gets is custom
+              to your clinic and their needs.
+            </p>
+          </div>
+          <figure className="crm-shot reveal-item">
+            <img
+              src="/product-analytics.jpg"
+              alt="The Caddie workspace showing live pipeline results, new leads per week, lead sources, and per-agent performance"
+              loading="lazy"
+            />
+          </figure>
+        </section>
+
+        {/* ===== PATIENT JOURNEY (the platform, 24/7) ===== */}
+        <section className="section journey-section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Around the clock</span>
+            <h2>One platform running your entire front office 24/7.</h2>
+            <p>
+              AI employees work while you sleep, so you never miss a potential
+              patient booking. Here is one patient&apos;s journey through your
+              AI team.
             </p>
           </div>
           <div className="journey">
@@ -864,79 +818,30 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== MEET THE TEAM ===== */}
-        <section className="section team-section" id="team" style={{ paddingTop: 0 }}>
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">Meet your AI employees</span>
-            <h2>Meet the team running your clinic 24/7.</h2>
-            <p>
-              Hire the AI employees you need. Each one is built around your clinic and
-              gets to work from day one.
-            </p>
-          </div>
-          <div className="team-grid reveal-item">
-            {agents.map((a) => (
-              <Link
-                key={a.slug}
-                href={`/ai-employees/${a.slug}`}
-                className="team-card"
-                style={agentVars(a.slug)}
-              >
-                <img src={a.portrait} alt={`${a.name}, ${a.role}`} loading="lazy" />
-                <div className="team-card-body">
-                  <strong>{a.name}</strong>
-                  <span className="team-card-role">{a.role}</span>
-                  <span className="team-card-quote">&ldquo;{a.cardLine}&rdquo;</span>
-                  <span className="team-card-more">Learn more &rarr;</span>
-                </div>
+        {/* ===== HIPAA / TRUST ===== */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="hipaa-strip reveal-item">
+            <div className="hipaa-copy">
+              <span className="eyebrow">Security &amp; compliance</span>
+              <h2>Built for healthcare. HIPAA-compliant by design.</h2>
+              <p>
+                Caddie&apos;s platform and AI employees are built to handle
+                protected health information the way HIPAA requires. PHI is
+                encrypted in transit and at rest, access is role-based and
+                audit-logged, and every AI conversation is recorded so your
+                team can review exactly what was said. Patient data is never
+                used to train shared models.
+              </p>
+              <Link href="/ai-vs-humans" className="hipaa-link">
+                How we keep AI employees safe and reliable &rarr;
               </Link>
-            ))}
-          </div>
-          <div className="outcome-actions reveal-item">
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
-            </a>
-          </div>
-        </section>
-
-        {/* ===== DAY IN THE LIFE ===== */}
-        <section className="section timeline-section">
-          <div className="section-copy reveal-item">
-            <span className="eyebrow">Day in the life</span>
-            <h2>Your clinic keeps working while you sleep.</h2>
-            <p>
-              Most clinics reply the next morning. By then, patients have already booked
-              with whoever answered first. Your AI team works the hours your staff
-              can&apos;t.
-            </p>
-            <div className="section-action">
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button dark">
-                See it in action
-              </a>
             </div>
-          </div>
-          <div className="timeline-card reveal-item">
-            <div className="timeline-head">
-              <span>Overnight, handled</span>
-              <span>6:14 PM &ndash; 7:02 AM</span>
-            </div>
-            <div className="timeline-rows">
-              {timeline.map((t) => {
-                const a = getAgent(t.agent)!;
-                return (
-                  <div key={t.time} className="timeline-row" style={agentVars(t.agent)}>
-                    <img className="timeline-avatar" src={a.portrait} alt={a.name} loading="lazy" />
-                    <div>
-                      <time>{t.time}</time>
-                      <p>{t.text}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="timeline-proof">
-              11% of patient inquiries come in outside business hours. Caddie handles every one.
-            </div>
+            <ul className="hipaa-points">
+              <li>PHI encrypted in transit and at rest</li>
+              <li>Role-based access with full audit logs</li>
+              <li>Every conversation recorded and reviewable</li>
+              <li>Never used to train shared models</li>
+            </ul>
           </div>
         </section>
 

@@ -60,8 +60,10 @@ export function SiteNav() {
           <Link href="/platform">Platform</Link>
           <Link href="/pricing">Pricing</Link>
           <div className="nav-dropdown">
-            <button className="nav-dropdown-trigger" type="button">Resources</button>
+            <button className="nav-dropdown-trigger" type="button">More</button>
             <div className="nav-dropdown-menu">
+              <Link href="/integrations">Integrations</Link>
+              <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
               <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
             </div>
@@ -110,7 +112,9 @@ export function SiteNav() {
               ))}
             </div>
             <div className="mobile-nav-group">
-              <span>Resources</span>
+              <span>More</span>
+              <Link href="/integrations" onClick={close}>Integrations</Link>
+              <Link href="/ai-vs-humans" onClick={close}>AI Employees vs. Humans</Link>
               <Link href="/about" onClick={close}>About</Link>
               <Link href="/contact" onClick={close}>Contact</Link>
             </div>
