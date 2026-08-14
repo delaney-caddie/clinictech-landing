@@ -6,10 +6,34 @@ import { agents, CALENDAR_URL } from "@/lib/agents";
 
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // The header is sticky, but keeping it permanently floating over content
+  // made scrolling feel cramped. Instead: hide it while reading (scrolling
+  // down), and bring it back only near the top of the page or after a
+  // deliberate upward scroll, so small jitters don't pop it over the text.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    let lastY = window.scrollY;
+    let upTravel = 0;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      lastY = y;
+      setScrolled(y > 8);
+      if (y < 120) {
+        upTravel = 0;
+        setHidden(false);
+        return;
+      }
+      if (delta > 0) {
+        upTravel = 0;
+        setHidden(true);
+      } else if (delta < 0) {
+        upTravel -= delta;
+        if (upTravel > 260) setHidden(false);
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -28,7 +52,11 @@ export function SiteNav() {
 
   return (
     <>
-      <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
+      <header
+        className={`site-header${scrolled ? " is-scrolled" : ""}${
+          hidden && !mobileOpen ? " is-hidden" : ""
+        }`}
+      >
         <Link href="/" className="brand" onClick={close}>
           <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie" />
         </Link>
