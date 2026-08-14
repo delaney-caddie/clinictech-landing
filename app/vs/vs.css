@@ -1,0 +1,209 @@
+/* Shared styles for the comparison pages (/vs and /vs/[slug]).
+   The table reuses the site's red/green compare language from the platform
+   and agent pages, with a leading feature-label column. */
+
+.vs-hero {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) 24px 0;
+  text-align: center;
+}
+.vs-hero h1 {
+  margin-left: auto;
+  margin-right: auto;
+}
+.vs-hero p {
+  font-size: 1.06rem;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+/* ---- Positioning intro on competitor pages ---- */
+.vs-frame {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gap);
+}
+.vs-frame article {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 28px 30px;
+}
+.vs-frame h3 {
+  font-size: 1.05rem;
+  font-weight: 620;
+  margin-bottom: 10px;
+}
+.vs-frame p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ---- The comparison table ---- */
+.vs-table {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: 28px;
+  overflow: hidden;
+}
+.vs-table-head,
+.vs-table-row {
+  display: grid;
+  grid-template-columns: 190px 1fr 1fr;
+}
+.vs-table-head span {
+  padding: 16px 22px;
+  font-size: 0.84rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+.vs-table-head span:nth-child(2) {
+  background: #fdf1f0;
+  color: #a13c33;
+}
+.vs-table-head span:last-child {
+  background: #128454;
+  color: #fff;
+}
+.vs-table-row {
+  border-top: 1px solid var(--line);
+}
+.vs-table-row > span {
+  padding: 15px 22px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.vs-table-row .vs-label {
+  color: var(--ink);
+  font-weight: 620;
+  font-size: 0.88rem;
+}
+.vs-table-row > span:nth-child(2) {
+  background: #fdf1f066;
+  color: #8a4740;
+  border-left: 1px solid var(--line);
+}
+.vs-table-row > span:last-child {
+  background: #e9f8f166;
+  color: #10502f;
+  border-left: 1px solid var(--line);
+}
+
+/* ---- Hub page: links to the per-competitor pages ---- */
+.vs-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gap);
+  margin-top: 32px;
+}
+.vs-link-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 26px 28px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s var(--ease);
+}
+.vs-link-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.vs-link-card strong {
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 620;
+  letter-spacing: -0.014em;
+}
+.vs-link-card span {
+  color: var(--muted-ink);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.vs-link-card em {
+  color: var(--blue-ink);
+  font-style: normal;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ---- Switching note ---- */
+.vs-switch {
+  margin-top: 30px;
+  background: var(--blue-wash);
+  border-radius: var(--r-lg);
+  color: var(--blue-ink);
+  padding: 22px 26px;
+  font-size: 0.96rem;
+  font-weight: 560;
+  line-height: 1.6;
+}
+
+/* ---- CTA ---- */
+.vs-cta {
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+  color: var(--ink);
+  gap: var(--grid-gap-lg);
+  background:
+    radial-gradient(900px 500px at 88% 0, #355cff29, #0000 62%),
+    linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
+  border: 1px solid #dde6f8;
+  justify-content: space-between;
+  align-items: center;
+  padding: 56px;
+  display: flex;
+}
+.vs-cta h2 {
+  margin-bottom: 10px;
+}
+.vs-cta p {
+  color: var(--ink-soft);
+  max-width: 640px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 1020px) {
+  .vs-frame {
+    grid-template-columns: 1fr;
+  }
+  .vs-links {
+    grid-template-columns: 1fr;
+  }
+  .vs-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  /* Stack the three-column rows: label on top, them/caddie side by side. */
+  .vs-table-head,
+  .vs-table-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .vs-table-head .vs-label,
+  .vs-table-row .vs-label {
+    grid-column: 1 / -1;
+    padding-bottom: 0;
+  }
+  .vs-table-row > span:nth-child(2) {
+    border-left: 0;
+  }
+}
+@media (max-width: 720px) {
+  .vs-cta {
+    padding: 30px;
+  }
+  .vs-table-head span,
+  .vs-table-row > span {
+    padding: 12px 14px;
+    font-size: 0.86rem;
+  }
+}

@@ -35,6 +35,13 @@ export function SiteFooter() {
         <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
         <Link href="/contact">Contact</Link>
       </nav>
+      <nav className="footer-group" aria-label="Caddie vs. traditional CRMs">
+        <h2>Caddie vs. traditional CRMs</h2>
+        <Link href="/vs">Why clinics switch</Link>
+        <Link href="/vs/hubspot">Caddie vs. HubSpot</Link>
+        <Link href="/vs/gohighlevel">Caddie vs. GoHighLevel</Link>
+        <Link href="/vs/zoho">Caddie vs. Zoho</Link>
+      </nav>
       <nav className="footer-group" aria-label="Legal">
         <h2>Legal</h2>
         <Link href="/privacy">Privacy policy</Link>

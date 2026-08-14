@@ -64,6 +64,7 @@ export function SiteNav() {
             <div className="nav-dropdown-menu">
               <Link href="/integrations">Integrations</Link>
               <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
+              <Link href="/vs">Caddie vs. Traditional CRMs</Link>
               <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
             </div>
@@ -115,6 +116,7 @@ export function SiteNav() {
               <span>More</span>
               <Link href="/integrations" onClick={close}>Integrations</Link>
               <Link href="/ai-vs-humans" onClick={close}>AI Employees vs. Humans</Link>
+              <Link href="/vs" onClick={close}>Caddie vs. Traditional CRMs</Link>
               <Link href="/about" onClick={close}>About</Link>
               <Link href="/contact" onClick={close}>Contact</Link>
             </div>

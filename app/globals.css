@@ -351,10 +351,10 @@ a.button { color: #fff; }
 /* ---- Site footer ---- */
 .site-footer {
   border-top: 1px solid var(--line); flex-wrap: wrap; justify-content: space-between;
-  align-items: flex-start; gap: 56px; max-width: 1180px; margin: 0 auto;
+  align-items: flex-start; gap: 40px 38px; max-width: 1180px; margin: 0 auto;
   padding: 64px 24px 28px; display: flex; z-index: 1; position: relative;
 }
-.site-footer > div:first-of-type { flex: 0 0 240px; }
+.site-footer > div:first-of-type { flex: 0 0 220px; }
 .site-footer p {
   color: var(--muted-ink); max-width: 280px; margin: 14px 0 0;
   font-size: .92rem; line-height: 1.6;
