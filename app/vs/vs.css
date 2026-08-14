@@ -136,6 +136,30 @@
   margin-top: 6px;
 }
 
+/* ---- Built for healthcare grid ---- */
+.vs-feat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
+  margin-top: 32px;
+}
+.vs-feat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 24px 26px;
+}
+.vs-feat h3 {
+  font-size: 0.98rem;
+  font-weight: 620;
+  margin-bottom: 8px;
+}
+.vs-feat p {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
 /* ---- Switching note ---- */
 .vs-switch {
   margin-top: 30px;
@@ -179,6 +203,9 @@
   .vs-links {
     grid-template-columns: 1fr;
   }
+  .vs-feat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
   .vs-cta {
     flex-direction: column;
     align-items: stretch;
@@ -200,6 +227,9 @@
 @media (max-width: 720px) {
   .vs-cta {
     padding: 30px;
+  }
+  .vs-feat-grid {
+    grid-template-columns: 1fr;
   }
   .vs-table-head span,
   .vs-table-row > span {

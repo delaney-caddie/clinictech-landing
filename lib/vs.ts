@@ -16,6 +16,11 @@ export type VsRow = {
 // traditional CRM. The hub page shows all of these.
 export const genericRows: VsRow[] = [
   {
+    label: "Industry focus",
+    them: "One size fits all. The same CRM sold to roofers, realtors, gyms, and you.",
+    caddie: "Healthcare only. Every feature assumes a patient on the other end.",
+  },
+  {
     label: "Core design",
     them: "A database your staff operates. Leads sit in a parking lot until someone works them.",
     caddie: "Fully agentic. The platform works every lead itself, in real time.",
@@ -99,6 +104,43 @@ export const genericRows: VsRow[] = [
     label: "Healthcare guardrails",
     them: "Generic tooling with no concept of a patient conversation.",
     caddie: "Healthcare-trained AI that never gives medical advice and hands off to your staff.",
+  },
+];
+
+// Clinic-specific capabilities that exist nowhere in a generic CRM. Rendered
+// as the "built for healthcare" section on the hub and competitor pages.
+export const clinicFeatures = [
+  {
+    title: "Protocol builder",
+    body: "Atlas drafts your treatment protocols so your practitioners review, not write.",
+  },
+  {
+    title: "Concierge coach",
+    body: "Sage preps your team before every consult with the patient's full story and what converts.",
+  },
+  {
+    title: "Post-procedure follow-ups",
+    body: "Automated questionnaires after every treatment, so recovery is tracked and concerns reach your staff early.",
+  },
+  {
+    title: "A patient journey, not a sales pipeline",
+    body: "Stages built for a clinic: inquiry, consult, treatment, follow-up. Not \"deal closed-won.\"",
+  },
+  {
+    title: "Your clinic's knowledge base",
+    body: "Treatments, pricing, prep and aftercare in a company brain behind every patient answer.",
+  },
+  {
+    title: "AI patient coordinator on the phone",
+    body: "Mia answers your clinic's calls 24/7, answers treatment questions, and books consults.",
+  },
+  {
+    title: "HIPAA-native",
+    body: "PHI handling built in from day one, not bolted on for an enterprise premium.",
+  },
+  {
+    title: "Healthcare guardrails",
+    body: "Trained for patient conversations: never medical advice, always a handoff to your staff.",
   },
 ];
 

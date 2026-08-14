@@ -747,7 +747,9 @@ export default function LandingPage() {
               traditional CRMs that store leads and wait for your staff to work
               them, Caddie&apos;s platform is fully agentic: it actions leads in
               real time with context, so every response a patient gets is custom
-              to your clinic and their needs.
+              to your clinic and their needs. And every part of it is built for
+              healthcare, from the protocol builder to post-procedure follow-up
+              questionnaires, not adapted from a one-size-fits-all CRM.
             </p>
           </div>
           <figure className="crm-shot reveal-item">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { VsClinicFeatures } from "@/components/vs-clinic-features";
 import { CALENDAR_URL } from "@/lib/agents";
 import { competitors, getCompetitor } from "@/lib/vs";
 
@@ -84,6 +85,9 @@ export default async function VsCompetitorPage({
             move, except that someone finally answers at 8pm.
           </div>
         </section>
+
+        {/* Built for healthcare */}
+        <VsClinicFeatures />
 
         {/* CTA */}
         <section className="section" style={{ paddingTop: 0 }}>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { VsClinicFeatures } from "@/components/vs-clinic-features";
 import { CALENDAR_URL } from "@/lib/agents";
 import { genericRows, competitors } from "@/lib/vs";
 
@@ -20,9 +21,10 @@ export default function VsPage() {
           <span className="eyebrow">Caddie vs. traditional CRMs</span>
           <h1>A CRM stores your leads. Caddie books them.</h1>
           <p>
-            Traditional CRMs were built to be databases your staff operates.
-            Caddie was built to do the operating itself. Here is every
-            difference that matters to a clinic, side by side.
+            Traditional CRMs are one-size-fits-all databases your staff
+            operates, the same product sold to every industry. Caddie was
+            built for medical clinics, and it does the operating itself.
+            Here is every difference that matters, side by side.
           </p>
         </header>
 
@@ -43,6 +45,9 @@ export default function VsPage() {
             ))}
           </div>
         </section>
+
+        {/* Built for healthcare */}
+        <VsClinicFeatures />
 
         {/* Per-competitor pages */}
         <section className="section" style={{ paddingTop: 0 }}>
