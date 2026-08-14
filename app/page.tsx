@@ -20,6 +20,16 @@ const problemsRight = [
   "You can't hire because payroll is getting out of control",
 ];
 
+// Every channel Mia picks up. Shown as chips in the "Meet Mia" callout.
+const miaChannels = [
+  "Phone",
+  "Email",
+  "Web form",
+  "Chatbot",
+  "WhatsApp",
+  "Social media",
+];
+
 const outcomes = [
   {
     title: "More patients booked",
@@ -405,6 +415,51 @@ export default function LandingPage() {
 }
 .outcome-actions { margin-top: 28px; display: flex; justify-content: center; }
 
+/* ===== MEET MIA ===== */
+/* Tinted with Mia's own palette via agentVars(), so the callout matches her
+   portrait and her page rather than introducing a new accent colour. */
+.mia-callout {
+  margin-top: 28px; display: grid; grid-template-columns: 1fr auto; gap: 40px;
+  align-items: center; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-xs);
+  padding: var(--card-pad);
+}
+.mia-callout-main { display: flex; gap: 28px; align-items: flex-start; }
+.mia-callout-portrait {
+  width: 132px; height: 132px; border-radius: 999px; object-fit: cover; flex: none;
+  background: var(--agent-bg); border: 3px solid var(--agent-edge);
+}
+.mia-callout-copy { min-width: 0; }
+.mia-callout-lead {
+  font-size: var(--h2-card); font-weight: var(--font-subhead);
+  color: var(--ink); margin-bottom: 16px; line-height: 1.35;
+}
+.mia-channels {
+  display: flex; flex-wrap: wrap; gap: 8px; list-style: none;
+  padding: 0; margin: 0 0 18px;
+}
+.mia-channels li {
+  background: var(--agent-bg); color: var(--agent-role); border-radius: var(--r-sm);
+  padding: 7px 13px; font-size: .87rem; font-weight: 560;
+}
+.mia-callout-close { font-size: .96rem; margin: 0; }
+.mia-callout-cta {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 12px; text-align: center; flex: none;
+}
+.mia-callout-cta span { color: var(--faint); font-size: .82rem; max-width: 210px; }
+
+@media (max-width: 900px) {
+  .mia-callout { grid-template-columns: 1fr; gap: 28px; }
+  .mia-callout-cta { text-align: left; align-items: flex-start; }
+  .mia-callout-cta span { max-width: none; }
+}
+@media (max-width: 620px) {
+  .mia-callout-main { flex-direction: column; gap: 20px; }
+  .mia-callout-portrait { width: 104px; height: 104px; }
+  .mia-callout-cta .button { width: 100%; text-align: center; }
+}
+
 /* ===== PATIENT JOURNEY ===== */
 .journey-section { text-align: center; }
 .journey-section .section-copy { margin: 0 auto; }
@@ -708,6 +763,45 @@ export default function LandingPage() {
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
               Book a demo
             </a>
+          </div>
+        </section>
+
+        {/* ===== MEET MIA ===== */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Your AI team</span>
+            <h2>Meet Mia, your AI Patient Coordinator.</h2>
+          </div>
+          <div className="mia-callout reveal-item" style={agentVars("mia")}>
+            <div className="mia-callout-main">
+              <img
+                className="mia-callout-portrait"
+                src="/agents/mia.jpg"
+                alt="Mia, the AI patient coordinator"
+                loading="lazy"
+              />
+              <div className="mia-callout-copy">
+                <p className="mia-callout-lead">
+                  Mia responds to every patient inquiry in seconds, so you never
+                  miss a potential patient.
+                </p>
+                <ul className="mia-channels">
+                  {miaChannels.map((c) => (
+                    <li key={c}>{c}</li>
+                  ))}
+                </ul>
+                <p className="mia-callout-close">
+                  She works around the clock, so if someone calls at 8pm on a
+                  Saturday, they get booked in immediately.
+                </p>
+              </div>
+            </div>
+            <div className="mia-callout-cta">
+              <Link href="/ai-employees/mia?call=1" className="button">
+                Start a call with Mia
+              </Link>
+              <span>Talk to her live, right now. No booking required.</span>
+            </div>
           </div>
         </section>
 

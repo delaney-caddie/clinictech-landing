@@ -77,8 +77,18 @@ export function VoiceDemoButton({ agentName }: { agentName: string }) {
 
     function poll() {
       if (cancelled) return;
-      if (findRetellFab()) {
+      const fab = findRetellFab();
+      if (fab) {
         setReady(true);
+        // Arriving from a "Start a call" link elsewhere on the site
+        // (/ai-employees/mia?call=1) opens the call straight away, so the
+        // visitor doesn't have to press a second button on landing.
+        if (
+          new URLSearchParams(window.location.search).get("call") === "1" &&
+          isRetellFabClosed(fab)
+        ) {
+          fab.click();
+        }
         return;
       }
       // The script is third-party; give it a generous window, then give up
