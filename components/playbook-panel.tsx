@@ -1,27 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 
+const FUNNEL_SCRIPT_SRC = "https://app.caddie.app/embed-funnel.js";
+
+// Playbook lead capture, wired to the Caddie CRM brochure funnel. The embed
+// script scans for its container when it executes, so it is re-injected on
+// every mount: this panel renders on both the homepage and the pricing page,
+// and after a client-side navigation the container is new but an
+// already-loaded script would never run again.
 export function PlaybookPanel() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (state === "sending") return;
-    setState("sending");
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, source: "playbook" }),
-      });
-      setState(res.ok ? "done" : "error");
-    } catch {
-      setState("error");
+  useEffect(() => {
+    // The embed script guards itself with a window flag, so only the first
+    // injection ever executes; its MutationObserver then initializes any
+    // container that appears later (e.g. after a client-side navigation).
+    if (!document.querySelector(`script[src="${FUNNEL_SCRIPT_SRC}"]`)) {
+      const script = document.createElement("script");
+      script.src = FUNNEL_SCRIPT_SRC;
+      script.async = true;
+      document.body.appendChild(script);
     }
-  }
+
+    // The embed auto-sizes the iframe from heights the funnel reports, but
+    // the funnel only reports changes LARGER than 4px, so late font loads
+    // can leave 1-4px of overflow: a scrollbar that scrolls almost nothing.
+    // scrolling="no" makes that stray overflow invisible instead. (Do NOT
+    // "fix" this by padding the reported height: the funnel's body fills
+    // the iframe viewport, so any buffer feeds back into the next
+    // measurement and the iframe grows forever.)
+    const watcher = window.setInterval(() => {
+      const f = document.querySelector("iframe[data-clinictech-funnel]");
+      if (f) {
+        f.setAttribute("scrolling", "no");
+        window.clearInterval(watcher);
+      }
+    }, 200);
+
+    return () => {
+      window.clearInterval(watcher);
+    };
+  }, []);
 
   return (
     <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
@@ -39,17 +57,13 @@ export function PlaybookPanel() {
 .playbook-panel .eyebrow { margin-bottom: 10px; }
 .playbook-panel h2 { margin-bottom: 10px; }
 .playbook-panel p { color: var(--ink-soft); margin-bottom: 0; max-width: 460px; }
-.playbook-form { display: flex; flex-wrap: wrap; gap: 10px; }
-.playbook-form input {
-  flex: 1 1 160px; min-height: 46px; border-radius: 999px; border: 1px solid var(--line-strong);
-  background: #ffffffe6; color: var(--ink); padding: 0 20px; font-size: .94rem; font-family: inherit;
-  outline: none; transition: border-color .16s ease, box-shadow .16s ease;
-}
-.playbook-form input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #355cff24; }
-.playbook-form .button { flex: none; }
-.playbook-note { margin-top: 12px; font-size: .88rem; font-weight: 560; color: var(--blue-ink); }
+.playbook-embed { min-height: 250px; display: flex; justify-content: center; }
+/* The embed renders at a fixed 480px; never let it overflow the panel. */
+.playbook-embed > div { max-width: 100%; }
+.playbook-embed iframe { max-width: 100% !important; }
 @media (max-width: 1020px) {
   .playbook-panel { grid-template-columns: 1fr; }
+  .playbook-embed { justify-content: flex-start; }
 }
 @media (max-width: 720px) {
   .playbook-panel { padding: 30px; }
@@ -64,38 +78,15 @@ export function PlaybookPanel() {
             into booked patients.
           </p>
         </div>
-        <div>
-          {state === "done" ? (
-            <p className="playbook-note">
-              You&apos;re on the list. The playbook is on its way to your inbox.
-            </p>
-          ) : (
-            <form className="playbook-form" onSubmit={submit}>
-              <input
-                type="text"
-                placeholder="First name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                aria-label="First name"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-label="Email"
-              />
-              <button type="submit" className="button" disabled={state === "sending"}>
-                {state === "sending" ? "Sending..." : "Send me the playbook"}
-              </button>
-              {state === "error" && (
-                <p className="playbook-note" style={{ color: "var(--coral)" }}>
-                  Something went wrong. Try again in a moment.
-                </p>
-              )}
-            </form>
-          )}
+        <div className="playbook-embed">
+          {/* Caddie brochure funnel */}
+          <div
+            id="clinictech-brochure"
+            data-funnel-id="b1318c2c-3230-4011-addd-ce963dc7f5e9"
+            data-host="https://app.caddie.app"
+            data-mode="inline"
+            data-width="480px"
+          ></div>
         </div>
       </section>
     </div>
