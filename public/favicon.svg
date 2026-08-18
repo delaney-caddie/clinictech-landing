@@ -1,18 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <!-- objectBoundingBox units, so each dot gets its own left-to-right ramp,
-         matching the source artwork. -->
-    <linearGradient id="cd" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#000C5E"/>
-      <stop offset="1" stop-color="#021A7C"/>
+    <!-- Royal-blue ground: brighter toward the top right, deepening to the
+         bottom left, matching the ads / LinkedIn / Instagram gradient. -->
+    <linearGradient id="bg" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A5CEA"/>
+      <stop offset="0.55" stop-color="#2B49D8"/>
+      <stop offset="1" stop-color="#1B31A6"/>
+    </linearGradient>
+    <!-- Each dot carries its own left-to-right ramp, as in the source art. -->
+    <linearGradient id="dot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDE5FB"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" fill="#C3CDFB"/>
-  <g fill="url(#cd)">
-    <circle cx="57.22" cy="30.56" r="20.56"/>
-    <circle cx="72.59" cy="72.59" r="17.04"/>
-    <circle cx="22.59" cy="72.59" r="10.37"/>
-    <circle cx="20.93" cy="45" r="10.19"/>
-    <circle cx="43.33" cy="63.7" r="5.19"/>
+  <rect width="100" height="100" fill="url(#bg)"/>
+  <g fill="url(#dot)" stroke="#93A8F2" stroke-width="0.9">
+    <circle cx="55.05" cy="36.39" r="14.39"/>
+    <circle cx="65.81" cy="65.81" r="11.93"/>
+    <circle cx="30.81" cy="65.81" r="7.26"/>
+    <circle cx="29.65" cy="46.5" r="7.13"/>
+    <circle cx="45.33" cy="59.59" r="3.63"/>
   </g>
 </svg>
