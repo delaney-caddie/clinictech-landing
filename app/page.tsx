@@ -649,7 +649,7 @@ export default function LandingPage() {
         <section className="section problem-section">
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">Sound familiar?</span>
-            <h2>You want to scale your clinic, but&hellip;</h2>
+            <h2>You want to scale your practice, but&hellip;</h2>
           </div>
           <div className="problem-layout reveal-item">
             <div className="problem-col">
