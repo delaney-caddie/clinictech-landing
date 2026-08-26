@@ -336,15 +336,15 @@ export default function LandingPage() {
 .hero-panel:has(.hero-video)::after {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background:
-    linear-gradient(180deg, #f4f7ffe6 0%, #eaf0ffd1 46%, #dfe8ffe6 100%),
-    radial-gradient(760px 420px at 50% 42%, #ffffff8c, #0000 72%);
+    linear-gradient(180deg, #f4f7ff8c 0%, #eaf0ff63 46%, #dfe8ff8c 100%),
+    radial-gradient(720px 400px at 50% 44%, #ffffff40, #0000 74%);
 }
 /* Phones get the poster as a still instead of downloading the clip. */
 @media (max-width: 720px) {
   .hero-video { display: none; }
   .hero-panel {
     background-image:
-      linear-gradient(180deg, #f4f7ffe6 0%, #eaf0ffd1 46%, #dfe8ffe6 100%),
+      linear-gradient(180deg, #f4f7ff8c 0%, #eaf0ff63 46%, #dfe8ff8c 100%),
       url("/hero-poster.jpg");
     background-size: cover; background-position: center;
   }
