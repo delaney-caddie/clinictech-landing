@@ -2,32 +2,32 @@ import { CALENDAR_URL } from "@/lib/agents";
 
 const faqs = [
   {
-    q: "What is a healthcare CRM?",
-    a: "A healthcare CRM is software that helps clinics manage every patient relationship, from the first inquiry to long-term follow-up. It captures leads, tracks conversations, and organizes patient communication in one place. Caddie is an agentic healthcare CRM, which means it does not just store patient information. It acts on it in real time, replying to inquiries, booking consults, and running follow-ups on its own.",
-  },
-  {
-    q: "What is patient management software?",
-    a: "Patient management software is a system that handles the day-to-day operations of a clinic, including scheduling, patient communication, reminders, and records. Traditional patient management software waits for your staff to do the work. Caddie is different. It comes with a team of AI employees that run these tasks for you around the clock, so your front office keeps moving even when your team is with patients.",
+    q: "Can Caddie replace my CRM?",
+    a: "Yes. Caddie's operating system includes an agentic CRM built to replace the generic ones clinics get stuck with — GoHighLevel, Zoho and the rest. The difference isn't the database, it's that Caddie works the leads inside it instead of storing them until someone has time.",
   },
   {
     q: "Does Caddie integrate with EHR and EMR systems?",
-    a: "Yes. Caddie is built to connect with the tools your clinic already runs on, including many EHR and EMR systems. Because every clinic's setup is different, the best way to confirm your specific system connects is to speak to the team.",
+    a: "Yes. Caddie connects with most existing EHR and EMR platforms, and can act as your system of record instead if you'd rather run everything in one place. Integration takes about two weeks on average, scoped with you during discovery.",
+  },
+  {
+    q: "Does Caddie integrate with patient management software?",
+    a: "Yes. Scheduling, records and patient communication tools connect to Caddie so your AI employees can read context and write back — booking real appointments on your real calendar, not a parallel one.",
   },
   {
     q: "Do your AI employees handle all patient scheduling?",
-    a: "Yes. Caddie's AI employees handle patient scheduling from end to end. They answer inquiries, book appointments, send confirmations, and manage reminders and reschedules automatically, so your calendar stays full without your front desk doing the manual work.",
+    a: "They can, and you set the rules. Run them around the clock, only after hours, only on certain channels, or only for certain appointment types. You decide what they own and what always goes to a human.",
   },
   {
-    q: "Does Caddie use AI voice agents?",
-    a: "Yes. Caddie uses AI voice agents. Our patient coordinator, Mia, responds to patient inquiries across every channel, including phone. She answers calls, replies to questions about treatments and pricing, and books consults, so no patient reaches a dead end no matter how they get in touch.",
+    q: "Do Caddie AI employees handle voice calls?",
+    a: "Yes. Mia answers your clinic's phone, handles treatment and pricing questions, and books consults on the call. You can talk to her yourself on her page before you ever speak to us.",
   },
   {
     q: "What is an AI-first clinic?",
-    a: "An AI-first clinic is a practice that uses AI to run its front office and back office, instead of relying on manual work and disconnected systems. It means patients get instant answers, follow-ups never slip, and staff spend their time on care instead of admin. Caddie makes any clinic AI-first without adding headcount.",
+    a: "A practice where the front office runs on AI instead of on manual work and disconnected tools. Patients get instant answers at any hour, follow-ups never slip, and staff spend their day on care rather than admin. Caddie makes a clinic AI-first without adding headcount.",
   },
   {
     q: "What types of clinics does Caddie support?",
-    a: "All types. Caddie supports clinics of every kind, including regenerative, aesthetic, med spa, and specialty practices. Because every setup is built on your own company brain, Caddie shapes itself around how your specific clinic runs, no matter your specialty.",
+    a: "All of them — regenerative medicine, hormone therapy, IVF, dental, aesthetics, med spa and specialty practices. Because every setup is built on your own company brain, Caddie shapes itself around how your clinic actually runs. Talk to our team about your specialty and goals.",
   },
 ];
 

@@ -1,31 +1,44 @@
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { PlaybookPanel } from "@/components/playbook-panel";
-import { agents, getAgent, CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL } from "@/lib/agents";
 
 export const metadata = {
   title: "Pricing | Caddie",
   description:
-    "Flexible pricing, built around your clinic. Only pay for the AI employees you want. Start with one, or hire a full team. Your plan flexes as your clinic grows.",
+    "Everything your front office needs, in one platform. Every quote is built around the AI employees your clinic actually needs — book a demo for yours.",
 };
 
-const mia = getAgent("mia")!;
-
-const options = [
+// No public prices by design: quotes are custom-sized per clinic, so the page
+// sells what's included and routes to a demo. Real numbers live in the
+// proposal deck.
+const plans = [
   {
-    title: "A la carte",
-    body: "Hire a single AI employee for the role where your clinic loses the most time. Add more whenever you are ready.",
-    visual: "single" as const,
+    title: "Clinic OS + AI Employees",
+    note: "The platform, and the team that runs on it",
+    lead: true,
+    items: [
+      "Agentic CRM that works every lead automatically",
+      "Branded patient portal and operating system",
+      "AI employees for the roles you need — start with one, add more as you grow",
+      "Every channel: phone, text, email, web chat, WhatsApp and social",
+      "Your company brain, built around your treatments, pricing and tone",
+      "HIPAA-compliant handling of PHI",
+      "Onboarding and setup done for you",
+      "Full-time support with under 1 day turnaround",
+    ],
   },
   {
-    title: "The full AI team",
-    body: "The whole team running your front office together: inquiries, inbox, socials, SEO, protocols, retention and sales support.",
-    visual: "team" as const,
-  },
-  {
-    title: "Custom AI employees for your practice",
-    body: "We work with your team to build one-off agents for the specific use cases your clinic needs.",
-    visual: "custom" as const,
+    title: "EHR add-on",
+    note: "Run your clinical records on Caddie too",
+    lead: false,
+    items: [
+      "Caddie as your clinical system of record",
+      "Charting, treatment records and documentation",
+      "One system, so nothing needs syncing or reconciling",
+      "Or keep your existing EHR and connect it to Caddie instead",
+      "Integration takes about two weeks on average",
+    ],
   },
 ];
 
@@ -39,121 +52,93 @@ export default function PricingPage() {
 }
 .pricing-hero h1 { margin-left: auto; margin-right: auto; }
 .pricing-hero p { font-size: 1.06rem; max-width: 620px; margin: 0 auto; }
-.pricing-points {
-  gap: var(--grid-gap); display: grid; grid-template-columns: repeat(3, 1fr);
-  margin-top: 52px;
+
+.plan-grid {
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: var(--grid-gap);
+  max-width: 1020px; margin: 0 auto;
+  align-items: start;
 }
-.pricing-point {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); padding: var(--card-pad); text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: 14px;
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s var(--ease);
+.plan-card {
+  background: var(--surface); border: 1px solid var(--line-strong);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-sm);
+  padding: clamp(26px, 3vw, 38px);
+  display: flex; flex-direction: column;
 }
-.pricing-point:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.pricing-visual { min-height: 96px; display: flex; align-items: center; justify-content: center; }
-.pricing-avatar {
-  width: 84px; height: 84px; border-radius: 999px; object-fit: cover;
-  border: 2.5px solid var(--agent-edge, var(--line-strong));
-  background: var(--agent-bg, var(--wash));
-  box-shadow: var(--shadow-sm);
+.plan-card.lead { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), var(--shadow-md); }
+.plan-card h2 { font-size: 1.4rem; margin-bottom: 4px; }
+.ct-page .plan-note { color: var(--muted-ink); font-size: .92rem; margin: 0 0 20px; }
+.plan-card ul { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 11px; }
+.plan-card li {
+  font-size: .94rem; color: var(--ink-soft); line-height: 1.5;
+  display: flex; gap: 11px; align-items: baseline;
 }
-.pricing-team { display: flex; }
-.pricing-team img {
-  width: 52px; height: 52px; border-radius: 999px; object-fit: cover;
-  border: 2px solid #fff; box-shadow: var(--shadow-sm);
+.plan-card li::before {
+  content: "\\2713"; flex: none;
+  width: 19px; height: 19px; border-radius: 999px;
+  background: var(--blue-wash); color: var(--blue-deep);
+  font-size: .64rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transform: translateY(2px);
 }
-.pricing-team img + img { margin-left: -14px; }
-.pricing-custom { display: flex; align-items: center; }
-.pricing-custom img {
-  width: 52px; height: 52px; border-radius: 999px; object-fit: cover;
-  border: 2px solid #fff; box-shadow: var(--shadow-sm); opacity: .55;
-}
-.pricing-custom img + img { margin-left: -14px; }
-.pricing-custom-plus {
-  width: 52px; height: 52px; border-radius: 999px; margin-left: -14px; flex: none;
-  background: var(--surface); border: 2px dashed var(--line-strong);
-  color: var(--blue); font-size: 1.4rem; font-weight: 600;
-  display: grid; place-items: center; position: relative; z-index: 1;
-}
+.plan-card .button { margin-top: auto; align-self: flex-start; }
+
 /* Scoped with .ct-page so it outranks the global paragraph margin reset. */
-.ct-page .pricing-included {
+.ct-page .pricing-footline {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: fit-content; max-width: 100%; margin: 32px auto 0;
+  width: fit-content; max-width: 100%; margin: 36px auto 0;
   background: var(--blue-wash); border: 1px solid #dde6f8; border-radius: 999px;
   color: var(--blue-ink); padding: 13px 24px;
   font-size: .96rem; font-weight: 560; text-align: center;
 }
-.ct-page .pricing-included::before {
-  content: "\\2713"; flex: none;
-  width: 20px; height: 20px; border-radius: 999px;
-  background: var(--mint); color: #14684a;
-  font-size: .68rem; font-weight: 700; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
-}
-.pricing-point h3 { margin-bottom: 0; font-size: 1.18rem; }
-.pricing-point p { margin-bottom: 0; font-size: .94rem; flex: 1; }
-.pricing-point .button { margin-top: 8px; }
 @media (max-width: 1020px) {
-  .pricing-points { grid-template-columns: 1fr; }
+  .plan-grid { grid-template-columns: 1fr; }
 }
       `}</style>
+
       <SiteNav />
+
       <main>
         <section className="pricing-hero">
           <span className="eyebrow">Pricing</span>
-          <h1>Flexible pricing, built around your clinic.</h1>
+          <h1>Everything your front office needs, in one platform.</h1>
           <p>
-            Caddie is priced so you only pay for the AI employees you want. Start with
-            one, or hire a full team. Your plan flexes as your clinic grows.
+            Every clinic runs differently, so every quote is built around the AI
+            employees you actually need. Book a demo and we will price it against
+            your real pipeline.
           </p>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="pricing-points">
-            {options.map((o) => (
-              <article key={o.title} className="pricing-point">
-                <div className="pricing-visual">
-                  {o.visual === "single" && (
-                    <img
-                      className="pricing-avatar"
-                      src={mia.portrait}
-                      alt={`${mia.name}, ${mia.role}`}
-                      style={{
-                        ["--agent-edge" as string]: mia.bgEdge,
-                        ["--agent-bg" as string]: mia.bg,
-                      } as React.CSSProperties}
-                    />
-                  )}
-                  {o.visual === "team" && (
-                    <div className="pricing-team">
-                      {agents.map((a) => (
-                        <img key={a.slug} src={a.portrait} alt={a.name} title={a.name} />
-                      ))}
-                    </div>
-                  )}
-                  {o.visual === "custom" && (
-                    <div className="pricing-custom">
-                      <img src={mia.portrait} alt="" aria-hidden="true" />
-                      <img src={getAgent("atlas")!.portrait} alt="" aria-hidden="true" />
-                      <span className="pricing-custom-plus" aria-label="Your custom agent">+</span>
-                    </div>
-                  )}
-                </div>
-                <h3>{o.title}</h3>
-                <p>{o.body}</p>
-                <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-                  Speak to the team
+        <section className="section" style={{ paddingTop: 40 }}>
+          <div className="plan-grid">
+            {plans.map((p) => (
+              <article key={p.title} className={`plan-card${p.lead ? " lead" : ""}`}>
+                <h2>{p.title}</h2>
+                <p className="plan-note">{p.note}</p>
+                <ul>
+                  {p.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <a
+                  href={CALENDAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button"
+                >
+                  Book a demo
                 </a>
               </article>
             ))}
           </div>
-          <p className="pricing-included">
-            Every agent comes with your own custom clinic CRM and Operating System.
+          <p className="pricing-footline">
+            Book a demo to receive your custom quote. No per-seat fees and no
+            setup cost.
           </p>
         </section>
 
         <PlaybookPanel />
       </main>
+
       <SiteFooter />
     </div>
   );

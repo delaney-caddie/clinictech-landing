@@ -7,17 +7,17 @@ import { SiteFooter } from "@/components/site-footer";
 import { FaqSection } from "@/components/faq-section";
 import { PlaybookPanel } from "@/components/playbook-panel";
 import { InvestorStrip } from "@/components/investor-strip";
-import { agents, getAgent, CALENDAR_URL } from "@/lib/agents";
+import { getAgent, CALENDAR_URL } from "@/lib/agents";
 
 const problemsLeft = [
-  "You start your day with 100+ unread emails",
-  "Patient called after hours without a response",
-  "Your social media hasn't been updated in weeks",
+  "A patient called after hours. Nobody called back.",
+  "Messages on Instagram and Facebook sit unread for days.",
+  "No-shows leave gaps in your schedule every week.",
 ];
 
 const problemsRight = [
-  "Your staff is buried in admin",
-  "You can't hire because payroll is getting out of control",
+  "Your happiest patients leave without being asked for a review.",
+  "You can't hire because payroll costs are already too high.",
 ];
 
 // Every channel Mia picks up. Shown as chips in the "Meet Mia" callout.
@@ -30,101 +30,71 @@ const miaChannels = [
   "Social media",
 ];
 
-const outcomes = [
+// The five scroll panels in "AI that keeps your calendar full". The sticky
+// visual on the right swaps to match whichever panel is centred in view.
+const featPanels = [
   {
-    title: "More patients booked",
-    body: "Caddie replies to every inquiry in seconds and follows up until the patient books or says no.",
-    proof: "Leads are 5x more likely to book when you respond within 5 minutes.",
+    eyebrow: "Speed",
+    title: "Respond to every lead before your competition does",
+    body: "Your AI employee replies like your best coordinator — in seconds, at any hour. No patient waits until Monday morning for a reply.",
   },
   {
-    title: "Lower operating costs",
-    body: "Your AI employees handle the busywork, so you scale volume without adding headcount.",
-    proof: "Cut admin hours and grow without adding more headcount.",
+    eyebrow: "Conversion",
+    title: "Turn interest into booked appointments",
+    body: "An inquiry lands at 10pm on a Saturday. Your AI employee answers the treatment questions, qualifies the patient, books the consult and confirms it. No one on your team has to be available.",
   },
   {
-    title: "A 5-star patient experience",
-    body: "Every patient gets instant answers and constant follow-through, even when the clinic is slammed.",
-    proof: "Personalized messages get 20% more responses.",
-  },
-];
-
-// The patient journey diagram. `agent: "patient"` marks a patient step.
-// A step with two cards shares one portrait, with a card either side of it.
-const journey: { agent: string; cards: { tag: string; text: string }[] }[] = [
-  {
-    agent: "vidi",
-    cards: [
-      { tag: "Instagram", text: "Vidi posts a knee pain video on your clinic's Instagram." },
-    ],
+    eyebrow: "Context",
+    title: "Every patient conversation in one place",
+    body: "Phone, text, email, web chat, Instagram, WhatsApp and your EHR, consolidated. One patient, one thread — so every reply includes the patient's full history.",
   },
   {
-    agent: "iris",
-    cards: [
-      {
-        tag: "Comments & DMs",
-        text: "A patient comments asking about your knee pain treatments. Iris replies in your clinic's voice.",
-      },
-    ],
+    eyebrow: "Attendance",
+    title: "Cut no-shows in half",
+    body: "Personalized reminders and confirmations go out ahead of every appointment, so more patients arrive for the appointments they booked.",
   },
   {
-    agent: "mia",
-    cards: [
-      {
-        tag: "Phone",
-        text: "The patient calls for pricing. Mia already has the knee pain context and shares pricing on the spot.",
-      },
-      {
-        tag: "Calendar",
-        text: "Mia books the consult straight into your doctor's calendar.",
-      },
-    ],
-  },
-  {
-    agent: "atlas",
-    cards: [{ tag: "Protocols", text: "Atlas drafts a knee pain protocol for the patient." }],
-  },
-  {
-    agent: "juno",
-    cards: [
-      {
-        tag: "Doctor review",
-        text: "Juno flags the protocol to your doctor for review and sign-off.",
-      },
-    ],
-  },
-  {
-    agent: "sage",
-    cards: [
-      {
-        tag: "Call prep",
-        text: "Sage preps your concierge with the protocol and full patient context before the call.",
-      },
-    ],
-  },
-  {
-    agent: "patient",
-    cards: [{ tag: "In clinic", text: "The patient comes in and gets treatment." }],
-  },
-  {
-    agent: "rio",
-    cards: [{ tag: "Follow-up", text: "Rio follows up for a 5-star review and testimonial." }],
+    eyebrow: "Reputation",
+    title: "Collect reviews on autopilot",
+    body: "Your AI employee follows up with happy patients after every visit and asks for the review and testimonial — while you sleep.",
   },
 ];
 
-// Precompute which side each single-card step sits on so the zigzag keeps
-// alternating around the two-sided steps.
-const journeySteps = (() => {
-  let onLeft = true;
-  return journey.map((step) => {
-    if (step.cards.length > 1) {
-      onLeft = true;
-      return { ...step, side: "both" as const };
-    }
-    const side = onLeft ? ("left" as const) : ("right" as const);
-    onLeft = !onLeft;
-    return { ...step, side };
-  });
-})();
+// PLACEHOLDER QUOTES — not real customers. Swap for real quotes (or ship
+// fewer, real ones) before this merges to production.
+const testimonials = [
+  {
+    quote:
+      "We used to miss weekend inquiries. Someone would message on a Friday night, and by the time we called on Monday they had already booked with another clinic. That does not happen now.",
+    who: "Practice Manager, aesthetics clinic",
+  },
+  {
+    quote:
+      "I was worried it would sound like a robot to our patients. It sounds like our front desk staff, and it answers the same way every time.",
+    who: "Founder, regenerative medicine clinic",
+  },
+  {
+    quote:
+      "No-shows were costing us more than our advertising. The reminders alone covered the cost of Caddie.",
+    who: "Owner, multi-location practice",
+  },
+  {
+    quote:
+      "We had years of happy patients and eleven reviews, because no one had time to ask. We have more than tripled that, and it takes none of our staff's time.",
+    who: "Clinic Director, hormone therapy",
+  },
+];
+
+const diffRows = [
+  ["After-hours inquiries go to voicemail", "Every inquiry answered in seconds, day or night"],
+  ["Follow-up depends on who remembers", "Every lead worked until it books or closes"],
+  ["Conversations scattered across phone, inbox, DMs and your EHR", "One thread per patient, every channel, full context"],
+  ["No-shows reduce the appointments you booked", "Reminders and confirmations cut no-shows in half"],
+  ["Reviews are collected only when someone has time", "Review requests go out automatically after every visit"],
+  ["Past patients are never contacted again", "Reactivation runs continuously in the background"],
+  ["Growing means hiring more staff", "Growing means adding another AI employee"],
+  ["A generic CRM built for every industry", "An operating system built only for clinics"],
+];
 
 function agentVars(slug: string | null) {
   const a = slug ? getAgent(slug) : undefined;
@@ -137,12 +107,102 @@ function agentVars(slug: string | null) {
   } as React.CSSProperties;
 }
 
+
+// The five staged product moments behind the scroll panels. Each is plain
+// markup, so swapping any of them for a real screenshot or loop later is a
+// one-block change that doesn't touch the scroll wiring.
+function FeatVisual({ index }: { index: number }) {
+  const mia = getAgent("mia")!;
+  const head = (title: string, time?: string) => (
+    <div className="fv-head" style={agentVars("mia")}>
+      <img src={mia.portrait} alt="" aria-hidden="true" />
+      <strong>{title}</strong>
+      {time && <span>{time}</span>}
+    </div>
+  );
+  if (index === 0)
+    return (
+      <div className="fv">
+        {head("New inquiry", "9:47 PM")}
+        <div className="fv-msg">Hi — do you treat knee pain without surgery? What would it cost?</div>
+        <div className="fv-msg out">
+          We do. Our regenerative program starts with a consult — happy to walk you
+          through the options and pricing. Want me to find you a time?
+        </div>
+        <div className="fv-chip">Replied in 4 seconds</div>
+      </div>
+    );
+  if (index === 1)
+    return (
+      <div className="fv">
+        {head("Saturday", "10:04 PM")}
+        <div className="fv-msg">Could I book a consult? I have been reading about hormone therapy.</div>
+        <div className="fv-msg out">
+          Absolutely. A couple of quick questions so the doctor has context, then
+          I will get you booked.
+        </div>
+        <div className="fv-cal">
+          <div>
+            <strong>Consult booked</strong>
+            <span>Tuesday &middot; 10:00 AM</span>
+          </div>
+        </div>
+        <div className="fv-chip">Confirmed by text</div>
+      </div>
+    );
+  if (index === 2)
+    return (
+      <div className="fv">
+        <div className="fv-head">
+          <strong>Sarah M.</strong>
+          <span>one thread</span>
+        </div>
+        <div className="fv-tags">
+          <span className="fv-tag">Phone</span>
+          <span className="fv-tag">Instagram</span>
+          <span className="fv-tag">Email</span>
+          <span className="fv-tag">Web chat</span>
+          <span className="fv-tag">EHR</span>
+        </div>
+        <div className="fv-row"><span className="fv-tag">Instagram</span><span>Asked about PRP pricing on Tuesday</span></div>
+        <div className="fv-row"><span className="fv-tag">Phone</span><span>Called after hours; consult booked</span></div>
+        <div className="fv-row"><span className="fv-tag">EHR</span><span>Intake form completed and on file</span></div>
+      </div>
+    );
+  if (index === 3)
+    return (
+      <div className="fv">
+        {head("Before the visit")}
+        <div className="fv-msg out">
+          Hi Sarah — a reminder that your consult is tomorrow at 10:00 AM. Reply R
+          if you need to reschedule.
+        </div>
+        <div className="fv-msg">Perfect, see you then!</div>
+        <div className="fv-chip">No-shows cut in half</div>
+      </div>
+    );
+  return (
+    <div className="fv">
+      {head("After the visit")}
+      <div className="fv-msg out">
+        Thanks for coming in today, Sarah! If you had a good experience, would you
+        mind leaving us a quick review?
+      </div>
+      <div className="fv-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div className="fv-chip">New 5-star review</div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   // Calculator state
   const [inquiries, setInquiries] = useState(60);
   const [avgValue, setAvgValue] = useState(9000);
   const [closeRate, setCloseRate] = useState(30);
   const [coldShare, setColdShare] = useState(25);
+
+  // Which of the five feature panels is centred in the viewport.
+  const [featActive, setFeatActive] = useState(0);
 
   const upside = useMemo(() => {
     // Conservative model: an instant, persistent first reply re-engages about
@@ -180,80 +240,26 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  // Patient journey: reveal each agent and their action one at a time as the
-  // section scrolls past, and draw the connector line in behind them.
+  // Scrollytelling: mark the feature panel nearest the viewport centre as
+  // active so the sticky visual can swap to match it.
   useEffect(() => {
-    const journeyEl = document.querySelector<HTMLElement>(".journey");
-    if (!journeyEl) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const steps = Array.from(journeyEl.querySelectorAll<HTMLElement>(".journey-step"));
-
-    if (reduceMotion) {
-      steps.forEach((s) => s.classList.add("is-revealed"));
-      journeyEl.style.setProperty("--journey-progress", "1");
-      return;
-    }
-
-    // Several steps fit on screen at once, so a plain observer would pop them
-    // all in together. Cascade whatever arrives in the same batch instead, in
-    // document order, so they always read as one-after-the-other.
+    const steps = Array.from(document.querySelectorAll<HTMLElement>(".feat-step"));
+    if (!steps.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        const arriving = entries
-          .filter((e) => e.isIntersecting)
-          .map((e) => e.target as HTMLElement)
-          .sort((a, b) => steps.indexOf(a) - steps.indexOf(b));
-
-        arriving.forEach((el, i) => {
-          observer.unobserve(el);
-          window.setTimeout(() => el.classList.add("is-revealed"), i * 160);
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const i = steps.indexOf(e.target as HTMLElement);
+            if (i >= 0) setFeatActive(i);
+          }
         });
       },
-      { threshold: 0.35, rootMargin: "0px 0px -22% 0px" }
+      // A narrow band around the viewport centre: exactly one panel is inside
+      // it at a time, so the active step never flickers between two panels.
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
     );
-    steps.forEach((s) => observer.observe(s));
-
-    // Grow the progress line from the first portrait to the last as you scroll.
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const rect = journeyEl.getBoundingClientRect();
-      const vh = window.innerHeight;
-
-      // A fast scroll or a jump link can carry a step past the viewport without
-      // the observer ever sampling it as visible, which would strand it hidden.
-      // Anything already above the fold gets revealed outright.
-      steps.forEach((el) => {
-        if (el.classList.contains("is-revealed")) return;
-        if (el.getBoundingClientRect().bottom < 0) {
-          observer.unobserve(el);
-          el.classList.add("is-revealed");
-        }
-      });
-
-      // 0 when the section's top sits at 75% of the viewport, 1 once its
-      // bottom has risen to 55%, so the line finishes with the last step.
-      const startsAt = vh * 0.75;
-      const travel = rect.height + vh * 0.2;
-      const progress = travel > 0 ? (startsAt - rect.top) / travel : 1;
-      journeyEl.style.setProperty(
-        "--journey-progress",
-        String(Math.max(0, Math.min(1, progress)))
-      );
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
+    steps.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -297,25 +303,18 @@ export default function LandingPage() {
 .hero-sub { color: var(--ink-soft); font-size: var(--text-lg); max-width: 620px; margin: 0 auto; line-height: 1.62; position: relative; z-index: 1; }
 .hero-actions { justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; display: flex; position: relative; z-index: 1; }
 
-/* Hero lineup */
-.hero-lineup {
-  width: 100%; margin-top: clamp(34px, 4vw, 52px);
-  display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px;
-  position: relative; z-index: 1;
+/* Video b-roll slot (unused until the clip ships). The video paints under
+   a scrim so the headline keeps contrast; every element in the panel already
+   sits at z-index 1. */
+.hero-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0;
 }
-.lineup-card {
-  background: #ffffffd9; border: 1px solid #355cff24; border-radius: 16px;
-  box-shadow: var(--shadow-xs); padding: 12px 8px 14px;
-  display: grid; justify-items: center; gap: 8px; text-decoration: none;
-  transition: transform .2s var(--ease), box-shadow .2s ease, border-color .2s ease;
+.hero-video + * { position: relative; }
+.hero-panel:has(.hero-video)::after {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, #f4f7ffd9 0%, #e7eeffb3 55%, #d8e4ffd9 100%);
 }
-.lineup-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--agent-edge, var(--blue)); }
-.lineup-card img {
-  width: 100%; max-width: 92px; aspect-ratio: 1; border-radius: 14px; object-fit: cover;
-  border: 2px solid var(--agent-edge, var(--line-strong));
-}
-.lineup-card strong { color: var(--ink); font-size: .95rem; font-weight: 620; letter-spacing: -.01em; line-height: 1; }
-.lineup-card span { color: var(--agent-role, var(--muted-ink)); font-size: .72rem; font-weight: 550; line-height: 1.25; text-align: center; }
 
 /* ===== PROBLEM ===== */
 .problem-section { text-align: center; }
@@ -359,28 +358,7 @@ export default function LandingPage() {
 .problem-col:first-child .problem-bubble { border-radius: 18px 18px 4px 18px; }
 .problem-col:last-child .problem-bubble { border-radius: 18px 18px 18px 4px; }
 
-/* ===== OUTCOMES ===== */
-.outcome-grid { gap: var(--grid-gap); display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; }
-.outcome-card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); padding: var(--card-pad);
-  display: flex; flex-direction: column;
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s var(--ease);
-}
-.outcome-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.outcome-num {
-  color: var(--faint); font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: .72rem; font-weight: 500; letter-spacing: .08em; margin-bottom: 14px;
-}
-.outcome-card h3 { margin-bottom: 12px; font-size: var(--h2-card); font-weight: var(--font-subhead); }
-.outcome-card p { margin-bottom: 22px; font-size: .96rem; }
-.outcome-card strong {
-  background: var(--blue-wash); border-radius: var(--r-sm); color: var(--blue-ink);
-  margin-top: auto; padding: 13px 14px; font-weight: 560; display: block; font-size: .9rem;
-}
-.outcome-actions { margin-top: 28px; display: flex; justify-content: center; }
-
-/* ===== MEET MIA ===== */
+/* ===== MEET MIA ===== *//* ===== MEET MIA ===== */
 /* Tinted with Mia's own palette via agentVars(), so the callout matches her
    portrait and her page rather than introducing a new accent colour. */
 .mia-callout {
@@ -425,101 +403,138 @@ export default function LandingPage() {
   .mia-callout-cta .button { width: 100%; text-align: center; }
 }
 
-/* ===== PATIENT JOURNEY ===== */
-.journey-section { text-align: center; }
-.journey-section .section-copy { margin: 0 auto; }
-.journey {
-  max-width: 860px; margin: 44px auto 0; position: relative;
-  display: grid; gap: 26px; text-align: left;
-  --journey-progress: 0;
+/* ===== AI THAT KEEPS YOUR CALENDAR FULL ===== */
+.feat-section .section-copy { margin: 0 auto; text-align: center; }
+.feat-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  gap: clamp(32px, 5vw, 80px); align-items: start;
+  max-width: 1080px; margin: 24px auto 0;
 }
-/* Dashed track, then a solid line that draws in over it as you scroll. */
-.journey::before {
-  content: ""; position: absolute; top: 28px; bottom: 28px; left: 50%;
-  border-left: 2px dashed #b9c6e6; transform: translateX(-1px);
+.feat-step {
+  min-height: 58vh; padding: 32px 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 12px;
+  opacity: .32; transition: opacity .35s ease;
 }
-.journey::after {
-  content: ""; position: absolute; top: 28px; bottom: 28px; left: 50%;
-  width: 2px; margin-left: -1px; border-radius: 2px;
-  background: linear-gradient(180deg, var(--blue), #7c3aed);
-  transform: scaleY(var(--journey-progress)); transform-origin: top;
-  box-shadow: 0 0 10px #355cff59;
+.feat-step.is-active { opacity: 1; }
+.feat-step h3 {
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem); font-weight: var(--font-subhead);
+  letter-spacing: -.022em; line-height: 1.15; margin: 0; max-width: 20ch;
 }
-
-/* Each agent and their action fade in as the step scrolls into view. */
-.journey-node img { transition: opacity .5s var(--ease), transform .5s var(--ease); }
-.journey-card { transition: opacity .55s var(--ease), transform .55s var(--ease); }
-.journey-step .journey-node img { opacity: 0; transform: scale(.55); }
-.journey-step .journey-card { opacity: 0; }
-.journey-step .journey-card.on-left { transform: translateX(-26px); }
-.journey-step .journey-card.on-right { transform: translateX(26px); }
-.journey-step.is-revealed .journey-node img { opacity: 1; transform: scale(1); }
-.journey-step.is-revealed .journey-card { opacity: 1; transform: translateX(0); transition-delay: .12s; }
-.journey-step.is-revealed .journey-card.on-right { transition-delay: .22s; }
+.feat-step p { font-size: 1rem; line-height: 1.62; margin: 0; max-width: 46ch; }
+.feat-inline { display: none; }
+.feat-sticky {
+  position: sticky; top: 92px; display: grid;
+  min-height: min(560px, calc(100vh - 120px));
+}
+.feat-visual {
+  grid-area: 1 / 1; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(14px); pointer-events: none;
+  transition: opacity .4s ease, transform .45s var(--ease);
+}
+.feat-visual.is-active { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .journey::after { display: none; }
-  .journey-step .journey-node img,
-  .journey-step .journey-card { opacity: 1; transform: none; transition: none; }
+  .feat-step, .feat-visual { transition: none; }
+  .feat-visual { transform: none; }
 }
-.journey-step {
-  display: grid; grid-template-columns: 1fr 64px 1fr;
-  align-items: center; gap: 18px; position: relative;
-}
-.journey-node {
-  grid-column: 2; justify-self: center; position: relative; z-index: 1;
-}
-.journey-node img {
-  width: 60px; height: 60px; border-radius: 999px; object-fit: cover; display: block;
-  border: 2.5px solid var(--agent-edge, var(--line-strong));
-  background: var(--agent-bg, var(--wash));
-  box-shadow: 0 0 0 5px var(--paper), var(--shadow-sm);
-}
-.journey-card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-sm); padding: 16px 20px;
-}
-.journey-card.on-left { grid-column: 1; grid-row: 1; }
-.journey-card.on-right { grid-column: 3; grid-row: 1; }
-.journey-tag {
-  color: var(--agent-role, var(--faint)); letter-spacing: .06em; text-transform: uppercase;
-  font-size: .68rem; font-weight: 700; display: block; margin-bottom: 5px;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-}
-.journey-card p { margin: 0; color: var(--ink); font-size: .94rem; font-weight: 510; line-height: 1.55; }
-.journey-actions { margin-top: 36px; display: flex; justify-content: center; }
+.feat-actions { margin-top: 12px; display: flex; justify-content: center; }
 
-/* ===== WHY CADDIE VS A TRADITIONAL CRM ===== */
-.crm-section { text-align: center; }
-.crm-section .section-copy { margin: 0 auto; }
-.crm-shot {
-  margin: 40px auto 0; max-width: 980px;
-  border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); overflow: hidden; background: var(--surface);
+/* The staged product moments */
+.fv {
+  width: 100%; max-width: 430px; background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); padding: 22px; display: grid; gap: 12px;
 }
-.crm-shot img { display: block; width: 100%; height: auto; }
-
-/* ===== HIPAA / TRUST ===== */
-.hipaa-strip {
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
-  gap: 48px; align-items: center;
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--r-lg); box-shadow: var(--shadow-xs);
-  padding: var(--card-pad);
-}
-.hipaa-copy h2 { margin-bottom: 14px; }
-.hipaa-copy p { font-size: .96rem; margin-bottom: 18px; }
-.hipaa-link { color: var(--blue-ink); font-size: .92rem; font-weight: 620; text-decoration: none; }
-.hipaa-link:hover { text-decoration: underline; }
-.hipaa-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.hipaa-points li {
-  background: var(--blue-wash); border-radius: var(--r-sm); color: var(--blue-ink);
-  padding: 13px 16px; font-size: .9rem; font-weight: 560;
+.fv-head {
   display: flex; align-items: center; gap: 10px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--line);
 }
-.hipaa-points li::before {
-  content: ""; width: 8px; height: 8px; border-radius: 999px;
-  background: var(--blue-ink); flex: none; opacity: .55;
+.fv-head img {
+  width: 34px; height: 34px; border-radius: 999px; object-fit: cover;
+  border: 2px solid var(--agent-edge, var(--line-strong));
+  background: var(--agent-bg, var(--wash));
 }
+.fv-head strong { font-size: .92rem; letter-spacing: -.01em; }
+.fv-head span {
+  margin-left: auto; color: var(--faint); font-size: .74rem;
+  font-variant-numeric: tabular-nums;
+}
+.fv-msg {
+  max-width: 88%; width: fit-content;
+  background: var(--wash); border: 1px solid var(--line);
+  border-radius: 16px 16px 16px 5px; padding: 10px 14px;
+  font-size: .9rem; line-height: 1.5; color: var(--ink);
+}
+.fv-msg.out {
+  margin-left: auto; border-radius: 16px 16px 5px 16px;
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+.fv-chip {
+  display: inline-flex; align-items: center; gap: 7px; width: fit-content;
+  background: #eaf6f0; color: #14684a; border: 1px solid #bfe3d2;
+  border-radius: 999px; padding: 6px 12px; font-size: .8rem; font-weight: 600;
+}
+.fv-chip::before {
+  content: ""; width: 7px; height: 7px; border-radius: 999px; background: #1f9d6a;
+}
+.fv-cal {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--blue-wash); border: 1px solid #dde6f8;
+  border-left: 3px solid var(--blue); border-radius: var(--r-sm);
+  padding: 12px 14px;
+}
+.fv-cal strong { font-size: .92rem; color: var(--ink); }
+.fv-cal span { display: block; color: var(--muted-ink); font-size: .78rem; margin-top: 2px; }
+.fv-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.fv-tag {
+  background: var(--wash); border: 1px solid var(--line); border-radius: 999px;
+  color: var(--muted-ink); padding: 3px 10px; font-size: .72rem; font-weight: 600;
+  flex: none;
+}
+.fv-row {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
+  font-size: .86rem; color: var(--ink-soft);
+}
+.fv-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.fv-stars { color: #f4b740; font-size: 1.2rem; letter-spacing: 4px; }
+
+/* ===== BUILT FOR HEALTHCARE ===== */
+.hc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); margin-top: 32px; }
+.hc-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs); padding: var(--card-pad);
+}
+.hc-card h3 { margin-bottom: 10px; font-size: 1.18rem; font-weight: var(--font-subhead); }
+.hc-card p { margin: 0; font-size: .95rem; }
+.hc-link { margin-top: 22px; }
+.hc-link a { color: var(--blue-ink); font-size: .94rem; font-weight: 620; text-decoration: none; }
+.hc-link a:hover { text-decoration: underline; }
+
+/* ===== TESTIMONIALS ===== */
+.testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); margin-top: 32px; }
+.testi-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs); padding: 26px 28px; margin: 0;
+  display: flex; flex-direction: column; gap: 13px;
+}
+.testi-stars { color: #f4b740; font-size: .95rem; letter-spacing: 3px; }
+.testi-card blockquote { margin: 0; color: var(--ink); font-size: 1.01rem; line-height: 1.62; }
+.testi-card figcaption { margin-top: auto; color: var(--muted-ink); font-size: .84rem; font-weight: 600; }
+
+/* ===== THE CADDIE DIFFERENCE ===== */
+.diff-wrap { overflow-x: auto; margin-top: 32px; }
+.diff-table {
+  min-width: 640px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.diff-head, .diff-row { display: grid; grid-template-columns: 1fr 1fr; }
+.diff-head span { padding: 15px 22px; font-size: .84rem; font-weight: 650; letter-spacing: -.005em; }
+.diff-head span:first-child { background: #fdf1f0; color: #a13c33; }
+.diff-head span:last-child { background: #128454; color: #fff; }
+.diff-row { border-top: 1px solid var(--line); }
+.diff-row span { padding: 13px 22px; font-size: .93rem; line-height: 1.5; color: #8a4740; background: #fdf1f066; }
+.diff-row span:last-child { background: #e9f8f166; color: #10502f; border-left: 1px solid var(--line); }
 
 /* ===== CALCULATOR ===== */
 .calculator-section {
@@ -582,17 +597,15 @@ export default function LandingPage() {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1020px) {
-  .hero-lineup { grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
   .problem-img { order: -1; }
-  .outcome-grid { grid-template-columns: 1fr; }
   .calculator-grid { grid-template-columns: 1fr; }
-  .hipaa-strip { grid-template-columns: 1fr; gap: 26px; }
-  .journey::before, .journey::after { left: 30px; }
-  .journey-step { grid-template-columns: 64px 1fr; align-items: start; row-gap: 12px; }
-  .journey-node { grid-column: 1; grid-row: 1; }
-  /* Stack both cards to the right of a single portrait on narrow screens. */
-  .journey-card.on-left, .journey-card.on-right { grid-column: 2; grid-row: auto; }
+  /* Scrollytelling collapses: no sticky rail, each panel carries its visual. */
+  .feat-layout { grid-template-columns: 1fr; }
+  .feat-sticky { display: none; }
+  .feat-step { min-height: 0; opacity: 1; padding: 26px 0; }
+  .feat-inline { display: block; margin-top: 16px; }
+  .hc-grid, .testi-grid { grid-template-columns: 1fr; }
   .cta-section { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) {
@@ -601,8 +614,7 @@ export default function LandingPage() {
   .hero h1 { font-size: 2.3rem; line-height: 1.06; }
   .hero-sub { font-size: 1rem; }
   .hero-actions { margin: 22px 0 0; }
-  .hero-lineup { grid-template-columns: repeat(2, 1fr); }
-  .lineup-card img { max-width: 120px; }
+  .diff-head span, .diff-row span { padding: 11px 14px; font-size: .86rem; }
   .cta-section { padding: 30px; }
   .calculator-result strong { font-size: 2.2rem; }
 }
@@ -615,30 +627,23 @@ export default function LandingPage() {
         <section className="hero">
           <div className="hero-panel">
             <div className="hero-badge">Your front office, running while you sleep</div>
-            <h1>Increase patient bookings without adding headcount</h1>
+            <h1>Increase patient bookings and revenue without adding headcount</h1>
             <p className="hero-sub">
-              Get an AI team who handles patient inquiries, your inbox, socials, SEO,
-              lead gen, protocols and marketing around the clock.
+              Turn more conversations into revenue with 24/7 AI employees that run
+              the full patient journey &mdash; from a patient&apos;s first message to a
+              booked appointment, a confirmation, and follow-up after the visit.
             </p>
             <div className="hero-actions">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
                 Book a demo
               </a>
             </div>
-            <div className="hero-lineup">
-              {agents.map((a) => (
-                <Link
-                  key={a.slug}
-                  href={`/ai-employees/${a.slug}`}
-                  className="lineup-card"
-                  style={agentVars(a.slug)}
-                >
-                  <img src={a.portrait} alt={`${a.name}, ${a.role}`} />
-                  <strong>{a.name}</strong>
-                  <span>{a.role}</span>
-                </Link>
-              ))}
-            </div>
+            {/* Video b-roll slot: when the clip is ready, add
+                <video className="hero-video" autoPlay muted loop playsInline
+                       poster="/hero-poster.jpg" src="/hero-broll.mp4" />
+                as the first child of .hero-panel. The .hero-video and
+                .hero-scrim styles below already handle sizing and contrast,
+                and everything else in the panel sits above them. */}
           </div>
         </section>
 
@@ -672,23 +677,43 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== OUTCOMES ===== */}
-        <section className="section" style={{ paddingTop: 0 }}>
+        {/* ===== AI THAT KEEPS YOUR CALENDAR FULL ===== */}
+        <section className="section feat-section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">What changes with Caddie</span>
-            <h2>Caddie employees handle the busywork so you can focus on patient care.</h2>
+            <h2>AI that keeps your calendar full.</h2>
+            <p>Five things your front office should never miss, and won&apos;t.</p>
           </div>
-          <div className="outcome-grid reveal-item">
-            {outcomes.map((o, i) => (
-              <article key={o.title} className="outcome-card">
-                <span className="outcome-num">0{i + 1}</span>
-                <h3>{o.title}</h3>
-                <p>{o.body}</p>
-                <strong>{o.proof}</strong>
-              </article>
-            ))}
+          <div className="feat-layout">
+            <div className="feat-steps">
+              {featPanels.map((f, i) => (
+                <div
+                  key={f.title}
+                  className={`feat-step${featActive === i ? " is-active" : ""}`}
+                >
+                  <span className="eyebrow">{f.eyebrow}</span>
+                  <h3>{f.title}</h3>
+                  <p>{f.body}</p>
+                  {/* On narrow screens the sticky rail is hidden and each panel
+                      carries its own visual instead. */}
+                  <div className="feat-inline">
+                    <FeatVisual index={i} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="feat-sticky" aria-hidden="true">
+              {featPanels.map((f, i) => (
+                <div
+                  key={f.title}
+                  className={`feat-visual${featActive === i ? " is-active" : ""}`}
+                >
+                  <FeatVisual index={i} />
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="outcome-actions reveal-item">
+          <div className="feat-actions reveal-item">
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
               Book a demo
             </a>
@@ -737,113 +762,81 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== WHY CADDIE VS A TRADITIONAL CRM ===== */}
-        <section className="section crm-section" style={{ paddingTop: 0 }}>
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">The platform</span>
-            <h2>Why modern clinics use Caddie instead of a traditional CRM.</h2>
-            <p>
-              Caddie&apos;s AI employees run on our agentic CRM platform. Unlike
-              traditional CRMs that store leads and wait for your staff to work
-              them, Caddie&apos;s platform is fully agentic: it actions leads in
-              real time with context, so every response a patient gets is custom
-              to your clinic and their needs. And every part of it is built for
-              healthcare, from the protocol builder to post-procedure follow-up
-              questionnaires, not adapted from a one-size-fits-all CRM.
-            </p>
-          </div>
-          <figure className="crm-shot reveal-item">
-            <img
-              src="/product-analytics.jpg"
-              alt="The Caddie workspace showing live pipeline results, new leads per week, lead sources, and per-agent performance"
-              loading="lazy"
-            />
-          </figure>
-        </section>
-
-        {/* ===== PATIENT JOURNEY (the platform, 24/7) ===== */}
-        <section className="section journey-section" style={{ paddingTop: 0 }}>
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">Around the clock</span>
-            <h2>One platform running your entire front office 24/7.</h2>
-            <p>
-              AI employees work while you sleep, so you never miss a potential
-              patient booking. Here is one patient&apos;s journey through your
-              AI team.
-            </p>
-          </div>
-          <div className="journey">
-            {journeySteps.map((step, i) => {
-              const a = getAgent(step.agent);
-              return (
-                <div
-                  key={i}
-                  className={`journey-step is-${step.side}`}
-                  style={
-                    a
-                      ? agentVars(step.agent)
-                      : ({
-                          ["--agent-bg" as string]: "#C1CFFE",
-                          ["--agent-edge" as string]: "#8799D5",
-                          ["--agent-role" as string]: "#46538A",
-                        } as React.CSSProperties)
-                  }
-                >
-                  <div className="journey-node">
-                    {a ? (
-                      <img src={a.portrait} alt={`${a.name}, ${a.role}`} title={a.name} />
-                    ) : (
-                      <img src="/patient.jpg" alt="The patient" title="Patient" />
-                    )}
-                  </div>
-                  {step.cards.map((card, j) => (
-                    <div
-                      key={card.tag}
-                      className={`journey-card ${
-                        step.side === "both"
-                          ? j === 0
-                            ? "on-left"
-                            : "on-right"
-                          : `on-${step.side}`
-                      }`}
-                    >
-                      <span className="journey-tag">{card.tag}</span>
-                      <p>{card.text}</p>
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-          <div className="journey-actions reveal-item">
-            <Link href="/platform" className="button secondary">See the platform</Link>
-          </div>
-        </section>
-
-        {/* ===== HIPAA / TRUST ===== */}
+        {/* ===== BUILT FOR HEALTHCARE ===== */}
         <section className="section" style={{ paddingTop: 0 }}>
-          <div className="hipaa-strip reveal-item">
-            <div className="hipaa-copy">
-              <span className="eyebrow">Security &amp; compliance</span>
-              <h2>Built for healthcare. HIPAA-compliant by design.</h2>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Security &amp; compliance</span>
+            <h2>AI built for healthcare, designed to convert.</h2>
+            <p>
+              Generic AI tools are built for every industry at once. Caddie is
+              built only for clinics, with clear limits on what it will and
+              will not do.
+            </p>
+          </div>
+          <div className="hc-grid reveal-item">
+            <article className="hc-card">
+              <h3>HIPAA-compliant by design</h3>
               <p>
-                Caddie&apos;s platform and AI employees are built to handle
-                protected health information the way HIPAA requires. PHI is
-                encrypted in transit and at rest, access is role-based and
-                audit-logged, and every AI conversation is recorded so your
+                PHI encrypted in transit and at rest, role-based access with
+                full audit logs, and every AI conversation recorded so your
                 team can review exactly what was said. Patient data is never
                 used to train shared models.
               </p>
-              <Link href="/ai-vs-humans" className="hipaa-link">
-                How we keep AI employees safe and reliable &rarr;
-              </Link>
+            </article>
+            <article className="hc-card">
+              <h3>Every AI employee is built around the patient journey</h3>
+              <p>
+                They are trained for healthcare, not adapted from a
+                general-purpose sales tool. They never give medical advice,
+                they answer only from the knowledge your clinic has approved,
+                and the moment a conversation turns clinical they hand it to
+                your staff with the full history attached.
+              </p>
+            </article>
+          </div>
+          <div className="hc-link reveal-item">
+            <Link href="/ai-vs-humans">
+              How we keep AI employees safe and reliable &rarr;
+            </Link>
+          </div>
+        </section>
+
+        {/* ===== TESTIMONIALS (placeholder quotes -- see const testimonials) ===== */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">Clinics on Caddie</span>
+            <h2>What clinics are saying about Caddie.</h2>
+          </div>
+          <div className="testi-grid reveal-item">
+            {testimonials.map((t) => (
+              <figure key={t.who} className="testi-card">
+                <div className="testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
+                <figcaption>{t.who}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== THE CADDIE DIFFERENCE ===== */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide reveal-item">
+            <span className="eyebrow">The Caddie difference</span>
+            <h2>From missed opportunities to an operating system that scales.</h2>
+          </div>
+          <div className="diff-wrap reveal-item">
+            <div className="diff-table">
+              <div className="diff-head">
+                <span>Before Caddie</span>
+                <span>With your Caddie employees</span>
+              </div>
+              {diffRows.map(([before, after]) => (
+                <div key={before} className="diff-row">
+                  <span>{before}</span>
+                  <span>{after}</span>
+                </div>
+              ))}
             </div>
-            <ul className="hipaa-points">
-              <li>PHI encrypted in transit and at rest</li>
-              <li>Role-based access with full audit logs</li>
-              <li>Every conversation recorded and reviewable</li>
-              <li>Never used to train shared models</li>
-            </ul>
           </div>
         </section>
 
