@@ -201,16 +201,31 @@ export default function AiEmployeesIndexPage() {
 .aie-gain span { display: block; color: var(--muted-ink); font-size: .9rem; margin-top: 6px; }
 .ct-page .aie-gains-note { margin-top: 16px; color: var(--faint); font-size: .84rem; max-width: 68ch; }
 
-/* Quote */
+/* Featured quote: clinic photo alongside the words, person in the byline */
 .aie-quote {
-  max-width: 760px; margin: 0 auto; text-align: center;
-  display: flex; flex-direction: column; gap: 16px; align-items: center;
+  max-width: 1000px; margin: 0 auto;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  align-items: stretch;
+}
+.aie-quote-clinic { width: 100%; height: 100%; min-height: 300px; object-fit: cover; display: block; }
+.aie-quote-body {
+  padding: clamp(28px, 3.4vw, 44px);
+  display: flex; flex-direction: column; justify-content: center; gap: 16px;
 }
 .aie-quote blockquote {
-  margin: 0; color: var(--ink); font-size: clamp(1.15rem, 2vw, 1.4rem);
+  margin: 0; color: var(--ink); font-size: clamp(1.1rem, 1.7vw, 1.32rem);
   line-height: 1.55; font-weight: 530; letter-spacing: -.01em;
 }
-.aie-quote figcaption { color: var(--muted-ink); font-size: .9rem; font-weight: 600; }
+.aie-quote figcaption {
+  display: flex; align-items: center; gap: 12px;
+  color: var(--muted-ink); font-size: .9rem; font-weight: 600;
+}
+.aie-quote figcaption img {
+  width: 44px; height: 44px; border-radius: 999px; object-fit: cover; flex: none;
+  border: 1.5px solid var(--line-strong);
+}
 .aie-quote .stars { color: #f4b740; letter-spacing: 4px; font-size: 1.05rem; }
 
 /* Roster hand-off */
@@ -231,6 +246,8 @@ export default function AiEmployeesIndexPage() {
   .aie-hero { grid-template-columns: 1fr; }
   .aie-cards, .aie-dark-grid { grid-template-columns: 1fr; }
   .aie-gains { grid-template-columns: 1fr 1fr; }
+  .aie-quote { grid-template-columns: 1fr; }
+  .aie-quote-clinic { min-height: 220px; max-height: 280px; }
   .aie-roster { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) {
@@ -392,14 +409,27 @@ export default function AiEmployeesIndexPage() {
 
         {/* Customer quote (placeholder — swap before production) */}
         <section className="section" style={{ paddingTop: 0 }}>
+          {/* Attribution matches the same testimonial on the homepage, so one
+              face is never shown as two different people across the site. */}
           <figure className="aie-quote">
-            <div className="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <blockquote>
-              &ldquo;We did not add a person and we are booking more consults than
-              we ever have. It is the first software we have bought that did the
-              work instead of creating more of it.&rdquo;
-            </blockquote>
-            <figcaption>Owner, aesthetics practice</figcaption>
+            <img
+              className="aie-quote-clinic"
+              src="/testimonials/dental-clinic.jpg"
+              alt=""
+              loading="lazy"
+            />
+            <div className="aie-quote-body">
+              <div className="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <blockquote>
+                &ldquo;We did not add a person and we are booking more consults
+                than we ever have. It is the first software we have bought that
+                did the work instead of creating more of it.&rdquo;
+              </blockquote>
+              <figcaption>
+                <img src="/testimonials/owner.jpg" alt="" loading="lazy" />
+                <span>Owner, multi-location dental practices</span>
+              </figcaption>
+            </div>
           </figure>
         </section>
 
