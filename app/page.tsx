@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { FaqSection } from "@/components/faq-section";
 import { PlaybookPanel } from "@/components/playbook-panel";
-import { InvestorStrip } from "@/components/investor-strip";
+import { CustomerLogos } from "@/components/customer-logos";
 import { getAgent, CALENDAR_URL } from "@/lib/agents";
 
 const problemsLeft = [
@@ -67,22 +67,39 @@ const testimonials = [
     quote:
       "We used to miss weekend inquiries. Someone would message on a Friday night, and by the time we called on Monday they had already booked with another clinic. That does not happen now.",
     who: "Practice Manager, aesthetics clinic",
+    person: "/testimonials/practice-manager.jpg",
+    clinic: "/testimonials/aesthetics-clinic.jpg",
   },
   {
     quote:
       "I was worried it would sound like a robot to our patients. It sounds like our front desk staff, and it answers the same way every time.",
     who: "Founder, regenerative medicine clinic",
+    person: "/testimonials/founder.jpg",
+    clinic: "/testimonials/regen-clinic.jpg",
   },
   {
     quote:
       "No-shows were costing us more than our advertising. The reminders alone covered the cost of Caddie.",
-    who: "Owner, multi-location practice",
+    who: "Owner, multi-location dental practices",
+    person: "/testimonials/owner.jpg",
+    clinic: "/testimonials/dental-clinic.jpg",
   },
   {
     quote:
       "We had years of happy patients and eleven reviews, because no one had time to ask. We have more than tripled that, and it takes none of our staff's time.",
     who: "Clinic Director, hormone therapy",
+    person: "/testimonials/clinic-director.jpg",
+    clinic: "/testimonials/hormone-clinic.jpg",
   },
+];
+
+// The industries the platform is built for, shown under the healthcare section.
+const industries = [
+  { title: "Plastic surgery", src: "/industries/plastic-surgery.jpg" },
+  { title: "Regenerative medicine", src: "/industries/regenerative.jpg" },
+  { title: "Fertility", src: "/industries/fertility.jpg" },
+  { title: "Dental", src: "/industries/dental.jpg" },
+  { title: "Med spas", src: "/industries/med-spas.jpg" },
 ];
 
 const diffRows = [
@@ -120,11 +137,17 @@ function FeatVisual({ index }: { index: number }) {
       {time && <span>{time}</span>}
     </div>
   );
+  const sara = (text: string) => (
+    <div className="fv-in">
+      <img src="/patients/sara-m.png" alt="" aria-hidden="true" />
+      <div className="fv-msg">{text}</div>
+    </div>
+  );
   if (index === 0)
     return (
       <div className="fv">
         {head("New inquiry", "9:47 PM")}
-        <div className="fv-msg">Hi — do you treat knee pain without surgery? What would it cost?</div>
+        {sara("Hi — do you treat knee pain without surgery? What would it cost?")}
         <div className="fv-msg out">
           We do. Our regenerative program starts with a consult — happy to walk you
           through the options and pricing. Want me to find you a time?
@@ -136,7 +159,7 @@ function FeatVisual({ index }: { index: number }) {
     return (
       <div className="fv">
         {head("Saturday", "10:04 PM")}
-        <div className="fv-msg">Could I book a consult? I have been reading about hormone therapy.</div>
+        {sara("Could I book a consult? I have been reading about hormone therapy.")}
         <div className="fv-msg out">
           Absolutely. A couple of quick questions so the doctor has context, then
           I will get you booked.
@@ -154,7 +177,8 @@ function FeatVisual({ index }: { index: number }) {
     return (
       <div className="fv">
         <div className="fv-head">
-          <strong>Sarah M.</strong>
+          <img src="/patients/sara-m.png" alt="" aria-hidden="true" />
+          <strong>Sara M.</strong>
           <span>one thread</span>
         </div>
         <div className="fv-tags">
@@ -174,10 +198,10 @@ function FeatVisual({ index }: { index: number }) {
       <div className="fv">
         {head("Before the visit")}
         <div className="fv-msg out">
-          Hi Sarah — a reminder that your consult is tomorrow at 10:00 AM. Reply R
+          Hi Sara — a reminder that your consult is tomorrow at 10:00 AM. Reply R
           if you need to reschedule.
         </div>
-        <div className="fv-msg">Perfect, see you then!</div>
+        {sara("Perfect, see you then!")}
         <div className="fv-chip">No-shows cut in half</div>
       </div>
     );
@@ -185,7 +209,7 @@ function FeatVisual({ index }: { index: number }) {
     <div className="fv">
       {head("After the visit")}
       <div className="fv-msg out">
-        Thanks for coming in today, Sarah! If you had a good experience, would you
+        Thanks for coming in today, Sara! If you had a good experience, would you
         mind leaving us a quick review?
       </div>
       <div className="fv-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
@@ -468,6 +492,12 @@ export default function LandingPage() {
   margin-left: auto; border-radius: 16px 16px 5px 16px;
   background: var(--blue); border-color: var(--blue); color: #fff;
 }
+.fv-in { display: flex; gap: 9px; align-items: flex-end; max-width: 92%; }
+.fv-in img {
+  width: 28px; height: 28px; border-radius: 999px; object-fit: cover; flex: none;
+  border: 1.5px solid var(--line-strong); background: var(--wash);
+}
+.fv-in .fv-msg { max-width: none; }
 .fv-chip {
   display: inline-flex; align-items: center; gap: 7px; width: fit-content;
   background: #eaf6f0; color: #14684a; border: 1px solid #bfe3d2;
@@ -506,6 +536,17 @@ export default function LandingPage() {
 }
 .hc-card h3 { margin-bottom: 10px; font-size: 1.18rem; font-weight: var(--font-subhead); }
 .hc-card p { margin: 0; font-size: .95rem; }
+.ind-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 26px; }
+.ind-card { margin: 0; }
+.ind-card img {
+  width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block;
+  border-radius: var(--r-md, 14px); border: 1px solid var(--line);
+  box-shadow: var(--shadow-xs);
+}
+.ind-card figcaption {
+  margin-top: 9px; color: var(--ink); font-size: .88rem; font-weight: 600;
+  letter-spacing: -.01em; text-align: center;
+}
 .hc-link { margin-top: 22px; }
 .hc-link a { color: var(--blue-ink); font-size: .94rem; font-weight: 620; text-decoration: none; }
 .hc-link a:hover { text-decoration: underline; }
@@ -514,12 +555,21 @@ export default function LandingPage() {
 .testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); margin-top: 32px; }
 .testi-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs); padding: 26px 28px; margin: 0;
-  display: flex; flex-direction: column; gap: 13px;
+  box-shadow: var(--shadow-xs); margin: 0; overflow: hidden;
+  display: flex; flex-direction: column;
 }
+.testi-clinic { width: 100%; aspect-ratio: 21 / 8; object-fit: cover; display: block; }
+.testi-body { padding: 22px 26px 24px; display: flex; flex-direction: column; gap: 13px; flex: 1; }
 .testi-stars { color: #f4b740; font-size: .95rem; letter-spacing: 3px; }
 .testi-card blockquote { margin: 0; color: var(--ink); font-size: 1.01rem; line-height: 1.62; }
-.testi-card figcaption { margin-top: auto; color: var(--muted-ink); font-size: .84rem; font-weight: 600; }
+.testi-card figcaption {
+  margin-top: auto; display: flex; align-items: center; gap: 11px;
+  color: var(--muted-ink); font-size: .84rem; font-weight: 600;
+}
+.testi-card figcaption img {
+  width: 38px; height: 38px; border-radius: 999px; object-fit: cover; flex: none;
+  border: 1.5px solid var(--line-strong);
+}
 
 /* ===== THE CADDIE DIFFERENCE ===== */
 .diff-wrap { overflow-x: auto; margin-top: 32px; }
@@ -606,6 +656,8 @@ export default function LandingPage() {
   .feat-step { min-height: 0; opacity: 1; padding: 26px 0; }
   .feat-inline { display: block; margin-top: 16px; }
   .hc-grid, .testi-grid { grid-template-columns: 1fr; }
+  .ind-grid { grid-template-columns: repeat(2, 1fr); }
+  .ind-grid .ind-card:last-child { grid-column: 1 / -1; }
   .cta-section { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) {
@@ -647,8 +699,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== PROOF BAR ===== */}
-        <InvestorStrip />
+        {/* ===== CUSTOMER LOGOS ===== */}
+        <CustomerLogos />
 
         {/* ===== PROBLEM ===== */}
         <section className="section problem-section">
@@ -794,6 +846,14 @@ export default function LandingPage() {
               </p>
             </article>
           </div>
+          <div className="ind-grid reveal-item">
+            {industries.map((ind) => (
+              <figure key={ind.title} className="ind-card">
+                <img src={ind.src} alt={ind.title} loading="lazy" />
+                <figcaption>{ind.title}</figcaption>
+              </figure>
+            ))}
+          </div>
           <div className="hc-link reveal-item">
             <Link href="/ai-vs-humans">
               How we keep AI employees safe and reliable &rarr;
@@ -810,9 +870,15 @@ export default function LandingPage() {
           <div className="testi-grid reveal-item">
             {testimonials.map((t) => (
               <figure key={t.who} className="testi-card">
-                <div className="testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
-                <figcaption>{t.who}</figcaption>
+                <img className="testi-clinic" src={t.clinic} alt="" loading="lazy" />
+                <div className="testi-body">
+                  <div className="testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
+                  <figcaption>
+                    <img src={t.person} alt="" loading="lazy" />
+                    <span>{t.who}</span>
+                  </figcaption>
+                </div>
               </figure>
             ))}
           </div>
@@ -867,8 +933,8 @@ export default function LandingPage() {
                       <output>{fmt(avgValue)}</output>
                     </label>
                     <input
-                      type="range" min={2000} max={30000} step={500} value={avgValue}
-                      style={{ ["--fill" as string]: `${((avgValue - 2000) / 28000) * 100}%` } as React.CSSProperties}
+                      type="range" min={100} max={30000} step={100} value={avgValue}
+                      style={{ ["--fill" as string]: `${((avgValue - 100) / 29900) * 100}%` } as React.CSSProperties}
                       onChange={(e) => setAvgValue(Number(e.target.value))}
                     />
                   </div>

@@ -97,7 +97,35 @@ export default function PlatformPage() {
         </section>
 
         {/* Agentic vs traditional */}
+        {/* Four pillars */}
         <section className="section">
+          <div className="section-copy wide">
+            <span className="eyebrow">The four pillars</span>
+            <h2>Everything your front office needs, in one place.</h2>
+            <p>One connected system, not four separate products.</p>
+          </div>
+          <div className="plat-pillar-grid">
+            {pillars.map((p, i) => (
+              <article key={p.id} className="plat-pillar" id={p.id}>
+                <span className="plat-pillar-num">0{i + 1}</span>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </article>
+            ))}
+          </div>
+          <figure className="plat-product">
+            <img
+              src="/product-analytics.jpg"
+              alt="The Caddie workspace showing live pipeline results, new leads per week, lead sources, and per-agent performance"
+              loading="lazy"
+            />
+          </figure>
+          <p className="plat-product-caption">
+            Your results, computed live from your workspace.
+          </p>
+        </section>
+
+        <section className="section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide">
             <span className="eyebrow">Agentic vs. traditional</span>
             <h2>A traditional CRM stores your data. Caddie acts on it.</h2>
@@ -122,34 +150,6 @@ export default function PlatformPage() {
           </div>
           <p className="plat-compare-closing">
             The difference is simple. A CRM is a parking lot. Caddie is a workforce.
-          </p>
-        </section>
-
-        {/* Four pillars */}
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="section-copy wide">
-            <span className="eyebrow">The four pillars</span>
-            <h2>Everything your front office needs, in one place.</h2>
-            <p>One connected system, not four separate products.</p>
-          </div>
-          <div className="plat-pillar-grid">
-            {pillars.map((p, i) => (
-              <article key={p.id} className="plat-pillar" id={p.id}>
-                <span className="plat-pillar-num">0{i + 1}</span>
-                <h3>{p.title}</h3>
-                <p>{p.body}</p>
-              </article>
-            ))}
-          </div>
-          <figure className="plat-product">
-            <img
-              src="/product-analytics.jpg"
-              alt="The Caddie workspace showing live pipeline results, new leads per week, lead sources, and per-agent performance"
-              loading="lazy"
-            />
-          </figure>
-          <p className="plat-product-caption">
-            Your results, computed live from your workspace.
           </p>
         </section>
 
