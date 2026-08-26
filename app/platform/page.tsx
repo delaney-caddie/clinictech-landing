@@ -97,6 +97,15 @@ export default function PlatformPage() {
         </section>
 
         {/* Agentic vs traditional */}
+        {/* The people the platform works for */}
+        <section className="section" style={{ paddingTop: 28, paddingBottom: 0 }}>
+          <div className="plat-photo-row">
+            <img src="/testimonials/regen-clinic.jpg" alt="A patient checking in at a clinic front desk" loading="lazy" />
+            <img src="/patients/receptionist.jpg" alt="A receptionist welcoming a patient" loading="lazy" />
+            <img src="/testimonials/aesthetics-clinic.jpg" alt="A consultation at an aesthetics clinic" loading="lazy" />
+          </div>
+        </section>
+
         {/* Four pillars */}
         <section className="section">
           <div className="section-copy wide">

@@ -32,7 +32,7 @@ export function SiteFooter() {
         <Link href="/about">About</Link>
         <Link href="/pricing">Pricing</Link>
         <Link href="/integrations">Integrations</Link>
-        <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
+        <Link href="/ai-vs-humans">Safety &amp; HIPAA</Link>
         <Link href="/contact">Contact</Link>
       </nav>
       <nav className="footer-group" aria-label="Caddie vs. traditional CRMs">

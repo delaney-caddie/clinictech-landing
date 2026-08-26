@@ -21,12 +21,33 @@ export default function VsPage() {
           <span className="eyebrow">Caddie vs. traditional CRMs</span>
           <h1>A CRM stores your leads. Caddie books them.</h1>
           <p>
-            Traditional CRMs are one-size-fits-all databases your staff
-            operates, the same product sold to every industry. Caddie was
-            built for medical clinics, and it does the operating itself.
-            Here is every difference that matters, side by side.
+            Caddie either integrates with your existing CRM or replaces it
+            altogether &mdash; most clinics retire theirs within a month. Either
+            way, here is why it beats a traditional CRM, side by side.
           </p>
         </header>
+
+        {/* Integrate or replace */}
+        <section className="section" style={{ paddingBottom: 0 }}>
+          <div className="vs-frame">
+            <article>
+              <h3>Integrates with your CRM</h3>
+              <p>
+                Keep what you run today. Caddie connects in front of it, works
+                the leads, and writes everything back &mdash; so you get the AI
+                team without a migration project on day one.
+              </p>
+            </article>
+            <article>
+              <h3>Or replaces it altogether</h3>
+              <p>
+                When you are ready, Caddie becomes the system of record: CRM,
+                patient portal and operating system in one. We migrate your
+                contacts and conversations during onboarding.
+              </p>
+            </article>
+          </div>
+        </section>
 
         {/* The master table */}
         <section className="section">

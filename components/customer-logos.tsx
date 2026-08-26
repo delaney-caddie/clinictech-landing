@@ -14,10 +14,10 @@ export function CustomerLogos() {
   return (
     <section className="cust-strip" aria-label="Clinics running on Caddie">
       <style>{`
-.cust-strip { max-width: 1180px; margin: 0 auto; padding: 34px 24px 10px; text-align: center; }
+.cust-strip { max-width: 1240px; margin: 0 auto; padding: 44px 24px 18px; text-align: center; }
 .cust-strip > p {
-  color: var(--faint); font-size: .84rem; font-weight: 550;
-  letter-spacing: .02em; margin: 0 0 18px;
+  color: var(--muted-ink); font-size: 1.02rem; font-weight: 600;
+  letter-spacing: -.01em; margin: 0 0 26px;
 }
 .cust-marquee {
   overflow: hidden; position: relative;
@@ -29,7 +29,7 @@ export function CustomerLogos() {
   width: max-content; animation: cust-scroll 32s linear infinite;
 }
 .cust-track img {
-  height: 34px; width: auto; max-width: 150px; object-fit: contain;
+  height: 52px; width: auto; max-width: 210px; object-fit: contain;
   opacity: .8; filter: grayscale(35%);
   transition: opacity .2s ease, filter .2s ease;
 }
@@ -41,7 +41,7 @@ export function CustomerLogos() {
   .cust-marquee { -webkit-mask-image: none; mask-image: none; }
 }
       `}</style>
-      <p>Clinics across North America run their front office on Caddie</p>
+      <p>Clinics around the globe run their front office on Caddie</p>
       <div className="cust-marquee">
         <div className="cust-track">
           {[...logos, ...logos].map((l, i) => (

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { agents, CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL } from "@/lib/agents";
 
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -61,37 +61,14 @@ export function SiteNav() {
           <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie" />
         </Link>
         <nav className="desktop-nav">
-          <div className="nav-dropdown">
-            <Link href="/ai-employees" className="nav-dropdown-trigger" style={{ textDecoration: "none" }}>
-              AI Employees
-            </Link>
-            <div className="nav-dropdown-menu nav-menu-agents">
-              {agents.map((a) => (
-                <Link
-                  key={a.slug}
-                  href={`/ai-employees/${a.slug}`}
-                  className="nav-menu-agent"
-                  style={{
-                    ["--agent-edge" as string]: a.bgEdge,
-                    ["--agent-role" as string]: a.roleColor,
-                  } as React.CSSProperties}
-                >
-                  <img src={a.portrait} alt="" />
-                  <span>
-                    <strong>{a.name}</strong>
-                    <span>{a.role}</span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <Link href="/ai-employees">AI Employees</Link>
           <Link href="/platform">Platform</Link>
           <Link href="/pricing">Pricing</Link>
           <div className="nav-dropdown">
             <button className="nav-dropdown-trigger" type="button">More</button>
             <div className="nav-dropdown-menu">
               <Link href="/integrations">Integrations</Link>
-              <Link href="/ai-vs-humans">AI Employees vs. Humans</Link>
+              <Link href="/ai-vs-humans">Safety &amp; HIPAA</Link>
               <Link href="/vs">Caddie vs. Traditional CRMs</Link>
               <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
@@ -133,17 +110,9 @@ export function SiteNav() {
             <Link href="/platform" onClick={close}>Platform</Link>
             <Link href="/pricing" onClick={close}>Pricing</Link>
             <div className="mobile-nav-group">
-              <span>Meet the team</span>
-              {agents.map((a) => (
-                <Link key={a.slug} href={`/ai-employees/${a.slug}`} onClick={close}>
-                  {a.name} &middot; {a.role}
-                </Link>
-              ))}
-            </div>
-            <div className="mobile-nav-group">
               <span>More</span>
               <Link href="/integrations" onClick={close}>Integrations</Link>
-              <Link href="/ai-vs-humans" onClick={close}>AI Employees vs. Humans</Link>
+              <Link href="/ai-vs-humans" onClick={close}>Safety &amp; HIPAA</Link>
               <Link href="/vs" onClick={close}>Caddie vs. Traditional CRMs</Link>
               <Link href="/about" onClick={close}>About</Link>
               <Link href="/contact" onClick={close}>Contact</Link>

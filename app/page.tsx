@@ -634,16 +634,19 @@ export default function LandingPage() {
 /* ===== CTA ===== */
 .cta-section {
   border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink);
-  gap: var(--grid-gap-lg); margin-bottom: var(--section-y);
+  margin-bottom: var(--section-y); overflow: hidden;
   background:
     radial-gradient(900px 500px at 88% 0, #355cff29, #0000 62%),
     radial-gradient(760px 520px at 0 112%, #355cff21, #0000 64%),
     linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
   border: 1px solid #dde6f8;
-  justify-content: space-between; align-items: center; padding: 56px; display: flex;
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+  align-items: stretch;
 }
+.cta-copy { padding: 56px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 .cta-section h2 { margin-bottom: 10px; }
-.cta-section p { color: var(--ink-soft); max-width: 640px; margin-bottom: 0; }
+.cta-section p { color: var(--ink-soft); max-width: 560px; margin-bottom: 22px; }
+.cta-photo { width: 100%; height: 100%; min-height: 320px; object-fit: cover; display: block; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1020px) {
@@ -658,7 +661,8 @@ export default function LandingPage() {
   .hc-grid, .testi-grid { grid-template-columns: 1fr; }
   .ind-grid { grid-template-columns: repeat(2, 1fr); }
   .ind-grid .ind-card:last-child { grid-column: 1 / -1; }
-  .cta-section { flex-direction: column; align-items: stretch; }
+  .cta-section { grid-template-columns: 1fr; }
+  .cta-photo { min-height: 240px; max-height: 320px; }
 }
 @media (max-width: 720px) {
   .hero { padding-top: 10px; padding-left: 10px; padding-right: 10px; }
@@ -667,7 +671,7 @@ export default function LandingPage() {
   .hero-sub { font-size: 1rem; }
   .hero-actions { margin: 22px 0 0; }
   .diff-head span, .diff-row span { padding: 11px 14px; font-size: .86rem; }
-  .cta-section { padding: 30px; }
+  .cta-copy { padding: 30px; }
   .calculator-result strong { font-size: 2.2rem; }
 }
       `}</style>
@@ -992,16 +996,22 @@ export default function LandingPage() {
         {/* ===== CTA ===== */}
         <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
           <section className="cta-section reveal-item">
-            <div>
+            <div className="cta-copy">
               <h2>Patients book with the clinic that answers first.</h2>
               <p>
                 Every day of slow replies is consults booked somewhere else. Put a team
                 of AI employees on it tonight.
               </p>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
+                Book a demo
+              </a>
             </div>
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
-            </a>
+            <img
+              className="cta-photo"
+              src="/patients/receptionist.jpg"
+              alt="A clinic receptionist greeting a patient at the front desk"
+              loading="lazy"
+            />
           </section>
         </div>
       </main>
