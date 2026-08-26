@@ -327,17 +327,30 @@ export default function LandingPage() {
 .hero-sub { color: var(--ink-soft); font-size: var(--text-lg); max-width: 620px; margin: 0 auto; line-height: 1.62; position: relative; z-index: 1; }
 .hero-actions { justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; display: flex; position: relative; z-index: 1; }
 
-/* Video b-roll slot (unused until the clip ships). The video paints under
-   a scrim so the headline keeps contrast; every element in the panel already
-   sits at z-index 1. */
+/* Hero b-roll. The clip paints under a scrim so the headline keeps its
+   contrast; every element in the panel already sits at z-index 1. */
 .hero-video {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; z-index: 0;
+  object-fit: cover; z-index: 0; pointer-events: none;
 }
-.hero-video + * { position: relative; }
 .hero-panel:has(.hero-video)::after {
-  content: ""; position: absolute; inset: 0; z-index: 0;
-  background: linear-gradient(180deg, #f4f7ffd9 0%, #e7eeffb3 55%, #d8e4ffd9 100%);
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, #f4f7ffe6 0%, #eaf0ffd1 46%, #dfe8ffe6 100%),
+    radial-gradient(760px 420px at 50% 42%, #ffffff8c, #0000 72%);
+}
+/* Phones get the poster as a still instead of downloading the clip. */
+@media (max-width: 720px) {
+  .hero-video { display: none; }
+  .hero-panel {
+    background-image:
+      linear-gradient(180deg, #f4f7ffe6 0%, #eaf0ffd1 46%, #dfe8ffe6 100%),
+      url("/hero-poster.jpg");
+    background-size: cover; background-position: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none; }
 }
 
 /* ===== PROBLEM ===== */
@@ -682,6 +695,21 @@ export default function LandingPage() {
         {/* ===== HERO ===== */}
         <section className="hero">
           <div className="hero-panel">
+            {/* Decorative b-roll. Muted + playsInline so iOS autoplays it;
+                hidden on small screens where the poster stands in, so phones
+                don't pull a video over cellular. */}
+            <video
+              className="hero-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/hero-poster.jpg"
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <source src="/hero-broll.mp4" type="video/mp4" />
+            </video>
             <div className="hero-badge">Your front office, running while you sleep</div>
             <h1>Increase patient bookings and revenue without adding headcount</h1>
             <p className="hero-sub">
@@ -694,12 +722,6 @@ export default function LandingPage() {
                 Book a demo
               </a>
             </div>
-            {/* Video b-roll slot: when the clip is ready, add
-                <video className="hero-video" autoPlay muted loop playsInline
-                       poster="/hero-poster.jpg" src="/hero-broll.mp4" />
-                as the first child of .hero-panel. The .hero-video and
-                .hero-scrim styles below already handle sizing and contrast,
-                and everything else in the panel sits above them. */}
           </div>
         </section>
 
