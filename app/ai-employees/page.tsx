@@ -2,6 +2,8 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { FaqSection } from "@/components/faq-section";
+import { Scrolly } from "@/components/scrolly";
+import { PatientJourney } from "@/components/patient-journey";
 import { getAgent, CALENDAR_URL } from "@/lib/agents";
 
 export const metadata = {
@@ -93,6 +95,62 @@ const gains = [
   { big: "80%", label: "of admin hours saved" },
   { big: "80%", label: "lower operating costs" },
 ];
+
+
+// Visuals for the five journey steps. Deliberately a different visual
+// language from the homepage chat mockups — these read as the AI's logged
+// activity, which doubles as proof of the "every action is visible" claim.
+function StepVisual({ index }: { index: number }) {
+  if (index === 0)
+    return (
+      <div className="sv">
+        <div className="sv-head"><strong>Inbound</strong><span>9:47 PM</span></div>
+        <div className="sv-row"><span className="sv-dot" /><div><b>New inquiry received</b><i>Instagram DM &middot; knee pain</i></div></div>
+        <div className="sv-row done"><span className="sv-dot" /><div><b>AI employee replied</b><i>4 seconds later</i></div></div>
+        <div className="sv-chip">Answered before your competition</div>
+      </div>
+    );
+  if (index === 1)
+    return (
+      <div className="sv">
+        <div className="sv-head"><strong>Qualifying</strong><span>in progress</span></div>
+        <div className="sv-check"><span /><div>Treatment of interest <b>Regenerative &mdash; knee</b></div></div>
+        <div className="sv-check"><span /><div>Timeline <b>Within a month</b></div></div>
+        <div className="sv-check"><span /><div>Been before <b>New patient</b></div></div>
+        <div className="sv-check"><span /><div>Best contact <b>Mobile, evenings</b></div></div>
+        <div className="sv-chip">Ready to book</div>
+      </div>
+    );
+  if (index === 2)
+    return (
+      <div className="sv">
+        <div className="sv-head"><strong>Your calendar</strong><span>Tuesday</span></div>
+        <div className="sv-slot muted"><b>9:00 AM</b><span>Follow-up &mdash; J. Alvarez</span></div>
+        <div className="sv-slot live"><b>10:00 AM</b><span>New consult &mdash; Sara M.</span></div>
+        <div className="sv-slot muted"><b>11:30 AM</b><span>Consult &mdash; D. Whitfield</span></div>
+        <div className="sv-chip">Booked in the conversation</div>
+      </div>
+    );
+  if (index === 3)
+    return (
+      <div className="sv">
+        <div className="sv-head"><strong>Before the visit</strong><span>scheduled</span></div>
+        <div className="sv-row done"><span className="sv-dot" /><div><b>Confirmation sent</b><i>at booking</i></div></div>
+        <div className="sv-row done"><span className="sv-dot" /><div><b>Reminder sent</b><i>24 hours before</i></div></div>
+        <div className="sv-row"><span className="sv-dot" /><div><b>Prep questions answered</b><i>parking, forms, fasting</i></div></div>
+        <div className="sv-chip">No-shows cut in half</div>
+      </div>
+    );
+  return (
+    <div className="sv">
+      <div className="sv-head"><strong>After the visit</strong><span>2 days later</span></div>
+      <div className="sv-row done"><span className="sv-dot" /><div><b>Review request sent</b><i>to a happy patient</i></div></div>
+      <div className="sv-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div className="sv-row"><span className="sv-dot" /><div><b>Re-engagement scheduled</b><i>6-month check-in</i></div></div>
+      <div className="sv-chip">One visit becomes the next</div>
+    </div>
+  );
+}
 
 export default function AiEmployeesIndexPage() {
   return (
@@ -201,6 +259,61 @@ export default function AiEmployeesIndexPage() {
 .aie-gain span { display: block; color: var(--muted-ink); font-size: .9rem; margin-top: 6px; }
 .ct-page .aie-gains-note { margin-top: 16px; color: var(--faint); font-size: .84rem; max-width: 68ch; }
 
+/* Step visuals: the AI's logged activity */
+.sv {
+  width: 100%; max-width: 420px; background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); padding: 22px; display: grid; gap: 11px;
+}
+.sv-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--line);
+}
+.sv-head strong { font-size: .95rem; letter-spacing: -.01em; }
+.sv-head span {
+  margin-left: auto; color: var(--faint); font-size: .74rem;
+  font-variant-numeric: tabular-nums;
+}
+.sv-row { display: flex; gap: 11px; align-items: flex-start; }
+.sv-row b { display: block; font-size: .9rem; font-weight: 620; color: var(--ink); }
+.sv-row i { display: block; font-style: normal; font-size: .78rem; color: var(--muted-ink); margin-top: 2px; }
+.sv-dot {
+  width: 9px; height: 9px; border-radius: 999px; flex: none; margin-top: 5px;
+  background: var(--line-strong);
+}
+.sv-row.done .sv-dot { background: #1f9d6a; box-shadow: 0 0 0 3px #1f9d6a1f; }
+.sv-check { display: flex; gap: 11px; align-items: center; font-size: .87rem; color: var(--ink-soft); }
+.sv-check b { color: var(--ink); font-weight: 620; }
+.sv-check > span {
+  width: 17px; height: 17px; border-radius: 999px; flex: none;
+  background: var(--blue-wash); border: 1px solid #cbd9fb; position: relative;
+}
+.sv-check > span::after {
+  content: ""; position: absolute; left: 5px; top: 2px;
+  width: 4px; height: 8px; border: solid var(--blue-deep);
+  border-width: 0 1.8px 1.8px 0; transform: rotate(45deg);
+}
+.sv-slot {
+  display: flex; align-items: baseline; gap: 12px;
+  border-radius: var(--r-sm); padding: 11px 13px; font-size: .86rem;
+}
+.sv-slot b { font-variant-numeric: tabular-nums; font-weight: 640; flex: none; }
+.sv-slot.muted { background: var(--wash); color: var(--muted-ink); }
+.sv-slot.live {
+  background: var(--blue-wash); border-left: 3px solid var(--blue);
+  color: var(--blue-ink);
+}
+.sv-slot.live b { color: var(--blue-ink); }
+.sv-stars { color: #f4b740; font-size: 1.2rem; letter-spacing: 4px; }
+.sv-chip {
+  display: inline-flex; align-items: center; gap: 7px; width: fit-content;
+  background: #eaf6f0; color: #14684a; border: 1px solid #bfe3d2;
+  border-radius: 999px; padding: 6px 12px; font-size: .8rem; font-weight: 600;
+}
+.sv-chip::before {
+  content: ""; width: 7px; height: 7px; border-radius: 999px; background: #1f9d6a;
+}
+
 /* Featured quote: clinic photo alongside the words, person in the byline */
 .aie-quote {
   max-width: 1000px; margin: 0 auto;
@@ -228,34 +341,18 @@ export default function AiEmployeesIndexPage() {
 }
 .aie-quote .stars { color: #f4b740; letter-spacing: 4px; font-size: 1.05rem; }
 
-/* Roster hand-off */
-.aie-roster {
-  border-radius: var(--r-xl); box-shadow: var(--shadow-md); color: var(--ink);
-  gap: var(--grid-gap-lg);
-  background:
-    radial-gradient(900px 500px at 88% 0, #355cff29, #0000 62%),
-    linear-gradient(138deg, #f4f7ff 0%, #e7eeff 50%, #d8e4ff 100%);
-  border: 1px solid #dde6f8;
-  justify-content: space-between; align-items: center;
-  padding: 48px 56px; display: flex;
-}
-.aie-roster h2 { margin-bottom: 8px; }
-.aie-roster p { color: var(--ink-soft); max-width: 560px; margin-bottom: 0; }
-
 @media (max-width: 1020px) {
   .aie-hero { grid-template-columns: 1fr; }
   .aie-cards, .aie-dark-grid { grid-template-columns: 1fr; }
   .aie-gains { grid-template-columns: 1fr 1fr; }
   .aie-quote { grid-template-columns: 1fr; }
   .aie-quote-clinic { min-height: 220px; max-height: 280px; }
-  .aie-roster { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) {
   .aie-step { grid-template-columns: 44px 1fr; gap: 14px; }
   .aie-num { width: 38px; height: 38px; font-size: .9rem; }
   .aie-gains { grid-template-columns: 1fr; }
   .aie-diff-head span, .aie-diff-row span { padding: 11px 14px; font-size: .86rem; }
-  .aie-roster { padding: 30px; }
 }
       `}</style>
 
@@ -310,18 +407,11 @@ export default function AiEmployeesIndexPage() {
               Here&apos;s what happens at each one.
             </p>
           </div>
-          <div className="aie-steps">
-            {journeySteps.map((s, i) => (
-              <div key={s.title} className="aie-step">
-                <div className="aie-num">{i + 1}</div>
-                <div>
-                  <span className="eyebrow">{s.eyebrow}</span>
-                  <h3>{s.title}</h3>
-                  <p>{s.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Scrolly
+            id="aie-journey"
+            panels={journeySteps}
+            visuals={journeySteps.map((_, i) => <StepVisual key={i} index={i} />)}
+          />
         </section>
 
         {/* Control, coaching and customization */}
@@ -361,6 +451,25 @@ export default function AiEmployeesIndexPage() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* The whole team, one patient */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide" style={{ margin: "0 auto", textAlign: "center" }}>
+            <span className="eyebrow">Around the clock</span>
+            <h2>One platform running your entire front office 24/7.</h2>
+            <p>
+              AI employees work while you sleep, so you never miss a potential
+              patient booking. Here is one patient&apos;s journey through your
+              AI team.
+            </p>
+          </div>
+          <PatientJourney />
+          <div className="journey-actions">
+            <Link href="/ai-employees/team" className="button secondary">
+              Learn more about Caddie&apos;s AI Employees
+            </Link>
           </div>
         </section>
 
@@ -436,22 +545,6 @@ export default function AiEmployeesIndexPage() {
         {/* FAQ */}
         <FaqSection />
 
-        {/* The rest of the team */}
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="aie-roster">
-            <div>
-              <span className="eyebrow">The rest of the team</span>
-              <h2>Mia is one of eight.</h2>
-              <p>
-                Every AI employee runs on the same platform and the same company
-                brain. Hire the ones your clinic actually needs.
-              </p>
-            </div>
-            <Link href="/ai-employees/team" className="button">
-              See other AI employees
-            </Link>
-          </div>
-        </section>
       </main>
 
       <SiteFooter />

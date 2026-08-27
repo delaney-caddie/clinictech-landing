@@ -29,7 +29,7 @@ const plans = [
     ],
   },
   {
-    title: "EHR add-on",
+    title: "Custom Integration with your EHR",
     note: "Run your clinical records on Caddie too",
     lead: false,
     items: [

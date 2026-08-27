@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { FaqSection } from "@/components/faq-section";
 import { PlaybookPanel } from "@/components/playbook-panel";
 import { CustomerLogos } from "@/components/customer-logos";
+import { Scrolly } from "@/components/scrolly";
 import { getAgent, CALENDAR_URL } from "@/lib/agents";
 
 const problemsLeft = [
@@ -225,8 +226,6 @@ export default function LandingPage() {
   const [closeRate, setCloseRate] = useState(30);
   const [coldShare, setColdShare] = useState(25);
 
-  // Which of the five feature panels is centred in the viewport.
-  const [featActive, setFeatActive] = useState(0);
 
   const upside = useMemo(() => {
     // Conservative model: an instant, persistent first reply re-engages about
@@ -261,28 +260,6 @@ export default function LandingPage() {
       { threshold: 0.12 }
     );
     document.querySelectorAll(".reveal-item").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  // Scrollytelling: mark the feature panel nearest the viewport centre as
-  // active so the sticky visual can swap to match it.
-  useEffect(() => {
-    const steps = Array.from(document.querySelectorAll<HTMLElement>(".feat-step"));
-    if (!steps.length) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            const i = steps.indexOf(e.target as HTMLElement);
-            if (i >= 0) setFeatActive(i);
-          }
-        });
-      },
-      // A narrow band around the viewport centre: exactly one panel is inside
-      // it at a time, so the active step never flickers between two panels.
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-    );
-    steps.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -323,8 +300,8 @@ export default function LandingPage() {
   background: var(--green); content: ""; border-radius: 999px; width: 6px; height: 6px;
   animation: 2.4s ease-in-out infinite ct-pulse; box-shadow: 0 0 0 3px #1f9d6a29;
 }
-.hero h1 { font-size: clamp(2.7rem, 5vw, 4.2rem); max-width: 800px; margin: 0 auto 20px; line-height: 1.04; position: relative; z-index: 1; }
-.hero-sub { color: var(--ink-soft); font-size: var(--text-lg); max-width: 620px; margin: 0 auto; line-height: 1.62; position: relative; z-index: 1; }
+.hero h1 { font-size: clamp(2.7rem, 5vw, 4.2rem); max-width: 800px; margin: 0 auto 20px; line-height: 1.04; position: relative; z-index: 1; text-shadow: 0 1px 22px #ffffffe6, 0 1px 3px #ffffffb3; }
+.hero-sub { color: var(--ink); font-size: var(--text-lg); max-width: 620px; margin: 0 auto; line-height: 1.62; position: relative; z-index: 1; text-shadow: 0 1px 16px #ffffffe6; }
 .hero-actions { justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; display: flex; position: relative; z-index: 1; }
 
 /* Hero b-roll. The clip paints under a scrim so the headline keeps its
@@ -336,15 +313,15 @@ export default function LandingPage() {
 .hero-panel:has(.hero-video)::after {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background:
-    linear-gradient(180deg, #f4f7ff8c 0%, #eaf0ff63 46%, #dfe8ff8c 100%),
-    radial-gradient(720px 400px at 50% 44%, #ffffff40, #0000 74%);
+    linear-gradient(180deg, #f4f7ffbf 0%, #eaf0ffa6 46%, #dfe8ffbf 100%),
+    radial-gradient(760px 430px at 50% 44%, #ffffff8c, #0000 76%);
 }
 /* Phones get the poster as a still instead of downloading the clip. */
 @media (max-width: 720px) {
   .hero-video { display: none; }
   .hero-panel {
     background-image:
-      linear-gradient(180deg, #f4f7ff8c 0%, #eaf0ff63 46%, #dfe8ff8c 100%),
+      linear-gradient(180deg, #f4f7ffbf 0%, #eaf0ffa6 46%, #dfe8ffbf 100%),
       url("/hero-poster.jpg");
     background-size: cover; background-position: center;
   }
@@ -441,38 +418,8 @@ export default function LandingPage() {
 }
 
 /* ===== AI THAT KEEPS YOUR CALENDAR FULL ===== */
+/* Layout + scroll behaviour live in components/scrolly.tsx */
 .feat-section .section-copy { margin: 0 auto; text-align: center; }
-.feat-layout {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
-  gap: clamp(32px, 5vw, 80px); align-items: start;
-  max-width: 1080px; margin: 24px auto 0;
-}
-.feat-step {
-  min-height: 58vh; padding: 32px 0;
-  display: flex; flex-direction: column; justify-content: center; gap: 12px;
-  opacity: .32; transition: opacity .35s ease;
-}
-.feat-step.is-active { opacity: 1; }
-.feat-step h3 {
-  font-size: clamp(1.45rem, 2.4vw, 1.9rem); font-weight: var(--font-subhead);
-  letter-spacing: -.022em; line-height: 1.15; margin: 0; max-width: 20ch;
-}
-.feat-step p { font-size: 1rem; line-height: 1.62; margin: 0; max-width: 46ch; }
-.feat-inline { display: none; }
-.feat-sticky {
-  position: sticky; top: 92px; display: grid;
-  min-height: min(560px, calc(100vh - 120px));
-}
-.feat-visual {
-  grid-area: 1 / 1; display: flex; align-items: center; justify-content: center;
-  opacity: 0; transform: translateY(14px); pointer-events: none;
-  transition: opacity .4s ease, transform .45s var(--ease);
-}
-.feat-visual.is-active { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .feat-step, .feat-visual { transition: none; }
-  .feat-visual { transform: none; }
-}
 .feat-actions { margin-top: 12px; display: flex; justify-content: center; }
 
 /* The staged product moments */
@@ -666,11 +613,6 @@ export default function LandingPage() {
   .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
   .problem-img { order: -1; }
   .calculator-grid { grid-template-columns: 1fr; }
-  /* Scrollytelling collapses: no sticky rail, each panel carries its visual. */
-  .feat-layout { grid-template-columns: 1fr; }
-  .feat-sticky { display: none; }
-  .feat-step { min-height: 0; opacity: 1; padding: 26px 0; }
-  .feat-inline { display: block; margin-top: 16px; }
   .hc-grid, .testi-grid { grid-template-columns: 1fr; }
   .ind-grid { grid-template-columns: repeat(2, 1fr); }
   .ind-grid .ind-card:last-child { grid-column: 1 / -1; }
@@ -762,35 +704,11 @@ export default function LandingPage() {
             <h2>AI that keeps your calendar full.</h2>
             <p>Five things your front office should never miss, and won&apos;t.</p>
           </div>
-          <div className="feat-layout">
-            <div className="feat-steps">
-              {featPanels.map((f, i) => (
-                <div
-                  key={f.title}
-                  className={`feat-step${featActive === i ? " is-active" : ""}`}
-                >
-                  <span className="eyebrow">{f.eyebrow}</span>
-                  <h3>{f.title}</h3>
-                  <p>{f.body}</p>
-                  {/* On narrow screens the sticky rail is hidden and each panel
-                      carries its own visual instead. */}
-                  <div className="feat-inline">
-                    <FeatVisual index={i} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="feat-sticky" aria-hidden="true">
-              {featPanels.map((f, i) => (
-                <div
-                  key={f.title}
-                  className={`feat-visual${featActive === i ? " is-active" : ""}`}
-                >
-                  <FeatVisual index={i} />
-                </div>
-              ))}
-            </div>
-          </div>
+          <Scrolly
+            id="home-feat"
+            panels={featPanels}
+            visuals={featPanels.map((_, i) => <FeatVisual key={i} index={i} />)}
+          />
           <div className="feat-actions reveal-item">
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
               Book a demo
