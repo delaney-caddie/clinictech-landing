@@ -62,9 +62,22 @@ export default function AdsTracking() {
       window.oaiq?.("measure", "lead_created", { type: "customer_action" });
       window.fbq?.("track", "Lead");
 
-      // If the Calendly widget script has loaded, open the popup on this page
-      // (required so the "event_scheduled" message can fire our conversion).
-      // If it hasn't loaded for any reason, do nothing and let the link
+      // The popup is desktop-only. Inside it, Calendly renders in an iframe
+      // with a fixed height, and iOS/Android WebKit won't touch-scroll that
+      // iframe's contents — the booking page opens but the times below the
+      // fold are unreachable. On any touch or small screen, let the link
+      // navigate to Calendly's own responsive page instead, which scrolls
+      // normally. Trade-off: the "event_scheduled" postMessage below only
+      // reaches us from the popup, so mobile bookings are counted from
+      // Calendly's side rather than the Meta/OpenAI pixels.
+      const useNativePage = window.matchMedia(
+        "(max-width: 820px), (pointer: coarse)"
+      ).matches;
+      if (useNativePage) return;
+
+      // Desktop: open the popup on this page (required so the
+      // "event_scheduled" message can fire our conversion). If the widget
+      // script hasn't loaded for any reason, do nothing and let the link
       // navigate to Calendly normally — the button still works.
       if (window.Calendly?.initPopupWidget) {
         e.preventDefault();
