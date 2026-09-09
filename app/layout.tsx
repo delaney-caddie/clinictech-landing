@@ -31,7 +31,7 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://caddie.app";
-const TITLE = "Caddie | The Tech Partner for Regenerative Medicine Clinics";
+const TITLE = "Caddie: The #1 Tech Platform for Regenerative Medicine Clinics";
 const DESCRIPTION =
   "More patients, a premium patient experience, and a clinic that runs on half the operating cost. Caddie is the technology partner built only for regenerative medicine clinics, from one practitioner to 80+ locations.";
 
