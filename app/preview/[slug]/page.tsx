@@ -167,7 +167,7 @@ export default function ClinicPreviewPage() {
               Learn More
             </a>
             <a
-              href="https://calendly.com/caddie-ai/demo"
+              href="https://calendly.com/caddie-ai/free-audit"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-500"

@@ -502,3 +502,30 @@ a.button { color: #fff; }
     @apply bg-background text-foreground;
   }
 }
+
+/* ===== CALENDLY POPUP =====
+   The booking widget opens as an on-page popup (see components/ads-tracking).
+   Calendly's widget.css loads after this file, so these rules are prefixed with
+   `body` to outrank it on specificity rather than relying on source order. */
+body .calendly-overlay .calendly-popup {
+  max-height: min(760px, calc(100vh - 40px)) !important;
+}
+@media (max-width: 820px) {
+  /* Calendly keeps a fixed popup size on every screen, which leaves a cramped
+     scroller on phones. Give it the whole viewport instead. */
+  body .calendly-overlay .calendly-popup {
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  body .calendly-overlay .calendly-popup-content { height: 100% !important; }
+  /* Keep the close button clear of the notch / status bar. */
+  body .calendly-overlay .calendly-popup-close {
+    top: max(12px, env(safe-area-inset-top)) !important;
+    right: 12px !important;
+  }
+}

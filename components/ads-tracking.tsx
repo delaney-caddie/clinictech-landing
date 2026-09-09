@@ -54,6 +54,10 @@ export default function AdsTracking() {
       ) as HTMLAnchorElement | null;
       if (!link) return;
 
+      // Leave deliberate "open in a new tab" gestures alone: cmd/ctrl-click,
+      // shift-click, and middle-click should still work the way people expect.
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
       // Fire the intent event (funnel step: clicked "Book a demo" = a lead).
       window.oaiq?.("measure", "lead_created", { type: "customer_action" });
       window.fbq?.("track", "Lead");

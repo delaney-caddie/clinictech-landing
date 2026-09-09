@@ -12,7 +12,7 @@ const DOMAIN = process.env.CLINICTECH_DOMAIN || "hirecaddie.ai";
 const SENDER_NAME = process.env.SENDER_NAME || "Danika";
 const SENDER_TITLE = process.env.SENDER_TITLE || "Co-founder, Caddie AI";
 const SENDER_EMAIL = process.env.SENDER_EMAIL || "danika@clinictech.io";
-const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendly.com/caddie-ai/demo";
+const CALENDAR_LINK = process.env.CALENDAR_LINK || "https://calendly.com/caddie-ai/free-audit";
 
 interface ClinicData {
   id: string;
