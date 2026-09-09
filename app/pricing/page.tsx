@@ -49,7 +49,7 @@ const sizes = [
   {
     photo: "/photos/clinic-glass.jpg",
     title: "Multi-location networks",
-    body: "Up to 80+ locations worldwide. Centralised intake and routing, group-wide visibility, and often a dedicated partnership for custom software.",
+    body: "Clinic groups operating across cities or countries. Centralised intake and routing, group-wide visibility, and often a dedicated partnership for custom software.",
   },
 ];
 
@@ -156,7 +156,7 @@ export default function PricingPage() {
               <span className="eyebrow">Why à la carte</span>
               <h2>Because no two regenerative clinics need the same thing.</h2>
               <p>
-                A single-practitioner clinic and an 80-location network have very
+                A single-practitioner clinic and a multi-location network have very
                 different gaps. A fixed package would over-charge one and
                 under-serve the other, so we price each clinic from its audit
                 instead.
@@ -181,7 +181,7 @@ export default function PricingPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide">
             <span className="eyebrow">Who we work with</span>
-            <h2>From one practitioner to 80+ locations worldwide.</h2>
+            <h2>Built for one-person practices all the way to multi-location clinics operating worldwide.</h2>
             <p>
               We only work with regenerative medicine clinics, and all of our
               products are built with that in mind.

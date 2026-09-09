@@ -92,8 +92,8 @@ const testimonials = [
   },
   {
     quote:
-      "We had 80 locations and 80 ways of handling intake. Caddie centralised it, and the same team now handles far more patients with far fewer mistakes. It is the first tech partner that understood regenerative medicine.",
-    who: "COO, 80+ location regenerative medicine network",
+      "Every location handled intake its own way. Caddie centralised it, and the same team now handles far more patients with far fewer mistakes. It is the first tech partner that understood regenerative medicine.",
+    who: "COO, multi-location regenerative medicine network",
     person: "/testimonials/founder.jpg",
     clinic: "/testimonials/hormone-clinic.jpg",
   },
@@ -528,7 +528,7 @@ export default function LandingPage() {
               <source src="/hero-broll.mp4" type="video/mp4" />
             </video>
             <div className="hero-badge">Built only for regenerative medicine</div>
-            <h1>The #1 tech platform to run your regen clinic.</h1>
+            <h1>The #1 tech platform to run your regenerative medicine clinic.</h1>
             <p className="hero-sub">
               Give your clinic the same tech as the top healthcare brands, without
               the price tag. One partner for your front office, CRM, patient portal
@@ -694,7 +694,7 @@ export default function LandingPage() {
             <WorldMap />
           </div>
           <div className="range-grid reveal-item">
-            <div className="range-card"><strong>1 &rarr; 80+</strong><span>Locations, from solo practices to the largest regenerative networks</span></div>
+            <div className="range-card"><strong>Any size</strong><span>From one-person practices to multi-location clinic networks</span></div>
             <div className="range-card"><strong>Worldwide</strong><span>Clinics across North America, Latin America and beyond</span></div>
             <div className="range-card"><strong>100%</strong><span>Regenerative medicine. No other specialty, by choice</span></div>
             <div className="range-card"><strong>HIPAA</strong><span>Compliant by design, with every conversation logged</span></div>

@@ -158,8 +158,8 @@ export default function ProductsPage() {
               <p>
                 We do not build for other specialties, by choice. Every product on
                 this page was designed around how regenerative clinics attract,
-                convert and care for patients, from single practitioners to networks
-                with 80+ locations worldwide.
+                convert and care for patients, from one-person practices to
+                multi-location clinics operating worldwide.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">

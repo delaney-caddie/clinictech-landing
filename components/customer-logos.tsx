@@ -41,7 +41,7 @@ export function CustomerLogos() {
   .cust-marquee { -webkit-mask-image: none; mask-image: none; }
 }
       `}</style>
-      <p>Regenerative medicine clinics worldwide run on Caddie &mdash; from single practitioners to 80+ locations</p>
+      <p>Regenerative medicine clinics worldwide run on Caddie &mdash; from one-person practices to multi-location clinics</p>
       <div className="cust-marquee">
         <div className="cust-track">
           {[...logos, ...logos].map((l, i) => (

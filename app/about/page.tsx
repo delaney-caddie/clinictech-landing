@@ -19,7 +19,7 @@ const beliefs = [
   },
   {
     title: "A partner, not a vendor",
-    body: "Every product we have shipped started as a problem a clinic owner brought to us. We build with clinics, from single practitioners to networks with 80+ locations.",
+    body: "Every product we have shipped started as a problem a clinic owner brought to us. We build with clinics of every size, from one-person practices to multi-location networks.",
   },
 ];
 
@@ -113,7 +113,7 @@ export default function AboutPage() {
               </p>
               <p>
                 Today Caddie works only with regenerative medicine clinics, from
-                single practitioners to networks with more than 80 locations
+                one-person practices to multi-location clinics operating
                 worldwide, with a team where practicality, simplicity and outcomes
                 come first in everything it ships.
               </p>

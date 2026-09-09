@@ -5,7 +5,7 @@ import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 const faqs = [
   {
     q: "What sizes of clinic do you work with?",
-    a: "All of them. Our smallest clients are single-practitioner clinics with one coordinator; our largest is a regenerative medicine network with more than 80 locations worldwide. The setup is different at each end, which is why every engagement starts with an audit of your clinic rather than a standard package.",
+    a: "All of them. Our smallest clients are single-practitioner clinics with one coordinator; our largest are multi-location regenerative medicine networks operating worldwide. The setup is different at each end, which is why every engagement starts with an audit of your clinic rather than a standard package.",
   },
   {
     q: "Which countries do you work in?",
