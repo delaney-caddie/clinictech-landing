@@ -12,7 +12,7 @@ const logos = [
 
 export function CustomerLogos() {
   return (
-    <section className="cust-strip" aria-label="Clinics running on Caddie">
+    <section className="cust-strip" aria-label="Regenerative clinics running on Caddie">
       <style>{`
 .cust-strip { max-width: 1240px; margin: 0 auto; padding: 44px 24px 18px; text-align: center; }
 .cust-strip > p {
@@ -41,7 +41,7 @@ export function CustomerLogos() {
   .cust-marquee { -webkit-mask-image: none; mask-image: none; }
 }
       `}</style>
-      <p>Clinics around the globe run their front office on Caddie</p>
+      <p>Regenerative medicine clinics worldwide run on Caddie &mdash; from single practitioners to 80+ locations</p>
       <div className="cust-marquee">
         <div className="cust-track">
           {[...logos, ...logos].map((l, i) => (

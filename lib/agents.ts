@@ -35,6 +35,11 @@ export type Agent = {
 export const CALENDAR_URL =
   "https://calendly.com/caddie-ai/demo";
 
+// The one call to action across the site. The short form is for the
+// header on narrow screens, where the full label would overflow.
+export const AUDIT_CTA = "Schedule Your Free Clinic Audit";
+export const AUDIT_CTA_SHORT = "Free Clinic Audit";
+
 export const agents: Agent[] = [
   {
     slug: "mia",

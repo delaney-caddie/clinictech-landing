@@ -65,7 +65,7 @@ export default function ContactPage() {
             <img src="/caddie-logo.svg" alt="Caddie AI" style={{ height: 20, opacity: 0.5 }} />
           </Link>
           <div className="contact-footer-links">
-            <Link href="/platform">Platform</Link>
+            <Link href="/products">Products</Link>
             <Link href="/about">About</Link>
             <Link href="/pricing">Pricing</Link>
           </div>

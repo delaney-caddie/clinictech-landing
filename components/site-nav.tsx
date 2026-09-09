@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL, AUDIT_CTA, AUDIT_CTA_SHORT } from "@/lib/agents";
 
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -61,28 +61,28 @@ export function SiteNav() {
           <img className="brand-logo" src="/caddie-logo.svg" alt="Caddie" />
         </Link>
         <nav className="desktop-nav">
-          <Link href="/ai-employees">AI Employees</Link>
-          <Link href="/platform">Platform</Link>
+          <Link href="/products">Products</Link>
           <Link href="/pricing">Pricing</Link>
           <div className="nav-dropdown">
             <button className="nav-dropdown-trigger" type="button">More</button>
             <div className="nav-dropdown-menu">
-              <Link href="/integrations">Integrations</Link>
               <Link href="/ai-vs-humans">Safety &amp; HIPAA</Link>
-              <Link href="/vs">Caddie vs. Traditional CRMs</Link>
+              <Link href="/integrations">Integrations</Link>
               <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
             </div>
           </div>
         </nav>
         <div className="header-actions">
+          {/* The full label is long; phones get the short form (see globals). */}
           <a
             href={CALENDAR_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="button small"
           >
-            Book a demo
+            <span className="cta-long">{AUDIT_CTA}</span>
+            <span className="cta-short">{AUDIT_CTA_SHORT}</span>
           </a>
           <button
             className="mobile-nav-toggle"
@@ -106,14 +106,12 @@ export function SiteNav() {
       {mobileOpen && (
         <div className="mobile-nav-panel">
           <div className="mobile-nav-links">
-            <Link href="/ai-employees" onClick={close}>AI Employees</Link>
-            <Link href="/platform" onClick={close}>Platform</Link>
+            <Link href="/products" onClick={close}>Products</Link>
             <Link href="/pricing" onClick={close}>Pricing</Link>
             <div className="mobile-nav-group">
               <span>More</span>
-              <Link href="/integrations" onClick={close}>Integrations</Link>
               <Link href="/ai-vs-humans" onClick={close}>Safety &amp; HIPAA</Link>
-              <Link href="/vs" onClick={close}>Caddie vs. Traditional CRMs</Link>
+              <Link href="/integrations" onClick={close}>Integrations</Link>
               <Link href="/about" onClick={close}>About</Link>
               <Link href="/contact" onClick={close}>Contact</Link>
             </div>
@@ -125,7 +123,7 @@ export function SiteNav() {
                 className="button"
                 onClick={close}
               >
-                Book a demo
+                {AUDIT_CTA}
               </a>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 
 export const metadata = {
   title: "Safety & HIPAA | Caddie",
@@ -26,7 +26,7 @@ const securityCards = [
   },
   {
     title: "Answers only from approved knowledge",
-    body: "Your AI employees answer from the treatments, pricing and policies your clinic has signed off on. If it is not in their knowledge, they do not say it.",
+    body: "Your AI assistants answer from the treatments, pricing and policies your clinic has signed off on. If it is not in their knowledge, they do not say it.",
   },
   {
     title: "Never medical advice",
@@ -62,7 +62,7 @@ const teamOwns = [
 const trainingPoints = [
   {
     title: "Trained on your clinic before it goes live",
-    body: "Your AI employees learn your services, pricing, policies and tone in a training environment, and talk to no patient until you have reviewed how they answer.",
+    body: "Your AI assistants learn your services, pricing, policies and tone in a training environment, and talk to no patient until you have reviewed how they answer.",
   },
   {
     title: "Correct it once, in plain English",
@@ -198,7 +198,7 @@ export default function SafetyPage() {
             <p>
               Caddie is built to handle protected health information the way
               HIPAA requires — and every safeguard here is one you can inspect
-              on a demo.
+              on a call.
             </p>
           </div>
           <div className="sec-grid">
@@ -249,7 +249,7 @@ export default function SafetyPage() {
             <h2>You train it. You supervise it.</h2>
             <p>
               Trust should not rest on promises. It rests on mechanisms you can
-              inspect — here are the four that govern every Caddie AI employee.
+              inspect — here are the four that govern every Caddie AI assistant.
             </p>
           </div>
           <div className="avh-loop">
@@ -274,7 +274,7 @@ export default function SafetyPage() {
             <span className="eyebrow">Performance &amp; reliability</span>
             <h2>Built for the industry where a wrong answer isn&apos;t an option.</h2>
             <p>
-              Caddie&apos;s AI employees are trained specifically for
+              Caddie&apos;s AI assistants are trained specifically for
               healthcare, not adapted from out-of-the-box agents. Because they
               only speak from knowledge your clinic has approved, they
               don&apos;t make answers up — when they don&apos;t know, they say
@@ -303,12 +303,12 @@ export default function SafetyPage() {
             <div>
               <h2>See the safeguards for yourself.</h2>
               <p>
-                Book a demo and we will show you the knowledge base, the
-                transcripts, the audit logs, and the handoff — live.
+                Book your free clinic audit and we will walk you through the
+                knowledge base, the transcripts, the audit logs and the handoff &mdash; live.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
+              {AUDIT_CTA}
             </a>
           </div>
         </section>

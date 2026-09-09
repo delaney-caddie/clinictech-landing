@@ -72,10 +72,10 @@ export function PlaybookPanel() {
       <section className="playbook-panel" id="playbook">
         <div>
           <span className="eyebrow">The AI clinic playbook</span>
-          <h2>Not ready for a demo? Start with the AI playbook for clinics.</h2>
+          <h2>Not ready to book yet? Start with the playbook for regenerative clinics.</h2>
           <p>
-            A short, practical guide on how you can use AI to turn more inquiries
-            into booked patients.
+            A short, practical guide on how regenerative clinics are turning more
+            inquiries into booked patients, and giving them a premium experience.
           </p>
         </div>
         <div className="playbook-embed">

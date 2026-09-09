@@ -1,6 +1,6 @@
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 
 export const metadata = {
   title: "Integrations | Caddie",
@@ -149,7 +149,7 @@ export default function IntegrationsPage() {
               <p>
                 Run your whole clinic on Caddie: patient records, scheduling,
                 communication, and the full front office in one platform, with
-                your AI employees working on top of it. One system, no syncing,
+                your AI assistants working on top of it. One system, no syncing,
                 nothing to reconcile.
               </p>
             </article>
@@ -193,7 +193,7 @@ export default function IntegrationsPage() {
           <p className="int-note">
             The handoff is explicit: Caddie works the lead until they become a
             patient, then your EHR holds the clinical relationship. Your AI
-            employees never chart, diagnose, or touch clinical documentation.
+            assistants never chart, diagnose, or touch clinical documentation.
           </p>
         </section>
 
@@ -208,8 +208,8 @@ export default function IntegrationsPage() {
             </p>
             <div className="section-action">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button secondary">
-                Book a demo
-              </a>
+              {AUDIT_CTA}
+            </a>
             </div>
           </div>
           <div className="int-faq-list">
@@ -230,7 +230,7 @@ export default function IntegrationsPage() {
               <p>Bring your EHR to a demo and we will show you where Caddie fits.</p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
+              {AUDIT_CTA}
             </a>
           </div>
         </section>

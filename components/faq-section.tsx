@@ -1,33 +1,39 @@
-import { CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 
+// Deliberately general: sizes, geography, how an engagement starts, and the
+// data question every clinic owner asks. Product detail lives on the call.
 const faqs = [
   {
-    q: "Can Caddie replace my CRM?",
-    a: "Yes. Caddie's operating system includes an agentic CRM built to replace the generic ones clinics get stuck with — GoHighLevel, Zoho and the rest. The difference isn't the database, it's that Caddie works the leads inside it instead of storing them until someone has time.",
+    q: "What sizes of clinic do you work with?",
+    a: "All of them. Our smallest clients are single-practitioner clinics with one coordinator; our largest is a regenerative medicine network with more than 80 locations worldwide. The setup is different at each end, which is why every engagement starts with an audit of your clinic rather than a standard package.",
   },
   {
-    q: "Does Caddie integrate with EHR and EMR systems?",
-    a: "Yes. Caddie connects with most existing EHR and EMR platforms, and can act as your system of record instead if you'd rather run everything in one place. Integration takes about two weeks on average, scoped with you during discovery.",
+    q: "Which countries do you work in?",
+    a: "We work with regenerative medicine clinics worldwide. Our clients today are across North America and Latin America, including clinics that treat international patients, and the platform supports English and Spanish out of the box.",
   },
   {
-    q: "Does Caddie integrate with patient management software?",
-    a: "Yes. Scheduling, records and patient communication tools connect to Caddie so your AI employees can read context and write back — booking real appointments on your real calendar, not a parallel one.",
+    q: "Do you only work with regenerative medicine clinics?",
+    a: "Yes, by choice. Every product we build is designed around how regenerative clinics attract, convert and care for patients — from stem cell and PRP inquiries to patients who travel for treatment. That focus is what makes it work, so we do not take on other specialties.",
   },
   {
-    q: "Do your AI employees handle all patient scheduling?",
-    a: "They can, and you set the rules. Run them around the clock, only after hours, only on certain channels, or only for certain appointment types. You decide what they own and what always goes to a human.",
+    q: "What happens in the free clinic audit?",
+    a: "A 30-minute call where we look at how your clinic runs today: where inquiries come from, how quickly they are answered, what happens between the first message and the treatment, and what happens after. We map the gaps and the places where the most revenue is leaking, then show you which changes would have the biggest impact. There is no obligation.",
   },
   {
-    q: "Do Caddie AI employees handle voice calls?",
-    a: "Yes. Mia answers your clinic's phone, handles treatment and pricing questions, and books consults on the call. You can talk to her yourself on her page before you ever speak to us.",
+    q: "How is Caddie priced?",
+    a: "À la carte, around what your clinic actually needs. After the audit we put together a proposal for your clinic — no bundles you will not use, no per-seat fees. Pricing scales with the size of the clinic, and we offer a dedicated tech partnership for clinics that need custom software built and launched with them.",
   },
   {
-    q: "What is an AI-first clinic?",
-    a: "A practice where the front office runs on AI instead of on manual work and disconnected tools. Patients get instant answers at any hour, follow-ups never slip, and staff spend their day on care rather than admin. Caddie makes a clinic AI-first without adding headcount.",
+    q: "Do we have to replace the software we already use?",
+    a: "No. Caddie can connect to the EHR, calendar and tools you already run, or replace the ones you would rather retire. We decide that together during the audit, based on what is working for you and what is not.",
   },
   {
-    q: "What types of clinics does Caddie support?",
-    a: "All of them — regenerative medicine, hormone therapy, IVF, dental, aesthetics, med spa and specialty practices. Because every setup is built on your own company brain, Caddie shapes itself around how your clinic actually runs. Talk to our team about your specialty and goals.",
+    q: "How long does it take to get up and running?",
+    a: "Most clinics are live within a few weeks of the proposal. Onboarding and setup are done for you, and integrations with an existing EHR take about two weeks on average.",
+  },
+  {
+    q: "Is our patient data secure?",
+    a: "Yes. Caddie is HIPAA-compliant by design: patient data is encrypted in transit and at rest, access is role-based with full audit logs, every conversation is recorded and reviewable, and patient data is never used to train shared models. The details are on our Safety & HIPAA page.",
   },
 ];
 
@@ -58,14 +64,14 @@ export function FaqSection() {
       `}</style>
       <div className="section-copy">
         <span className="eyebrow">FAQ</span>
-        <h2>Clear answers for clinics considering Caddie.</h2>
+        <h2>Questions clinics ask before they book.</h2>
         <p>
-          Anything else? Bring it to a demo and we will answer it against your
-          clinic&apos;s real pipeline.
+          Anything else? Bring it to your audit and we will answer it against
+          how your clinic actually runs.
         </p>
         <div className="section-action">
           <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button secondary">
-            Book a demo
+            {AUDIT_CTA}
           </a>
         </div>
       </div>

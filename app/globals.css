@@ -290,28 +290,6 @@ a.button { color: #fff; }
 .nav-dropdown-menu a:hover { color: var(--blue); }
 
 /* AI Employees mega menu: 8 agents with photos, 2 per row */
-.nav-dropdown-menu.nav-menu-agents {
-  width: min(480px, 100vw - 48px);
-  grid-template-columns: 1fr 1fr;
-  gap: 6px; padding: 14px;
-}
-.nav-menu-agent {
-  border-radius: 12px; align-items: center; gap: 12px; padding: 8px 10px;
-  display: flex; transition: background .14s;
-}
-.nav-menu-agent:hover { background: var(--wash); }
-.nav-menu-agent img {
-  width: 42px; height: 42px; border-radius: 10px; object-fit: cover; flex: none;
-  border: 1.5px solid var(--agent-edge, var(--line-strong));
-}
-.nav-menu-agent strong {
-  display: block; color: var(--ink); font-size: .92rem; font-weight: 620;
-  letter-spacing: -.01em; line-height: 1.2;
-}
-.nav-menu-agent span {
-  display: block; color: var(--agent-role, var(--faint));
-  font-size: .74rem; font-weight: 550; line-height: 1.25;
-}
 .mobile-nav-toggle {
   background: none; border: none; border-radius: 999px; cursor: pointer;
   justify-content: center; align-items: center; width: 40px; height: 40px; padding: 0;
@@ -338,6 +316,7 @@ a.button { color: #fff; }
   text-decoration: none;
 }
 .mobile-nav-actions { gap: 10px; margin-top: 22px; display: grid; }
+.header-actions .cta-short { display: none; }
 @media (max-width: 1020px) {
   .desktop-nav { display: none; }
   .mobile-nav-toggle { display: inline-flex; }
@@ -347,6 +326,8 @@ a.button { color: #fff; }
   .site-header .brand { margin: -6px -12px; padding: 6px 12px; }
   .header-actions { gap: 8px; margin: -6px; padding: 6px; }
   .header-actions .button.small { min-height: 38px; padding-left: 14px; padding-right: 14px; font-size: .86rem; }
+  .header-actions .cta-long { display: none; }
+  .header-actions .cta-short { display: inline; }
   .brand-logo { width: 142px; }
 }
 

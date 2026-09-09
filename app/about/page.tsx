@@ -1,13 +1,27 @@
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { InvestorStrip } from "@/components/investor-strip";
-import { CALENDAR_URL } from "@/lib/agents";
+import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 
 export const metadata = {
   title: "About | Caddie",
   description:
-    "Meet Danika and Delaney, the founders bringing the automation and technology the tech industry runs on into medical.",
+    "Meet Danika and Delaney, the founders building the technology partner regenerative medicine clinics have been missing.",
 };
+
+const beliefs = [
+  {
+    title: "Outcomes, not software",
+    body: "We measure ourselves on the things that matter to a clinic: more patients, higher conversion, happier patients, and a practice that runs on less. Features are only interesting if they move one of those.",
+  },
+  {
+    title: "One specialty, done properly",
+    body: "Regenerative medicine has its own patient journey, its own questions, and often patients who travel for treatment. Building only for it is why our products fit on day one.",
+  },
+  {
+    title: "A partner, not a vendor",
+    body: "Every product we have shipped started as a problem a clinic owner brought to us. We build with clinics, from single practitioners to networks with 80+ locations.",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -18,15 +32,12 @@ export default function AboutPage() {
   padding: clamp(56px, 8vw, 96px) 24px 0; text-align: center;
 }
 .about-hero h1 { margin-left: auto; margin-right: auto; }
-.about-hero p { font-size: 1.06rem; max-width: 620px; margin: 0 auto; }
+.about-hero p { font-size: 1.06rem; max-width: 640px; margin: 0 auto; }
 .about-grid {
   display: grid; grid-template-columns: minmax(280px, 400px) 1fr;
   gap: clamp(32px, 5vw, 60px); align-items: center;
 }
-.about-img {
-  border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-lg);
-  border: 1px solid var(--line);
-}
+.about-img { border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
 .about-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .about-body p { font-size: 1.02rem; margin-bottom: 16px; }
 .about-body p:last-child { margin-bottom: 0; }
@@ -34,17 +45,19 @@ export default function AboutPage() {
   border-left: 3px solid var(--blue); margin: 0; padding: 6px 0 6px 20px;
   color: var(--ink); font-size: 1.08rem; font-style: italic; line-height: 1.6;
 }
+.about-beliefs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); margin-top: 32px; }
+.about-belief { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); padding: 26px 28px; }
+.about-belief h3 { font-size: 1.1rem; font-weight: var(--font-subhead); margin-bottom: 10px; }
+.about-belief p { margin: 0; font-size: .94rem; }
 .about-ai-panel {
   color: #eef2fb;
   background:
     radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
     radial-gradient(640px 460px at -6% 112%, #8b5cf64d, #0000 60%),
     linear-gradient(152deg, #1a2b5c 0%, #23407e 52%, #1a2b5c 100%);
-  border: 1px solid #ffffff26;
-  border-radius: var(--r-xl);
+  border: 1px solid #ffffff26; border-radius: var(--r-xl);
   box-shadow: 0 14px 34px #1a2b5c30, 0 40px 90px #1a2b5c3d;
-  margin-bottom: var(--section-y);
-  padding: clamp(36px, 5vw, 64px);
+  margin-bottom: var(--section-y); padding: clamp(36px, 5vw, 64px);
 }
 .about-ai-panel .eyebrow { color: #a7c0ff; }
 .about-ai-panel h2 { color: #fff; }
@@ -63,22 +76,21 @@ export default function AboutPage() {
 @media (max-width: 1020px) {
   .about-grid { grid-template-columns: 1fr; }
   .about-img { max-width: 400px; margin: 0 auto; }
+  .about-beliefs { grid-template-columns: 1fr; }
   .about-cta-panel { flex-direction: column; align-items: stretch; }
 }
-@media (max-width: 720px) {
-  .about-cta-panel { padding: 30px; }
-}
+@media (max-width: 720px) { .about-cta-panel { padding: 30px; } }
       `}</style>
       <SiteNav />
       <main>
         <section className="about-hero">
           <span className="eyebrow">Our mission</span>
-          <h1>Bringing tech-industry automation into medical.</h1>
+          <h1>The tech partner regenerative medicine clinics have been missing.</h1>
           <p>
-            We&apos;re on a mission to bring the same level of automation and technology
-            the tech industry runs on into medical. Clinics deliver world-class care,
-            but the systems behind them are still stuck a decade back. We&apos;re here
-            to close that gap.
+            Regenerative clinics deliver some of the most advanced care in
+            medicine, on systems that are a decade behind. We exist to close that
+            gap: to give every regenerative clinic the same technology as the top
+            healthcare brands, without the price tag.
           </p>
         </section>
 
@@ -90,22 +102,38 @@ export default function AboutPage() {
             <div className="about-body">
               <span className="eyebrow">The founders</span>
               <p>
-                With over 15 years in tech between them, Danika and Delaney are bringing
-                everything they&apos;ve learned to the medical industry. It started when
-                a family friend needed help scaling their practice. The founders got to
-                work and built what every medical clinic wished they&apos;d had 10 years
-                ago.
+                With over 15 years in tech between them, Danika and Delaney started
+                Caddie when a family friend needed help scaling their regenerative
+                clinic. What began as one clinic&apos;s website and intake flow
+                became a full platform, and then a partnership model, as more
+                clinics asked for the same.
               </p>
               <p>
-                With their AI-first and go-to-market expertise, they&apos;ve built a team
-                where practicality, simplicity, and outcomes come first in everything
-                they ship.
+                Today Caddie works only with regenerative medicine clinics, from
+                single practitioners to networks with more than 80 locations
+                worldwide, with a team where practicality, simplicity and outcomes
+                come first in everything it ships.
               </p>
               <blockquote className="about-quote">
-                &ldquo;Every product, feature, and system we&apos;ve built solves a
-                specific problem our clinic owners brought to us.&rdquo;
+                &ldquo;Every product, feature and system we&apos;ve built solves a
+                specific problem a clinic owner brought to us.&rdquo;
               </blockquote>
             </div>
+          </div>
+        </section>
+
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-copy wide">
+            <span className="eyebrow">What we believe</span>
+            <h2>Three things that shape everything we build.</h2>
+          </div>
+          <div className="about-beliefs">
+            {beliefs.map((b) => (
+              <article key={b.title} className="about-belief">
+                <h3>{b.title}</h3>
+                <p>{b.body}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -114,12 +142,11 @@ export default function AboutPage() {
             <span className="eyebrow">AI-first, always</span>
             <h2>Better software, faster, at a fraction of the cost.</h2>
             <p>
-              We&apos;re AI-first in everything we do. We build with the latest models,
-              ship with modern dev tooling, and move at a pace traditional agencies and
-              legacy software companies can&apos;t match. The result is better software,
-              faster, at a fraction of the cost. If you&apos;re running a clinic and
-              your back office still runs on spreadsheets, phone calls, and disconnected
-              systems, we built this for you.
+              We are AI-first in everything we do. We build with the latest models,
+              ship with modern tooling, and move at a pace traditional agencies and
+              legacy software companies cannot match. That is how a clinic of any
+              size gets technology that used to be reserved for the largest
+              healthcare brands.
             </p>
           </section>
         </div>
@@ -129,16 +156,14 @@ export default function AboutPage() {
             <div>
               <h2>See what Caddie can do for your clinic.</h2>
               <p>
-                It starts with a short conversation about how your clinic actually runs.
+                It starts with a free, 30-minute audit of how your clinic runs today.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
-              Book a demo
+              {AUDIT_CTA}
             </a>
           </section>
         </div>
-
-        <InvestorStrip divider={false} standalone />
       </main>
       <SiteFooter />
     </div>
