@@ -50,6 +50,7 @@ const groups = [
     items: [
       { name: "CRM", body: "Every lead and patient conversation in one place, worked automatically until it becomes a booking." },
       { name: "Brandable patient portal", body: "Your clinic's own front door for patients: bookings, questions, prep and follow-up under your brand." },
+      { name: "AI protocol builder", body: "Builds treatment protocols from your clinic's own approach, ready for your doctors to review and sign off." },
       { name: "Operating system", body: "Confirmations, reminders, follow-ups and task coordination that run on their own, every day." },
       { name: "Integrations", body: "Connects to the EHR, calendar and tools you already run, or replaces the ones you would rather retire." },
     ],
@@ -104,7 +105,8 @@ export default function ProductsPage() {
                 <p>{g.lead}</p>
               </div>
             </div>
-            <div className="prod-grid">
+            {/* Columns follow the group size so no card is orphaned on its own row. */}
+            <div className="prod-grid" style={{ ["--cols" as string]: g.items.length }}>
               {g.items.map((it) => (
                 <article key={it.name} className="prod-card">
                   <h3>{it.name}</h3>

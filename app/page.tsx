@@ -69,7 +69,7 @@ const productGroups = [
   },
   {
     title: "Run your practice",
-    items: ["CRM", "Brandable patient portal", "Operating system", "Integrations"],
+    items: ["CRM", "Brandable patient portal", "AI protocol builder", "Operating system", "Integrations"],
   },
 ];
 
