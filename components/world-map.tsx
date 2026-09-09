@@ -45,6 +45,19 @@ const pins: { x: number; y: number; size: 1 | 2 | 3; label?: string; side?: "lef
   { x: 87.5, y: 76, size: 3, label: "Sydney" },
 ];
 
+// Photo cards tethered to a pin. Positions are percentages of the image and
+// are chosen to sit over ocean so no land or other pins get covered.
+const cards: { pin: { x: number; y: number }; x: number; y: number; photo: string; caption: string }[] = [
+  { pin: { x: 14, y: 37 }, x: 1.5, y: 47, photo: "/photos/team-walking.jpg", caption: "Multi-location network" },
+  { pin: { x: 46.5, y: 26 }, x: 33, y: 15, photo: "/photos/clinic-park.jpg", caption: "Single-practitioner clinic" },
+  { pin: { x: 62, y: 42 }, x: 53.5, y: 56, photo: "/photos/clinic-glass.jpg", caption: "Multi-location network" },
+  { pin: { x: 87.5, y: 76 }, x: 69.5, y: 68, photo: "/photos/clinic-lush.jpg", caption: "Multi-provider clinic" },
+];
+// Card box in image-percent units: width, and height derived from the
+// image aspect so the tether meets the card's edge.
+const CARD_W = 12.5;
+const CARD_H = 13.5;
+
 export function WorldMap() {
   return (
     <div className="wmap" aria-label="Regenerative clinics running on Caddie around the world" role="img">
@@ -89,6 +102,20 @@ export function WorldMap() {
   background: #ffffffe6; border: 1px solid #dde6f8; border-radius: 999px; padding: 3px 9px;
   box-shadow: var(--shadow-xs);
 }
+.wmap-tethers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.wmap-tethers line { stroke: var(--blue); stroke-width: .18; stroke-dasharray: .6 .5; opacity: .7; }
+.wmap-card {
+  position: absolute; background: #fff; border-radius: 12px; padding: 5px 5px 7px;
+  border: 1px solid var(--line); box-shadow: 0 10px 26px #1c2e6e2e, 0 2px 6px #1c2e6e1a;
+  transform: rotate(-1.5deg);
+}
+.wmap-card:nth-of-type(even) { transform: rotate(1.5deg); }
+.wmap-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; border-radius: 8px; }
+.wmap-card span {
+  display: block; margin-top: 6px; font-size: .68rem; font-weight: 650; color: var(--blue-ink);
+  letter-spacing: -.005em; line-height: 1.25;
+}
+@media (max-width: 1020px) { .wmap-card, .wmap-tethers { display: none; } }
 .wmap-legend {
   position: absolute; left: 18px; bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px 18px;
   background: #ffffffd9; border: 1px solid var(--line); border-radius: 999px;
@@ -124,6 +151,26 @@ export function WorldMap() {
             <i className="wmap-dot" aria-hidden="true" />
             {p.label && <em className={`wmap-label${p.side === "left" ? " left" : ""}`}>{p.label}</em>}
           </span>
+        ))}
+        {/* Dotted tethers from each photo card to its pin. The viewBox is in
+            image-percent units and stretched to fill, so the same numbers
+            position both the cards and the lines. */}
+        <svg className="wmap-tethers" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {cards.map((c, i) => {
+            const cx = c.x + CARD_W / 2;
+            const cy = c.y + CARD_H / 2;
+            return <line key={i} x1={c.pin.x} y1={c.pin.y} x2={cx} y2={cy} />;
+          })}
+        </svg>
+        {cards.map((c, i) => (
+          <figure
+            key={i}
+            className="wmap-card"
+            style={{ left: `${c.x}%`, top: `${c.y}%`, width: `${CARD_W}%` }}
+          >
+            <img src={c.photo} alt="" loading="lazy" />
+            <span>{c.caption}</span>
+          </figure>
         ))}
       </div>
       <div className="wmap-legend" aria-hidden="true">
