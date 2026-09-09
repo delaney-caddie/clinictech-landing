@@ -528,7 +528,7 @@ export default function LandingPage() {
               <source src="/hero-broll.mp4" type="video/mp4" />
             </video>
             <div className="hero-badge">Built only for regenerative medicine</div>
-            <h1>The #1 tech platform to run your regenerative medicine clinic.</h1>
+            <h1>The #1 tech platform for regenerative medicine clinics.</h1>
             <p className="hero-sub">
               Give your clinic the same tech as the top healthcare brands, without
               the price tag. One partner for your front office, CRM, patient portal
