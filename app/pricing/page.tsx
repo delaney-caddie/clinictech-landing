@@ -37,14 +37,17 @@ const included = [
 
 const sizes = [
   {
+    photo: "/photos/clinic-park.jpg",
     title: "Single-practitioner clinics",
     body: "One doctor, one coordinator. Usually starts with capturing and converting every inquiry, and a patient experience that feels bigger than the clinic.",
   },
   {
+    photo: "/photos/clinic-lush.jpg",
     title: "Multi-provider clinics",
     body: "Several practitioners, a growing front office. Usually one connected system replacing a patchwork of tools, and follow-up that runs on its own.",
   },
   {
+    photo: "/photos/clinic-glass.jpg",
     title: "Multi-location networks",
     body: "Up to 80+ locations worldwide. Centralised intake and routing, group-wide visibility, and often a dedicated partnership for custom software.",
   },
@@ -88,7 +91,9 @@ export default function PricingPage() {
 }
 
 .pr-sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); margin-top: 30px; }
-.pr-size { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); padding: 26px 28px; }
+.pr-size { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); overflow: hidden; }
+.pr-size img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.pr-size > div { padding: 22px 26px 26px; }
 .pr-size h3 { font-size: 1.08rem; font-weight: var(--font-subhead); margin-bottom: 8px; }
 .pr-size p { margin: 0; font-size: .93rem; }
 
@@ -185,8 +190,11 @@ export default function PricingPage() {
           <div className="pr-sizes">
             {sizes.map((s) => (
               <article key={s.title} className="pr-size">
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
+                <img src={s.photo} alt="" loading="lazy" />
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
+                </div>
               </article>
             ))}
           </div>

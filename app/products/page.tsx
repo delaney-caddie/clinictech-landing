@@ -87,9 +87,9 @@ export default function ProductsPage() {
         {/* Photo band: real front-office moments */}
         <section className="section" style={{ paddingTop: 28, paddingBottom: 0 }}>
           <div className="prod-photo-row">
-            <img src="/testimonials/regen-clinic.jpg" alt="A patient checking in at a clinic front desk" loading="lazy" />
-            <img src="/patients/receptionist.jpg" alt="A receptionist welcoming a patient" loading="lazy" />
-            <img src="/testimonials/aesthetics-clinic.jpg" alt="A consultation at a clinic" loading="lazy" />
+            <img src="/photos/clinic-glass.jpg" alt="A modern glass clinic building" loading="lazy" />
+            <img src="/photos/team-walking.jpg" alt="A clinic team standing outside their building" loading="lazy" />
+            <img src="/photos/clinic-lush.jpg" alt="A clinic building surrounded by greenery" loading="lazy" />
           </div>
         </section>
 

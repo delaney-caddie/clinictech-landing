@@ -8,28 +8,28 @@ import { FaqSection } from "@/components/faq-section";
 import { PlaybookPanel } from "@/components/playbook-panel";
 import { CustomerLogos } from "@/components/customer-logos";
 import { Scrolly } from "@/components/scrolly";
+import { WorldMap } from "@/components/world-map";
 import { CALENDAR_URL, AUDIT_CTA } from "@/lib/agents";
 
 // The pains a regenerative clinic owner recognises on sight. Left column
 // is the revenue side, right column is the cost side.
 const problemsLeft = [
-  "Stem cell and PRP inquiries come in all weekend. Nobody answers until Monday.",
-  "Patients comparing three clinics book with the one that replied first.",
-  "Happy patients leave without a review, a testimonial or a referral.",
+  "You pay for multiple tools that don't talk to each other, and the tech bills keep racking up.",
+  "You use generic software that isn't made for regen clinics.",
+  "Inquiries come in over the weekend and have to wait until Monday.",
 ];
 
 const problemsRight = [
-  "You pay for a CRM, a scheduler, a forms tool and a reviews tool that don't talk to each other.",
-  "Every new patient means more admin, so growing means hiring.",
+  "The only way to grow your practice is by adding more headcount.",
+  "You wish you had one reliable system to run your entire practice end to end.",
 ];
 
-// Results pulled from the clinic projects Caddie has already shipped
-// (previously on /projects). Outcome-first, product-agnostic by design.
+// What Caddie clinics get. Outcome-first, product-agnostic by design.
 const results = [
-  { big: "2.1% → 7.2%", label: "website conversion rate", who: "Single-location stem cell clinic" },
-  { big: "+$2.1M", label: "revenue from centralised intake", who: "50+ location clinic network" },
-  { big: "22 hrs/wk", label: "of coordination time saved", who: "3-location clinic group" },
-  { big: "+28%", label: "returning patients", who: "US clinic treating in Mexico" },
+  { big: "5-star", label: "premium patient experience" },
+  { big: "15–20%", label: "more patient bookings and revenue" },
+  { big: "80%", label: "lower operating costs" },
+  { big: "25 hrs/wk", label: "saved in internal admin time" },
 ];
 
 // The four outcomes every Caddie engagement is measured against. These are
@@ -323,17 +323,18 @@ export default function LandingPage() {
     radial-gradient(760px 420px at 82% -12%, #6e8fff5c, #0000 62%),
     linear-gradient(150deg, #101a33 0%, #16234a 55%, #1b2c5e 100%);
   border: 1px solid #27355e; box-shadow: var(--shadow-lg);
-  padding: clamp(36px, 5vw, 56px); margin-bottom: var(--section-y);
+  margin-bottom: var(--section-y);
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); align-items: stretch;
 }
+.results-copy { padding: clamp(36px, 5vw, 56px); }
+.results-photo { width: 100%; height: 100%; min-height: 360px; object-fit: cover; object-position: 50% 30%; display: block; }
 .results-band .eyebrow { color: #9db4ff; }
 .results-band h2 { color: #fff; max-width: 720px; }
 .ct-page .results-band .section-copy > p { color: #c9d4ee; }
-.results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grid-gap); margin-top: 30px; }
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); margin-top: 30px; }
 .result { background: #ffffff0f; border: 1px solid #ffffff1c; border-radius: var(--r-lg); padding: 22px 24px; }
-.result strong { display: block; color: #fff; font-size: clamp(1.7rem, 2.4vw, 2.1rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
-.result span { display: block; color: #dbe4f7; font-size: .92rem; margin-top: 8px; }
-.result em { display: block; color: #93a4cc; font-size: .78rem; font-style: normal; margin-top: 10px; }
-.ct-page .results-foot { margin: 22px 0 0; color: #93a4cc; font-size: .82rem; }
+.result strong { display: block; color: #fff; font-size: clamp(1.9rem, 2.8vw, 2.5rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
+.result span { display: block; color: #dbe4f7; font-size: .94rem; margin-top: 8px; }
 
 /* ===== OUTCOMES (scrolly visuals) ===== */
 .outcomes-section .section-copy { margin: 0 auto; text-align: center; }
@@ -471,7 +472,9 @@ export default function LandingPage() {
 @media (max-width: 1020px) {
   .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
   .problem-img { order: -1; }
-  .results-grid, .range-grid { grid-template-columns: 1fr 1fr; }
+  .results-band { grid-template-columns: 1fr; }
+  .results-photo { min-height: 260px; max-height: 340px; object-position: 50% 25%; }
+  .range-grid { grid-template-columns: 1fr 1fr; }
   .pg-grid, .testi-grid, .audit-steps { grid-template-columns: 1fr; }
   .pg-partner { grid-template-columns: 1fr; }
   .calculator-grid { grid-template-columns: 1fr; }
@@ -486,6 +489,7 @@ export default function LandingPage() {
   .hero-actions { margin: 22px 0 0; }
   .hero-actions .button { width: 100%; justify-content: center; }
   .results-grid, .range-grid { grid-template-columns: 1fr; }
+  .results-copy { padding: 28px 22px; }
   .cta-copy { padding: 30px; }
   .calculator-inner { padding: 0 14px; }
   .calculator-inputs, .calculator-result { padding: 20px 18px; }
@@ -551,8 +555,8 @@ export default function LandingPage() {
             </div>
             <div className="problem-img">
               <img
-                src="/clinic-owner-stressed.jpg"
-                alt="A clinic owner on the phone at their desk"
+                src="/photos/doctor-tired.jpg"
+                alt="A tired doctor leaning against a clinic window"
                 loading="lazy"
               />
             </div>
@@ -567,27 +571,30 @@ export default function LandingPage() {
         {/* ===== RESULTS ===== */}
         <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
           <section className="results-band reveal-item">
-            <div className="section-copy wide">
-              <span className="eyebrow">Results</span>
-              <h2>What regenerative clinics get with Caddie.</h2>
-              <p>
-                More patients, more revenue, and a clinic that runs on about half
-                the operating cost. Here is what that has looked like in practice.
-              </p>
+            <div className="results-copy">
+              <div className="section-copy wide">
+                <span className="eyebrow">Results</span>
+                <h2>What regenerative clinics get with Caddie.</h2>
+                <p>
+                  More patients, a premium patient experience, and a clinic that
+                  runs on a fraction of the operating cost.
+                </p>
+              </div>
+              <div className="results-grid">
+                {results.map((r) => (
+                  <div key={r.label} className="result">
+                    <strong>{r.big}</strong>
+                    <span>{r.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="results-grid">
-              {results.map((r) => (
-                <div key={r.label} className="result">
-                  <strong>{r.big}</strong>
-                  <span>{r.label}</span>
-                  <em>{r.who}</em>
-                </div>
-              ))}
-            </div>
-            <p className="results-foot">
-              Results from individual clinic engagements. Your audit will show you
-              what is realistic for your clinic.
-            </p>
+            <img
+              className="results-photo"
+              src="/photos/doctor-phone.jpg"
+              alt="A smiling doctor reading a message on their phone"
+              loading="lazy"
+            />
           </section>
         </div>
 
@@ -595,11 +602,11 @@ export default function LandingPage() {
         <section className="section outcomes-section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">What we focus on</span>
-            <h2>Four outcomes. Everything we build points at one of them.</h2>
+            <h2>Caddie offers one platform to run your entire practice end-to-end.</h2>
             <p>
-              We are not here to sell you software. We are here to get you more
-              patients, convert more of them, give them a premium experience, and
-              run your clinic more efficiently.
+              Everything in it points at one of four outcomes: more patients,
+              higher conversion, a premium patient experience, and a clinic that
+              runs more efficiently.
             </p>
           </div>
           <Scrolly
@@ -658,11 +665,14 @@ export default function LandingPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="section-copy wide reveal-item">
             <span className="eyebrow">Regenerative medicine only</span>
-            <h2>From one practitioner to 80+ locations worldwide.</h2>
+            <h2>Built for one-person practices all the way to multi-location clinics operating worldwide.</h2>
             <p>
-              We only work with regenerative medicine clinics, and every product we
-              build is designed with that in mind. That focus is why it works.
+              Whatever the size of your clinic, we only work with regenerative
+              medicine, and every product we build is designed with that in mind.
             </p>
+          </div>
+          <div className="reveal-item" style={{ marginTop: 32 }}>
+            <WorldMap />
           </div>
           <div className="range-grid reveal-item">
             <div className="range-card"><strong>1 &rarr; 80+</strong><span>Locations, from solo practices to the largest regenerative networks</span></div>
@@ -819,8 +829,8 @@ export default function LandingPage() {
             </div>
             <img
               className="cta-photo"
-              src="/patients/receptionist.jpg"
-              alt="A clinic receptionist greeting a patient at the front desk"
+              src="/photos/doctor-window.jpg"
+              alt="A smiling doctor leaning on a clinic window"
               loading="lazy"
             />
           </section>

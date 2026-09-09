@@ -89,6 +89,7 @@ export default function SafetyPage() {
 .avh-hero h1 { margin-left: auto; margin-right: auto; }
 .avh-hero p { font-size: 1.06rem; max-width: 660px; margin: 0 auto; }
 
+.avh-photo { width: 100%; max-height: 380px; object-fit: cover; object-position: 50% 30%; display: block; border-radius: var(--r-xl); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
 .sec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); margin-top: 32px; }
 .sec-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
@@ -189,6 +190,15 @@ export default function SafetyPage() {
             trains and supervises it.
           </p>
         </header>
+
+        <section className="section" style={{ paddingTop: 36, paddingBottom: 0 }}>
+          <img
+            className="avh-photo"
+            src="/photos/team-outside.jpg"
+            alt="A confident clinic team"
+            loading="lazy"
+          />
+        </section>
 
         {/* Security & HIPAA — first, because it's what this audience checks */}
         <section className="section">

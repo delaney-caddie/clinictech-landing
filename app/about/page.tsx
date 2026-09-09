@@ -45,6 +45,8 @@ export default function AboutPage() {
   border-left: 3px solid var(--blue); margin: 0; padding: 6px 0 6px 20px;
   color: var(--ink); font-size: 1.08rem; font-style: italic; line-height: 1.6;
 }
+.about-photos { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: var(--section-y); }
+.about-photos img { width: 100%; height: 100%; min-height: 220px; max-height: 340px; object-fit: cover; display: block; border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
 .about-beliefs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); margin-top: 32px; }
 .about-belief { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); padding: 26px 28px; }
 .about-belief h3 { font-size: 1.1rem; font-weight: var(--font-subhead); margin-bottom: 10px; }
@@ -77,6 +79,7 @@ export default function AboutPage() {
   .about-grid { grid-template-columns: 1fr; }
   .about-img { max-width: 400px; margin: 0 auto; }
   .about-beliefs { grid-template-columns: 1fr; }
+  .about-photos { grid-template-columns: 1fr; }
   .about-cta-panel { flex-direction: column; align-items: stretch; }
 }
 @media (max-width: 720px) { .about-cta-panel { padding: 30px; } }
@@ -119,6 +122,13 @@ export default function AboutPage() {
                 specific problem a clinic owner brought to us.&rdquo;
               </blockquote>
             </div>
+          </div>
+        </section>
+
+        <section className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <div className="about-photos">
+            <img src="/photos/team-laughing.jpg" alt="A clinic team walking and laughing outside" loading="lazy" />
+            <img src="/photos/doctor-colleagues.jpg" alt="A doctor smiling with colleagues" loading="lazy" />
           </div>
         </section>
 
