@@ -103,7 +103,7 @@ const testimonials = [
 // the fear of a sales call, which is the real objection to booking.
 const auditSteps = [
   {
-    title: "Book a 30-minute call",
+    title: "Book a call",
     body: "Pick a time that suits you. We will ask how your clinic runs today: where inquiries come from, how they are handled, and what happens after treatment.",
   },
   {
@@ -541,7 +541,7 @@ export default function LandingPage() {
               </a>
             </div>
             <div className="hero-micro">
-              <span>30 minutes</span>
+              <span>Free clinic audit</span>
               <span>We map your biggest gaps and opportunities</span>
               <span>No obligation</span>
             </div>
@@ -747,7 +747,7 @@ export default function LandingPage() {
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
               {AUDIT_CTA}
             </a>
-            <span>Free, 30 minutes, no obligation.</span>
+            <span>Free, and no obligation.</span>
           </div>
         </section>
 
@@ -840,7 +840,7 @@ export default function LandingPage() {
               <h2>Patients book with the clinic that answers first.</h2>
               <p>
                 Find out where your clinic is losing patients and revenue, and what
-                would fix it. The audit is free and takes 30 minutes.
+                would fix it. The audit is free, with no obligation.
               </p>
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
                 {AUDIT_CTA}

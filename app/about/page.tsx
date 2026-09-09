@@ -166,7 +166,7 @@ export default function AboutPage() {
             <div>
               <h2>See what Caddie can do for your clinic.</h2>
               <p>
-                It starts with a free, 30-minute audit of how your clinic runs today.
+                It starts with a free audit of how your clinic runs today.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">

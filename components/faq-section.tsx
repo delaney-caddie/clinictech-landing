@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: "What happens in the free clinic audit?",
-    a: "A 30-minute call where we look at how your clinic runs today: where inquiries come from, how quickly they are answered, what happens between the first message and the treatment, and what happens after. We map the gaps and the places where the most revenue is leaking, then show you which changes would have the biggest impact. There is no obligation.",
+    a: "A call where we look at how your clinic runs today: where inquiries come from, how quickly they are answered, what happens between the first message and the treatment, and what happens after. We map the gaps and the places where the most revenue is leaking, then show you which changes would have the biggest impact. There is no obligation.",
   },
   {
     q: "How is Caddie priced?",

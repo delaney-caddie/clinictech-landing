@@ -14,7 +14,7 @@ export const metadata = {
 const steps = [
   {
     title: "A free audit of your clinic",
-    body: "A 30-minute call where we look at how your clinic runs today — where inquiries come from, how they are handled, and what happens after treatment — and find the gaps and the biggest areas of impact.",
+    body: "A call where we look at how your clinic runs today — where inquiries come from, how they are handled, and what happens after treatment — and find the gaps and the biggest areas of impact.",
   },
   {
     title: "A proposal built for your clinic",
@@ -132,7 +132,7 @@ export default function PricingPage() {
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
               {AUDIT_CTA}
             </a>
-            <span>Free, 30 minutes, no obligation.</span>
+            <span>Free, and no obligation.</span>
           </div>
         </section>
 
@@ -206,8 +206,8 @@ export default function PricingPage() {
             <div>
               <h2>Start with your free clinic audit.</h2>
               <p>
-                Thirty minutes to find out where your clinic is losing patients and
-                revenue, and what would fix it. Your proposal follows from there.
+                Find out where your clinic is losing patients and revenue, and
+                what would fix it. Your proposal follows from there.
               </p>
             </div>
             <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
