@@ -513,13 +513,13 @@ export default function LandingPage() {
             >
               <source src="/hero-broll.mp4" type="video/mp4" />
             </video>
-            <div className="hero-badge">The #1 tech partner for regenerative medicine clinics</div>
-            <h1>Give your clinic the same tech as the top healthcare brands. Without the price tag.</h1>
+            <div className="hero-badge">Built only for regenerative medicine</div>
+            <h1>The #1 tech platform to run your regen clinic.</h1>
             <p className="hero-sub">
-              Caddie clinics get more patients and more revenue, with half the
-              operational cost of running the clinic. One partner for your front
-              office, CRM, patient portal, AI assistants and more &mdash; built only
-              for regenerative medicine.
+              Give your clinic the same tech as the top healthcare brands, without
+              the price tag. One partner for your front office, CRM, patient portal
+              and AI assistants &mdash; so you get more patients, a premium patient
+              experience, and half the operating cost.
             </p>
             <div className="hero-actions">
               <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="button">
