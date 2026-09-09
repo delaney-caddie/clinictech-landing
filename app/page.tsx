@@ -337,7 +337,16 @@ export default function LandingPage() {
 .result span { display: block; color: #dbe4f7; font-size: .94rem; margin-top: 8px; }
 
 /* ===== OUTCOMES (scrolly visuals) ===== */
-.outcomes-section .section-copy { margin: 0 auto; text-align: center; }
+.outcomes-head {
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+  gap: clamp(28px, 4vw, 56px); align-items: center;
+}
+.outcomes-head .section-copy { margin: 0; text-align: left; }
+.outcomes-shot {
+  margin: 0; border-radius: var(--r-xl); overflow: hidden; background: var(--surface);
+  border: 1px solid var(--line); box-shadow: var(--shadow-lg);
+}
+.outcomes-shot img { width: 100%; height: auto; display: block; }
 .outcomes-actions { margin-top: 12px; display: flex; justify-content: center; }
 .ov {
   width: 100%; max-width: 420px; background: var(--surface);
@@ -473,6 +482,7 @@ export default function LandingPage() {
   .problem-layout { grid-template-columns: 1fr; max-width: 480px; }
   .problem-img { order: -1; }
   .results-band { grid-template-columns: 1fr; }
+  .outcomes-head { grid-template-columns: 1fr; }
   .results-photo { min-height: 260px; max-height: 340px; object-position: 50% 25%; }
   .range-grid { grid-template-columns: 1fr 1fr; }
   .pg-grid, .testi-grid, .audit-steps { grid-template-columns: 1fr; }
@@ -600,14 +610,23 @@ export default function LandingPage() {
 
         {/* ===== FOUR OUTCOMES ===== */}
         <section className="section outcomes-section" style={{ paddingTop: 0 }}>
-          <div className="section-copy wide reveal-item">
-            <span className="eyebrow">What we focus on</span>
-            <h2>Caddie offers one platform to run your entire practice end-to-end.</h2>
-            <p>
-              Everything in it points at one of four outcomes: more patients,
-              higher conversion, a premium patient experience, and a clinic that
-              runs more efficiently.
-            </p>
+          <div className="outcomes-head reveal-item">
+            <div className="section-copy wide">
+              <span className="eyebrow">What we focus on</span>
+              <h2>Caddie offers one platform to run your entire practice end-to-end.</h2>
+              <p>
+                Everything in it points at one of four outcomes: more patients,
+                higher conversion, a premium patient experience, and a clinic that
+                runs more efficiently.
+              </p>
+            </div>
+            <figure className="outcomes-shot">
+              <img
+                src="/product-analytics.jpg"
+                alt="The Caddie platform showing live pipeline results, new leads per week and lead sources"
+                loading="lazy"
+              />
+            </figure>
           </div>
           <Scrolly
             id="home-outcomes"
